@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# \[Insert Project Name\]
+
+**[BLUEPRINT INTERNAL]: PLEASE GO THROUGH THIS README AND REPLACE ALL THE [INSERT] STATEMENTS WITH VALUES SPECIFIC TO YOUR PROJECT. DELETE THIS MESSAGE WHEN DONE.**
+
+This project is being built by a team at [Blueprint](https://calblueprint.org), a student organization at the University of California, Berkeley building software pro bono for nonprofits.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+Check your installation of `npm` and `node`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node -v
+npm -v
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js and npm. See [Downloading and installing Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Clone the repo & install dependencies
 
-## Learn More
+   1. Clone this repo
+      - using SSH (recommended)
+        ```bash
+        git clone [git@insert-project-ssh]
+        ```
+      - using HTTPS
+        ```bash
+        git clone [insert.project.link]
+        ```
+   2. Enter the cloned directory
+      ```bash
+      cd [insert-project-repo]
+      ```
+   3. Install project dependencies. This command installs all packages from [`package.json`](package.json).
+      ```bash
+      npm install
+      ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Set up secrets:
+   1. In the project's root directory (`[insert-project-repo]/`), create a new file named `.env.local`
+   2. Copy the credentials from [Blueprint's internal Notion](https://www.notion.so/calblueprint/Environment-Setup-6fb1e251cdca4393b9dd47a3436abc11?pvs=4#9c2ff603f7a44348835c97e96d521d2d) (access is required) and paste them into the `.env.local` file.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Helpful resources**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [GitHub: Cloning a Repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository#cloning-a-repository)
+- [GitHub: Generating SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 
-## Deploy on Vercel
+### Development environment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **[VSCode](https://code.visualstudio.com/) (recommended)**
+  1. Open the `[insert-project-repo]` project in VSCode.
+  2. Install recommended workspace VSCode extensions. You should see a pop-up on the bottom right to "install the recommended extensions for this repository".
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Running the app
+
+In the project directory, run:
+
+```shell
+ npm run dev
+```
+
+Then, navigate to http://localhost:3000 to launch the web application.
