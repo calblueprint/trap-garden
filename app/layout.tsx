@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={sans.variable}>{children}</body>
+      <body className={sans.className}>{children}</body>
     </html>
   );
 }
