@@ -15,14 +15,18 @@ This project is being built by a team at [Blueprint](https://calblueprint.org), 
 
 ### Prerequisites
 
-Check your installation of `pnpm` and `node`:
+Check your installation of `node` and `pnpm`:
 
 ```bash
 node -v
 pnpm -v
 ```
 
-We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js and pnpm. See [Downloading and installing Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) to install Node.js (and optionally npm). See the [Installation Guide for pnpm](https://pnpm.io/installation) to get pnpm on your system.
+We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js. Visit the [pnpm website](https://pnpm.io/installation) to install pnpm.
+
+Additional resources:
+- [Installing Node.js via package manager](https://nodejs.org/en/download/package-manager/all#nvm)
+- [A Complete guide to pnpm](https://refine.dev/blog/how-to-use-pnpm/#uninstall-packages-with-pnpm)
 
 ### Installation
 

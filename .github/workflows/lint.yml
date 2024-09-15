@@ -47,16 +47,16 @@ jobs:
       # Lint codebase                #
       ################################
       - name: Run ESLint
-        run: npx eslint .
+        run: pnpm exec eslint .
 
       ################################
       # Check Prettier on codebase   #
       ################################
       - name: Run Prettier
-        run: npx prettier --check .
+        run: pnpm exec prettier --check .
 
       ################################
       # Check for TypeScript errors  #
       ################################
       - name: Run TypeScript compiler (tsc)
-        run: npx tsc --noEmit
+        run: pnpm exec tsc --noEmit
