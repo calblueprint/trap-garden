@@ -1,6 +1,6 @@
 # \[Insert Project Name\]
 
-**[BLUEPRINT INTERNAL]: PLEASE GO THROUGH THIS README AND REPLACE ALL THE [INSERT] STATEMENTS WITH VALUES SPECIFIC TO YOUR PROJECT. DELETE THIS MESSAGE WHEN DONE.**
+**[BLUEPRINT INTERNAL]: PLEASE GO THROUGH THIS README AND REPLACE ALL THE [INSERT] STATEMENTS WITH VALUES SPECIFIC TO YOUR PROJECT. DELETE THIS SECTION WHEN DONE.**
 
 This template also has variants with pre-configured setup for styling libraries:
 - [Tailwind CSS](https://github.com/calblueprint/web-app-template/tree/tailwind)
@@ -15,14 +15,14 @@ This project is being built by a team at [Blueprint](https://calblueprint.org), 
 
 ### Prerequisites
 
-Check your installation of `npm` and `node`:
+Check your installation of `pnpm` and `node`:
 
 ```bash
 node -v
-npm -v
+pnpm -v
 ```
 
-We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js and npm. See [Downloading and installing Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js and pnpm. See [Downloading and installing Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) to install Node.js (and optionally npm). See the [Installation Guide for pnpm](https://pnpm.io/installation) to get pnpm on your system.
 
 ### Installation
 
@@ -43,7 +43,7 @@ We strongly recommend using a Node version manager like [nvm](https://github.com
       ```
    3. Install project dependencies. This command installs all packages from [`package.json`](package.json).
       ```bash
-      npm install
+      pnpm install
       ```
 
 2. Set up secrets:
@@ -66,7 +66,7 @@ We strongly recommend using a Node version manager like [nvm](https://github.com
 In the project directory, run:
 
 ```shell
- npm run dev
+pnpm run dev
 ```
 
 Then, navigate to http://localhost:3000 to launch the web application.

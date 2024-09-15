@@ -2,7 +2,7 @@
 name: Lint
 
 #############################
-# Start the job on push #
+# Start the job on push     #
 #############################
 on:
   push:
@@ -28,29 +28,35 @@ jobs:
       # Checkout the code base #
       ##########################
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # Full git history is needed to get a proper
           # list of changed files within `super-linter`
           fetch-depth: 0
 
       ################################
-      # Install packages #
+      # Install packages             #
       ################################
       - name: Install packages
-        run: npm ci
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+
       ################################
-      # Lint codebase #
+      # Lint codebase                #
       ################################
       - name: Run ESLint
         run: npx eslint .
+
       ################################
-      # Check Prettier on codebase #
+      # Check Prettier on codebase   #
       ################################
       - name: Run Prettier
         run: npx prettier --check .
+
       ################################
-      # Check for TypeScript errors #
+      # Check for TypeScript errors  #
       ################################
       - name: Run TypeScript compiler (tsc)
         run: npx tsc --noEmit
