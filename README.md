@@ -70,7 +70,7 @@ Additional resources:
 In the project directory, run:
 
 ```shell
-pnpm run dev
+pnpm dev
 ```
 
 Then, navigate to http://localhost:3000 to launch the web application.
