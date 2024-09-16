@@ -22,11 +22,13 @@ node -v
 pnpm -v
 ```
 
-We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js. Visit the [pnpm website](https://pnpm.io/installation) to install pnpm.
+We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js. If you don't plan on switching between different Node versions, you can alternatively get a [prebuilt installer](https://nodejs.org/en/download/prebuilt-installer) from the Node.js website for an easier approach. Make sure to get Node version 18 and up, the latest LTS version should be sufficient.
+
+After installing Node, you most likely have npm installed as well (check by running `npm -v`). If you have npm installed, simply run `npm install -g pnpm` to install pnpm. If your command line does not recognize npm as a command, refer to [this article](https://www.geeksforgeeks.org/how-to-resolve-npm-command-not-found-error-in-node-js/) to troubleshoot.
 
 Additional resources:
-- [Installing Node.js via package manager](https://nodejs.org/en/download/package-manager/all#nvm)
-- [A Complete guide to pnpm](https://refine.dev/blog/how-to-use-pnpm/#uninstall-packages-with-pnpm)
+- [Downloading and installing Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Installing pnpm without npm](https://pnpm.io/installation)
 
 ### Installation
 
