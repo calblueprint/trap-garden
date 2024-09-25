@@ -1,4 +1,4 @@
-# \[Trap Garden\]
+# Trap Garden
 
 This template also has variants with pre-configured setup for styling libraries:
 - [Tailwind CSS](https://github.com/calblueprint/web-app-template/tree/tailwind)
@@ -35,7 +35,7 @@ Additional resources:
    1. Clone this repo
       - using SSH (recommended)
         ```bash
-        git clone [git@trap-garden-ssh]
+        git clone git@github.com:calblueprint/trap-garden.git
         ```
       - using HTTPS
         ```bash
