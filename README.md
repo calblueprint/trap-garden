@@ -1,4 +1,4 @@
-# Trap Garden
+# Trap Garden 🪴
 
 This template also has variants with pre-configured setup for styling libraries:
 - [Tailwind CSS](https://github.com/calblueprint/web-app-template/tree/tailwind)
@@ -52,7 +52,7 @@ Additional resources:
 
 2. Set up secrets:
    1. In the project's root directory (`trap_garden`), create a new file named `.env.local`
-   2. Copy the credentials from [Blueprint's internal Notion](https://www.notion.so/calblueprint/Environment-Setup-6fb1e251cdca4393b9dd47a3436abc11?pvs=4#9c2ff603f7a44348835c97e96d521d2d) (access is required) and paste them into the `.env.local` file.
+   2. Copy the credentials from [Blueprint's internal Notion](https://www.notion.so/calblueprint/Trap-Garden-Environment-Setup-d283f0c2c3ce43c6aeafa1f24f3d4580) (access is required) and paste them into the `.env.local` file.
 
 **Helpful resources**
 
