@@ -1,14 +1,5 @@
 # \[Insert Project Name\]
 
-**[BLUEPRINT INTERNAL]: PLEASE GO THROUGH THIS README AND REPLACE ALL THE [INSERT] STATEMENTS WITH VALUES SPECIFIC TO YOUR PROJECT. DELETE THIS SECTION WHEN DONE.**
-
-This template also has variants with pre-configured setup for styling libraries:
-- [Tailwind CSS](https://github.com/calblueprint/web-app-template/tree/tailwind)
-- [Styled Components](https://github.com/calblueprint/web-app-template/tree/styled-components)
-- [Vanilla Extract](https://github.com/calblueprint/web-app-template/tree/vanilla-extract)
-
----
-
 This project is being built by a team at [Blueprint](https://calblueprint.org), a student organization at the University of California, Berkeley building software pro bono for nonprofits.
 
 ## Getting Started
@@ -22,7 +13,7 @@ node -v
 pnpm -v
 ```
 
-We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js. If you don't plan on switching between different Node versions, you can alternatively get a [prebuilt installer](https://nodejs.org/en/download/prebuilt-installer) from the Node.js website for an easier approach. Make sure to get Node version 18 and up, the latest LTS version should be sufficient.
+We strongly recommend using a Node version manager like [nvm](https://github.com/nvm-sh/nvm) (for Mac) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (for Windows) to install Node.js. If you don't plan on switching between different Node versions, you can alternatively get a [prebuilt installer](https://nodejs.org/en/download/prebuilt-installer) from the Node.js website for an easier approach. Make sure to get Node version 20 and up, the latest LTS version should be sufficient.
 
 After installing Node, you most likely have npm installed as well (check by running `npm -v`). If you have npm installed, simply run `npm install -g pnpm` to install pnpm. If your command line does not recognize npm as a command, refer to [this article](https://www.geeksforgeeks.org/how-to-resolve-npm-command-not-found-error-in-node-js/) to troubleshoot.
 
