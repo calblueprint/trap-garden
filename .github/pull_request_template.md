@@ -1,6 +1,4 @@
-[//]: # "Feel free to customize this template to your project's vibes"
-
-## What's new in this PR
+## What's new in this PR 🧑‍🌾
 ### Description
 [//]: # "Required - Describe what's new in this PR in a few lines. A description and bullet points for specifics will suffice."
 
@@ -34,4 +32,4 @@
 
 
 
-CC: @insert pl github username here
+CC: @ccatherinetan
