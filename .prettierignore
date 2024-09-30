@@ -4,8 +4,5 @@
 
 README.md
 package-lock.json
-<<<<<<< HEAD
-=======
 pnpm-lock.yaml
->>>>>>> template/styled-components
 next-env.d.ts
