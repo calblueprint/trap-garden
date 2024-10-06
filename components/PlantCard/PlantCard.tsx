@@ -1,0 +1,45 @@
+import React from 'react';
+import styles from './PlantCardStyles.module.css';
+
+function format(start: String, end: String) {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+}
+export default function PlantCard(plantObj: Plant) {
+  return (
+    <div className={styles.Card}>
+      <div className={styles.CardPic}>
+        <img alt={plantObj.plant_name}></img>
+      </div>
+      <div className={styles.cardContent}>
+        <h2>{plantObj.plant_name}</h2>
+        <div className={styles.plantAttributes}>
+          <div className={styles.attribute}>
+            {/* icon */}
+            <p>{plantObj.harvest_start + ' - ' + plantObj.harvest_end}</p>
+          </div>
+          <div className={styles.attribute}>
+            {/* icon */}
+            <p>{plantObj.water_num_times_per_week + ' times / wk'}</p>
+          </div>
+          <div className={styles.attribute}>
+            {/* icon */}
+            <p>{plantObj.sunlight_required}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
