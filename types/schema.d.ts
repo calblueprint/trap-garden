@@ -2,6 +2,13 @@ import type { UUID } from 'crypto';
 
 export type Season = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
 
+export interface Profile {
+  state: string;
+  email: string;
+  phone_num: string;
+  user_type: string;
+}
+
 export interface Plant {
   id: UUID;
   plant_name: string;
