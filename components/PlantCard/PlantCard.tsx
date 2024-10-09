@@ -1,22 +1,7 @@
 import React from 'react';
+import { Plant } from '@/types/schema';
 import styles from './PlantCardStyles.module.css';
 
-function format(start: String, end: String) {
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-}
 export default function PlantCard(plantObj: Plant) {
   return (
     <div className={styles.Card}>
