@@ -12,8 +12,6 @@ export default function Page() {
   const { addProfile } = useProfile();
 
   const handleButtonClick = (state: string) => {
-    const newProfile = { state, email: '', phone_num: '', user_type: '' };
-    addProfile(newProfile);
     console.log('test');
   };
   return (
