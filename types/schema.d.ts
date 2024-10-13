@@ -3,10 +3,12 @@ import type { UUID } from 'crypto';
 export type Season = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
 
 export interface Profile {
+  user_id: UUID;
   state: string;
   email: string;
   phone_num: string;
   user_type: string;
+  has_plot: boolean;
 }
 
 export interface Plant {
