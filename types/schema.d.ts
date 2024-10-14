@@ -21,4 +21,5 @@ export interface Plant {
   sunlight_required: string;
   beginner_friendly: boolean;
   plant_tips: string;
+  img: string;
 }
