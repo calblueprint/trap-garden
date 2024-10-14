@@ -2,7 +2,14 @@ import React from 'react';
 import { Plant } from '@/types/schema';
 import styles from './PlantCardStyles.module.css';
 
-export default function PlantCard(plantObj: Plant) {
+export default function PlantCard({
+  plantObj,
+  canSelect,
+}: {
+  plantObj: Plant;
+  canSelect: boolean;
+}) {
+  console.log(canSelect);
   return (
     <div className={styles.Card}>
       <div className={styles.CardPic}>
