@@ -10,7 +10,7 @@ export interface Plant {
   state: string;
   harvest_season: SeasonEnum;
   water_frequency: string;
-  weed_frequency: string;
+  weeding_frequency: string;
   plant_seed_indoors_start: string;
   plant_seed_indoors_end: string;
   plant_seed_outdoors_start: string;
