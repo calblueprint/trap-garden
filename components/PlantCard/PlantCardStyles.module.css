@@ -22,31 +22,31 @@
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
-.cardContent {
+.CardContent {
   display: flex;
   flex-direction: column;
-  padding-left: 20px;
+  padding-left: 1vw;
   height: 40%;
-  row-gap: 10px;
+  row-gap: 1vh;
 }
-.cardContent > * {
+.CardContent > * {
   margin: 0;
 }
-.cardContent > h2 {
-  font-size: 20px;
-  margin-top: 10px;
+.CardContent > h2 {
+  font-size: 1.5vw;
+  margin-top: 1vh;
 }
-.plantAttributes {
+.PlantAttributes {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1vh;
 }
 
-.attribute {
+.Attribute {
   display: flex;
   flex-direction: row;
 }
-.attribute > * {
+.Attribute > * {
   margin: 0;
-  font-size: 14px;
+  font-size: 1vw;
 }
