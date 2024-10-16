@@ -2,26 +2,26 @@ import React from 'react';
 import { Plant } from '@/types/schema';
 import styles from './PlantCardStyles.module.css';
 
-export default function PlantCard(plantObj: Plant) {
+export default function PlantCard({ plant }: { plant: Plant }) {
   return (
     <div className={styles.Card}>
       <div className={styles.CardPic}>
-        <img alt={plantObj.plant_name}></img>
+        <img alt={plant.plant_name}></img>
       </div>
-      <div className={styles.cardContent}>
-        <h2>{plantObj.plant_name}</h2>
-        <div className={styles.plantAttributes}>
-          <div className={styles.attribute}>
+      <div className={styles.CardContent}>
+        <h2>{plant.plant_name}</h2>
+        <div className={styles.PlantAttributes}>
+          <div className={styles.Attribute}>
             {/* icon */}
-            <p>{plantObj.harvest_start + ' - ' + plantObj.harvest_end}</p>
+            <p>{plant.harvest_start + ' - ' + plant.harvest_end}</p>
           </div>
-          <div className={styles.attribute}>
+          <div className={styles.Attribute}>
             {/* icon */}
-            <p>{plantObj.water_num_times_per_week + ' times / wk'}</p>
+            <p>{plant.water_num_times_per_week + ' times / wk'}</p>
           </div>
-          <div className={styles.attribute}>
+          <div className={styles.Attribute}>
             {/* icon */}
-            <p>{plantObj.sunlight_required}</p>
+            <p>{plant.sunlight_required}</p>
           </div>
         </div>
       </div>
