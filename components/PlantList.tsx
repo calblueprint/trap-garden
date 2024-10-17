@@ -7,7 +7,7 @@ export const PlantList = () => {
 
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
-      const plantList = await getPlantSeasonality('Tennessee');
+      const plantList = await getPlantSeasonality('TENNESSEE');
       setPlants(plantList);
     };
 
