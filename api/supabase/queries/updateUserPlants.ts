@@ -1,4 +1,4 @@
-import { randomUUID, UUID } from 'crypto';
+import { UUID } from 'crypto';
 import supabase from '../createClient';
 
 interface FormData {
@@ -19,5 +19,6 @@ export async function updateUserPlants(userId: UUID, formData: FormData[]) {
       date_harvested: null,
       planting_type: curr['plant_type'],
     });
+    if (error) throw new Error(`Error inserting data: ${error.message}`);
   });
 }
