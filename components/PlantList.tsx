@@ -11,10 +11,10 @@ interface PlantListProps {
 export const PlantList = (props: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
   const growingSeasonToMonth = new Map<string, string[]>([
-    ['Spring', ['March', 'April', 'May']],
-    ['Summer', ['June', 'July', 'August']],
-    ['Fall', ['September', 'October', 'November']],
-    ['Winter', ['December', 'January', 'February']],
+    ['Spring', ['MARCH', 'APRIL', 'MAY']],
+    ['Summer', ['JUNE', 'JULY', 'AUGUST']],
+    ['Fall', ['SEPTEMBER', 'OCTOBER', 'NOVEMBER']],
+    ['Winter', ['DECEMBER', 'JANUARY', 'FEBRUARY']],
   ]);
 
   useEffect(() => {
@@ -39,10 +39,10 @@ export const PlantList = (props: PlantListProps) => {
     const months = growingSeasonToMonth.get(props.growing_season);
 
     return (
-      months?.includes(plant.plant_seed_indoors_start) ||
-      months?.includes(plant.plant_seed_indoors_end) ||
-      months?.includes(plant.plant_seed_outdoors_start) ||
-      months?.includes(plant.plant_seed_outdoors_end)
+      months?.includes(plant.indoors_start) ||
+      months?.includes(plant.indoors_end) ||
+      months?.includes(plant.outdoors_start) ||
+      months?.includes(plant.outdoors_end)
     );
   };
 
@@ -60,20 +60,11 @@ export const PlantList = (props: PlantListProps) => {
     }
 
     if (props.planting_type === 'Start Seeds Indoors') {
-      return (
-        plant.plant_seed_indoors_start !== null &&
-        plant.plant_seed_indoors_start !== null
-      );
+      return plant.indoors_start !== null && plant.indoors_start !== null;
     } else if (props.planting_type === 'Start Seeds Outdoors') {
-      return (
-        plant.plant_seed_outdoors_start !== null &&
-        plant.plant_seed_outdoors_start !== null
-      );
+      return plant.outdoors_start !== null && plant.outdoors_start !== null;
     } else if (props.planting_type === 'Plant Seedlings/Transplant Outdoors') {
-      return (
-        plant.plant_transplant_start !== null &&
-        plant.plant_transplant_end !== null
-      );
+      return plant.transplant_start !== null && plant.transplant_end !== null;
     }
   };
 
