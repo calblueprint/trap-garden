@@ -5,7 +5,7 @@ export async function getPlantSeasonality(
   input_state: string,
 ): Promise<Plant[]> {
   const { data, error } = await supabase
-    .from('plant_seasonality')
+    .from('plants')
     .select('*')
     .eq('state', input_state);
   if (error)
