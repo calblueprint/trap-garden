@@ -4,7 +4,7 @@ interface FilterDropdownProps {
   name: string;
   id: string;
   value: string;
-  setStateAction: React.SetStateAction<any>;
+  setStateAction: React.Dispatch<React.SetStateAction<string>>;
   options: string[];
   placeholder: string;
 }
