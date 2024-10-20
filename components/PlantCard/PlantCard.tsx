@@ -24,11 +24,11 @@ export default function PlantCard({
           </div>
           <div className={styles.attribute}>
             {/* icon */}
-            <p>{plantObj.water_num_times_per_week + ' times / wk'}</p>
+            <p>{plantObj.water_frequency + ' times / wk'}</p>
           </div>
           <div className={styles.attribute}>
             {/* icon */}
-            <p>{plantObj.sunlight_required}</p>
+            <p>{plantObj.sunlight_min_hours}</p>
           </div>
         </div>
       </div>

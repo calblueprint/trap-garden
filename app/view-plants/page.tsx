@@ -41,6 +41,7 @@ export default function Home() {
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
       const plantList = await getPlantSeasonality('Tennessee');
+      console.log(plantList[0]);
       setPlants(plantList);
     };
 
