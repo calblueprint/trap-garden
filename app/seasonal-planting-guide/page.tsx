@@ -4,20 +4,22 @@ import React, { useState } from 'react';
 // import FilterDropdown from '@/components/FilterDropdown';
 import { PlantList } from '@/components/PlantList';
 
-interface SeasonalPlantingGuideProps {}
+// interface SeasonalPlantingGuideProps {}
 
-const SeasonalPlantingGuide = (props: SeasonalPlantingGuideProps) => {
-  const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
-  const harvestSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
-  const plantingTypeOptions = [
-    'Start Seeds Indoors',
-    'Start Seeds Outdoors',
-    'Plant Seedlings/Transplant Outdoors',
-  ];
+const SeasonalPlantingGuide = () => {
+  // hide this for now, will be used in the next PR for dropdown filters
 
-  const [growingSeason, setGrowingSeason] = useState<string>('');
-  const [harvestSeason, setHarvestSeason] = useState<string>('');
-  const [plantingType, setPlantingType] = useState<string>('');
+  // const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
+  // const harvestSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
+  // const plantingTypeOptions = [
+  //   'Start Seeds Indoors',
+  //   'Start Seeds Outdoors',
+  //   'Plant Seedlings/Transplant Outdoors',
+  // ];
+
+  // const [growingSeason, setGrowingSeason] = useState<string>('');
+  // const [harvestSeason, setHarvestSeason] = useState<string>('');
+  // const [plantingType, setPlantingType] = useState<string>('');
 
   return (
     //hide filter dropdowns for now, will be done in another PR
@@ -47,9 +49,9 @@ const SeasonalPlantingGuide = (props: SeasonalPlantingGuideProps) => {
       /> */}
 
       <PlantList
-        growing_season={growingSeason}
-        harvest_season={harvestSeason}
-        planting_type={plantingType}
+      // growing_season={growingSeason}
+      // harvest_season={harvestSeason}
+      // planting_type={plantingType}
       />
     </div>
   );
