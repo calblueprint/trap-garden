@@ -7,7 +7,7 @@ export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
 export interface Plant {
   id: UUID;
   plant_name: string;
-  state: string;
+  us_state: string;
   harvest_season: SeasonEnum;
   water_frequency: string;
   weeding_frequency: string;
