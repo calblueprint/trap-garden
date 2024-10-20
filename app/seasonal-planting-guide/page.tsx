@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 import FilterDropdown from '@/components/FilterDropdown';
 import { PlantList } from '@/components/PlantList';
 
-interface SeasonalPlantingGuideProps {}
-
-const SeasonalPlantingGuide = (props: SeasonalPlantingGuideProps) => {
+const SeasonalPlantingGuide = () => {
   const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
   const harvestSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
   const plantingTypeOptions = [
@@ -19,11 +17,18 @@ const SeasonalPlantingGuide = (props: SeasonalPlantingGuideProps) => {
   const [harvestSeason, setHarvestSeason] = useState<string>('');
   const [plantingType, setPlantingType] = useState<string>('');
 
+  const clearFilters = () => {
+    setGrowingSeason('');
+    setHarvestSeason('');
+    setPlantingType('');
+  };
+
   return (
     <div>
       <FilterDropdown
         name="growingSeason"
         id="growingSeason"
+        value={growingSeason}
         setStateAction={setGrowingSeason}
         options={growingSeasonOptions}
         placeholder="Growing Season"
@@ -32,6 +37,7 @@ const SeasonalPlantingGuide = (props: SeasonalPlantingGuideProps) => {
       <FilterDropdown
         name="harvestSeason"
         id="harvestSeason"
+        value={harvestSeason}
         setStateAction={setHarvestSeason}
         options={harvestSeasonOptions}
         placeholder="Harvest Season"
@@ -40,10 +46,13 @@ const SeasonalPlantingGuide = (props: SeasonalPlantingGuideProps) => {
       <FilterDropdown
         name="plantingType"
         id="plantingType"
+        value={plantingType}
         setStateAction={setPlantingType}
         options={plantingTypeOptions}
         placeholder="Planting Type"
       />
+
+      <button onClick={clearFilters}>Clear filters</button>
 
       <PlantList
         growing_season={growingSeason}

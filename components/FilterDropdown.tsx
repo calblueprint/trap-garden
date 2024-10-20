@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 interface FilterDropdownProps {
   name: string;
   id: string;
+  value: string;
   setStateAction: React.SetStateAction<any>;
   options: string[];
   placeholder: string;
@@ -27,9 +28,10 @@ export default function FilterDropdown(props: FilterDropdownProps) {
       onChange={handleChange}
       onClick={handleToggle}
       onBlur={() => setIsOpen(false)}
+      value={props.value}
     >
       {/*Default placeholder text*/}
-      <option disabled={true} selected={true} hidden={true}>
+      <option value="" disabled hidden>
         {props.placeholder}
       </option>
       {props.options.map((option, index) => (
