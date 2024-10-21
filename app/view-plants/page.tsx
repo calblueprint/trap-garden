@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { UUID } from 'crypto';
-import { getPlantById } from '@/api/supabase/queries/plant_by_id';
+import { getPlantById } from '@/api/supabase/queries/plants';
 import PlantCard from '@/components/PlantCard/PlantCard';
 import { Plant } from '@/types/schema';
 
@@ -10,9 +10,8 @@ export default function Home() {
   const [result, setResult] = useState<Plant>();
   useEffect(() => {
     const getData = async () => {
-      const testState: string = 'Tennessee';
-      const testUUID: UUID = '185a3300-b0fc-4383-8fb4-417737d77659';
-      const plant2 = await getPlantById(testState, testUUID);
+      const testUUID: UUID = '010ae695-6cc8-4af4-919a-d15b92fdd68d';
+      const plant2 = await getPlantById(testUUID);
       setResult(plant2); // Set the result to state
     };
 

@@ -17,11 +17,17 @@ export default function PlantCard({ plant }: { plant: Plant }) {
           </div>
           <div className={styles.Attribute}>
             {/* icon */}
-            <p>{plant.water_num_times_per_week + ' times / wk'}</p>
+            <p>{plant.water_frequency}</p>
           </div>
           <div className={styles.Attribute}>
             {/* icon */}
-            <p>{plant.sunlight_required}</p>
+            <p>
+              {plant.sunlight_min_hours}
+              {plant.sunlight_max_hours
+                ? ' - ' + plant.sunlight_max_hours
+                : ''}{' '}
+              hours/day
+            </p>
           </div>
         </div>
       </div>
