@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getPlantSeasonality } from '@/api/supabase/queries/plantSeasonality';
+import { getAllPlants } from '@/api/supabase/queries/plants';
 import { Plant } from '@/types/schema';
 
 export const PlantList = () => {
@@ -7,8 +7,12 @@ export const PlantList = () => {
 
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
-      const plantList = await getPlantSeasonality('Tennessee');
-      setPlants(plantList);
+      const plantList = await getAllPlants();
+      const us_state = 'TENNESSEE';
+      const filteredPlantList = plantList.filter(
+        plant => plant.us_state === us_state,
+      );
+      setPlants(filteredPlantList);
     };
 
     fetchPlantSeasonality();
