@@ -39,7 +39,8 @@ export default function Login() {
       />
       <button type="button" onClick={handleLogin}>
         Sign in
-      </button>
+      </button>{' '}
+      {/* Sign in button */}
     </>
   );
 }
