@@ -4,6 +4,13 @@ export type SeasonEnum = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
 
 export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
 
+export interface Profile {
+  user_id: UUID;
+  state: string;
+  user_type: string;
+  has_plot: boolean;
+}
+
 export interface Plant {
   id: UUID;
   plant_name: string;
