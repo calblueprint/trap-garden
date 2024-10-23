@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-// import FilterDropdown from '@/components/FilterDropdown';
+import React, { useState } from 'react';
+import FilterDropdown from '@/components/FilterDropdown';
 import { PlantList } from '@/components/PlantList';
 
 const SeasonalPlantingGuide = () => {
@@ -26,7 +26,7 @@ const SeasonalPlantingGuide = () => {
   return (
     //hide filter dropdowns for now, will be done in another PR
     <div>
-      {/* <FilterDropdown
+      <FilterDropdown
         name="growingSeason"
         id="growingSeason"
         value={growingSeason}
@@ -56,9 +56,9 @@ const SeasonalPlantingGuide = () => {
       <button onClick={clearFilters}>Clear filters</button>
 
       <PlantList
-      // growing_season={growingSeason}
-      // harvest_season={harvestSeason}
-      // planting_type={plantingType}
+        growing_season={growingSeason}
+        harvest_season={harvestSeason}
+        planting_type={plantingType}
       />
     </div>
   );
