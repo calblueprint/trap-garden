@@ -4,12 +4,6 @@ import React, { useState } from 'react';
 import { upsertProfile } from '@/api/supabase/queries/profiles';
 import { Profile } from '@/types/schema';
 
-type UUID = `${string}-${string}-${string}-${string}-${string}`;
-const generateUUID = (): UUID => {
-  return crypto.randomUUID() as UUID;
-};
-const id = generateUUID();
-
 // Define the possible options for each question
 const states = ['Tennessee', 'Missouri'];
 const gardenTypes = ['Individual', 'Community', 'School'];
@@ -124,20 +118,19 @@ const OnboardingFlow = () => {
 
   const handleSubmit = async () => {
     const profile: Profile = {
-      user_id: id,
+      user_id: '2abd7296-374a-42d1-bb4f-b813da1615ae',
       state: selectedState,
-      email: '',
-      phone_num: '',
       user_type: selectedGardenType,
       has_plot: selectedPlot,
     };
     try {
-      const updatedProfile = await upsertProfile(profile);
-      console.log('Profile successfully upserted:', updatedProfile);
-    } catch (err) {
-      console.error('Error upserting profile:', err);
+      upsertProfile(profile);
+    } catch (error) {
+      console.error('Error upserting profile:', error);
+      throw new Error('Error upserting profile');
     } finally {
     }
+    //TODO: Remove console log.
     console.log('Submitted data: ', profile);
     // Handle form submission, e.g., send to a server or display a confirmation
   };
