@@ -1,51 +1,36 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import supabase from '../../../api/supabase/createClient';
+import { AuthProvider, useAuth } from '../../utils/AuthProvider';
 
-export default function Login() {
+export default function LoginLayout() {
+  return (
+    <AuthProvider>
+      <Login />
+    </AuthProvider>
+  );
+}
+
+function Login() {
+  const { signIn, signUp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { push } = useRouter();
 
-  const handleSignUp = async () => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      // Check if the error is due to an already registered email
-      if (error.message.includes('User already registered')) {
-        throw new Error(
-          'This email is already registered. Please try signing in instead.',
-        );
-      } else {
-        throw new Error(
-          `An error occurred trying to sign up: ${error.message}`,
-        );
-      }
+  const handleSignIn = async () => {
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      console.error(error.message);
     }
-
-    push('/');
-
-    return data;
   };
 
-  const handleSignInWithEmail = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      throw new Error(`An error occurred trying to sign in: ${error}`);
+  const handleSignUp = async () => {
+    // Define handleSignUp
+    try {
+      await signUp(email, password);
+    } catch (error) {
+      console.error(error.message);
     }
-
-    push('/');
-
-    return data;
   };
 
   return (
@@ -65,10 +50,12 @@ export default function Login() {
       />
       <button type="button" onClick={handleSignUp}>
         Sign up
-      </button>
-      <button type="button" onClick={handleSignInWithEmail}>
+      </button>{' '}
+      {/* Sign up button */}
+      <button type="button" onClick={handleSignIn}>
         Sign in
-      </button>
+      </button>{' '}
+      {/* Sign in button */}
     </>
   );
 }
