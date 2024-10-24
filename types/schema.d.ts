@@ -11,12 +11,12 @@ export interface Plant {
   harvest_season: SeasonEnum;
   water_frequency: string;
   weeding_frequency: string;
-  plant_seed_indoors_start: string;
-  plant_seed_indoors_end: string;
-  plant_seed_outdoors_start: string;
-  plant_seed_outdoors_end: string;
-  plant_transplant_start: string;
-  plant_transplant_end: string;
+  indoors_start: string;
+  indoors_end: string;
+  outdoors_start: string;
+  outdoors_end: string;
+  transplant_start: string;
+  transplant_end: string;
   harvest_start: string;
   harvest_end: string;
   beginner_friendly: boolean;
