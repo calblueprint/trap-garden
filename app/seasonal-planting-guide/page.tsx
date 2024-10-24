@@ -56,9 +56,9 @@ const SeasonalPlantingGuide = () => {
       <button onClick={clearFilters}>Clear filters</button>
 
       <PlantList
-        growing_season={growingSeason}
-        harvest_season={harvestSeason}
-        planting_type={plantingType}
+        growingSeason={growingSeason}
+        harvestSeason={harvestSeason}
+        plantingType={plantingType}
       />
     </div>
   );

@@ -9,11 +9,18 @@ interface FilterDropdownProps {
   placeholder: string;
 }
 
-export default function FilterDropdown(props: FilterDropdownProps) {
+export default function FilterDropdown({
+  name,
+  id,
+  value,
+  setStateAction,
+  options,
+  placeholder,
+}: FilterDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    props.setStateAction(event.target.value);
+    setStateAction(event.target.value);
     setIsOpen(false);
   };
 
@@ -23,18 +30,18 @@ export default function FilterDropdown(props: FilterDropdownProps) {
 
   return (
     <select
-      name={props.name}
-      id={props.id}
+      name={name}
+      id={id}
       onChange={handleChange}
       onClick={handleToggle}
       onBlur={() => setIsOpen(false)}
-      value={props.value}
+      value={value}
     >
       {/*Default placeholder text*/}
       <option value="" disabled hidden>
-        {props.placeholder}
+        {placeholder}
       </option>
-      {props.options.map((option, index) => (
+      {options.map((option, index) => (
         <option key={index} value={option}>
           {option}
         </option>

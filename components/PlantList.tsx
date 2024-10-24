@@ -3,12 +3,16 @@ import { getAllPlants } from '@/api/supabase/queries/plants';
 import { Plant } from '@/types/schema';
 
 interface PlantListProps {
-  harvest_season: string;
-  planting_type: string;
-  growing_season: string;
+  harvestSeason: string;
+  plantingType: string;
+  growingSeason: string;
 }
 
-export const PlantList = (props: PlantListProps) => {
+export const PlantList = ({
+  harvestSeason,
+  plantingType,
+  growingSeason,
+}: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
   const growingSeasonToMonth = new Map<string, string[]>([
     ['Spring', ['MARCH', 'APRIL', 'MAY']],
@@ -32,11 +36,11 @@ export const PlantList = (props: PlantListProps) => {
   }, []);
 
   const checkGrowingSeason = (plant: Plant) => {
-    if (!props.growing_season) {
+    if (!growingSeason) {
       return true;
     }
 
-    const months = growingSeasonToMonth.get(props.growing_season);
+    const months = growingSeasonToMonth.get(growingSeason);
 
     return (
       months?.includes(plant.indoors_start) ||
@@ -47,24 +51,23 @@ export const PlantList = (props: PlantListProps) => {
   };
 
   const checkHarvestSeason = (plant: Plant) => {
-    if (!props.harvest_season) {
-      return true;
-    }
-
-    return plant.harvest_season === props.harvest_season.toLocaleUpperCase();
+    return (
+      !harvestSeason ||
+      plant.harvest_season === harvestSeason.toLocaleUpperCase()
+    );
   };
 
   const checkPlantingType = (plant: Plant) => {
-    if (!props.planting_type) {
+    if (!plantingType) {
       return true;
     }
 
-    if (props.planting_type === 'Start Seeds Indoors') {
-      return plant.indoors_start !== null && plant.indoors_start !== null;
-    } else if (props.planting_type === 'Start Seeds Outdoors') {
-      return plant.outdoors_start !== null && plant.outdoors_start !== null;
-    } else if (props.planting_type === 'Plant Seedlings/Transplant Outdoors') {
-      return plant.transplant_start !== null && plant.transplant_end !== null;
+    if (plantingType === 'Start Seeds Indoors') {
+      return plant.indoors_start !== null;
+    } else if (plantingType === 'Start Seeds Outdoors') {
+      return plant.outdoors_start !== null;
+    } else if (plantingType === 'Plant Seedlings/Transplant Outdoors') {
+      return plant.transplant_start !== null;
     }
   };
 

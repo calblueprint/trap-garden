@@ -7,7 +7,7 @@ export async function getPlantSeasonality(
   const { data, error } = await supabase
     .from('plants')
     .select('*')
-    .eq('state', input_state);
+    .eq('us_state', input_state);
   if (error)
     throw new Error(`Error fetching plant seasonality: ${error.message}`);
   return data;
