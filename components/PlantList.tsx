@@ -14,11 +14,26 @@ export const PlantList = ({
   growingSeason,
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
-  const growingSeasonToMonth = new Map<string, string[]>([
-    ['Spring', ['MARCH', 'APRIL', 'MAY']],
-    ['Summer', ['JUNE', 'JULY', 'AUGUST']],
-    ['Fall', ['SEPTEMBER', 'OCTOBER', 'NOVEMBER']],
-    ['Winter', ['DECEMBER', 'JANUARY', 'FEBRUARY']],
+  const growingSeasonToIndex = new Map<string, number[]>([
+    ['Spring', [2, 3, 4]],
+    ['Summer', [5, 6, 7]],
+    ['Fall', [8, 9, 10]],
+    ['Winter', [11, 0, 1]],
+  ]);
+
+  const monthToIndex = new Map<string, number>([
+    ['JANUARY', 0],
+    ['FEBRUARY', 1],
+    ['MARCH', 2],
+    ['APRIL', 3],
+    ['MAY', 4],
+    ['JUNE', 5],
+    ['JULY', 6],
+    ['AUGUST', 7],
+    ['SEPTEMBER', 8],
+    ['OCTOBER', 9],
+    ['NOVEMBER', 10],
+    ['DECEMBER', 11],
   ]);
 
   useEffect(() => {
@@ -35,33 +50,62 @@ export const PlantList = ({
     fetchPlantSeasonality();
   }, []);
 
+  // Check if growingSeason matches the plant's growing season
   const checkGrowingSeason = (plant: Plant) => {
+    // Automatically returns true if selected growing season is ''
     if (!growingSeason) {
       return true;
     }
 
-    const months = growingSeasonToMonth.get(growingSeason);
+    // list of valid indexes for the growing season
+    // indexes are the months of the year
+    const validIndexes = growingSeasonToIndex.get(growingSeason);
 
+    const isInRange = (start: number, end: number, validIndexes: number[]) => {
+      // Checks if the start and end months are within the valid range
+      if (start <= end) {
+        return validIndexes.some(index => index >= start && index <= end);
+      } else {
+        // Handle wrap-around case (e.g. NOVEMBER to FEBRUARY)
+        return validIndexes.some(index => index >= start || index <= end);
+      }
+    };
+
+    // Checks if either indoor_start to indoor_end or outdoor_start to outdoor_end
+    // is within the valid range
+    // exclamation marks to assert values are not undefined
     return (
-      months?.includes(plant.indoors_start) ||
-      months?.includes(plant.indoors_end) ||
-      months?.includes(plant.outdoors_start) ||
-      months?.includes(plant.outdoors_end)
+      isInRange(
+        monthToIndex.get(plant.indoors_start)!,
+        monthToIndex.get(plant.indoors_end)!,
+        validIndexes!,
+      ) ||
+      isInRange(
+        monthToIndex.get(plant.outdoors_start)!,
+        monthToIndex.get(plant.outdoors_end)!,
+        validIndexes!,
+      )
     );
   };
 
+  // Checks if harvestSeason matches the plant's harvest_season
   const checkHarvestSeason = (plant: Plant) => {
+    // Automatically returns true if selected harvestSeason is ''
     return (
       !harvestSeason ||
       plant.harvest_season === harvestSeason.toLocaleUpperCase()
     );
   };
 
+  // Checks if plantingType matches the plant's planting type
   const checkPlantingType = (plant: Plant) => {
+    // Automatically returns true if selected plantingType is ''
     if (!plantingType) {
       return true;
     }
 
+    // Checking if corresponding start field in table is not null
+    // according to plantingType selected
     if (plantingType === 'Start Seeds Indoors') {
       return plant.indoors_start !== null;
     } else if (plantingType === 'Start Seeds Outdoors') {
@@ -72,6 +116,8 @@ export const PlantList = ({
   };
 
   const filterPlantList = (plant: Plant) => {
+    // Filters the plant list based on the selected filters
+    // Only returns true if plant passes all checks
     return (
       checkGrowingSeason(plant) &&
       checkHarvestSeason(plant) &&
@@ -82,6 +128,7 @@ export const PlantList = ({
   return (
     <div>
       {plants.filter(filterPlantList).map((plant, key) => (
+        //this should display PlantCalendarRows instead of this temporary div
         <div key={key}>{plant.plant_name}</div>
       ))}
     </div>
