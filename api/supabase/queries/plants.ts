@@ -12,10 +12,12 @@ export async function getPlantById(plantId: UUID): Promise<Plant> {
   const { data, error } = await supabase
     .from('plants')
     .select('*')
-    .eq('id', plantId);
+    .eq('id', plantId)
+    .limit(1)
+    .single();
   if (error) {
     throw new Error(`Error getting matching plant: ${error.message}`);
   }
 
-  return data[0];
+  return data;
 }

@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import { UUID } from 'crypto';
-import { getPlantById } from '@/api/supabase/queries/plants';
+import supabase from '@/api/supabase/createClient';
+import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
 import PlantCard from '@/components/PlantCard/PlantCard';
 import { Plant } from '@/types/schema';
-import supabase from '@/api/supabase/createClient';
 
-export default function Home() {
-  const [selectedOption, setSelectedOption] = useState<'myPlants' | 'all'>(
+export default function Page() {
+  const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
     'myPlants',
   );
-  const [isSelected, setIsSelected] = useState<true | false>(false);
+  const [inAddMode, setInAddMode] = useState<boolean>(false);
 
   const [plants, setPlants] = useState<Plant[]>([]);
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
@@ -20,26 +20,24 @@ export default function Home() {
     const { data, error } = await supabase
       .from('user_plants')
       .select('plant_id')
-      .eq('user_id', user_id);
+      .eq('user_id', user_id)
+      .is('date_harvested', null);
 
     if (error) {
       console.error('Error fetching plant IDs:', error);
       return [];
     }
-
-    const plantIds = data?.map(row => row.plant_id) || [];
-    if (plantIds.length === 0) {
-      return [];
-    }
+    if (!data) return [];
+    const plantIds = data.map(row => row.plant_id) || [];
 
     const plantsUser: Plant[] = await Promise.all(
-      plantIds.map(plantId => get_plant_by_id('Tennessee', plantId)),
+      plantIds.map(plantId => getPlantById(plantId)),
     );
     return plantsUser;
   }
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
-      const plantList = await getPlantSeasonality('Tennessee');
+      const plantList = await getAllPlants();
       setPlants(plantList);
     };
 
@@ -53,55 +51,54 @@ export default function Home() {
     fetchData();
   }, []);
 
-  // Handle button clicks
-  const handleClick = (option: 'myPlants' | 'all') => {
-    setSelectedOption(option);
-  };
-  const handleSelected = (isSelectedInput: true | false) => {
-    setIsSelected(isSelectedInput);
-  };
   return (
     <div className="main">
       <div id="plantContent">
         <div className="plantSelectionHeader">
-          <button onClick={() => handleClick('myPlants')}>My Plants</button>
-          <button onClick={() => handleClick('all')}>All</button>
+          <button onClick={() => setViewingOption('myPlants')}>
+            My Plants
+          </button>
+          <button onClick={() => setViewingOption('all')}>All</button>
         </div>
         <div className="componentsDisplay">
-          {selectedOption === 'myPlants' && userPlants.length == 0 && (
-            <div>
-              <button onClick={() => handleClick('all')}>Add Plants</button>
-            </div>
-          )}
-          {selectedOption === 'myPlants' && (
-            <div>
-              {userPlants.map((plant, key) => (
-                <PlantCard key={key} plantObj={plant} canSelect={false} />
-              ))}
-            </div>
-          )}
-          {selectedOption === 'all' && isSelected == true && (
-            <div>
-              {plants.map((plant, key) => (
-                <PlantCard key={key} plantObj={plant} canSelect={true} />
-              ))}
-              <div className="footer">
-                <button>Add to my plants</button>
+          {viewingOption === 'myPlants' &&
+            (userPlants.length ? (
+              <div>
+                {userPlants.map((plant, key) => (
+                  <PlantCard key={key} plant={plant} canSelect={false} />
+                ))}
               </div>
-            </div>
-          )}
-          {selectedOption === 'all' && isSelected == false && (
-            <div>
-              {plants.map((plant, key) => (
-                <PlantCard key={key} plantObj={plant} canSelect={false} />
-              ))}
-              <div className="footer">
-                <button onClick={() => handleSelected(true)}>
-                  Add to my plants
+            ) : (
+              <div>
+                <button onClick={() => setViewingOption('all')}>
+                  Add Plants
                 </button>
               </div>
-            </div>
-          )}
+            ))}
+          {viewingOption === 'all' &&
+            (inAddMode ? (
+              <div>
+                {plants.map((plant, key) => (
+                  <PlantCard key={key} plant={plant} canSelect={true} />
+                ))}
+                <div className="footer">
+                  <button onClick={() => setInAddMode(false)}>
+                    Select Plants
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                {plants.map((plant, key) => (
+                  <PlantCard key={key} plant={plant} canSelect={false} />
+                ))}
+                <div className="footer">
+                  <button onClick={() => setInAddMode(true)}>
+                    Add to my plants
+                  </button>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </div>
