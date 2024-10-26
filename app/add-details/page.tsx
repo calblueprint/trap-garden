@@ -10,12 +10,13 @@ import { Plant, UserPlants } from '@/types/schema';
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState<number>(1);
   const [details, setDetails] = useState<Partial<UserPlants>[]>([]);
+  const [isDisabled, setIsDisabled] = useState<boolean[]>([true]);
   const router = useRouter();
 
   const plants: Plant[] = [
     {
       id: '43c19f80-8205-4d03-b323-05c220550bf0',
-      plant_name: 'cabbbage',
+      plant_name: 'cabbage',
       us_state: 'string',
       harvest_season: 'SPRING',
       water_frequency: 'string',
@@ -37,7 +38,7 @@ export default function Home() {
     },
     {
       id: '43c19f80-8205-4d03-b323-05c220550bf0',
-      plant_name: 'tomatoooooo',
+      plant_name: 'tomato',
       us_state: 'string',
       harvest_season: 'SPRING',
       water_frequency: 'string',
@@ -59,74 +60,91 @@ export default function Home() {
     },
   ];
   const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
+  const getDefaultDate = () => new Date().toISOString().substring(0, 10);
 
   function move(steps: number) {
-    // if ur not at the end of the plant details flow update details to store what was in the inputs
-    if (currentIndex != plants.length + 1) {
-      const updatedDetails = [...details];
-      const plantID = plants[currentIndex - 1]['id'];
-      const date = (document.getElementById('date')! as HTMLInputElement).value;
-      const plant_type = (
-        document.getElementById('plantingType')! as HTMLInputElement
-      ).value;
-      updatedDetails[currentIndex - 1] = {
-        date_added: date,
-        planting_type: plant_type,
-        plant_id: plantID,
-      };
-      setDetails(updatedDetails);
+    // Navigate between plants and save input data
+    const currentDetail = details[currentIndex - 1];
+    if (
+      (!currentDetail || !currentDetail.date_added) &&
+      currentIndex <= plants.length
+    ) {
+      updateInput('date_added', getDefaultDate());
     }
-    //if param steps is less than 0 and ur not at start, move back
-    if (steps < 0 && currentIndex != 1) {
-      setCurrentIndex(currentIndex => currentIndex - 1);
-
-      //retrieve input for that element
-      //updateInput()
-      //if param steps is more than 0 and ur not at the end, move forward
-    } else if (steps > 0 && currentIndex != plants.length + 1) {
-      setCurrentIndex(currentIndex => currentIndex + 1);
-
-      //retrieve input for that element
-      //updateInput()
+    if (
+      steps > 0 &&
+      (!currentDetail?.planting_type ||
+        currentDetail?.planting_type == 'SELECT')
+    ) {
+      alert('Please select a valid planting type and date before proceeding.');
+      return;
+    }
+    if (
+      steps !== 0 &&
+      currentIndex + steps > 0 &&
+      currentIndex + steps <= plants.length + 1
+    ) {
+      if (steps > 0) {
+        const copyIsDisabled = [...isDisabled];
+        copyIsDisabled.push(true);
+        setIsDisabled(copyIsDisabled);
+      }
+      setCurrentIndex(prevIndex => prevIndex + steps);
     }
   }
-  function updateDB(user_id: UUID) {
-    //console.log(details)
+
+  function updateInput(field: string, value: string) {
+    // Update the specific field of the current plant's details
+    if (field == 'planting_type') {
+      const copyIsDisabled = [...isDisabled];
+      if (value === 'SELECT') {
+        copyIsDisabled[currentIndex - 1] = true;
+      } else {
+        copyIsDisabled[currentIndex - 1] = false;
+      }
+      setIsDisabled(copyIsDisabled);
+    }
+    const updatedDetails = [...details];
+    updatedDetails[currentIndex - 1] = {
+      ...updatedDetails[currentIndex - 1],
+      [field]: value,
+      plant_id: plants[currentIndex - 1].id,
+    };
+    setDetails(updatedDetails);
+  }
+
+  function updateDB() {
     updateUserPlants(user_id, details);
     router.push('/view-plants');
-  }
-  function getDetails() {
-    if (details[currentIndex - 1]) {
-      return details[currentIndex - 1];
-    }
-    return undefined;
   }
 
   return (
     <div>
-      {currentIndex != plants.length + 1 && (
+      {currentIndex !== plants.length + 1 && (
         <div>
           <PlantDetails
-            detail={getDetails()!}
             plant={plants[currentIndex - 1]}
-          ></PlantDetails>
+            date={details[currentIndex - 1]?.date_added || getDefaultDate()}
+            plantingType={details[currentIndex - 1]?.planting_type || ''}
+            onDateChange={date => updateInput('date_added', date)}
+            onPlantingTypeChange={type => updateInput('planting_type', type)}
+          />
           <button onClick={() => move(-1)}>Back</button>
           <p>
             {currentIndex} / {plants.length}
           </p>
-          <button onClick={() => move(1)}>Next</button>
+          <button
+            disabled={isDisabled[currentIndex - 1]}
+            onClick={() => move(1)}
+          >
+            Next
+          </button>
         </div>
       )}
-      {currentIndex == plants.length + 1 && (
+      {currentIndex === plants.length + 1 && (
         <div>
           <button onClick={() => move(-1)}>Back</button>
-          <button
-            onClick={() => {
-              updateDB(user_id);
-            }}
-          >
-            Submit
-          </button>
+          <button onClick={updateDB}>Submit</button>
         </div>
       )}
     </div>
