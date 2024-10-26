@@ -19,6 +19,7 @@
     "next": "^14.2.10",
     "react": "^18",
     "react-dom": "^18",
+    "react-multi-select-component": "^4.3.4",
     "styled-components": "^6.1.13",
     "supabase": "^1.200.3"
   },
