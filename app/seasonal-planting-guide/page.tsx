@@ -39,6 +39,7 @@ const SeasonalPlantingGuide = () => {
     setSelectedGrowingSeason([]);
     setSelectedHarvestSeason([]);
     setSelectedPlantingType([]);
+    setSelectedUsState('');
   };
 
   return (
