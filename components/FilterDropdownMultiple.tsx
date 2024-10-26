@@ -9,7 +9,7 @@ interface FilterDropdownProps {
   placeholder: string;
 }
 
-export default function FilterDropdown({
+export default function FilterDropdownMultiple({
   value,
   setStateAction,
   options,
@@ -22,24 +22,8 @@ export default function FilterDropdown({
       onChange={setStateAction}
       labelledBy={placeholder}
       hasSelectAll={false}
+      overrideStrings={{ selectSomeItems: placeholder }}
+      disableSearch
     />
-    // <select
-    //   name={name}
-    //   id={id}
-    //   onChange={handleChange}
-    //   onClick={handleToggle}
-    //   onBlur={() => setIsOpen(false)}
-    //   value={value}
-    // >
-    //   {/*Default placeholder text*/}
-    //   <option value="" disabled hidden>
-    //     {placeholder}
-    //   </option>
-    //   {options.map((option, index) => (
-    //     <option key={index} value={option}>
-    //       {option}
-    //     </option>
-    //   ))}
-    // </select>
   );
 }

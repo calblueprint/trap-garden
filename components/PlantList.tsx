@@ -11,12 +11,14 @@ interface PlantListProps {
   harvestSeasonFilterValue: DropdownOption[];
   plantingTypeFilterValue: DropdownOption[];
   growingSeasonFilterValue: DropdownOption[];
+  usStateFilterValue: string;
 }
 
 export const PlantList = ({
   harvestSeasonFilterValue,
   plantingTypeFilterValue,
   growingSeasonFilterValue,
+  usStateFilterValue,
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
 
@@ -24,7 +26,7 @@ export const PlantList = ({
     const fetchPlantSeasonality = async () => {
       // gets plants in Tennessee by default
       const plantList = await getAllPlants();
-      const us_state = 'TENNESSEE';
+      const us_state = usStateFilterValue.toLocaleUpperCase();
       const filteredPlantList = plantList.filter(
         plant => plant.us_state === us_state,
       );
@@ -32,11 +34,7 @@ export const PlantList = ({
     };
 
     fetchPlantSeasonality();
-  }, [
-    harvestSeasonFilterValue,
-    plantingTypeFilterValue,
-    growingSeasonFilterValue,
-  ]);
+  }, [usStateFilterValue]);
 
   const filterPlantList = (plant: Plant) => {
     // Filters the plant list based on the selected filters
