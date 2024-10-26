@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import StyledComponentsRegistry from '@/lib/registry';
+import { ProfileProvider } from '@/utils/ProfileProvider';
 
 // font definitions
 const sans = Inter({
@@ -22,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={sans.className}>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <ProfileProvider>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </ProfileProvider>
       </body>
     </html>
   );
