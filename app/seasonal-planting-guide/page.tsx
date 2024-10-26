@@ -13,24 +13,25 @@ const SeasonalPlantingGuide = () => {
     'Plant Seedlings/Transplant Outdoors',
   ];
 
-  const [growingSeason, setGrowingSeason] = useState<string>('');
-  const [harvestSeason, setHarvestSeason] = useState<string>('');
-  const [plantingType, setPlantingType] = useState<string>('');
+  const [selectedGrowingSeason, setSelectedGrowingSeason] =
+    useState<string>('');
+  const [selectedHarvestSeason, setSelectedHarvestSeason] =
+    useState<string>('');
+  const [selectedPlantingType, setSelectedPlantingType] = useState<string>('');
 
   const clearFilters = () => {
-    setGrowingSeason('');
-    setHarvestSeason('');
-    setPlantingType('');
+    setSelectedGrowingSeason('');
+    setSelectedHarvestSeason('');
+    setSelectedPlantingType('');
   };
 
   return (
-    //hide filter dropdowns for now, will be done in another PR
     <div>
       <FilterDropdown
         name="growingSeason"
         id="growingSeason"
-        value={growingSeason}
-        setStateAction={setGrowingSeason}
+        value={selectedGrowingSeason}
+        setStateAction={setSelectedGrowingSeason}
         options={growingSeasonOptions}
         placeholder="Growing Season"
       />
@@ -38,8 +39,8 @@ const SeasonalPlantingGuide = () => {
       <FilterDropdown
         name="harvestSeason"
         id="harvestSeason"
-        value={harvestSeason}
-        setStateAction={setHarvestSeason}
+        value={selectedHarvestSeason}
+        setStateAction={setSelectedHarvestSeason}
         options={harvestSeasonOptions}
         placeholder="Harvest Season"
       />
@@ -47,8 +48,8 @@ const SeasonalPlantingGuide = () => {
       <FilterDropdown
         name="plantingType"
         id="plantingType"
-        value={plantingType}
-        setStateAction={setPlantingType}
+        value={selectedPlantingType}
+        setStateAction={setSelectedPlantingType}
         options={plantingTypeOptions}
         placeholder="Planting Type"
       />
@@ -56,9 +57,9 @@ const SeasonalPlantingGuide = () => {
       <button onClick={clearFilters}>Clear filters</button>
 
       <PlantList
-        growingSeason={growingSeason}
-        harvestSeason={harvestSeason}
-        plantingType={plantingType}
+        growingSeasonFilterValue={selectedGrowingSeason}
+        harvestSeasonFilterValue={selectedHarvestSeason}
+        plantingTypeFilterValue={selectedPlantingType}
       />
     </div>
   );

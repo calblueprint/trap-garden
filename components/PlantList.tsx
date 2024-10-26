@@ -3,15 +3,15 @@ import { getAllPlants } from '@/api/supabase/queries/plants';
 import { Plant } from '@/types/schema';
 
 interface PlantListProps {
-  harvestSeason: string;
-  plantingType: string;
-  growingSeason: string;
+  harvestSeasonFilterValue: string;
+  plantingTypeFilterValue: string;
+  growingSeasonFilterValue: string;
 }
 
 export const PlantList = ({
-  harvestSeason,
-  plantingType,
-  growingSeason,
+  harvestSeasonFilterValue,
+  plantingTypeFilterValue,
+  growingSeasonFilterValue,
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
   const growingSeasonToIndex = new Map<string, number[]>([
@@ -53,13 +53,13 @@ export const PlantList = ({
   // Check if growingSeason matches the plant's growing season
   const checkGrowingSeason = (plant: Plant) => {
     // Automatically returns true if selected growing season is ''
-    if (!growingSeason) {
+    if (!growingSeasonFilterValue) {
       return true;
     }
 
     // list of valid indexes for the growing season
     // indexes are the months of the year
-    const validIndexes = growingSeasonToIndex.get(growingSeason);
+    const validIndexes = growingSeasonToIndex.get(growingSeasonFilterValue);
 
     const isInRange = (start: number, end: number, validIndexes: number[]) => {
       // Checks if the start and end months are within the valid range
@@ -125,25 +125,27 @@ export const PlantList = ({
   const checkHarvestSeason = (plant: Plant) => {
     // Automatically returns true if selected harvestSeason is ''
     return (
-      !harvestSeason ||
-      plant.harvest_season === harvestSeason.toLocaleUpperCase()
+      !harvestSeasonFilterValue ||
+      plant.harvest_season === harvestSeasonFilterValue.toLocaleUpperCase()
     );
   };
 
   // Checks if plantingType matches the plant's planting type
   const checkPlantingType = (plant: Plant) => {
     // Automatically returns true if selected plantingType is ''
-    if (!plantingType) {
+    if (!plantingTypeFilterValue) {
       return true;
     }
 
     // Checking if corresponding start field in table is not null
     // according to plantingType selected
-    if (plantingType === 'Start Seeds Indoors') {
+    if (plantingTypeFilterValue === 'Start Seeds Indoors') {
       return plant.indoors_start !== null;
-    } else if (plantingType === 'Start Seeds Outdoors') {
+    } else if (plantingTypeFilterValue === 'Start Seeds Outdoors') {
       return plant.outdoors_start !== null;
-    } else if (plantingType === 'Plant Seedlings/Transplant Outdoors') {
+    } else if (
+      plantingTypeFilterValue === 'Plant Seedlings/Transplant Outdoors'
+    ) {
       return plant.transplant_start !== null;
     }
   };
