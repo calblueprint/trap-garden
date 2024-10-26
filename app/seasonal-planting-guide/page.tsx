@@ -5,7 +5,11 @@ import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantList } from '@/components/PlantList';
 import { DropdownOption } from '@/types/schema';
-import { FilterContainer } from './styles';
+import {
+  FilterContainer,
+  PageContainer,
+  StateOptionsContainer,
+} from './styles';
 
 const SeasonalPlantingGuide = () => {
   const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
@@ -32,52 +36,66 @@ const SeasonalPlantingGuide = () => {
     setSelectedGrowingSeason([]);
     setSelectedHarvestSeason([]);
     setSelectedPlantingType([]);
-    setSelectedUsState('');
   };
 
   return (
-    <>
-      <FilterContainer>
-        <FilterDropdownMultiple
-          value={selectedGrowingSeason}
-          setStateAction={setSelectedGrowingSeason}
-          options={growingSeasonOptions}
-          placeholder="Growing Season"
-        />
+    <PageContainer>
+      {!selectedUsState ? (
+        <>
+          <p>Please select a US state to view planting information.</p>
+          <StateOptionsContainer>
+            {usStateOptions.map(state => (
+              <button key={state} onClick={() => setSelectedUsState(state)}>
+                {state}
+              </button>
+            ))}
+          </StateOptionsContainer>
+        </>
+      ) : (
+        <>
+          <FilterContainer>
+            <FilterDropdownSingle
+              name="usState"
+              id="usState"
+              value={selectedUsState}
+              setStateAction={setSelectedUsState}
+              placeholder="US State"
+              options={usStateOptions}
+            />
 
-        <FilterDropdownMultiple
-          value={selectedHarvestSeason}
-          setStateAction={setSelectedHarvestSeason}
-          options={harvestSeasonOptions}
-          placeholder="Harvest Season"
-        />
+            <FilterDropdownMultiple
+              value={selectedGrowingSeason}
+              setStateAction={setSelectedGrowingSeason}
+              options={growingSeasonOptions}
+              placeholder="Growing Season"
+            />
 
-        <FilterDropdownMultiple
-          value={selectedPlantingType}
-          setStateAction={setSelectedPlantingType}
-          options={plantingTypeOptions}
-          placeholder="Planting Type"
-        />
+            <FilterDropdownMultiple
+              value={selectedHarvestSeason}
+              setStateAction={setSelectedHarvestSeason}
+              options={harvestSeasonOptions}
+              placeholder="Harvest Season"
+            />
 
-        <FilterDropdownSingle
-          name="usState"
-          id="usState"
-          value={selectedUsState}
-          setStateAction={setSelectedUsState}
-          placeholder="US State"
-          options={usStateOptions}
-        />
-      </FilterContainer>
+            <FilterDropdownMultiple
+              value={selectedPlantingType}
+              setStateAction={setSelectedPlantingType}
+              options={plantingTypeOptions}
+              placeholder="Planting Type"
+            />
 
-      <button onClick={clearFilters}>Clear filters</button>
+            <button onClick={clearFilters}>Clear filters</button>
+          </FilterContainer>
 
-      <PlantList
-        growingSeasonFilterValue={selectedGrowingSeason}
-        harvestSeasonFilterValue={selectedHarvestSeason}
-        plantingTypeFilterValue={selectedPlantingType}
-        usStateFilterValue={selectedUsState}
-      />
-    </>
+          <PlantList
+            growingSeasonFilterValue={selectedGrowingSeason}
+            harvestSeasonFilterValue={selectedHarvestSeason}
+            plantingTypeFilterValue={selectedPlantingType}
+            usStateFilterValue={selectedUsState}
+          />
+        </>
+      )}
+    </PageContainer>
   );
 };
 
