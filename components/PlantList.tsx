@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAllPlants } from '@/api/supabase/queries/plants';
 import { Plant } from '@/types/schema';
+import { processPlantMonth } from '@/utils/helpers';
 
 interface PlantListProps {
   harvestSeasonFilterValue: string;
@@ -71,38 +72,12 @@ export const PlantList = ({
       }
     };
 
-    // Handle late/early month logic -- Set late/early month to just the month
-    let indoorsStart = plant.indoors_start;
-    let indoorsEnd = plant.indoors_end;
-    let outdoorsStart = plant.outdoors_start;
-    let outdoorsEnd = plant.outdoors_end;
-
-    /// If field is not null and starts with 'LATE' or 'EARLY,
-    // get substring after 'LATE_ or 'EARLY_'
-    if (
-      indoorsStart &&
-      (indoorsStart.startsWith('LATE') || indoorsStart.startsWith('EARLY'))
-    ) {
-      indoorsStart = indoorsStart.substring(5);
-    }
-    if (
-      indoorsEnd &&
-      (indoorsEnd.startsWith('LATE') || indoorsEnd.startsWith('EARLY'))
-    ) {
-      indoorsEnd = indoorsEnd.substring(5);
-    }
-    if (
-      outdoorsStart &&
-      (outdoorsStart.startsWith('LATE') || outdoorsStart.startsWith('EARLY'))
-    ) {
-      outdoorsStart = outdoorsStart.substring(5);
-    }
-    if (
-      outdoorsEnd &&
-      (outdoorsEnd.startsWith('LATE') || outdoorsEnd.startsWith('EARLY'))
-    ) {
-      outdoorsEnd = outdoorsEnd.substring(5);
-    }
+    // Handle late/early month logic
+    // Set late/early month to just the month using processPlantMonth
+    let indoorsStart = processPlantMonth(plant.indoors_start);
+    let indoorsEnd = processPlantMonth(plant.indoors_end);
+    let outdoorsStart = processPlantMonth(plant.outdoors_start);
+    let outdoorsEnd = processPlantMonth(plant.outdoors_end);
 
     // Checks if either indoor_start to indoor_end or outdoor_start to outdoor_end
     // is within the valid range
