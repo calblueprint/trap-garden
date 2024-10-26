@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MultiSelect } from 'react-multi-select-component';
 import { DropdownOption } from '@/types/schema';
 

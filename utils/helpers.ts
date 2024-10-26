@@ -103,7 +103,7 @@ export function checkHarvestSeason(
 
   // For each harvestSeason selected, check if plant's harvest_season matches harvestSeason
   // If it does, add true to harvestSeasonBoolean
-  let harvestSeasonBoolean: boolean[] = [];
+  const harvestSeasonBoolean: boolean[] = [];
   for (const harvestSeason of harvestSeasonFilterValue) {
     harvestSeasonBoolean.push(
       plant.harvest_season === harvestSeason.value.toLocaleUpperCase(),
@@ -126,7 +126,7 @@ export function checkPlantingType(
 
   // For each plantingType selected, check if corresponding start field in table is not null
   // If it is not null, add true to plantingTypeBoolean
-  let plantingTypeBoolean: boolean[] = [];
+  const plantingTypeBoolean: boolean[] = [];
   for (const plantingType of plantingTypeFilterValue) {
     if (plantingType.value === 'Start Seeds Indoors') {
       plantingTypeBoolean.push(plant.indoors_start !== null);
