@@ -74,10 +74,10 @@ export const PlantList = ({
 
     // Handle late/early month logic
     // Set late/early month to just the month using processPlantMonth
-    let indoorsStart = processPlantMonth(plant.indoors_start);
-    let indoorsEnd = processPlantMonth(plant.indoors_end);
-    let outdoorsStart = processPlantMonth(plant.outdoors_start);
-    let outdoorsEnd = processPlantMonth(plant.outdoors_end);
+    const indoorsStart = processPlantMonth(plant.indoors_start);
+    const indoorsEnd = processPlantMonth(plant.indoors_end);
+    const outdoorsStart = processPlantMonth(plant.outdoors_start);
+    const outdoorsEnd = processPlantMonth(plant.outdoors_end);
 
     // Checks if either indoor_start to indoor_end or outdoor_start to outdoor_end
     // is within the valid range
