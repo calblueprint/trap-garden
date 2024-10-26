@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { upsertProfile } from '@/api/supabase/queries/profiles';
-import { Profile } from '@/types/schema';
+import { ProfileProvider, useProfile } from '@/utils/ProfileProvider';
 
 // Define the possible options for each question
 const states = ['Tennessee', 'Missouri'];
@@ -115,58 +114,57 @@ const OnboardingFlow = () => {
   const handleBack = () => {
     setStep(step - 1);
   };
-
+  const { setProfile } = useProfile();
   const handleSubmit = async () => {
-    const profile: Profile = {
-      user_id: '2abd7296-374a-42d1-bb4f-b813da1615ae',
-      state: selectedState,
-      user_type: selectedGardenType,
-      has_plot: selectedPlot,
-    };
     try {
-      upsertProfile(profile);
+      await setProfile({
+        state: selectedState,
+        user_type: selectedGardenType,
+        has_plot: selectedPlot,
+      });
+      console.log('Profile updated successfully');
     } catch (error) {
-      console.error('Error upserting profile:', error);
-      throw new Error('Error upserting profile');
-    } finally {
-      //TODO: Remove console log.
-      console.log('Submitted data: ', profile);
+      console.error('Error submitting profile:', error);
     }
-    // Handle form submission, e.g., send to a server or display a confirmation
   };
+  // Handle form submission, e.g., send to a server or display a confirmation
 
   return (
-    <div>
-      {step === 1 && (
-        <StateSelection
-          selectedState={selectedState}
-          setSelectedState={setSelectedState}
-        />
-      )}
-      {step === 2 && (
-        <GardenTypeSelection
-          selectedGardenType={selectedGardenType}
-          setSelectedGardenType={setSelectedGardenType}
-        />
-      )}
-      {step === 3 && (
-        <PlotSelection
-          selectedPlot={selectedPlot}
-          setSelectedPlot={setSelectedPlot}
-        />
-      )}
-
+    <ProfileProvider>
       <div>
-        {step > 1 && <button onClick={handleBack}>Back</button>}
-        {step < 3 && (
-          <button onClick={handleNext} disabled={!selectedState && step === 1}>
-            Next
-          </button>
+        {step === 1 && (
+          <StateSelection
+            selectedState={selectedState}
+            setSelectedState={setSelectedState}
+          />
         )}
-        {step === 3 && <button onClick={handleSubmit}>Submit</button>}
+        {step === 2 && (
+          <GardenTypeSelection
+            selectedGardenType={selectedGardenType}
+            setSelectedGardenType={setSelectedGardenType}
+          />
+        )}
+        {step === 3 && (
+          <PlotSelection
+            selectedPlot={selectedPlot}
+            setSelectedPlot={setSelectedPlot}
+          />
+        )}
+
+        <div>
+          {step > 1 && <button onClick={handleBack}>Back</button>}
+          {step < 3 && (
+            <button
+              onClick={handleNext}
+              disabled={!selectedState && step === 1}
+            >
+              Next
+            </button>
+          )}
+          {step === 3 && <button onClick={handleSubmit}>Submit</button>}
+        </div>
       </div>
-    </div>
+    </ProfileProvider>
   );
 };
-
 export default OnboardingFlow;
