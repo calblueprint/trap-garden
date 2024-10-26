@@ -160,10 +160,13 @@ export const PlantList = ({
 
   return (
     <div>
-      {plants.filter(filterPlantList).map((plant, key) => (
-        //this should display PlantCalendarRows instead of this temporary div
-        <div key={key}>{plant.plant_name}</div>
-      ))}
+      {plants
+        .filter(filterPlantList)
+        .sort((a, b) => a.plant_name.localeCompare(b.plant_name))
+        .map((plant, key) => (
+          //this should display PlantCalendarRows instead of this temporary div
+          <div key={key}>{plant.plant_name}</div>
+        ))}
     </div>
   );
 };
