@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import FilterDropdown from '@/components/FilterDropdown';
 import { PlantList } from '@/components/PlantList';
+import { DropdownOption } from '@/types/schema';
 
 const SeasonalPlantingGuide = () => {
   const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
@@ -13,23 +14,25 @@ const SeasonalPlantingGuide = () => {
     'Plant Seedlings/Transplant Outdoors',
   ];
 
-  const [selectedGrowingSeason, setSelectedGrowingSeason] =
-    useState<string>('');
-  const [selectedHarvestSeason, setSelectedHarvestSeason] =
-    useState<string>('');
-  const [selectedPlantingType, setSelectedPlantingType] = useState<string>('');
+  const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
+    DropdownOption[]
+  >([]);
+  const [selectedHarvestSeason, setSelectedHarvestSeason] = useState<
+    DropdownOption[]
+  >([]);
+  const [selectedPlantingType, setSelectedPlantingType] = useState<
+    DropdownOption[]
+  >([]);
 
   const clearFilters = () => {
-    setSelectedGrowingSeason('');
-    setSelectedHarvestSeason('');
-    setSelectedPlantingType('');
+    setSelectedGrowingSeason([]);
+    setSelectedHarvestSeason([]);
+    setSelectedPlantingType([]);
   };
 
   return (
     <div>
       <FilterDropdown
-        name="growingSeason"
-        id="growingSeason"
         value={selectedGrowingSeason}
         setStateAction={setSelectedGrowingSeason}
         options={growingSeasonOptions}
@@ -37,8 +40,6 @@ const SeasonalPlantingGuide = () => {
       />
 
       <FilterDropdown
-        name="harvestSeason"
-        id="harvestSeason"
         value={selectedHarvestSeason}
         setStateAction={setSelectedHarvestSeason}
         options={harvestSeasonOptions}
@@ -46,8 +47,6 @@ const SeasonalPlantingGuide = () => {
       />
 
       <FilterDropdown
-        name="plantingType"
-        id="plantingType"
         value={selectedPlantingType}
         setStateAction={setSelectedPlantingType}
         options={plantingTypeOptions}
