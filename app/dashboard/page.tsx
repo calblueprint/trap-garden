@@ -1,6 +1,6 @@
 'use client';
 
-import { AuthProvider, useAuth } from '../utils/AuthProvider'; // Ensure the path is correct
+import { AuthProvider, useAuth } from '../utils/AuthProvider';
 
 export default function DashboardPage() {
   return (
@@ -25,8 +25,8 @@ function Dashboard() {
 
       <main>
         <p>User is currently: {isLoggedIn ? 'Logged In' : 'Logged Out'}</p>
-        {authUser && <p>User name: {authUser.email}</p>}{' '}
         {/* Display user's email */}
+        {authUser && <p>User name: {authUser.email}</p>}{' '}
         <button onClick={signOut}>Log Out</button> {/* Logout button */}
       </main>
     </>
