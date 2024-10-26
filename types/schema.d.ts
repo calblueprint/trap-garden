@@ -26,3 +26,12 @@ export interface Plant {
   sunlight_min_hours: int;
   sunlight_max_hours: int;
 }
+
+export interface UserPlants {
+  id: UUID;
+  user_id: UUID;
+  plant_id: UUID;
+  date_added: string;
+  date_harvested: string;
+  planting_type: string;
+}

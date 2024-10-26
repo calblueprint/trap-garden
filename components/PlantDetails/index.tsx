@@ -1,7 +1,16 @@
-import { Plant } from '@/types/schema';
+import { Plant, UserPlants } from '@/types/schema';
 
-export default function PlantDetails({ plant }: { plant: Plant }) {
+export default function PlantDetails({
+  detail,
+  plant,
+}: {
+  detail: Partial<UserPlants>;
+  plant: Plant;
+}) {
   function getDate() {
+    if (detail) {
+      return detail['date_added'];
+    }
     const curr = new Date();
     curr.setDate(curr.getDate());
     return curr.toISOString().substring(0, 10);
@@ -15,7 +24,7 @@ export default function PlantDetails({ plant }: { plant: Plant }) {
 
       <label htmlFor="plantingType">Planting type:</label>
       <select id="plantingType">
-        <option value={'TRANSPLANT'}>Transplant</option>
+        <option value="TRANSPLANT">Transplant</option>
         <option value="INDOORS">Indoors</option>
         <option value="OUTDOORS">Outdoors</option>
       </select>
