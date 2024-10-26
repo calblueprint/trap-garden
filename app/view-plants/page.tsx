@@ -16,6 +16,7 @@ export default function Page() {
   const [plants, setPlants] = useState<Plant[]>([]);
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
   const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
+  const userState = 'TENNESSEE';
   async function fetchUserPlants(user_id: UUID) {
     const { data, error } = await supabase
       .from('user_plants')
@@ -38,7 +39,8 @@ export default function Page() {
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
       const plantList = await getAllPlants();
-      setPlants(plantList);
+      const result = plantList.filter(plant => plant.us_state === userState);
+      setPlants(result);
     };
 
     fetchPlantSeasonality();
