@@ -129,9 +129,9 @@ const OnboardingFlow = () => {
       console.error('Error upserting profile:', error);
       throw new Error('Error upserting profile');
     } finally {
+      //TODO: Remove console log.
+      console.log('Submitted data: ', profile);
     }
-    //TODO: Remove console log.
-    console.log('Submitted data: ', profile);
     // Handle form submission, e.g., send to a server or display a confirmation
   };
 
