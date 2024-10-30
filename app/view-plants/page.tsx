@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { UUID } from 'crypto';
 import supabase from '@/api/supabase/createClient';
 import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
-import PlantCard from '@/components/PlantCard/PlantCard';
+import PlantCard from '@/components/PlantCard';
 import { Plant } from '@/types/schema';
 
 export default function Page() {
