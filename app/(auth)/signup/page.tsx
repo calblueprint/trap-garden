@@ -14,11 +14,9 @@ export default function SignUp() {
     // Define handleSignUp
     try {
       await signUp(email, password);
-      router.push('/');
     } catch (error) {
       if (error instanceof Error) {
-        console.error(error.message);
-      }
+        console.error('Login Error:', error.message);
     }
   };
 
