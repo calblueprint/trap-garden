@@ -105,6 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Fetch the currently logged-in user on mount and redirect to dashboard if signed in
   useEffect(() => {
     const getUser = async () => {
+      setLoading(true);
       const { data } = await supabase.auth.getUser();
       if (data.user) {
         // Map the user data to AuthUser type
@@ -138,13 +139,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } else {
           setAuthUser(null);
           setIsLoggedIn(false);
-          push('/login');
+
+          if (!loading) {
+            if (window.location.pathname !== '/signup') {
+              push('/login');
+            }
+          }
         }
       },
     );
 
     return () => subscription?.unsubscribe();
-  }, [push]); // Add push to dependencies to avoid stale closures
+  }, [push]);
 
   const value: AuthContextType = {
     authUser,

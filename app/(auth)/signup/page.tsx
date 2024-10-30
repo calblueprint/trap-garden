@@ -3,22 +3,23 @@
 import { useState } from 'react';
 import { AuthProvider, useAuth } from '../../utils/AuthProvider';
 
-export default function LoginLayout() {
+export default function SignUpLayout() {
   return (
     <AuthProvider>
-      <Login />
+      <SignUp />
     </AuthProvider>
   );
 }
 
-function Login() {
-  const { signIn } = useAuth();
+function SignUp() {
+  const { signUp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
+    // Define handleSignUp
     try {
-      await signIn(email, password);
+      await signUp(email, password);
     } catch (error) {
       console.error(error.message);
     }
@@ -39,10 +40,17 @@ function Login() {
         value={password}
         placeholder="Password"
       />
-      <button type="button" onClick={handleSignIn}>
-        Sign in
+      <input
+        type="password"
+        name="Confirm Password"
+        onChange={e => setPassword(e.target.value)}
+        value={password}
+        placeholder="Confirm Password"
+      />
+      <button type="button" onClick={handleSignUp}>
+        Sign up
       </button>{' '}
-      {/* Sign in button */}
+      {/* Sign up button */}
     </>
   );
 }
