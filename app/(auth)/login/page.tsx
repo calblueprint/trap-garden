@@ -20,7 +20,9 @@ function Login() {
     try {
       await signIn(email, password);
     } catch (error) {
-      console.error(error.message);
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
     }
   };
 
