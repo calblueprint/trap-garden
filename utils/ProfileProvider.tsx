@@ -15,15 +15,16 @@ import { Profile } from '@/types/schema';
 // Define a placeholder user ID for development purposes
 const placeholderUserId = '2abd7296-374a-42d1-bb4f-b813da1615ae';
 
-interface ProfileContextType {
+export interface ProfileContextType {
   profileData: Profile | null;
   profileReady: boolean;
-  setProfile: (newProfileData: Partial<Profile>) => Promise<void>;
+  has_plot: boolean;
+  setProfile: (completeProfile: Profile) => Promise<void>; // Now expects full Profile
   loadProfile: () => Promise<void>;
+  updateHasPlot: (plotValue: boolean) => Promise<void>; // Add this line
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
-
 export const useProfile = () => {
   const context = useContext(ProfileContext);
   if (!context) {
@@ -32,25 +33,28 @@ export const useProfile = () => {
   return context;
 };
 
-export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
+interface ProfileProviderProps {
+  children: ReactNode;
+}
+export default function ProfileProvider({
   children,
-}) => {
+}: ProfileProviderProps): JSX.Element {
   const [profileData, setProfileData] = useState<Profile | null>(null);
   const [profileReady, setProfileReady] = useState<boolean>(false);
+  const [hasPlot, setHasPlot] = useState<boolean>(false);
 
   const loadProfile = useCallback(async () => {
     setProfileReady(false);
-
     try {
       const profile: Profile = {
         user_id: placeholderUserId,
         state: '',
-        user_type: '',
-        has_plot: false,
+        user_type: 'INDIV', //default for now
+        // Removed has_plot as it's not part of Profile
       };
-      // Fetch or upsert the profile for the placeholder user ID
       const fetchedProfile = await upsertProfile(profile);
       setProfileData(fetchedProfile);
+      // Set has_plot independently, assuming it needs separate handling
     } catch (error) {
       console.error('Error loading profile:', error);
     } finally {
@@ -58,37 +62,42 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, []);
 
-  const setProfile = useCallback(
-    async (newProfileData: Partial<Profile>) => {
-      const profileToUpdate: Profile = {
-        ...profileData!,
-        ...newProfileData,
-        user_id: placeholderUserId, // Using placeholder user ID for now
-      };
+  const setProfile = useCallback(async (completeProfile: Profile) => {
+    try {
+      const updatedProfile = await upsertProfile(completeProfile);
+      setProfileData(updatedProfile);
+      // Update has_plot if necessary by separate logic
+    } catch (error) {
+      console.error('Error setting profile:', error);
+      throw new Error('Error setting profile');
+    }
+  }, []);
 
-      try {
-        const updatedProfile = await upsertProfile(profileToUpdate);
-        setProfileData(updatedProfile);
-      } catch (error) {
-        console.error('Error updating profile:', error);
-        throw new Error('Error updating profile');
-      }
-    },
-    [profileData],
-  );
-
-  useEffect(() => {
-    loadProfile();
-  }, [loadProfile]);
+  const updateHasPlot = useCallback(async (plotValue: boolean) => {
+    try {
+      setHasPlot(plotValue);
+    } catch (error) {
+      console.error('Error updating has_plot:', error);
+    }
+  }, []);
 
   const providerValue = useMemo(
     () => ({
       profileData,
       profileReady,
+      has_plot: hasPlot,
       setProfile,
       loadProfile,
+      updateHasPlot, // Ensure this is included
     }),
-    [profileData, profileReady, setProfile, loadProfile],
+    [
+      profileData,
+      profileReady,
+      hasPlot,
+      setProfile,
+      loadProfile,
+      updateHasPlot,
+    ],
   );
 
   return (
@@ -96,4 +105,4 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
       {children}
     </ProfileContext.Provider>
   );
-};
+}

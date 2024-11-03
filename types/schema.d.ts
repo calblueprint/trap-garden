@@ -1,14 +1,13 @@
 import type { UUID } from 'crypto';
 
 export type SeasonEnum = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
-
+export type UserTypeEnum = 'INDIV' | 'SCHOOL' | 'ORG';
 export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
 
 export interface Profile {
   user_id: UUID;
   state: string;
-  user_type: string;
-  has_plot: boolean;
+  user_type: UserTypeEnum;
 }
 
 export interface Plant {
