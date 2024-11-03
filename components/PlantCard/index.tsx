@@ -9,9 +9,21 @@ export default function PlantCard({
   plant: Plant;
   canSelect: boolean;
 }) {
-  console.log(canSelect);
+  function toggle() {
+    const elem = document.getElementById(plant.id);
+    elem!.classList.toggle(styles.greenBorder);
+  }
   return (
-    <div className={styles.Card}>
+    <div id={plant.id} className={styles.Card}>
+      {canSelect && (
+        <div className={styles.TopRight}>
+          <input
+            onClick={toggle}
+            className={styles.RoundCheck}
+            type="checkbox"
+          ></input>
+        </div>
+      )}
       <div className={styles.CardPic}>
         <img alt={plant.plant_name}></img>
       </div>
