@@ -93,7 +93,12 @@ export default function Page() {
           {viewingOption === 'all' &&
             (inAddMode ? (
               <div>
-                <h3>Select Plants</h3>
+                {selectedPlants.length === 0 ? (
+                  <h3>Select Plants</h3>
+                ) : (
+                  <h3>{selectedPlants.length} Plants Selected</h3>
+                )}
+
                 {plants.map((plant, key) => (
                   <div key={key} onClick={() => addPlant(plant)}>
                     <PlantCard key={key} plant={plant} canSelect={true} />
