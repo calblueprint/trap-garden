@@ -1,14 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../utils/AuthProvider';
 
 export default function SignUp() {
   const { signUp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
 
   const handleSignUp = async () => {
     // Define handleSignUp
@@ -16,7 +14,8 @@ export default function SignUp() {
       await signUp(email, password);
     } catch (error) {
       if (error instanceof Error) {
-        console.error('Login Error:', error.message);
+        console.error(error.message);
+      }
     }
   };
 

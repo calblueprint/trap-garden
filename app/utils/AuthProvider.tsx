@@ -49,18 +49,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) throw new Error(error.message);
 
-      // Map the user data to AuthUser type
-      const user: AuthUser = {
-        id: data.user.id,
-        email: data.user.email,
-      };
+      if (data.user) {
+        // Map the user data to AuthUser type, ensuring `id` and `email` are defined
+        const user: AuthUser = {
+          id: data.user.id ?? '', // Fallback to an empty string if `id` is undefined
+          email: data.user.email ?? '', // Fallback to an empty string if `email` is undefined
+        };
 
-      setAuthUser(user);
-      setIsLoggedIn(true);
-      push('/dashboard'); // Redirect to dashboard after sign-up
+        setAuthUser(user);
+        setIsLoggedIn(true);
+        push('/dashboard'); // Redirect to dashboard after sign-up
+      }
     } catch (error) {
-      console.error('Sign-up Error:', error.message);
-      // Handle error accordingly (e.g., show a toast notification)
+      if (error instanceof Error) {
+        console.error('Sign-up Error:', error.message);
+      }
     }
   };
 
@@ -75,16 +78,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Map the user data to AuthUser type
       const user: AuthUser = {
-        id: data.user.id,
-        email: data.user.email,
+        id: data.user.id ?? '', // Fallback to an empty string if `id` is undefined
+        email: data.user.email ?? '', // Fallback to an empty string if `email` is undefined
       };
 
       setAuthUser(user);
       setIsLoggedIn(true);
       push('/dashboard'); // Redirect to dashboard after sign-in
     } catch (error) {
-      console.error('Sign-in Error:', error.message);
-      // Handle error accordingly (e.g., show a toast notification)
+      if (error instanceof Error) {
+        console.error('Sign-in Error:', error.message);
+      }
     }
   };
 
@@ -97,8 +101,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoggedIn(false);
       push('/login'); // Redirect to login after sign-out
     } catch (error) {
-      console.error('Sign-out Error:', error.message);
-      // Handle error accordingly
+      if (error instanceof Error) {
+        console.error('Sign-out Error:', error.message);
+      }
     }
   };
 
@@ -107,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const getUser = async () => {
       setLoading(true);
       const { data } = await supabase.auth.getUser();
-      if (data.user) {
+      if (data.user && data.user.id && data.user.email) {
         // Map the user data to AuthUser type
         const user: AuthUser = {
           id: data.user.id,
@@ -126,31 +131,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     getUser();
 
     // Listen for auth state changes
-    const { subscription } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session?.user) {
-          const user: AuthUser = {
-            id: session.user.id,
-            email: session.user.email,
-          };
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const user: AuthUser = {
+          id: session.user.id ?? '', // Fallback to empty string if `id` is undefined
+          email: session.user.email ?? '', // Fallback to empty string if `email` is undefined
+        };
 
-          setAuthUser(user);
-          setIsLoggedIn(true);
-        } else {
-          setAuthUser(null);
-          setIsLoggedIn(false);
+        setAuthUser(user);
+        setIsLoggedIn(true);
+      } else {
+        setAuthUser(null);
+        setIsLoggedIn(false);
 
-          if (!loading) {
-            if (window.location.pathname !== '/signup') {
-              push('/login');
-            }
+        if (!loading) {
+          if (window.location.pathname !== '/signup') {
+            push('/login');
           }
         }
-      },
-    );
+      }
+    });
 
     return () => subscription?.unsubscribe();
-  }, [push]);
+  }, [push, loading]);
 
   const value: AuthContextType = {
     authUser,
