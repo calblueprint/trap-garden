@@ -68,7 +68,7 @@ export default function SignUp() {
   const handleSignUp = async () => {
     if (password) {
       await signUp(email, password);
-    }
+    } 
   };
 
   return (
