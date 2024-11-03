@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import StyledComponentsRegistry from '@/lib/registry';
-import { ProfileProvider } from '@/utils/ProfileProvider';
+import ProfileProvider from '@/utils/ProfileProvider';
 
 // font definitions
 const sans = Inter({

@@ -1,15 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ProfileProvider, useProfile } from '@/utils/ProfileProvider';
+import { UUID } from 'crypto';
+import { Profile, UserTypeEnum } from '@/types/schema';
+import ProfileProvider, { useProfile } from '@/utils/ProfileProvider';
 
 // Define the possible options for each question
 const states = ['Tennessee', 'Missouri'];
-const gardenTypes = ['Individual', 'Community', 'School'];
+const gardenTypes: UserTypeEnum[] = ['INDIV', 'SCHOOL', 'ORG'];
 const plotOptions = [
   { label: 'yes', value: true },
   { label: 'no', value: false },
 ];
+const placeholderUserId: UUID = '2abd7296-374a-42d1-bb4f-b813da1615ae';
+
 //Interfaces and props to avoid typ errors on Lint
 interface StateSelectionProps {
   selectedState: string;
@@ -17,8 +21,8 @@ interface StateSelectionProps {
 }
 
 interface GardenTypeSelectionProps {
-  selectedGardenType: string;
-  setSelectedGardenType: React.Dispatch<React.SetStateAction<string>>;
+  selectedGardenType: UserTypeEnum;
+  setSelectedGardenType: React.Dispatch<React.SetStateAction<UserTypeEnum>>;
 }
 
 interface PlotSelectionProps {
@@ -27,10 +31,10 @@ interface PlotSelectionProps {
 }
 
 // Select State
-const StateSelection: React.FC<StateSelectionProps> = ({
+const StateSelection = ({
   selectedState,
   setSelectedState,
-}) => {
+}: StateSelectionProps) => {
   return (
     <div>
       <h2>Which state do you live in?</h2>
@@ -53,10 +57,10 @@ const StateSelection: React.FC<StateSelectionProps> = ({
 
 // Step 2: Select garden type
 
-const GardenTypeSelection: React.FC<GardenTypeSelectionProps> = ({
+const GardenTypeSelection = ({
   selectedGardenType,
   setSelectedGardenType,
-}) => {
+}: GardenTypeSelectionProps) => {
   return (
     <div>
       <h2>What type of garden do you want to create?</h2>
@@ -67,7 +71,9 @@ const GardenTypeSelection: React.FC<GardenTypeSelectionProps> = ({
             name="gardenType"
             value={type}
             checked={selectedGardenType === type}
-            onChange={e => setSelectedGardenType(e.target.value)}
+            onChange={e =>
+              setSelectedGardenType(e.target.value as UserTypeEnum)
+            }
           />
           {type}
         </label>
@@ -77,10 +83,10 @@ const GardenTypeSelection: React.FC<GardenTypeSelectionProps> = ({
 };
 
 // Step 3: Do you have a plot?
-const PlotSelection: React.FC<PlotSelectionProps> = ({
+const PlotSelection = ({
   selectedPlot,
   setSelectedPlot,
-}) => {
+}: PlotSelectionProps) => {
   return (
     <div>
       <h2>Do you already have a plot?</h2>
@@ -102,9 +108,11 @@ const PlotSelection: React.FC<PlotSelectionProps> = ({
 
 // Main Onboarding Component
 const OnboardingFlow = () => {
+  const { setProfile, updateHasPlot } = useProfile();
   const [step, setStep] = useState(1);
   const [selectedState, setSelectedState] = useState<string>('');
-  const [selectedGardenType, setSelectedGardenType] = useState<string>('');
+  const [selectedGardenType, setSelectedGardenType] =
+    useState<UserTypeEnum>('INDIV');
   const [selectedPlot, setSelectedPlot] = useState<boolean>(false);
 
   const handleNext = () => {
@@ -114,15 +122,17 @@ const OnboardingFlow = () => {
   const handleBack = () => {
     setStep(step - 1);
   };
-  const { setProfile } = useProfile();
   const handleSubmit = async () => {
     try {
-      await setProfile({
+      const profileToUpload: Profile = {
+        user_id: placeholderUserId,
         state: selectedState,
         user_type: selectedGardenType,
-        has_plot: selectedPlot,
-      });
-      console.log('Profile updated successfully');
+      };
+
+      await setProfile(profileToUpload);
+      await updateHasPlot(selectedPlot); // Update has_plot
+      console.log('Profile and has_plot updated successfully');
     } catch (error) {
       console.error('Error submitting profile:', error);
     }
