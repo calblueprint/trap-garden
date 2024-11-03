@@ -15,6 +15,7 @@ export default function Page() {
 
   const [plants, setPlants] = useState<Plant[]>([]);
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
+  const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
   const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
   const userState = 'TENNESSEE';
   async function fetchUserPlants(user_id: UUID) {
@@ -52,6 +53,18 @@ export default function Page() {
     };
     fetchData();
   }, []);
+  function excludeElement<T>(array: T[], element: T): T[] {
+    return array.filter(item => item !== element);
+  }
+
+  function addPlant(plant: Plant) {
+    if (selectedPlants.includes(plant)) {
+      setSelectedPlants(excludeElement(selectedPlants, plant));
+    } else {
+      setSelectedPlants([...selectedPlants, plant]);
+    }
+    console.log(selectedPlants);
+  }
 
   return (
     <div className="main">
@@ -80,8 +93,11 @@ export default function Page() {
           {viewingOption === 'all' &&
             (inAddMode ? (
               <div>
+                <h3>Select Plants</h3>
                 {plants.map((plant, key) => (
-                  <PlantCard key={key} plant={plant} canSelect={true} />
+                  <div key={key} onClick={() => addPlant(plant)}>
+                    <PlantCard key={key} plant={plant} canSelect={true} />
+                  </div>
                 ))}
                 <div className="footer">
                   <button onClick={() => setInAddMode(false)}>
