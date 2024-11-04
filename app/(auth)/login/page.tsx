@@ -30,6 +30,7 @@ export default function Login() {
         value={email}
         placeholder="Email"
       />
+      {/* Email input*/}
       <input
         type="password"
         name="password"
