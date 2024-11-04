@@ -28,7 +28,7 @@ export const PlantList = ({
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
       const plantList = await getAllPlants();
-      const us_state = usStateFilterValue.toLocaleUpperCase();
+      const us_state = usStateFilterValue;
       const filteredPlantList = plantList.filter(
         plant => plant.us_state === us_state,
       );

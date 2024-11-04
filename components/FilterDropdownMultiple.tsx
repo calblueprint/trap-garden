@@ -17,7 +17,10 @@ export default function FilterDropdownMultiple({
 }: FilterDropdownProps) {
   return (
     <MultiSelect
-      options={options.map(option => ({ label: option, value: option }))}
+      options={options.map(option => ({
+        label: option,
+        value: option.toLocaleUpperCase(),
+      }))}
       value={value}
       onChange={setStateAction}
       labelledBy={placeholder}

@@ -42,7 +42,7 @@ export default function FilterDropdownSingle({
         {placeholder}
       </option>
       {options.map((option, index) => (
-        <option key={index} value={option}>
+        <option key={index} value={option.toLocaleUpperCase()}>
           {option}
         </option>
       ))}

@@ -23,10 +23,10 @@ export function checkGrowingSeason(
   plant: Plant,
 ) {
   const growingSeasonToIndex = new Map<string, number[]>([
-    ['Spring', [2, 3, 4]],
-    ['Summer', [5, 6, 7]],
-    ['Fall', [8, 9, 10]],
-    ['Winter', [11, 0, 1]],
+    ['SPRING', [2, 3, 4]],
+    ['SUMMER', [5, 6, 7]],
+    ['FALL', [8, 9, 10]],
+    ['WINTER', [11, 0, 1]],
   ]);
 
   const monthToIndex = new Map<string, number>([
@@ -105,9 +105,7 @@ export function checkHarvestSeason(
   // If it does, add true to harvestSeasonBoolean
   const harvestSeasonBoolean: boolean[] = [];
   for (const harvestSeason of harvestSeasonFilterValue) {
-    harvestSeasonBoolean.push(
-      plant.harvest_season === harvestSeason.value.toLocaleUpperCase(),
-    );
+    harvestSeasonBoolean.push(plant.harvest_season === harvestSeason.value);
   }
 
   // Return true if any of the harvestSeasonBooleans are true
@@ -128,11 +126,11 @@ export function checkPlantingType(
   // If it is not null, add true to plantingTypeBoolean
   const plantingTypeBoolean: boolean[] = [];
   for (const plantingType of plantingTypeFilterValue) {
-    if (plantingType.value === 'Start Seeds Indoors') {
+    if (plantingType.value === 'START SEEDS INDOORS') {
       plantingTypeBoolean.push(plant.indoors_start !== null);
-    } else if (plantingType.value === 'Start Seeds Outdoors') {
+    } else if (plantingType.value === 'START SEEDS OUTDOORS') {
       plantingTypeBoolean.push(plant.outdoors_start !== null);
-    } else if (plantingType.value === 'Plant Seedlings/Transplant Outdoors') {
+    } else if (plantingType.value === 'PLANT SEEDLINGS/TRANSPLANT OUTDOORS') {
       plantingTypeBoolean.push(plant.transplant_start !== null);
     }
   }
