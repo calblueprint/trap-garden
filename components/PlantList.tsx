@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getAllPlants } from '@/api/supabase/queries/plants';
 import { DropdownOption, Plant } from '@/types/schema';
 import {
@@ -32,7 +32,10 @@ export const PlantList = ({
       const filteredPlantList = plantList.filter(
         plant => plant.us_state === us_state,
       );
-      setPlants(filteredPlantList);
+      const sortedAndFilteredPlantList = filteredPlantList.sort((a, b) =>
+        a.plant_name.localeCompare(b.plant_name),
+      );
+      setPlants(sortedAndFilteredPlantList);
     };
 
     fetchPlantSeasonality();
@@ -49,15 +52,22 @@ export const PlantList = ({
     );
   };
 
+  const filteredPlantList = useMemo(() => {
+    return plants.filter(filterPlantList);
+  }, [
+    plants,
+    harvestSeasonFilterValue,
+    plantingTypeFilterValue,
+    growingSeasonFilterValue,
+    searchTerm,
+  ]);
+
   return (
     <div>
-      {plants
-        .filter(filterPlantList)
-        .sort((a, b) => a.plant_name.localeCompare(b.plant_name))
-        .map((plant, key) => (
-          //this should display PlantCalendarRows instead of this temporary div
-          <div key={key}>{plant.plant_name}</div>
-        ))}
+      {filteredPlantList.map((plant, key) => (
+        //this should display PlantCalendarRows instead of this temporary div
+        <div key={key}>{plant.plant_name}</div>
+      ))}
     </div>
   );
 };
