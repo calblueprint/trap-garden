@@ -5,6 +5,7 @@ import {
   checkGrowingSeason,
   checkHarvestSeason,
   checkPlantingType,
+  checkSearchTerm,
 } from '@/utils/helpers';
 
 interface PlantListProps {
@@ -12,6 +13,7 @@ interface PlantListProps {
   plantingTypeFilterValue: DropdownOption[];
   growingSeasonFilterValue: DropdownOption[];
   usStateFilterValue: string;
+  searchTerm: string;
 }
 
 export const PlantList = ({
@@ -19,12 +21,12 @@ export const PlantList = ({
   plantingTypeFilterValue,
   growingSeasonFilterValue,
   usStateFilterValue,
+  searchTerm,
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
 
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
-      // gets plants in Tennessee by default
       const plantList = await getAllPlants();
       const us_state = usStateFilterValue.toLocaleUpperCase();
       const filteredPlantList = plantList.filter(
@@ -37,12 +39,13 @@ export const PlantList = ({
   }, [usStateFilterValue]);
 
   const filterPlantList = (plant: Plant) => {
-    // Filters the plant list based on the selected filters
+    // Filters the plant list based on the selected filters and search term
     // Only returns true if plant passes all checks
     return (
       checkGrowingSeason(growingSeasonFilterValue, plant) &&
       checkHarvestSeason(harvestSeasonFilterValue, plant) &&
-      checkPlantingType(plantingTypeFilterValue, plant)
+      checkPlantingType(plantingTypeFilterValue, plant) &&
+      checkSearchTerm(searchTerm, plant)
     );
   };
 

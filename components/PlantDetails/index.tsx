@@ -1,29 +1,37 @@
-import { Plant, UserPlants } from '@/types/schema';
+import { Plant } from '@/types/schema';
 
 export default function PlantDetails({
-  detail,
   plant,
+  date,
+  plantingType,
+  onDateChange,
+  onPlantingTypeChange,
 }: {
-  detail: Partial<UserPlants>;
   plant: Plant;
+  date: string;
+  plantingType: string;
+  onDateChange: (date: string) => void;
+  onPlantingTypeChange: (type: string) => void;
 }) {
-  function getDate() {
-    if (detail) {
-      return detail['date_added'];
-    }
-    const curr = new Date();
-    curr.setDate(curr.getDate());
-    return curr.toISOString().substring(0, 10);
-  }
   return (
     <div>
       <h2>{plant.plant_name}</h2>
 
       <label htmlFor="date">Date Planted:</label>
-      <input id="date" type="date" defaultValue={getDate()} />
+      <input
+        id="date"
+        type="date"
+        value={date}
+        onChange={e => onDateChange(e.target.value)}
+      />
 
       <label htmlFor="plantingType">Planting type:</label>
-      <select id="plantingType">
+      <select
+        id="plantingType"
+        value={plantingType}
+        onChange={e => onPlantingTypeChange(e.target.value)}
+      >
+        <option value="SELECT">Select option</option>
         <option value="TRANSPLANT">Transplant</option>
         <option value="INDOORS">Indoors</option>
         <option value="OUTDOORS">Outdoors</option>

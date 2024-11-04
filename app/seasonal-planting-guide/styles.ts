@@ -6,6 +6,12 @@ export const PageContainer = styled.div`
   gap: 1rem;
 `;
 
+export const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
 export const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;

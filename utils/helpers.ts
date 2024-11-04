@@ -140,3 +140,16 @@ export function checkPlantingType(
   // Return true if any of the plantingTypeBooleans are true
   return plantingTypeBoolean.includes(true);
 }
+
+export function checkSearchTerm(searchTerm: string, plant: Plant) {
+  // Automatically returns true if searchTerm is ''
+  if (searchTerm === '') {
+    return true;
+  }
+
+  // Process searchTerm to remove leading and trailing spaces
+  searchTerm = searchTerm.trim();
+
+  // Check if plant_name contains searchTerm
+  return plant.plant_name.toLowerCase().includes(searchTerm.toLowerCase());
+}
