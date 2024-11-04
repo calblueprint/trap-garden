@@ -47,11 +47,14 @@ const SeasonalPlantingGuide = () => {
         <>
           <p>Please select a US state to view planting information.</p>
           <StateOptionsContainer>
-            {usStateOptions.map(state => (
-              <button key={state} onClick={() => setSelectedUsState(state)}>
-                {state}
-              </button>
-            ))}
+            <FilterDropdownSingle
+              name="usState"
+              id="usState"
+              value={selectedUsState}
+              setStateAction={setSelectedUsState}
+              placeholder="US State"
+              options={usStateOptions}
+            />
           </StateOptionsContainer>
         </>
       ) : (
