@@ -155,7 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription?.unsubscribe();
-  }, [push, loading]);
+  }, [push]);
 
   const value: AuthContextType = {
     authUser,
