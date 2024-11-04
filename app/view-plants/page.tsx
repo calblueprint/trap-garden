@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { UUID } from 'crypto';
 import supabase from '@/api/supabase/createClient';
 import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
+import FilterDropdown from '@/components/FilterDropdown';
 import PlantCard from '@/components/PlantCard';
 import { Plant } from '@/types/schema';
+import { FilterContainer } from './styles';
 
 export default function Page() {
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
@@ -15,8 +17,21 @@ export default function Page() {
 
   const [plants, setPlants] = useState<Plant[]>([]);
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('');
+  const [selectedSunlight, setSelectedSunlight] = useState<string>('');
+  const [selectedGrowingSeason, setSelectedGrowingSeason] =
+    useState<string>('');
   const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
   const userState = 'TENNESSEE';
+  const sunlightOptions = [
+    'Less than 2 hours',
+    '2-4 hours',
+    '4-6 hours',
+    '6+ hours',
+  ];
+  const difficultyOptions = ['Easy', 'Medium', 'Hard'];
+  const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
+
   async function fetchUserPlants(user_id: UUID) {
     const { data, error } = await supabase
       .from('user_plants')
@@ -63,20 +78,49 @@ export default function Page() {
           <button onClick={() => setViewingOption('all')}>All</button>
         </div>
         <div className="componentsDisplay">
-          {viewingOption === 'myPlants' &&
-            (userPlants.length ? (
-              <div>
-                {userPlants.map((plant, key) => (
-                  <PlantCard key={key} plant={plant} canSelect={false} />
-                ))}
-              </div>
-            ) : (
-              <div>
-                <button onClick={() => setViewingOption('all')}>
-                  Add Plants
-                </button>
-              </div>
-            ))}
+          {viewingOption === 'myPlants' && (
+            <div>
+              <FilterContainer>
+                <FilterDropdown
+                  name="difficulty"
+                  id="difficulty"
+                  value={selectedDifficulty}
+                  setStateAction={setSelectedDifficulty}
+                  options={difficultyOptions}
+                  placeholder="Difficulty Level"
+                />
+                <FilterDropdown
+                  name="sunlight"
+                  id="sunlight"
+                  value={selectedSunlight}
+                  setStateAction={setSelectedSunlight}
+                  options={sunlightOptions}
+                  placeholder="Sunlight"
+                />
+                <FilterDropdown
+                  name="growingSeason"
+                  id="growingSeason"
+                  value={selectedGrowingSeason}
+                  setStateAction={setSelectedGrowingSeason}
+                  options={growingSeasonOptions}
+                  placeholder="Growing Season"
+                />
+              </FilterContainer>
+              {userPlants.length ? (
+                <div>
+                  {userPlants.map((plant, key) => (
+                    <PlantCard key={key} plant={plant} canSelect={false} />
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  <button onClick={() => setViewingOption('all')}>
+                    Add Plants
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
           {viewingOption === 'all' &&
             (inAddMode ? (
               <div>
