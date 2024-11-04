@@ -5,7 +5,7 @@ import { DropdownOption } from '@/types/schema';
 interface FilterDropdownProps {
   value: DropdownOption[];
   setStateAction: React.Dispatch<React.SetStateAction<DropdownOption[]>>;
-  options: string[];
+  options: DropdownOption[];
   placeholder: string;
 }
 
@@ -17,10 +17,7 @@ export default function FilterDropdownMultiple({
 }: FilterDropdownProps) {
   return (
     <MultiSelect
-      options={options.map(option => ({
-        label: option,
-        value: option.toLocaleUpperCase(),
-      }))}
+      options={options}
       value={value}
       onChange={setStateAction}
       labelledBy={placeholder}

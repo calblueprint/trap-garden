@@ -126,11 +126,11 @@ export function checkPlantingType(
   // If it is not null, add true to plantingTypeBoolean
   const plantingTypeBoolean: boolean[] = [];
   for (const plantingType of plantingTypeFilterValue) {
-    if (plantingType.value === 'START SEEDS INDOORS') {
+    if (plantingType.value === 'Start Seeds Indoors') {
       plantingTypeBoolean.push(plant.indoors_start !== null);
-    } else if (plantingType.value === 'START SEEDS OUTDOORS') {
+    } else if (plantingType.value === 'Start Seeds Outdoors') {
       plantingTypeBoolean.push(plant.outdoors_start !== null);
-    } else if (plantingType.value === 'PLANT SEEDLINGS/TRANSPLANT OUTDOORS') {
+    } else if (plantingType.value === 'Plant Seedlings/Transplant Outdoors') {
       plantingTypeBoolean.push(plant.transplant_start !== null);
     }
   }

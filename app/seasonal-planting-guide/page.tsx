@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantList } from '@/components/PlantList';
-import SearchBar from '@/components/SearchBar/SearchBar';
+import SearchBar from '@/components/SearchBar';
 import { DropdownOption } from '@/types/schema';
 import {
   FilterContainer,
@@ -13,15 +13,31 @@ import {
   StateOptionsContainer,
 } from './styles';
 
-const SeasonalPlantingGuide = () => {
-  const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
-  const harvestSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
-  const plantingTypeOptions = [
-    'Start Seeds Indoors',
-    'Start Seeds Outdoors',
-    'Plant Seedlings/Transplant Outdoors',
+export default function SeasonalPlantingGuide() {
+  const growingSeasonOptions: DropdownOption[] = [
+    { label: 'Spring', value: 'SPRING' },
+    { label: 'Summer', value: 'SUMMER' },
+    { label: 'Fall', value: 'FALL' },
+    { label: 'Winter', value: 'WINTER' },
   ];
-  const usStateOptions = ['Tennessee', 'Missouri'];
+  const harvestSeasonOptions: DropdownOption[] = [
+    { label: 'Spring', value: 'SPRING' },
+    { label: 'Summer', value: 'SUMMER' },
+    { label: 'Fall', value: 'FALL' },
+    { label: 'Winter', value: 'WINTER' },
+  ];
+  const plantingTypeOptions: DropdownOption[] = [
+    { label: 'Start Seeds Indoors', value: 'Start Seeds Indoors' },
+    { label: 'Start Seeds Outdoors', value: 'Start Seeds Outdoors' },
+    {
+      label: 'Plant Seedlings/Transplant Outdoors',
+      value: 'Plant Seedlings/Transplant Outdoors',
+    },
+  ];
+  const usStateOptions: DropdownOption[] = [
+    { label: 'Tennessee', value: 'TENNESSEE' },
+    { label: 'Missouri', value: 'MISSOURI' },
+  ];
 
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
     DropdownOption[]
@@ -107,6 +123,4 @@ const SeasonalPlantingGuide = () => {
       )}
     </PageContainer>
   );
-};
-
-export default SeasonalPlantingGuide;
+}
