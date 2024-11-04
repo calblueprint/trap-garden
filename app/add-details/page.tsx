@@ -10,7 +10,7 @@ import { Plant, UserPlants } from '@/types/schema';
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState<number>(1);
   const [details, setDetails] = useState<Partial<UserPlants>[]>([]);
-  const [isDisabled, setIsDisabled] = useState<boolean[]>([true]);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const router = useRouter();
 
   const plants: Plant[] = [
@@ -85,9 +85,7 @@ export default function Home() {
       currentIndex + steps <= plants.length + 1
     ) {
       if (steps > 0) {
-        const copyIsDisabled = [...isDisabled];
-        copyIsDisabled.push(true);
-        setIsDisabled(copyIsDisabled);
+        setIsDisabled(true);
       }
       setCurrentIndex(prevIndex => prevIndex + steps);
     }
@@ -96,13 +94,13 @@ export default function Home() {
   function updateInput(field: string, value: string) {
     // Update the specific field of the current plant's details
     if (field == 'planting_type') {
-      const copyIsDisabled = [...isDisabled];
+      let shouldBeDisabled = isDisabled;
       if (value === 'SELECT') {
-        copyIsDisabled[currentIndex - 1] = true;
+        shouldBeDisabled = true;
       } else {
-        copyIsDisabled[currentIndex - 1] = false;
+        shouldBeDisabled = false;
       }
-      setIsDisabled(copyIsDisabled);
+      setIsDisabled(shouldBeDisabled);
     }
     const updatedDetails = [...details];
     updatedDetails[currentIndex - 1] = {
@@ -133,10 +131,7 @@ export default function Home() {
           <p>
             {currentIndex} / {plants.length}
           </p>
-          <button
-            disabled={isDisabled[currentIndex - 1]}
-            onClick={() => move(1)}
-          >
+          <button disabled={isDisabled} onClick={() => move(1)}>
             Next
           </button>
         </div>
