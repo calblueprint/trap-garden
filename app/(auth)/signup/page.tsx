@@ -11,7 +11,9 @@ export default function SignUp() {
   const [password, setPassword] = useState<string | null>(null);
   const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState('');
-  const [passwordComplexityError, setPasswordComplexityError] = useState<string | null>(null);
+  const [passwordComplexityError, setPasswordComplexityError] = useState<
+    string | null
+  >(null);
   const [passwordComplexity, setPasswordComplexity] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -25,22 +27,25 @@ export default function SignUp() {
   };
 
   // Handles input to confirm password
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const newConfirmPassword = e.target.value;
     setConfirmPassword(newConfirmPassword);
     validatePasswords(password, newConfirmPassword);
   };
 
   // Checks if passwords match and sets error
-  const validatePasswords = (password: string | null, confirmPassword: string | null) => { 
-    if ( password !== confirmPassword) {
-      setPasswordError("Passwords do not match.");
+  const validatePasswords = (
+    password: string | null,
+    confirmPassword: string | null,
+  ) => {
+    if (password !== confirmPassword) {
+      setPasswordError('Passwords do not match.');
     } else {
-      setPasswordError(""); // Clear error when passwords match
+      setPasswordError(''); // Clear error when passwords match
     }
   };
-
-  
 
   // Set password complexity error if requirements are not met
   const validatePasswordComplexity = (password: string | null) => {
@@ -59,7 +64,7 @@ export default function SignUp() {
       setPasswordComplexityError(null); // Clear error if password is empty
     }
   };
-  
+
   const handleSignUp = async () => {
     if (password) {
       await signUp(email, password);
@@ -93,12 +98,13 @@ export default function SignUp() {
         name="confirmPassword"
       />
       {/* Confirm password input with toggle visibility */}
-
       <button type="button" onClick={handleSignUp} disabled={!!passwordError}>
         Sign up
       </button>{' '}
       {/* Sign up button */}
-      {confirmPassword && passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
+      {confirmPassword && passwordError && (
+        <p style={{ color: 'red' }}>{passwordError}</p>
+      )}
       {/* Conditional password validation error message */}
       <PasswordComplexity
         password={password || ''} // Set default value if password is null

@@ -26,10 +26,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
         value={value || ''}
         placeholder={placeholder}
       />
-      <button
-        type="button"
-        onClick={toggleVisibility}
-      >
+      <button type="button" onClick={toggleVisibility}>
         {isVisible ? 'Hide' : 'Show'}
       </button>
     </div>
