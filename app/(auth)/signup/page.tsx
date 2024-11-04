@@ -98,7 +98,11 @@ export default function SignUp() {
         name="confirmPassword"
       />
       {/* Confirm password input with toggle visibility */}
-      <button type="button" onClick={handleSignUp} disabled={!!passwordError}>
+      <button
+        type="button"
+        onClick={handleSignUp}
+        disabled={!email || !!passwordError || !!passwordComplexityError}
+      >
         Sign up
       </button>{' '}
       {/* Sign up button */}
