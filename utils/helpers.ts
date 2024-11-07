@@ -175,7 +175,10 @@ export function checkSunlight(
     const [minHours, maxHours] = sunlightToHours.get(sunlight.value)!;
     // if max_hours is null then plant can only receive min_hours of sunlight
     if (plant.sunlight_max_hours === null) {
-      sunlightBoolean.push(plant.sunlight_min_hours >= minHours);
+      sunlightBoolean.push(
+        plant.sunlight_min_hours >= minHours &&
+          plant.sunlight_min_hours <= maxHours,
+      );
     } else {
       sunlightBoolean.push(
         plant.sunlight_min_hours >= minHours &&
