@@ -1,68 +1,126 @@
 'use client';
 
 import React, { useState } from 'react';
-import FilterDropdown from '@/components/FilterDropdown';
+import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
+import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantList } from '@/components/PlantList';
+import SearchBar from '@/components/SearchBar';
+import { DropdownOption } from '@/types/schema';
+import {
+  FilterContainer,
+  HeaderContainer,
+  PageContainer,
+  StateOptionsContainer,
+} from './styles';
 
-const SeasonalPlantingGuide = () => {
-  const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
-  const harvestSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
-  const plantingTypeOptions = [
-    'Start Seeds Indoors',
-    'Start Seeds Outdoors',
-    'Plant Seedlings/Transplant Outdoors',
+export default function SeasonalPlantingGuide() {
+  const growingSeasonOptions: DropdownOption[] = [
+    { label: 'Spring', value: 'SPRING' },
+    { label: 'Summer', value: 'SUMMER' },
+    { label: 'Fall', value: 'FALL' },
+    { label: 'Winter', value: 'WINTER' },
+  ];
+  const harvestSeasonOptions: DropdownOption[] = [
+    { label: 'Spring', value: 'SPRING' },
+    { label: 'Summer', value: 'SUMMER' },
+    { label: 'Fall', value: 'FALL' },
+    { label: 'Winter', value: 'WINTER' },
+  ];
+  const plantingTypeOptions: DropdownOption[] = [
+    { label: 'Start Seeds Indoors', value: 'Start Seeds Indoors' },
+    { label: 'Start Seeds Outdoors', value: 'Start Seeds Outdoors' },
+    {
+      label: 'Plant Seedlings/Transplant Outdoors',
+      value: 'Plant Seedlings/Transplant Outdoors',
+    },
+  ];
+  const usStateOptions: DropdownOption[] = [
+    { label: 'Tennessee', value: 'TENNESSEE' },
+    { label: 'Missouri', value: 'MISSOURI' },
   ];
 
-  const [selectedGrowingSeason, setSelectedGrowingSeason] =
-    useState<string>('');
-  const [selectedHarvestSeason, setSelectedHarvestSeason] =
-    useState<string>('');
-  const [selectedPlantingType, setSelectedPlantingType] = useState<string>('');
+  const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
+    DropdownOption[]
+  >([]);
+  const [selectedHarvestSeason, setSelectedHarvestSeason] = useState<
+    DropdownOption[]
+  >([]);
+  const [selectedPlantingType, setSelectedPlantingType] = useState<
+    DropdownOption[]
+  >([]);
+  const [selectedUsState, setSelectedUsState] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const clearFilters = () => {
-    setSelectedGrowingSeason('');
-    setSelectedHarvestSeason('');
-    setSelectedPlantingType('');
+    setSelectedGrowingSeason([]);
+    setSelectedHarvestSeason([]);
+    setSelectedPlantingType([]);
   };
 
   return (
-    <div>
-      <FilterDropdown
-        name="growingSeason"
-        id="growingSeason"
-        value={selectedGrowingSeason}
-        setStateAction={setSelectedGrowingSeason}
-        options={growingSeasonOptions}
-        placeholder="Growing Season"
-      />
+    <PageContainer>
+      {!selectedUsState ? (
+        <>
+          <p>Please select a US state to view planting information.</p>
+          <StateOptionsContainer>
+            <FilterDropdownSingle
+              name="usState"
+              id="usState"
+              value={selectedUsState}
+              setStateAction={setSelectedUsState}
+              placeholder="US State"
+              options={usStateOptions}
+            />
+          </StateOptionsContainer>
+        </>
+      ) : (
+        <>
+          <HeaderContainer>
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <FilterContainer>
+              <FilterDropdownSingle
+                name="usState"
+                id="usState"
+                value={selectedUsState}
+                setStateAction={setSelectedUsState}
+                placeholder="US State"
+                options={usStateOptions}
+              />
 
-      <FilterDropdown
-        name="harvestSeason"
-        id="harvestSeason"
-        value={selectedHarvestSeason}
-        setStateAction={setSelectedHarvestSeason}
-        options={harvestSeasonOptions}
-        placeholder="Harvest Season"
-      />
+              <FilterDropdownMultiple
+                value={selectedGrowingSeason}
+                setStateAction={setSelectedGrowingSeason}
+                options={growingSeasonOptions}
+                placeholder="Growing Season"
+              />
 
-      <FilterDropdown
-        name="plantingType"
-        id="plantingType"
-        value={selectedPlantingType}
-        setStateAction={setSelectedPlantingType}
-        options={plantingTypeOptions}
-        placeholder="Planting Type"
-      />
+              <FilterDropdownMultiple
+                value={selectedHarvestSeason}
+                setStateAction={setSelectedHarvestSeason}
+                options={harvestSeasonOptions}
+                placeholder="Harvest Season"
+              />
 
-      <button onClick={clearFilters}>Clear filters</button>
+              <FilterDropdownMultiple
+                value={selectedPlantingType}
+                setStateAction={setSelectedPlantingType}
+                options={plantingTypeOptions}
+                placeholder="Planting Type"
+              />
 
-      <PlantList
-        growingSeasonFilterValue={selectedGrowingSeason}
-        harvestSeasonFilterValue={selectedHarvestSeason}
-        plantingTypeFilterValue={selectedPlantingType}
-      />
-    </div>
+              <button onClick={clearFilters}>Clear filters</button>
+            </FilterContainer>
+          </HeaderContainer>
+
+          <PlantList
+            growingSeasonFilterValue={selectedGrowingSeason}
+            harvestSeasonFilterValue={selectedHarvestSeason}
+            plantingTypeFilterValue={selectedPlantingType}
+            usStateFilterValue={selectedUsState}
+            searchTerm={searchTerm}
+          />
+        </>
+      )}
+    </PageContainer>
   );
-};
-
-export default SeasonalPlantingGuide;
+}
