@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { DropdownOption } from '@/types/schema';
 
 interface FilterDropdownProps {
   name: string;
   id: string;
   value: string;
   setStateAction: React.Dispatch<React.SetStateAction<string>>;
-  options: string[];
+  options: DropdownOption[];
   placeholder: string;
 }
 
@@ -42,8 +43,8 @@ export default function FilterDropdown({
         {placeholder}
       </option>
       {options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
+        <option key={index} value={option.value}>
+          {option.label}
         </option>
       ))}
     </select>

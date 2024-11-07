@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { UUID } from 'crypto';
 import supabase from '@/api/supabase/createClient';
 import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
 import FilterDropdown from '@/components/FilterDropdown';
 import PlantCard from '@/components/PlantCard';
-import { Plant } from '@/types/schema';
+import { DropdownOption, Plant } from '@/types/schema';
 import { FilterContainer } from './styles';
 
 export default function Page() {
@@ -23,14 +23,23 @@ export default function Page() {
     useState<string>('');
   const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
   const userState = 'TENNESSEE';
-  const sunlightOptions = [
-    'Less than 2 hours',
-    '2-4 hours',
-    '4-6 hours',
-    '6+ hours',
+  const sunlightOptions: DropdownOption[] = [
+    { label: 'Less than 2 hours', value: 'SHADE' },
+    { label: '2-4 hours', value: 'PARTIAL_SHADE' },
+    { label: '4-6 hours', value: 'PARTIAL_SUN' },
+    { label: '6+ hours', value: 'FULL' },
   ];
-  const difficultyOptions = ['Easy', 'Medium', 'Hard'];
-  const growingSeasonOptions = ['Spring', 'Summer', 'Fall', 'Winter'];
+  const difficultyOptions: DropdownOption[] = [
+    { label: 'Easy', value: 'EASY' },
+    { label: 'Moderate', value: 'MODERATE' },
+    { label: 'Hard', value: 'HARD' },
+  ];
+  const growingSeasonOptions: DropdownOption[] = [
+    { label: 'Spring', value: 'SPRING' },
+    { label: 'Summer', value: 'SUMMER' },
+    { label: 'Fall', value: 'FALL' },
+    { label: 'Winter', value: 'WINTER' },
+  ];
 
   async function fetchUserPlants(user_id: UUID) {
     const { data, error } = await supabase
@@ -60,6 +69,7 @@ export default function Page() {
 
     fetchPlantSeasonality();
   }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetchUserPlants(user_id);
@@ -67,6 +77,41 @@ export default function Page() {
     };
     fetchData();
   }, []);
+
+  const clearFilters = () => {
+    setSelectedGrowingSeason('');
+    setSelectedSunlight('');
+    setSelectedDifficulty('');
+  };
+
+  // temporary for now, change to utils functions later
+  const checkGrowingSeason = (plant: Plant) => {
+    return true;
+  };
+
+  const checkSunlight = (plant: Plant) => {
+    return true;
+  };
+
+  const checkDifficulty = (plant: Plant) => {
+    return true;
+  };
+
+  const filterPlantListFunction = (plant: Plant) => {
+    return (
+      checkGrowingSeason(plant) &&
+      checkSunlight(plant) &&
+      checkDifficulty(plant)
+    );
+  };
+
+  const filteredPlantList = useMemo(() => {
+    return plants.filter(filterPlantListFunction);
+  }, [plants, selectedDifficulty, selectedSunlight, selectedGrowingSeason]);
+
+  const filteredUserPlantList = useMemo(() => {
+    return userPlants.filter(filterPlantListFunction);
+  }, [userPlants, selectedDifficulty, selectedSunlight, selectedGrowingSeason]);
 
   return (
     <div className="main">
@@ -78,37 +123,39 @@ export default function Page() {
           <button onClick={() => setViewingOption('all')}>All</button>
         </div>
         <div className="componentsDisplay">
+          <FilterContainer>
+            <FilterDropdown
+              name="difficulty"
+              id="difficulty"
+              value={selectedDifficulty}
+              setStateAction={setSelectedDifficulty}
+              options={difficultyOptions}
+              placeholder="Difficulty Level"
+            />
+            <FilterDropdown
+              name="sunlight"
+              id="sunlight"
+              value={selectedSunlight}
+              setStateAction={setSelectedSunlight}
+              options={sunlightOptions}
+              placeholder="Sunlight"
+            />
+            <FilterDropdown
+              name="growingSeason"
+              id="growingSeason"
+              value={selectedGrowingSeason}
+              setStateAction={setSelectedGrowingSeason}
+              options={growingSeasonOptions}
+              placeholder="Growing Season"
+            />
+
+            <button onClick={clearFilters}>Clear filters</button>
+          </FilterContainer>
           {viewingOption === 'myPlants' && (
             <div>
-              <FilterContainer>
-                <FilterDropdown
-                  name="difficulty"
-                  id="difficulty"
-                  value={selectedDifficulty}
-                  setStateAction={setSelectedDifficulty}
-                  options={difficultyOptions}
-                  placeholder="Difficulty Level"
-                />
-                <FilterDropdown
-                  name="sunlight"
-                  id="sunlight"
-                  value={selectedSunlight}
-                  setStateAction={setSelectedSunlight}
-                  options={sunlightOptions}
-                  placeholder="Sunlight"
-                />
-                <FilterDropdown
-                  name="growingSeason"
-                  id="growingSeason"
-                  value={selectedGrowingSeason}
-                  setStateAction={setSelectedGrowingSeason}
-                  options={growingSeasonOptions}
-                  placeholder="Growing Season"
-                />
-              </FilterContainer>
-              {userPlants.length ? (
+              {filteredUserPlantList.length ? (
                 <div>
-                  {userPlants.map((plant, key) => (
+                  {filteredUserPlantList.map((plant, key) => (
                     <PlantCard key={key} plant={plant} canSelect={false} />
                   ))}
                 </div>
@@ -124,7 +171,7 @@ export default function Page() {
           {viewingOption === 'all' &&
             (inAddMode ? (
               <div>
-                {plants.map((plant, key) => (
+                {filteredPlantList.map((plant, key) => (
                   <PlantCard key={key} plant={plant} canSelect={true} />
                 ))}
                 <div className="footer">
@@ -135,7 +182,7 @@ export default function Page() {
               </div>
             ) : (
               <div>
-                {plants.map((plant, key) => (
+                {filteredPlantList.map((plant, key) => (
                   <PlantCard key={key} plant={plant} canSelect={false} />
                 ))}
                 <div className="footer">
