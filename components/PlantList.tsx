@@ -41,24 +41,19 @@ export const PlantList = ({
     fetchPlantSeasonality();
   }, [usStateFilterValue]);
 
-  const filterPlantList = (plant: Plant) => {
-    // Filters the plant list based on the selected filters and search term
-    // Only returns true if plant passes all checks
-    return (
-      checkGrowingSeason(growingSeasonFilterValue, plant) &&
-      checkHarvestSeason(harvestSeasonFilterValue, plant) &&
-      checkPlantingType(plantingTypeFilterValue, plant) &&
-      checkSearchTerm(searchTerm, plant)
-    );
-  };
-
   const filteredPlantList = useMemo(() => {
-    return plants.filter(filterPlantList);
+    return plants.filter(
+      plant =>
+        checkGrowingSeason(growingSeasonFilterValue, plant) &&
+        checkHarvestSeason(harvestSeasonFilterValue, plant) &&
+        checkPlantingType(plantingTypeFilterValue, plant) &&
+        checkSearchTerm(searchTerm, plant),
+    );
   }, [
     plants,
+    growingSeasonFilterValue,
     harvestSeasonFilterValue,
     plantingTypeFilterValue,
-    growingSeasonFilterValue,
     searchTerm,
   ]);
 
