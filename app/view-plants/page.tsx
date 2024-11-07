@@ -4,9 +4,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { UUID } from 'crypto';
 import supabase from '@/api/supabase/createClient';
 import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
-import FilterDropdown from '@/components/FilterDropdown';
+import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import PlantCard from '@/components/PlantCard';
 import { DropdownOption, Plant } from '@/types/schema';
+import {
+  checkDifficulty,
+  checkGrowingSeason,
+  checkSunlight,
+} from '@/utils/helpers';
 import { FilterContainer } from './styles';
 
 export default function Page() {
@@ -17,10 +22,15 @@ export default function Page() {
 
   const [plants, setPlants] = useState<Plant[]>([]);
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('');
-  const [selectedSunlight, setSelectedSunlight] = useState<string>('');
-  const [selectedGrowingSeason, setSelectedGrowingSeason] =
-    useState<string>('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<
+    DropdownOption[]
+  >([]);
+  const [selectedSunlight, setSelectedSunlight] = useState<DropdownOption[]>(
+    [],
+  );
+  const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
+    DropdownOption[]
+  >([]);
   const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
   const userState = 'TENNESSEE';
   const sunlightOptions: DropdownOption[] = [
@@ -79,39 +89,33 @@ export default function Page() {
   }, []);
 
   const clearFilters = () => {
-    setSelectedGrowingSeason('');
-    setSelectedSunlight('');
-    setSelectedDifficulty('');
-  };
-
-  // temporary for now, change to utils functions later
-  const checkGrowingSeason = (plant: Plant) => {
-    return true;
-  };
-
-  const checkSunlight = (plant: Plant) => {
-    return true;
-  };
-
-  const checkDifficulty = (plant: Plant) => {
-    return true;
-  };
-
-  const filterPlantListFunction = (plant: Plant) => {
-    return (
-      checkGrowingSeason(plant) &&
-      checkSunlight(plant) &&
-      checkDifficulty(plant)
-    );
+    setSelectedGrowingSeason([]);
+    setSelectedSunlight([]);
+    setSelectedDifficulty([]);
   };
 
   const filteredPlantList = useMemo(() => {
-    return plants.filter(filterPlantListFunction);
+    return plants.filter(
+      plant =>
+        checkGrowingSeason(selectedGrowingSeason, plant) &&
+        checkSunlight(selectedSunlight, plant) &&
+        checkDifficulty(selectedDifficulty, plant),
+    );
   }, [plants, selectedDifficulty, selectedSunlight, selectedGrowingSeason]);
 
   const filteredUserPlantList = useMemo(() => {
-    return userPlants.filter(filterPlantListFunction);
+    return userPlants.filter(
+      plant =>
+        checkGrowingSeason(selectedGrowingSeason, plant) &&
+        checkSunlight(selectedSunlight, plant) &&
+        checkDifficulty(selectedDifficulty, plant),
+    );
   }, [userPlants, selectedDifficulty, selectedSunlight, selectedGrowingSeason]);
+
+  useEffect(() => {
+    console.log('filteredPlantList', filteredPlantList);
+    console.log('filteredUserPlantList', filteredUserPlantList);
+  }, [filteredPlantList, filteredUserPlantList]);
 
   return (
     <div className="main">
@@ -124,25 +128,19 @@ export default function Page() {
         </div>
         <div className="componentsDisplay">
           <FilterContainer>
-            <FilterDropdown
-              name="difficulty"
-              id="difficulty"
+            <FilterDropdownMultiple
               value={selectedDifficulty}
               setStateAction={setSelectedDifficulty}
               options={difficultyOptions}
               placeholder="Difficulty Level"
             />
-            <FilterDropdown
-              name="sunlight"
-              id="sunlight"
+            <FilterDropdownMultiple
               value={selectedSunlight}
               setStateAction={setSelectedSunlight}
               options={sunlightOptions}
               placeholder="Sunlight"
             />
-            <FilterDropdown
-              name="growingSeason"
-              id="growingSeason"
+            <FilterDropdownMultiple
               value={selectedGrowingSeason}
               setStateAction={setSelectedGrowingSeason}
               options={growingSeasonOptions}

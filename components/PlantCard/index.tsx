@@ -9,7 +9,7 @@ export default function PlantCard({
   plant: Plant;
   canSelect: boolean;
 }) {
-  console.log(canSelect);
+  // console.log(canSelect);
   return (
     <div className={styles.Card}>
       <div className={styles.CardPic}>
