@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AuthProvider, useAuth } from '../../utils/AuthProvider';
+import { useAuth } from '../../utils/AuthProvider';
 
 export default function SignUp() {
   const { signUp } = useAuth();
