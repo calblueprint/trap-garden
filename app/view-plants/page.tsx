@@ -6,13 +6,15 @@ import supabase from '@/api/supabase/createClient';
 import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import PlantCard from '@/components/PlantCard';
+import SearchBar from '@/components/SearchBar';
 import { DropdownOption, Plant } from '@/types/schema';
 import {
   checkDifficulty,
   checkGrowingSeason,
+  checkSearchTerm,
   checkSunlight,
 } from '@/utils/helpers';
-import { FilterContainer } from './styles';
+import { FilterContainer, TopRowContainer } from './styles';
 
 export default function Page() {
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
@@ -31,7 +33,8 @@ export default function Page() {
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
     DropdownOption[]
   >([]);
-  const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const user_id: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
   const userState = 'TENNESSEE';
   const sunlightOptions: DropdownOption[] = [
     { label: 'Less than 2 hours', value: 'SHADE' },
@@ -99,23 +102,32 @@ export default function Page() {
       plant =>
         checkGrowingSeason(selectedGrowingSeason, plant) &&
         checkSunlight(selectedSunlight, plant) &&
-        checkDifficulty(selectedDifficulty, plant),
+        checkDifficulty(selectedDifficulty, plant) &&
+        checkSearchTerm(searchTerm, plant),
     );
-  }, [plants, selectedDifficulty, selectedSunlight, selectedGrowingSeason]);
+  }, [
+    plants,
+    selectedDifficulty,
+    selectedSunlight,
+    selectedGrowingSeason,
+    searchTerm,
+  ]);
 
   const filteredUserPlantList = useMemo(() => {
     return userPlants.filter(
       plant =>
         checkGrowingSeason(selectedGrowingSeason, plant) &&
         checkSunlight(selectedSunlight, plant) &&
-        checkDifficulty(selectedDifficulty, plant),
+        checkDifficulty(selectedDifficulty, plant) &&
+        checkSearchTerm(searchTerm, plant),
     );
-  }, [userPlants, selectedDifficulty, selectedSunlight, selectedGrowingSeason]);
-
-  useEffect(() => {
-    console.log('filteredPlantList', filteredPlantList);
-    console.log('filteredUserPlantList', filteredUserPlantList);
-  }, [filteredPlantList, filteredUserPlantList]);
+  }, [
+    userPlants,
+    selectedDifficulty,
+    selectedSunlight,
+    selectedGrowingSeason,
+    searchTerm,
+  ]);
 
   return (
     <div className="main">
@@ -127,28 +139,31 @@ export default function Page() {
           <button onClick={() => setViewingOption('all')}>All</button>
         </div>
         <div className="componentsDisplay">
-          <FilterContainer>
-            <FilterDropdownMultiple
-              value={selectedDifficulty}
-              setStateAction={setSelectedDifficulty}
-              options={difficultyOptions}
-              placeholder="Difficulty Level"
-            />
-            <FilterDropdownMultiple
-              value={selectedSunlight}
-              setStateAction={setSelectedSunlight}
-              options={sunlightOptions}
-              placeholder="Sunlight"
-            />
-            <FilterDropdownMultiple
-              value={selectedGrowingSeason}
-              setStateAction={setSelectedGrowingSeason}
-              options={growingSeasonOptions}
-              placeholder="Growing Season"
-            />
+          <TopRowContainer>
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <FilterContainer>
+              <FilterDropdownMultiple
+                value={selectedDifficulty}
+                setStateAction={setSelectedDifficulty}
+                options={difficultyOptions}
+                placeholder="Difficulty Level"
+              />
+              <FilterDropdownMultiple
+                value={selectedSunlight}
+                setStateAction={setSelectedSunlight}
+                options={sunlightOptions}
+                placeholder="Sunlight"
+              />
+              <FilterDropdownMultiple
+                value={selectedGrowingSeason}
+                setStateAction={setSelectedGrowingSeason}
+                options={growingSeasonOptions}
+                placeholder="Growing Season"
+              />
 
-            <button onClick={clearFilters}>Clear filters</button>
-          </FilterContainer>
+              <button onClick={clearFilters}>Clear filters</button>
+            </FilterContainer>
+          </TopRowContainer>
           {viewingOption === 'myPlants' && (
             <div>
               {filteredUserPlantList.length ? (
