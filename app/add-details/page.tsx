@@ -15,7 +15,7 @@ export default function Home() {
 
   const plants: Plant[] = [
     {
-      id: '43c19f80-8205-4d03-b323-05c220550bf0',
+      id: 'cfed129c-1cdf-4089-89d2-83ae2fb2f83d',
       plant_name: 'cabbage',
       us_state: 'string',
       harvest_season: 'SPRING',
@@ -37,7 +37,7 @@ export default function Home() {
       sunlight_max_hours: 1,
     },
     {
-      id: '43c19f80-8205-4d03-b323-05c220550bf0',
+      id: '8f25fca8-6e86-486b-9a2b-79f68efa3658',
       plant_name: 'tomato',
       us_state: 'string',
       harvest_season: 'SPRING',
@@ -59,7 +59,7 @@ export default function Home() {
       sunlight_max_hours: 1,
     },
   ];
-  const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
+  const user_id: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
   const getDefaultDate = () => new Date().toISOString().substring(0, 10);
 
   function move(steps: number) {
@@ -74,7 +74,7 @@ export default function Home() {
     if (
       steps > 0 &&
       (!currentDetail?.planting_type ||
-        currentDetail?.planting_type == 'SELECT')
+        currentDetail?.planting_type === 'SELECT')
     ) {
       alert('Please select a valid planting type and date before proceeding.');
       return;
@@ -94,13 +94,11 @@ export default function Home() {
   function updateInput(field: string, value: string) {
     // Update the specific field of the current plant's details
     if (field == 'planting_type') {
-      let shouldBeDisabled = isDisabled;
       if (value === 'SELECT') {
-        shouldBeDisabled = true;
+        setIsDisabled(true);
       } else {
-        shouldBeDisabled = false;
+        setIsDisabled(false);
       }
-      setIsDisabled(shouldBeDisabled);
     }
     const updatedDetails = [...details];
     updatedDetails[currentIndex - 1] = {
@@ -111,8 +109,8 @@ export default function Home() {
     setDetails(updatedDetails);
   }
 
-  function updateDB() {
-    updateUserPlants(user_id, details);
+  async function updateDB() {
+    await updateUserPlants(user_id, details);
     router.push('/view-plants');
   }
 
