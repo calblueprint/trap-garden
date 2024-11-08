@@ -1,17 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { AuthProvider, useAuth } from '../../utils/AuthProvider';
+import { useAuth } from '../../utils/AuthProvider';
 
-export default function LoginLayout() {
-  return (
-    <AuthProvider>
-      <Login />
-    </AuthProvider>
-  );
-}
-
-function Login() {
+export default function Login() {
   const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

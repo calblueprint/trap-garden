@@ -3,15 +3,7 @@
 import { useState } from 'react';
 import { AuthProvider, useAuth } from '../../utils/AuthProvider';
 
-export default function SignUpLayout() {
-  return (
-    <AuthProvider>
-      <SignUp />
-    </AuthProvider>
-  );
-}
-
-function SignUp() {
+export default function SignUp() {
   const { signUp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +20,7 @@ function SignUp() {
   };
 
   return (
-    <>
+    <div>
       <input
         name="email"
         onChange={e => setEmail(e.target.value)}
@@ -53,6 +45,6 @@ function SignUp() {
         Sign up
       </button>{' '}
       {/* Sign up button */}
-    </>
+    </div>
   );
 }
