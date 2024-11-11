@@ -13,33 +13,23 @@ import {
 export default function PlantCard({
   plant,
   canSelect,
+  isSelected,
+  onToggleSelect,
 }: {
   plant: Plant;
   canSelect: boolean;
+  isSelected?: boolean;
+  onToggleSelect?: () => void;
 }) {
-  function toggle() {
-    // Toggle the green border on the Card
-    const elem = document.getElementById(plant.id);
-    elem!.classList.toggle('greenBorder');
-
-    // Toggle the checkbox state
-    const checkBox = document.getElementById(
-      plant.id + 'check',
-    ) as HTMLInputElement;
-    checkBox.checked = !checkBox.checked;
-  }
-  function toggleCheck() {
-    const checkBox = document.getElementById(
-      plant.id + 'check',
-    ) as HTMLInputElement;
-    checkBox.checked = !checkBox.checked;
-  }
-
   return (
-    <Card onClick={toggle} id={plant.id}>
+    <Card
+      className={isSelected ? 'greenBorder' : ''}
+      onClick={canSelect ? onToggleSelect : undefined}
+      id={plant.id}
+    >
       {canSelect && (
         <TopRight>
-          <RoundCheck onClick={toggleCheck} id={plant.id + 'check'} />
+          <RoundCheck checked={isSelected} readOnly id={plant.id + 'check'} />
         </TopRight>
       )}
       <CardPic>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { UUID } from 'crypto';
+import styled from 'styled-components';
 import supabase from '@/api/supabase/createClient';
 import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
 import PlantCard from '@/components/PlantCard';
@@ -12,12 +13,16 @@ export default function Page() {
     'myPlants',
   );
   const [inAddMode, setInAddMode] = useState<boolean>(false);
-
   const [plants, setPlants] = useState<Plant[]>([]);
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
   const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
   const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
   const userState = 'TENNESSEE';
+
+  const InlineDiv = styled.div`
+    display: inline-block;
+  `;
+
   async function fetchUserPlants(user_id: UUID) {
     const { data, error } = await supabase
       .from('user_plants')
@@ -37,6 +42,7 @@ export default function Page() {
     );
     return plantsUser;
   }
+
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
       const plantList = await getAllPlants();
@@ -46,6 +52,7 @@ export default function Page() {
 
     fetchPlantSeasonality();
   }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetchUserPlants(user_id);
@@ -53,17 +60,13 @@ export default function Page() {
     };
     fetchData();
   }, []);
-  function excludeElement<T>(array: T[], element: T): T[] {
-    return array.filter(item => item !== element);
-  }
 
-  function addPlant(plant: Plant) {
+  function togglePlantSelection(plant: Plant) {
     if (selectedPlants.includes(plant)) {
-      setSelectedPlants(excludeElement(selectedPlants, plant));
+      setSelectedPlants(selectedPlants.filter(item => item !== plant));
     } else {
       setSelectedPlants([...selectedPlants, plant]);
     }
-    console.log(selectedPlants);
   }
 
   return (
@@ -78,11 +81,11 @@ export default function Page() {
         <div className="componentsDisplay">
           {viewingOption === 'myPlants' &&
             (userPlants.length ? (
-              <div>
+              <InlineDiv>
                 {userPlants.map((plant, key) => (
                   <PlantCard key={key} plant={plant} canSelect={false} />
                 ))}
-              </div>
+              </InlineDiv>
             ) : (
               <div>
                 <button onClick={() => setViewingOption('all')}>
@@ -93,16 +96,23 @@ export default function Page() {
           {viewingOption === 'all' &&
             (inAddMode ? (
               <div>
-                {selectedPlants.length === 0 ? (
-                  <h3>Select Plants</h3>
-                ) : (
-                  <h3>{selectedPlants.length} Plants Selected</h3>
-                )}
-
+                <h3>
+                  {selectedPlants.length > 0
+                    ? `${selectedPlants.length} Plants Selected`
+                    : 'Select Plants'}
+                </h3>
                 {plants.map((plant, key) => (
-                  <div key={key} onClick={() => addPlant(plant)}>
-                    <PlantCard key={key} plant={plant} canSelect={true} />
-                  </div>
+                  <InlineDiv
+                    key={key}
+                    onClick={() => togglePlantSelection(plant)}
+                  >
+                    <PlantCard
+                      key={key}
+                      plant={plant}
+                      canSelect={true}
+                      isSelected={selectedPlants.includes(plant)}
+                    />
+                  </InlineDiv>
                 ))}
                 <div className="footer">
                   <button onClick={() => setInAddMode(false)}>
@@ -113,7 +123,9 @@ export default function Page() {
             ) : (
               <div>
                 {plants.map((plant, key) => (
-                  <PlantCard key={key} plant={plant} canSelect={false} />
+                  <InlineDiv key={key}>
+                    <PlantCard key={key} plant={plant} canSelect={false} />
+                  </InlineDiv>
                 ))}
                 <div className="footer">
                   <button onClick={() => setInAddMode(true)}>
