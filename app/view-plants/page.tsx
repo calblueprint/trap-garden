@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { UUID } from 'crypto';
+import styled from 'styled-components';
 import supabase from '@/api/supabase/createClient';
 import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
@@ -21,7 +22,6 @@ export default function Page() {
     'myPlants',
   );
   const [inAddMode, setInAddMode] = useState<boolean>(false);
-
   const [plants, setPlants] = useState<Plant[]>([]);
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState<
@@ -73,6 +73,7 @@ export default function Page() {
     );
     return plantsUser;
   }
+
   useEffect(() => {
     const fetchPlantSeasonality = async () => {
       const plantList = await getAllPlants();
