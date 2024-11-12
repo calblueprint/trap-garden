@@ -47,7 +47,7 @@ export default function ProfileProvider({
     try {
       const profile: Profile = {
         user_id: placeholderUserId,
-        state: '',
+        us_state: '',
         user_type: 'INDIV', //default for now
         // Removed has_plot as it's not part of Profile
       };
