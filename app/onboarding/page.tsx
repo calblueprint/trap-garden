@@ -3,31 +3,31 @@
 import React, { useState } from 'react';
 import { UUID } from 'crypto';
 import { Profile, UserTypeEnum } from '@/types/schema';
-import ProfileProvider, { useProfile } from '@/utils/ProfileProvider';
+import { useProfile } from '@/utils/ProfileProvider';
 
 // Define the possible options for each question
-const states = ['Tennessee', 'Missouri'];
+const states = ['TENNESSEE', 'MISSOURI'];
 const gardenTypes: UserTypeEnum[] = ['INDIV', 'SCHOOL', 'ORG'];
 const plotOptions = [
-  { label: 'yes', value: true },
-  { label: 'no', value: false },
+  { label: 'Yes', value: true },
+  { label: 'No', value: false },
 ];
-const placeholderUserId: UUID = '2abd7296-374a-42d1-bb4f-b813da1615ae';
+const placeholderUserId: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
 
 //Interfaces and props to avoid typ errors on Lint
 interface StateSelectionProps {
-  selectedState: string;
-  setSelectedState: React.Dispatch<React.SetStateAction<string>>;
+  selectedState?: string;
+  setSelectedState: (selected: string) => void;
 }
 
-interface GardenTypeSelectionProps {
-  selectedGardenType: UserTypeEnum;
-  setSelectedGardenType: React.Dispatch<React.SetStateAction<UserTypeEnum>>;
+interface UserTypeSelectionProps {
+  selectedUserType?: UserTypeEnum;
+  setSelectedUserType: (selected: UserTypeEnum) => void;
 }
 
 interface PlotSelectionProps {
-  selectedPlot: boolean | null;
-  setSelectedPlot: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedPlot?: boolean;
+  setSelectedPlot: (selected: boolean) => void;
 }
 
 // Select State
@@ -55,12 +55,12 @@ const StateSelection = ({
   );
 };
 
-// Step 2: Select garden type
+// Step 2: Select user type
 
-const GardenTypeSelection = ({
-  selectedGardenType,
-  setSelectedGardenType,
-}: GardenTypeSelectionProps) => {
+const UserTypeSelection = ({
+  selectedUserType,
+  setSelectedUserType,
+}: UserTypeSelectionProps) => {
   return (
     <div>
       <h2>What type of garden do you want to create?</h2>
@@ -70,10 +70,8 @@ const GardenTypeSelection = ({
             type="radio"
             name="gardenType"
             value={type}
-            checked={selectedGardenType === type}
-            onChange={e =>
-              setSelectedGardenType(e.target.value as UserTypeEnum)
-            }
+            checked={selectedUserType === type}
+            onChange={e => setSelectedUserType(e.target.value as UserTypeEnum)}
           />
           {type}
         </label>
@@ -96,7 +94,11 @@ const PlotSelection = ({
             type="radio"
             name="plot"
             value={String(option.value)}
-            checked={selectedPlot === option.value}
+            checked={
+              typeof selectedPlot === 'undefined'
+                ? false
+                : selectedPlot === option.value
+            }
             onChange={() => setSelectedPlot(option.value)}
           />
           {option.label}
@@ -107,13 +109,16 @@ const PlotSelection = ({
 };
 
 // Main Onboarding Component
-const OnboardingFlow = () => {
+export default function OnboardingFlow() {
   const { setProfile, updateHasPlot } = useProfile();
   const [step, setStep] = useState(1);
   const [selectedState, setSelectedState] = useState<string>('');
-  const [selectedGardenType, setSelectedGardenType] =
-    useState<UserTypeEnum>('INDIV');
-  const [selectedPlot, setSelectedPlot] = useState<boolean>(false);
+  const [selectedUserType, setSelectedUserType] = useState<
+    UserTypeEnum | undefined
+  >(undefined);
+  const [selectedPlot, setSelectedPlot] = useState<boolean | undefined>(
+    undefined,
+  );
 
   const handleNext = () => {
     setStep(step + 1);
@@ -126,55 +131,53 @@ const OnboardingFlow = () => {
     try {
       const profileToUpload: Profile = {
         user_id: placeholderUserId,
-        state: selectedState,
-        user_type: selectedGardenType,
+        us_state: selectedState,
+        user_type: selectedUserType!,
       };
 
       await setProfile(profileToUpload);
-      await updateHasPlot(selectedPlot); // Update has_plot
-      console.log('Profile and has_plot updated successfully');
+      await updateHasPlot(selectedPlot!); // Update has_plot
     } catch (error) {
       console.error('Error submitting profile:', error);
     }
   };
-  // Handle form submission, e.g., send to a server or display a confirmation
+
+  const disableNext = () => {
+    if (step === 1) return !selectedState;
+    if (step === 2) return !selectedUserType;
+    if (step === 3) return !(typeof selectedPlot === 'undefined');
+  };
 
   return (
-    <ProfileProvider>
-      <div>
-        {step === 1 && (
-          <StateSelection
-            selectedState={selectedState}
-            setSelectedState={setSelectedState}
-          />
-        )}
-        {step === 2 && (
-          <GardenTypeSelection
-            selectedGardenType={selectedGardenType}
-            setSelectedGardenType={setSelectedGardenType}
-          />
-        )}
-        {step === 3 && (
-          <PlotSelection
-            selectedPlot={selectedPlot}
-            setSelectedPlot={setSelectedPlot}
-          />
-        )}
+    <div>
+      {step === 1 && (
+        <StateSelection
+          selectedState={selectedState}
+          setSelectedState={setSelectedState}
+        />
+      )}
+      {step === 2 && (
+        <UserTypeSelection
+          selectedUserType={selectedUserType}
+          setSelectedUserType={setSelectedUserType}
+        />
+      )}
+      {step === 3 && (
+        <PlotSelection
+          selectedPlot={selectedPlot}
+          setSelectedPlot={setSelectedPlot}
+        />
+      )}
 
-        <div>
-          {step > 1 && <button onClick={handleBack}>Back</button>}
-          {step < 3 && (
-            <button
-              onClick={handleNext}
-              disabled={!selectedState && step === 1}
-            >
-              Next
-            </button>
-          )}
-          {step === 3 && <button onClick={handleSubmit}>Submit</button>}
-        </div>
+      <div>
+        {step > 1 && <button onClick={handleBack}>Back</button>}
+        {step < 3 && (
+          <button onClick={handleNext} disabled={disableNext()}>
+            Next
+          </button>
+        )}
+        {step === 3 && <button onClick={handleSubmit}>Submit</button>}
       </div>
-    </ProfileProvider>
+    </div>
   );
-};
-export default OnboardingFlow;
+}
