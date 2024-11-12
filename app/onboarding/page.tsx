@@ -110,7 +110,7 @@ const PlotSelection = ({
 
 // Main Onboarding Component
 export default function OnboardingFlow() {
-  const { setProfile, updateHasPlot } = useProfile();
+  const { setProfile, setHasPlot } = useProfile();
   const [step, setStep] = useState(1);
   const [selectedState, setSelectedState] = useState<string>('');
   const [selectedUserType, setSelectedUserType] = useState<
@@ -136,7 +136,7 @@ export default function OnboardingFlow() {
       };
 
       await setProfile(profileToUpload);
-      await updateHasPlot(selectedPlot!); // Update has_plot
+      await setHasPlot(selectedPlot!); // Update has_plot
     } catch (error) {
       console.error('Error submitting profile:', error);
     }

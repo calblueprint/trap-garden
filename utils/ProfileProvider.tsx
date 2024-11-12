@@ -8,22 +8,26 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { upsertProfile } from '@/api/supabase/queries/profiles';
+import {
+  fetchProfileById,
+  upsertProfile,
+} from '@/api/supabase/queries/profiles';
 import { Profile } from '@/types/schema';
 
 // Define a placeholder user ID for development purposes
-const placeholderUserId = '2abd7296-374a-42d1-bb4f-b813da1615ae';
+const placeholderUserId = '0802d796-ace8-480d-851b-d16293c74a21';
 
 export interface ProfileContextType {
   profileData: Profile | null;
   profileReady: boolean;
-  has_plot: boolean;
+  has_plot: boolean | null;
   setProfile: (completeProfile: Profile) => Promise<void>; // Now expects full Profile
   loadProfile: () => Promise<void>;
-  updateHasPlot: (plotValue: boolean) => Promise<void>; // Add this line
+  setHasPlot: (plotValue: boolean | null) => void;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
+
 export const useProfile = () => {
   const context = useContext(ProfileContext);
   if (!context) {
@@ -35,30 +39,18 @@ export const useProfile = () => {
 interface ProfileProviderProps {
   children: ReactNode;
 }
-export default function ProfileProvider({
-  children,
-}: ProfileProviderProps): JSX.Element {
+export default function ProfileProvider({ children }: ProfileProviderProps) {
   const [profileData, setProfileData] = useState<Profile | null>(null);
   const [profileReady, setProfileReady] = useState<boolean>(false);
-  const [hasPlot, setHasPlot] = useState<boolean>(false);
+  const [hasPlot, setHasPlot] = useState<boolean | null>(null);
 
   const loadProfile = useCallback(async () => {
     setProfileReady(false);
-    try {
-      const profile: Profile = {
-        user_id: placeholderUserId,
-        us_state: '',
-        user_type: 'INDIV', //default for now
-        // Removed has_plot as it's not part of Profile
-      };
-      const fetchedProfile = await upsertProfile(profile);
-      setProfileData(fetchedProfile);
-      // Set has_plot independently, assuming it needs separate handling
-    } catch (error) {
-      console.error('Error loading profile:', error);
-    } finally {
-      setProfileReady(true);
-    }
+
+    const fetchedProfile = await fetchProfileById(placeholderUserId);
+
+    setProfileData(fetchedProfile);
+    setProfileReady(true);
   }, []);
 
   const setProfile = useCallback(async (completeProfile: Profile) => {
@@ -72,14 +64,6 @@ export default function ProfileProvider({
     }
   }, []);
 
-  const updateHasPlot = useCallback(async (plotValue: boolean) => {
-    try {
-      setHasPlot(plotValue);
-    } catch (error) {
-      console.error('Error updating has_plot:', error);
-    }
-  }, []);
-
   const providerValue = useMemo(
     () => ({
       profileData,
@@ -87,16 +71,9 @@ export default function ProfileProvider({
       has_plot: hasPlot,
       setProfile,
       loadProfile,
-      updateHasPlot, // Ensure this is included
+      setHasPlot,
     }),
-    [
-      profileData,
-      profileReady,
-      hasPlot,
-      setProfile,
-      loadProfile,
-      updateHasPlot,
-    ],
+    [profileData, profileReady, hasPlot, setProfile, loadProfile, setHasPlot],
   );
 
   return (
