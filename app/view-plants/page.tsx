@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { UUID } from 'crypto';
-import styled from 'styled-components';
-import supabase from '@/api/supabase/createClient';
-import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
+import { getAllPlants, getPlantById, getMatchingPlantForUserPlants, } from '@/api/supabase/queries/plants';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
+import { useRouter } from 'next/navigation';
+import { getUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
 import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
 import { DropdownOption, Plant } from '@/types/schema';
@@ -18,6 +18,7 @@ import {
 import { FilterContainer, TopRowContainer } from './styles';
 
 export default function Page() {
+  const router = useRouter();
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
     'myPlants',
   );
@@ -35,6 +36,9 @@ export default function Page() {
   >([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const user_id: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
+  const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
+  const [ownedPlants, setOwnedPlants] = useState<Map<UUID, UUID>>();
+
   const userState = 'TENNESSEE';
   const sunlightOptions: DropdownOption[] = [
     { label: 'Less than 2 hours', value: 'SHADE' },
@@ -55,22 +59,18 @@ export default function Page() {
   ];
 
   async function fetchUserPlants(user_id: UUID) {
-    const { data, error } = await supabase
-      .from('user_plants')
-      .select('plant_id')
-      .eq('user_id', user_id)
-      .is('date_harvested', null);
+    const data = await getUserPlantsByUserId(user_id);
 
-    if (error) {
-      console.error('Error fetching plant IDs:', error);
-      return [];
-    }
-    if (!data) return [];
-    const plantIds = data.map(row => row.plant_id) || [];
+    data.map(row => {
+      setOwnedPlants(prevOwnedPlants =>
+        new Map(prevOwnedPlants).set(row.plant_id, row.id),
+      );
+    });
 
     const plantsUser: Plant[] = await Promise.all(
-      plantIds.map(plantId => getPlantById(plantId)),
+      data.map(row => getMatchingPlantForUserPlants(row)),
     );
+
     return plantsUser;
   }
 
@@ -129,6 +129,27 @@ export default function Page() {
     selectedGrowingSeason,
     searchTerm,
   ]);
+  function handlePlantCardClick(plant: Plant) {
+    //if in my plants go to [userPlantId] page
+    if (viewingOption == 'myPlants' && ownedPlants) {
+      router.push(`my-plants/${ownedPlants.get(plant.id)}`);
+    }
+    //if in all plants
+    else {
+      //if in select mode add plant to selected
+      if (inAddMode) {
+        if (selectedPlants.includes(plant)) {
+          setSelectedPlants(selectedPlants.filter(item => item !== plant));
+        } else {
+          setSelectedPlants([...selectedPlants, plant]);
+        }
+      }
+      //if not in select mode go to [plantId] page
+      else {
+        router.push(`all-plants/${plant.id}`);
+      }
+    }
+  }
 
   return (
     <div className="main">

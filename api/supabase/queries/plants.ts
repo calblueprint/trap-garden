@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { Plant } from '@/types/schema';
+import { Plant, UserPlants } from '@/types/schema';
 import supabase from '../createClient';
 
 export async function getAllPlants(): Promise<Plant[]> {
@@ -20,4 +20,9 @@ export async function getPlantById(plantId: UUID): Promise<Plant> {
   }
 
   return data;
+}
+export async function getMatchingPlantForUserPlants(
+  userPlant: UserPlants,
+): Promise<Plant> {
+  return getPlantById(userPlant['plant_id']);
 }

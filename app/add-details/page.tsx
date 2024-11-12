@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
-import { updateUserPlants } from '@/api/supabase/queries/updateUserPlants';
+import { updateUserPlants } from '@/api/supabase/queries/userPlants';
 import PlantDetails from '@/components/PlantDetails';
 import { Plant, UserPlants } from '@/types/schema';
 
