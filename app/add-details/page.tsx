@@ -75,22 +75,12 @@ export default function Home() {
     ) {
       updateInput('date_added', getDefaultDate());
     }
-    // Alert user to select planting type if trying to move forward
-    if (
-      steps > 0 &&
-      (!currentDetail?.planting_type ||
-        currentDetail?.planting_type === 'SELECT')
-    ) {
-      alert('Please select a valid planting type and date before proceeding.');
-      return;
-    }
-    //
+    // For valid moves, move to next page
     if (
       steps !== 0 &&
       currentIndex + steps > 0 &&
       currentIndex + steps <= plants.length + 1
     ) {
-      // For valid moves, move to next page
       setCurrentIndex(prevIndex => prevIndex + steps);
     }
   }
