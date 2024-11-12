@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -20,7 +21,7 @@ const placeholderUserId = '0802d796-ace8-480d-851b-d16293c74a21';
 export interface ProfileContextType {
   profileData: Profile | null;
   profileReady: boolean;
-  has_plot: boolean | null;
+  hasPlot: boolean | null;
   setProfile: (completeProfile: Profile) => Promise<void>; // Now expects full Profile
   loadProfile: () => Promise<void>;
   setHasPlot: (plotValue: boolean | null) => void;
@@ -53,6 +54,10 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
     setProfileReady(true);
   }, []);
 
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
+
   const setProfile = useCallback(async (completeProfile: Profile) => {
     try {
       const updatedProfile = await upsertProfile(completeProfile);
@@ -68,7 +73,7 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
     () => ({
       profileData,
       profileReady,
-      has_plot: hasPlot,
+      hasPlot: hasPlot,
       setProfile,
       loadProfile,
       setHasPlot,
