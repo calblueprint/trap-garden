@@ -7,6 +7,8 @@ import {
   checkPlantingType,
   checkSearchTerm,
 } from '@/utils/helpers';
+import PlantCalendarRow from '../PlantCalendarRow';
+import { CalendarRowsContainer } from './styles';
 
 interface PlantListProps {
   harvestSeasonFilterValue: DropdownOption[];
@@ -58,11 +60,23 @@ export const PlantList = ({
   ]);
 
   return (
-    <div>
+    <CalendarRowsContainer>
       {filteredPlantList.map((plant, key) => (
         //this should display PlantCalendarRows instead of this temporary div
-        <div key={key}>{plant.plant_name}</div>
+        <PlantCalendarRow
+          plantName={plant.plant_name}
+          harvestStart={plant.harvest_start}
+          harvestEnd={plant.harvest_end}
+          transplantStart={plant.transplant_start}
+          transplantEnd={plant.transplant_end}
+          indoorsStart={plant.indoors_start}
+          indoorsEnd={plant.indoors_end}
+          outdoorsStart={plant.outdoors_start}
+          outdoorsEnd={plant.outdoors_end}
+          // only show months header for the first plant
+          showMonths={key === 0}
+        />
       ))}
-    </div>
+    </CalendarRowsContainer>
   );
 };
