@@ -11,6 +11,6 @@ const COLORS = {
   black: '#222222',
   darkgray: '#555555',
   midgray: '#888888',
-  lightgray: '#DDDDDDDD',
+  lightgray: '#DDDDDD',
 };
 export default COLORS;
