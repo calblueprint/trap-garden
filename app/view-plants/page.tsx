@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { UUID } from 'crypto';
-import styled from 'styled-components';
 import supabase from '@/api/supabase/createClient';
 import { getAllPlants, getPlantById } from '@/api/supabase/queries/plants';
 import PlantCard from '@/components/PlantCard';
 import { Plant } from '@/types/schema';
+import { InlineDiv } from './styles';
 
 export default function Page() {
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
@@ -18,10 +18,6 @@ export default function Page() {
   const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
   const user_id: UUID = 'e72af66d-7aae-45f6-935a-187197749d9f';
   const userState = 'TENNESSEE';
-
-  const InlineDiv = styled.div`
-    display: inline-block;
-  `;
 
   async function fetchUserPlants(user_id: UUID) {
     const { data, error } = await supabase
