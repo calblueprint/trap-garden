@@ -10,7 +10,7 @@ export const StyledLabel = styled.label`
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: darkgreen;
+  color: #1f5a2a;
 `;
 
 export const StyledInput = styled.input`

@@ -76,7 +76,7 @@ export default function SignUp() {
       }}
     >
       <header>
-        <h1 style={{ color: 'darkgreen' }}>Sign Up</h1>
+        <h1 style={{ color: '#1F5A2A' }}>Sign Up</h1>
       </header>
       <TextInput
         id="email-input"

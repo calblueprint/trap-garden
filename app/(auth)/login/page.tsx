@@ -33,7 +33,7 @@ export default function Login() {
       }}
     >
       <header>
-        <h1 style={{ color: 'darkgreen' }}>Log In</h1>
+        <h1 style={{ color: '#1F5A2A' }}>Log In</h1>
       </header>
       <TextInput
         id="email-input"
