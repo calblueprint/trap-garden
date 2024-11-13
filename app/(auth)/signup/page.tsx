@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import PasswordComplexity from '@/components/PasswordComplexity';
-import PasswordInput from '@/components/PasswordInput';
-import { useAuth } from '@/utils/AuthProvider';
+import PasswordComplexity from '@/app/utils/PasswordComplexity';
+import TextInput from '@/components/TextInput';
+import { useAuth } from '../../utils/AuthProvider';
 
 export default function SignUp() {
   const { signUp } = useAuth();
@@ -19,18 +19,14 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Handles input to password
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPassword = e.target.value;
+  const handlePasswordChange = (newPassword: string) => {
     setPassword(newPassword);
     validatePasswords(newPassword, confirmPassword);
     validatePasswordComplexity(newPassword);
   };
 
   // Handles input to confirm password
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newConfirmPassword = e.target.value;
+  const handleConfirmPasswordChange = (newConfirmPassword: string) => {
     setConfirmPassword(newConfirmPassword);
     validatePasswords(password, newConfirmPassword);
   };
@@ -72,30 +68,45 @@ export default function SignUp() {
   };
 
   return (
-    <>
-      <input
-        name="email"
-        onChange={e => setEmail(e.target.value)}
+    <div
+      style={{
+        backgroundColor: '#f5f5f5',
+        minHeight: '100vh',
+        padding: '20px',
+      }}
+    >
+      <header>
+        <h1 style={{ color: 'darkgreen' }}>Sign Up</h1>
+      </header>
+      <TextInput
+        id="email-input"
+        label="Email"
+        type="email"
+        onChange={setEmail}
         value={email}
         placeholder="Email"
       />
       {/* Email input*/}
-      <PasswordInput
-        value={password}
+      <TextInput
+        id="password-input"
+        type="password"
+        value={password || ''}
         onChange={handlePasswordChange}
         placeholder="Password"
         isVisible={showPassword}
         toggleVisibility={() => setShowPassword(!showPassword)}
-        name="password"
+        label="Password"
       />
       {/* Password input with toggle visibility */}
-      <PasswordInput
-        value={confirmPassword}
+      <TextInput
+        id="confirm-password-input"
+        type="password"
+        value={confirmPassword || ''}
         onChange={handleConfirmPasswordChange}
         placeholder="Confirm Password"
         isVisible={showConfirmPassword}
         toggleVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
-        name="confirmPassword"
+        label="Confirm Password"
       />
       {/* Confirm password input with toggle visibility */}
       <button
@@ -118,6 +129,6 @@ export default function SignUp() {
         <p style={{ color: 'red' }}>{passwordComplexityError}</p>
       )}
       {/* Password complexity error message */}
-    </>
+    </div>
   );
 }
