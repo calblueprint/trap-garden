@@ -2,10 +2,10 @@ import styled, { css } from 'styled-components';
 import COLORS from '@/styles/colors';
 
 interface SelectedProps {
-  isSelected: boolean;
+  $isSelected: boolean;
 }
 
-export const ComponentContainer = styled.div<SelectedProps>`
+export const ComponentContainer = styled.button<SelectedProps>`
   display: flex;
   flex-direction: row;
   gap: 0.9375rem;
@@ -19,10 +19,11 @@ export const ComponentContainer = styled.div<SelectedProps>`
   padding-left: 1.188rem;
   padding-right: 1rem;
   margin-bottom: 1.125rem;
-  ${({ isSelected }) =>
-    isSelected &&
+  border-color: ${({ $isSelected }) =>
+    $isSelected ? COLORS.shrub : COLORS.lightgray};
+  ${({ $isSelected }) =>
+    $isSelected &&
     css`
-      border-color: ${COLORS.shrub}; // Changes border color when selected
       background-color: rgba(148, 181, 6, 0.1); //not added to color styles yet
     `}
 `;
@@ -35,6 +36,6 @@ export const RadioInput = styled.input.attrs({ type: 'radio' })`
   }
 `;
 export const RadioLabel = styled.label<SelectedProps>`
-  color: ${({ isSelected }) => (isSelected ? COLORS.shrub : COLORS.midgray)};
+  color: ${({ $isSelected }) => ($isSelected ? COLORS.shrub : COLORS.midgray)};
   font-size: 1.25rem;
 `;

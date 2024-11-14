@@ -1,29 +1,26 @@
 import { useState } from 'react';
 import { ComponentContainer, RadioInput, RadioLabel } from './styles';
 
-interface Option {
+interface Option<T> {
   label: string;
-  value: string;
+  value: T;
 }
 
-interface SingleSelectRadioGroupProps {
+interface RadioGroupProps<T> {
   name: string;
-  options: Option[];
-  defaultValue?: string;
-  onChange?: (value: string) => void;
+  options: Option<T>[];
+  defaultValue?: T;
+  onChange?: (value: T) => void;
 }
 
-export default function SingleSelectRadioGroup({
+export default function RadioGroup<T>({
   name,
   options,
-  defaultValue,
   onChange,
-}: SingleSelectRadioGroupProps) {
-  const [selectedValue, setSelectedValue] = useState(
-    defaultValue || options[0].value,
-  );
+}: RadioGroupProps<T>) {
+  const [selectedValue, setSelectedValue] = useState<T | null>(null);
 
-  const handleChange = (value: string) => {
+  const handleChange = (value: T) => {
     setSelectedValue(value);
     if (onChange) onChange(value);
   };
@@ -32,17 +29,21 @@ export default function SingleSelectRadioGroup({
     <div>
       {options.map(option => (
         <ComponentContainer
-          key={option.value}
-          isSelected={selectedValue === option.value}
+          key={String(option.value)}
+          $isSelected={selectedValue === option.value}
+          onClick={() => handleChange(option.value)}
         >
-          <RadioLabel isSelected={selectedValue === option.value}>
+          <RadioLabel
+            $isSelected={selectedValue === option.value}
+            htmlFor={option.label + 'Radio'}
+          >
             {option.label}
           </RadioLabel>
           <RadioInput
             name={name}
-            value={option.value}
+            value={String(option.value)}
             checked={selectedValue === option.value}
-            onChange={() => handleChange(option.value)}
+            id={option.label + 'Radio'}
           />
         </ComponentContainer>
       ))}

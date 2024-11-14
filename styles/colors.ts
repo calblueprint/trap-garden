@@ -8,5 +8,6 @@ const COLORS = {
 
   //grey
   midgray: '#888888',
+  lightgray: '#DDDDDDDD',
 };
 export default COLORS;
