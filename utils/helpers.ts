@@ -1,6 +1,6 @@
 import { DropdownOption, Plant, SeasonEnum } from '@/types/schema';
 
-// Helper function to process late/early month fields for checkGrowingSeason
+// Helper function to process late/early month fields
 function processPlantMonth(month: string) {
   // If field is not null and starts with 'LATE' or 'EARLY,
   // get substring after 'LATE_ or 'EARLY_'
@@ -17,33 +17,34 @@ function processPlantMonth(month: string) {
   }
 }
 
+// helper constants for processing months to indexes
+const growingSeasonToIndex = new Map<string, number[]>([
+  ['SPRING', [2, 3, 4]],
+  ['SUMMER', [5, 6, 7]],
+  ['FALL', [8, 9, 10]],
+  ['WINTER', [11, 0, 1]],
+]);
+
+const monthToIndex = new Map<string, number>([
+  ['JANUARY', 0],
+  ['FEBRUARY', 1],
+  ['MARCH', 2],
+  ['APRIL', 3],
+  ['MAY', 4],
+  ['JUNE', 5],
+  ['JULY', 6],
+  ['AUGUST', 7],
+  ['SEPTEMBER', 8],
+  ['OCTOBER', 9],
+  ['NOVEMBER', 10],
+  ['DECEMBER', 11],
+]);
+
 // Helper function to check if selected growing season(s) match plant's growing_season
 export function checkGrowingSeason(
   growingSeasonFilterValue: DropdownOption[],
   plant: Plant,
 ) {
-  const growingSeasonToIndex = new Map<string, number[]>([
-    ['SPRING', [2, 3, 4]],
-    ['SUMMER', [5, 6, 7]],
-    ['FALL', [8, 9, 10]],
-    ['WINTER', [11, 0, 1]],
-  ]);
-
-  const monthToIndex = new Map<string, number>([
-    ['JANUARY', 0],
-    ['FEBRUARY', 1],
-    ['MARCH', 2],
-    ['APRIL', 3],
-    ['MAY', 4],
-    ['JUNE', 5],
-    ['JULY', 6],
-    ['AUGUST', 7],
-    ['SEPTEMBER', 8],
-    ['OCTOBER', 9],
-    ['NOVEMBER', 10],
-    ['DECEMBER', 11],
-  ]);
-
   // Automatically returns true if selected growing season is []
   if (growingSeasonFilterValue.length === 0) {
     return true;
@@ -212,9 +213,11 @@ export function checkDifficulty(
   // Return false if no matches found
   return false;
 }
+
 export function useTitleCase(text: string) {
   return text.charAt(0) + text.slice(1).toLowerCase();
 }
+
 export function formatTimestamp(timestamp: string): string {
   // Convert the input to a Date object
   const date = new Date(timestamp);
@@ -249,4 +252,57 @@ else return null*/
 export function mapMonthToSeason(month: string): SeasonEnum | null {
   month = processPlantMonth(month).toUpperCase();
   return monthToSeason[month] || null;
+}
+  
+export function fillCalendarGridArrayRowWithColor(
+  startMonth: string,
+  endMonth: string,
+  color: string,
+  rowIndex: number,
+  gridArray: string[],
+) {
+  // if startMonth and endMonth is both null, row should be empty
+  if (startMonth === null && endMonth === null) {
+    return gridArray;
+  }
+
+  // if either startMonth or endMonth are null, the null one should be set to the other
+  // this makes the time frame only one month long
+  if (startMonth === null) {
+    startMonth = endMonth;
+  } else if (endMonth === null) {
+    endMonth = startMonth;
+  }
+
+  // remove 'LATE' or 'EARLY' from startMonth and endMonth to query monthToIndex
+  const processedStartMonth = processPlantMonth(startMonth);
+  const processedEndMonth = processPlantMonth(endMonth);
+
+  // if the start month is LATE_MONTH, start column should be the second column for that month
+  // if the end month is EARLY_MONTH, end column should be the first column for that month
+  // otherwise, start column should be the first column and end column should be the second column for that month
+  let startColumn = startMonth.startsWith('LATE')
+    ? monthToIndex.get(processedStartMonth)! * 2 + 1
+    : monthToIndex.get(processedStartMonth)! * 2;
+  let endColumn = endMonth.startsWith('EARLY')
+    ? monthToIndex.get(processedEndMonth)! * 2
+    : monthToIndex.get(processedEndMonth)! * 2 + 1;
+
+  // fill gridArray with corresponding colour from startColumn to endColumn
+  if (startColumn > endColumn) {
+    // handle case when the season goes from November - February, e.g.
+    for (let i = startColumn; i <= 24; i++) {
+      gridArray[rowIndex * 24 + i] = color;
+    }
+    for (let i = 0; i <= endColumn; i++) {
+      gridArray[rowIndex * 24 + i] = color;
+    }
+  } else {
+    // fill normally
+    for (let i = startColumn; i <= endColumn; i++) {
+      gridArray[rowIndex * 24 + i] = color;
+    }
+  }
+
+  return gridArray;
 }

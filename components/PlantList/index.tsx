@@ -7,6 +7,7 @@ import {
   checkPlantingType,
   checkSearchTerm,
 } from '@/utils/helpers';
+import MonthHeader from '../MonthHeader';
 import PlantCalendarRow from '../PlantCalendarRow';
 import { CalendarRowsContainer } from './styles';
 
@@ -60,23 +61,26 @@ export const PlantList = ({
   ]);
 
   return (
-    <CalendarRowsContainer>
-      {filteredPlantList.map((plant, key) => (
-        //this should display PlantCalendarRows instead of this temporary div
-        <PlantCalendarRow
-          plantName={plant.plant_name}
-          harvestStart={plant.harvest_start}
-          harvestEnd={plant.harvest_end}
-          transplantStart={plant.transplant_start}
-          transplantEnd={plant.transplant_end}
-          indoorsStart={plant.indoors_start}
-          indoorsEnd={plant.indoors_end}
-          outdoorsStart={plant.outdoors_start}
-          outdoorsEnd={plant.outdoors_end}
-          // only show months header for the first plant
-          showMonths={key === 0}
-        />
-      ))}
-    </CalendarRowsContainer>
+    <div>
+      <MonthHeader />
+      <CalendarRowsContainer>
+        {filteredPlantList.map((plant, key) => (
+          //this should display PlantCalendarRows instead of this temporary div
+          <PlantCalendarRow
+            plantName={plant.plant_name}
+            harvestStart={plant.harvest_start}
+            harvestEnd={plant.harvest_end}
+            transplantStart={plant.transplant_start}
+            transplantEnd={plant.transplant_end}
+            indoorsStart={plant.indoors_start}
+            indoorsEnd={plant.indoors_end}
+            outdoorsStart={plant.outdoors_start}
+            outdoorsEnd={plant.outdoors_end}
+            // only show months header for the first plant
+            showMonths={key === 0}
+          />
+        ))}
+      </CalendarRowsContainer>
+    </div>
   );
 };
