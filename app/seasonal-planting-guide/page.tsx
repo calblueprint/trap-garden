@@ -10,6 +10,7 @@ import {
   FilterContainer,
   HeaderContainer,
   PageContainer,
+  PageTitle,
   StateOptionsContainer,
 } from './styles';
 
@@ -76,6 +77,7 @@ export default function SeasonalPlantingGuide() {
       ) : (
         <>
           <HeaderContainer>
+            <PageTitle>Seasonality Chart</PageTitle>
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <FilterContainer>
               <FilterDropdownSingle

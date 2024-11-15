@@ -1,5 +1,5 @@
 import React from 'react';
-import { MultiSelect } from 'react-multi-select-component';
+import { StyledMultiSelect } from './styles';
 import { DropdownOption } from '@/types/schema';
 
 interface FilterDropdownProps {
@@ -16,7 +16,7 @@ export default function FilterDropdownMultiple({
   placeholder,
 }: FilterDropdownProps) {
   return (
-    <MultiSelect
+    <StyledMultiSelect
       options={options}
       value={value}
       onChange={setStateAction}
