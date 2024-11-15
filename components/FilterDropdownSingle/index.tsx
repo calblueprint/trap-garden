@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DropdownOption } from '@/types/schema';
+import { FilterDropdownInput } from './styles';
 
 interface FilterDropdownProps {
   name?: string;
@@ -30,7 +31,7 @@ export default function FilterDropdownSingle({
   };
 
   return (
-    <select
+    <FilterDropdownInput
       name={name}
       id={id}
       onChange={handleChange}
@@ -47,6 +48,6 @@ export default function FilterDropdownSingle({
           {option.label}
         </option>
       ))}
-    </select>
+    </FilterDropdownInput>
   );
 }
