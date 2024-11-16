@@ -41,3 +41,8 @@ export interface UserPlants {
   date_harvested: string;
   planting_type: string;
 }
+
+export interface DropdownOption {
+  label: string;
+  value: string;
+}

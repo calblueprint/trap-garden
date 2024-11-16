@@ -6,41 +6,28 @@ import { Profile, UserTypeEnum } from '@/types/schema';
 import { useProfile } from '@/utils/ProfileProvider';
 
 // Define the possible options for each question
-type Options<T> = {
-  label: string; // Represents the text for UI
-  value: T; // Represents the value stored in the DB
-};
-const states: Options<string>[] = [
-  { label: 'Tennessee', value: 'TENNESSE' },
-  { label: 'Missouri', value: 'MISSOURI' },
+const states = ['TENNESSEE', 'MISSOURI'];
+const gardenTypes: UserTypeEnum[] = ['INDIV', 'SCHOOL', 'ORG'];
+const plotOptions = [
+  { label: 'Yes', value: true },
+  { label: 'No', value: false },
 ];
-const gardenTypes: Options<UserTypeEnum>[] = [
-  { label: 'Individual', value: 'INDIV' },
-  { label: 'School', value: 'SCHOOL' },
-  { label: 'Community', value: 'ORG' },
-];
-const plotOptions: Options<boolean>[] = [
-  { label: 'yes', value: true },
-  { label: 'no', value: false },
-];
-const placeholderUserId: UUID = '2abd7296-374a-42d1-bb4f-b813da1615ae';
+const placeholderUserId: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
 
 //Interfaces and props to avoid typ errors on Lint
 interface StateSelectionProps {
-  selectedState: string;
-  setSelectedState: React.Dispatch<React.SetStateAction<string>>;
+  selectedState?: string;
+  setSelectedState: (selected: string) => void;
 }
 
-interface GardenTypeSelectionProps {
-  selectedGardenType: UserTypeEnum | null;
-  setSelectedGardenType: React.Dispatch<
-    React.SetStateAction<UserTypeEnum | null>
-  >;
+interface UserTypeSelectionProps {
+  selectedUserType?: UserTypeEnum;
+  setSelectedUserType: (selected: UserTypeEnum) => void;
 }
 
 interface PlotSelectionProps {
-  selectedPlot: boolean | null;
-  setSelectedPlot: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedPlot?: boolean;
+  setSelectedPlot: (selected: boolean) => void;
 }
 
 // Select State
@@ -68,12 +55,12 @@ const StateSelection = ({
   );
 };
 
-// Step 2: Select garden type
+// Step 2: Select user type
 
-const GardenTypeSelection = ({
-  selectedGardenType,
-  setSelectedGardenType,
-}: GardenTypeSelectionProps) => {
+const UserTypeSelection = ({
+  selectedUserType,
+  setSelectedUserType,
+}: UserTypeSelectionProps) => {
   return (
     <div>
       <h2>What type of garden do you want to create?</h2>
@@ -82,11 +69,9 @@ const GardenTypeSelection = ({
           <input
             type="radio"
             name="gardenType"
-            value={type.value}
-            checked={selectedGardenType === type.value}
-            onChange={e =>
-              setSelectedGardenType(e.target.value as UserTypeEnum)
-            }
+            value={type}
+            checked={selectedUserType === type}
+            onChange={e => setSelectedUserType(e.target.value as UserTypeEnum)}
           />
           {type.label}
         </label>
@@ -109,7 +94,11 @@ const PlotSelection = ({
             type="radio"
             name="plot"
             value={String(option.value)}
-            checked={selectedPlot === option.value}
+            checked={
+              typeof selectedPlot === 'undefined'
+                ? false
+                : selectedPlot === option.value
+            }
             onChange={() => setSelectedPlot(option.value)}
           />
           {option.label}
@@ -120,13 +109,16 @@ const PlotSelection = ({
 };
 
 // Main Onboarding Component
-const OnboardingFlow = () => {
-  const { setProfile, updateHasPlot } = useProfile();
+export default function OnboardingFlow() {
+  const { setProfile, setHasPlot } = useProfile();
   const [step, setStep] = useState(1);
   const [selectedState, setSelectedState] = useState<string>('');
-  const [selectedGardenType, setSelectedGardenType] =
-    useState<UserTypeEnum | null>(null);
-  const [selectedPlot, setSelectedPlot] = useState<boolean>(false);
+  const [selectedUserType, setSelectedUserType] = useState<
+    UserTypeEnum | undefined
+  >(undefined);
+  const [selectedPlot, setSelectedPlot] = useState<boolean | undefined>(
+    undefined,
+  );
 
   const handleNext = () => {
     setStep(step + 1);
@@ -136,24 +128,25 @@ const OnboardingFlow = () => {
     setStep(step - 1);
   };
   const handleSubmit = async () => {
-    if (!selectedGardenType) {
-      console.error('Garden type is required to submit the profile.');
-      return;
-    }
     try {
       const profileToUpload: Profile = {
         user_id: placeholderUserId,
         us_state: selectedState,
-        user_type: selectedGardenType,
+        user_type: selectedUserType!,
       };
 
       await setProfile(profileToUpload);
-      await updateHasPlot(selectedPlot); // Update has_plot
+      await setHasPlot(selectedPlot!); // Update has_plot
     } catch (error) {
       console.error('Error submitting profile:', error);
     }
   };
-  // Handle form submission, e.g., send to a server or display a confirmation
+
+  const disableNext = () => {
+    if (step === 1) return !selectedState;
+    if (step === 2) return !selectedUserType;
+    if (step === 3) return !(typeof selectedPlot === 'undefined');
+  };
 
   return (
     <div>
@@ -164,9 +157,9 @@ const OnboardingFlow = () => {
         />
       )}
       {step === 2 && (
-        <GardenTypeSelection
-          selectedGardenType={selectedGardenType}
-          setSelectedGardenType={setSelectedGardenType}
+        <UserTypeSelection
+          selectedUserType={selectedUserType}
+          setSelectedUserType={setSelectedUserType}
         />
       )}
       {step === 3 && (
@@ -179,7 +172,7 @@ const OnboardingFlow = () => {
       <div>
         {step > 1 && <button onClick={handleBack}>Back</button>}
         {step < 3 && (
-          <button onClick={handleNext} disabled={!selectedState && step === 1}>
+          <button onClick={handleNext} disabled={disableNext()}>
             Next
           </button>
         )}
@@ -187,5 +180,4 @@ const OnboardingFlow = () => {
       </div>
     </div>
   );
-};
-export default OnboardingFlow;
+}
