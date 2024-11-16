@@ -6,7 +6,7 @@ export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
 
 export interface Profile {
   user_id: UUID;
-  state: string;
+  us_state: string;
   user_type: UserTypeEnum;
 }
 
