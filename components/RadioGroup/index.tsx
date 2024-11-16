@@ -16,9 +16,12 @@ interface RadioGroupProps<T> {
 export default function RadioGroup<T>({
   name,
   options,
+  defaultValue,
   onChange,
 }: RadioGroupProps<T>) {
-  const [selectedValue, setSelectedValue] = useState<T | null>(null);
+  const [selectedValue, setSelectedValue] = useState<T | null>(
+    defaultValue || null,
+  );
 
   const handleChange = (value: T) => {
     setSelectedValue(value);
@@ -52,7 +55,8 @@ export default function RadioGroup<T>({
 }
 
 // Example usage
-// import SingleSelectRadioGroup from '@/components/SingleSelectRadio';
+// 'use client';
+// import RadioGroup from '@/components/RadioGroup';
 // export default function Home() {
 //   return (
 //     <Container>

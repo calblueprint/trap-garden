@@ -24,7 +24,7 @@ export const ComponentContainer = styled.button<SelectedProps>`
   ${({ $isSelected }) =>
     $isSelected &&
     css`
-      background-color: rgba(148, 181, 6, 0.1); //not added to color styles yet
+      background-color: ${COLORS.sproutLight};
     `}
 `;
 
