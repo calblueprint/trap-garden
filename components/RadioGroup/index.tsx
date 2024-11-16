@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { ComponentContainer, RadioInput, RadioLabel } from './styles';
+import {
+  ComponentContainer,
+  RadioButton,
+  RadioInput,
+  RadioLabel,
+} from './styles';
 
 interface Option<T> {
   label: string;
@@ -29,9 +34,9 @@ export default function RadioGroup<T>({
   };
 
   return (
-    <div>
+    <ComponentContainer>
       {options.map(option => (
-        <ComponentContainer
+        <RadioButton
           key={String(option.value)}
           $isSelected={selectedValue === option.value}
           onClick={() => handleChange(option.value)}
@@ -48,9 +53,9 @@ export default function RadioGroup<T>({
             checked={selectedValue === option.value}
             id={option.label + 'Radio'}
           />
-        </ComponentContainer>
+        </RadioButton>
       ))}
-    </div>
+    </ComponentContainer>
   );
 }
 
