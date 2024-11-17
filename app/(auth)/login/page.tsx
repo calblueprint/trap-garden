@@ -13,18 +13,19 @@ export default function LoginLayout() {
 }
 
 function Login() {
-  const { signIn } = useAuth();
+  const { signIn } = useAuth(); // Use `signIn` function from AuthProvider
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleSignIn = async () => {
+  const handleLogin = async () => {
+    // Define handleLogin
     try {
       await signIn(email, password);
-      router.push('/');
+      router.push('/'); // Redirect to the home page on success
     } catch (error) {
       if (error instanceof Error) {
-        console.error(error.message);
+        console.error('Login Error:', error.message);
       }
     }
   };
@@ -44,10 +45,9 @@ function Login() {
         value={password}
         placeholder="Password"
       />
-      <button type="button" onClick={handleSignIn}>
+      <button type="button" onClick={handleLogin}>
         Sign in
-      </button>{' '}
-      {/* Sign in button */}
+      </button>
     </>
   );
 }

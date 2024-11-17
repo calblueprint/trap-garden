@@ -1,24 +1,49 @@
 import type { UUID } from 'crypto';
 
-export type Season = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
+export type SeasonEnum = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
+
+export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
+
+export interface Profile {
+  user_id: UUID;
+  state: string;
+  user_type: string;
+  has_plot: boolean;
+}
 
 export interface Plant {
   id: UUID;
   plant_name: string;
-  state: string;
-  harvest_season: Season;
-  water_num_times_per_week: number;
-  plant_seed_indoors_start: string;
-  plant_seed_indoors_end: string;
-  plant_seed_outdoors_start: string;
-  plant_seed_outdoors_end: string;
-  plant_transplant_start: string;
-  plant_transplant_end: string;
+  us_state: string;
+  harvest_season: SeasonEnum;
+  water_frequency: string;
+  weeding_frequency: string;
+  indoors_start: string;
+  indoors_end: string;
+  outdoors_start: string;
+  outdoors_end: string;
+  transplant_start: string;
+  transplant_end: string;
   harvest_start: string;
   harvest_end: string;
-  water_inches_per_week: number;
-  harvest_days_after_plant: number;
-  sunlight_required: string;
   beginner_friendly: boolean;
   plant_tips: string;
+  img: string;
+  difficulty_level: DifficultyLevelEnum;
+  sunlight_min_hours: int;
+  sunlight_max_hours: int;
+}
+
+export interface UserPlants {
+  id: UUID;
+  user_id: UUID;
+  plant_id: UUID;
+  date_added: string;
+  date_harvested: string;
+  planting_type: string;
+}
+
+export interface DropdownOption {
+  label: string;
+  value: string;
 }
