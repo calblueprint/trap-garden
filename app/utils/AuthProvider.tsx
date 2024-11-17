@@ -8,20 +8,18 @@ import {
   useState,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import { Session } from '@supabase/supabase-js';
 import supabase from '../../api/supabase/createClient';
 
 interface AuthContextType {
-  authUser: AuthUser | null;
+  userId: string | null;
+  email: string | null;
+  session: Session | null;
   isLoggedIn: boolean;
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   loading: boolean;
-}
-
-interface AuthUser {
-  id: string;
-  email: string;
 }
 
 // Create the AuthContext
@@ -38,10 +36,12 @@ export function useAuth() {
 
 // AuthProvider component that wraps around your app or specific pages
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { push } = useRouter(); // Get Next.js router for navigation
+  const { push } = useRouter();
 
   // Sign Up function
   const signUp = async (email: string, password: string) => {
@@ -50,15 +50,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) throw new Error(error.message);
 
       if (data.user) {
-        // Map the user data to AuthUser type, ensuring `id` and `email` are defined
-        const user: AuthUser = {
-          id: data.user.id ?? '', // Fallback to an empty string if `id` is undefined
-          email: data.user.email ?? '', // Fallback to an empty string if `email` is undefined
-        };
-
-        setAuthUser(user);
+        setUserId(data.user.id ?? null);
+        setEmail(data.user.email ?? null);
         setIsLoggedIn(true);
-        push('/dashboard'); // Redirect to dashboard after sign-up
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -76,15 +70,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (error) throw new Error(error.message);
 
-      // Map the user data to AuthUser type
-      const user: AuthUser = {
-        id: data.user.id ?? '', // Fallback to an empty string if `id` is undefined
-        email: data.user.email ?? '', // Fallback to an empty string if `email` is undefined
-      };
-
-      setAuthUser(user);
+      setUserId(data.user.id ?? null);
+      setEmail(data.user.email ?? null);
       setIsLoggedIn(true);
-      push('/dashboard'); // Redirect to dashboard after sign-in
     } catch (error) {
       if (error instanceof Error) {
         console.error('Sign-in Error:', error.message);
@@ -97,9 +85,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw new Error(error.message);
-      setAuthUser(null);
+      setUserId(null);
+      setEmail(null);
       setIsLoggedIn(false);
-      push('/login'); // Redirect to login after sign-out
+      setSession(null);
+      // push('/login'); // Redirect to login after sign-out
     } catch (error) {
       if (error instanceof Error) {
         console.error('Sign-out Error:', error.message);
@@ -111,54 +101,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const getUser = async () => {
       setLoading(true);
-      const { data } = await supabase.auth.getUser();
-      if (data.user && data.user.id && data.user.email) {
-        // Map the user data to AuthUser type
-        const user: AuthUser = {
-          id: data.user.id,
-          email: data.user.email,
-        };
-
-        setAuthUser(user);
-        setIsLoggedIn(true);
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Session Error:', error.message);
+      } else if (data.session) {
+        setSession(data.session);
+        const { user } = data.session;
+        if (user) {
+          setUserId(user.id ?? null);
+          setEmail(user.email ?? null);
+          setIsLoggedIn(true);
+        }
       } else {
-        setAuthUser(null);
+        setUserId(null);
+        setEmail(null);
         setIsLoggedIn(false);
       }
       setLoading(false);
     };
-
     getUser();
 
     // Listen for auth state changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        const user: AuthUser = {
-          id: session.user.id ?? '', // Fallback to empty string if `id` is undefined
-          email: session.user.email ?? '', // Fallback to empty string if `email` is undefined
-        };
-
-        setAuthUser(user);
-        setIsLoggedIn(true);
-      } else {
-        setAuthUser(null);
-        setIsLoggedIn(false);
-
-        if (!loading) {
-          if (window.location.pathname !== '/signup') {
-            push('/login');
-          }
+      if (session) {
+        setSession(session);
+        const { user } = session;
+        if (user) {
+          setUserId(user.id ?? null);
+          setEmail(user.email ?? null);
+          setIsLoggedIn(true);
         }
+      } else {
+        setUserId(null);
+        setEmail(null);
+        setIsLoggedIn(false);
+        setSession(null);
+
+        // if (!loading && window.location.pathname !== '/signup') {
+        // push('/login');
+        // }
       }
     });
 
     return () => subscription?.unsubscribe();
-  }, [push]);
+  }, [push, loading]);
 
   const value: AuthContextType = {
-    authUser,
+    userId,
+    email,
+    session,
     isLoggedIn,
     signUp,
     signIn,
@@ -166,9 +159,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading ? children : <div>Loading...</div>}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

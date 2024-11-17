@@ -1,3 +1,4 @@
+/*
 'use client';
 
 import { AuthProvider, useAuth } from '../utils/AuthProvider';
@@ -25,10 +26,11 @@ function Dashboard() {
 
       <main>
         <p>User is currently: {isLoggedIn ? 'Logged In' : 'Logged Out'}</p>
-        {/* Display user's email */}
         {authUser && <p>User name: {authUser.email}</p>}{' '}
-        <button onClick={signOut}>Log Out</button> {/* Logout button */}
+        <button onClick={signOut}>Log Out</button> 
       </main>
     </>
   );
 }
+
+*/

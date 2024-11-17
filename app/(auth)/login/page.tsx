@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AuthProvider, useAuth } from '../../utils/AuthProvider';
 
 export default function LoginLayout() {
@@ -15,10 +16,12 @@ function Login() {
   const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSignIn = async () => {
     try {
       await signIn(email, password);
+      router.push('/');
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
