@@ -15,7 +15,7 @@ const TextStyles = css<TextProps>`
 
 export const H1 = styled.h1<TextProps>`
   ${TextStyles}
-  font-size: 2rem;
+  font-size: 2rem; // this may change later
 `;
 
 export const H2 = styled.h2<TextProps>`
@@ -31,10 +31,4 @@ export const H3 = styled.h3<TextProps>`
 export const H4 = styled.h4<TextProps>`
   ${TextStyles}
   font-size: 1rem;
-`;
-
-export const P = styled.p<TextProps>`
-  ${TextStyles}
-  font-size: .75rem;
-  font-weight: 400;
 `;
