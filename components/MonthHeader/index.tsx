@@ -1,9 +1,14 @@
-import { MonthHeaderContainer, MonthsContainer, MonthsText } from './styles';
+import {
+  MonthHeaderContainer,
+  MonthsContainer,
+  MonthsText,
+  WhiteSpace,
+} from './styles';
 
 export default function MonthHeader() {
   return (
     <MonthHeaderContainer>
-      <p></p>
+      <WhiteSpace />
       <MonthsContainer>
         <MonthsText>Jan</MonthsText>
         <MonthsText>Feb</MonthsText>

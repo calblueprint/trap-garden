@@ -1,5 +1,6 @@
 import React from 'react';
-import { SearchBarContainer, SearchBarInput } from './styles';
+import Icon from '../Icon';
+import { IconWrapper, SearchBarContainer, SearchBarInput } from './styles';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -12,6 +13,9 @@ export default function SearchBar({
 }: SearchBarProps) {
   return (
     <SearchBarContainer>
+      <IconWrapper>
+        <Icon type="search" />
+      </IconWrapper>
       <SearchBarInput
         type="text"
         placeholder="Search Plant"

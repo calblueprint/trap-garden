@@ -5,12 +5,15 @@ import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantList } from '@/components/PlantList';
 import SearchBar from '@/components/SearchBar';
+import COLORS from '@/styles/colors';
+import { H1 } from '@/styles/text';
 import { DropdownOption } from '@/types/schema';
 import {
   FilterContainer,
   HeaderContainer,
   PageContainer,
   PageTitle,
+  PlantListContainer,
   StateOptionsContainer,
 } from './styles';
 
@@ -60,60 +63,61 @@ export default function SeasonalPlantingGuide() {
 
   return (
     <PageContainer>
+      <HeaderContainer>
+        <PageTitle>
+          <H1 $color={COLORS.shrub} $align="left">
+            Planting Timeline
+          </H1>
+        </PageTitle>
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <FilterContainer>
+          <FilterDropdownSingle
+            name="usState"
+            id="usState"
+            value={selectedUsState}
+            setStateAction={setSelectedUsState}
+            placeholder="US State"
+            options={usStateOptions}
+          />
+
+          <FilterDropdownMultiple
+            value={selectedGrowingSeason}
+            setStateAction={setSelectedGrowingSeason}
+            options={growingSeasonOptions}
+            placeholder="Growing Season"
+          />
+
+          <FilterDropdownMultiple
+            value={selectedHarvestSeason}
+            setStateAction={setSelectedHarvestSeason}
+            options={harvestSeasonOptions}
+            placeholder="Harvest Season"
+          />
+
+          <FilterDropdownMultiple
+            value={selectedPlantingType}
+            setStateAction={setSelectedPlantingType}
+            options={plantingTypeOptions}
+            placeholder="Planting Type"
+          />
+
+          <button onClick={clearFilters}>Clear filters</button>
+        </FilterContainer>
+      </HeaderContainer>
       {!selectedUsState ? (
-        <>
-          <p>Please select a US state to view planting information.</p>
-          <StateOptionsContainer>
-            <FilterDropdownSingle
-              name="usState"
-              id="usState"
-              value={selectedUsState}
-              setStateAction={setSelectedUsState}
-              placeholder="US State"
-              options={usStateOptions}
-            />
-          </StateOptionsContainer>
-        </>
+        <StateOptionsContainer>
+          <p>Choose your state</p>
+          <FilterDropdownSingle
+            name="usState"
+            id="usState"
+            value={selectedUsState}
+            setStateAction={setSelectedUsState}
+            placeholder="US State"
+            options={usStateOptions}
+          />
+        </StateOptionsContainer>
       ) : (
-        <>
-          <HeaderContainer>
-            <PageTitle>Seasonality Chart</PageTitle>
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            <FilterContainer>
-              <FilterDropdownSingle
-                name="usState"
-                id="usState"
-                value={selectedUsState}
-                setStateAction={setSelectedUsState}
-                placeholder="US State"
-                options={usStateOptions}
-              />
-
-              <FilterDropdownMultiple
-                value={selectedGrowingSeason}
-                setStateAction={setSelectedGrowingSeason}
-                options={growingSeasonOptions}
-                placeholder="Growing Season"
-              />
-
-              <FilterDropdownMultiple
-                value={selectedHarvestSeason}
-                setStateAction={setSelectedHarvestSeason}
-                options={harvestSeasonOptions}
-                placeholder="Harvest Season"
-              />
-
-              <FilterDropdownMultiple
-                value={selectedPlantingType}
-                setStateAction={setSelectedPlantingType}
-                options={plantingTypeOptions}
-                placeholder="Planting Type"
-              />
-
-              <button onClick={clearFilters}>Clear filters</button>
-            </FilterContainer>
-          </HeaderContainer>
-
+        <PlantListContainer>
           <PlantList
             growingSeasonFilterValue={selectedGrowingSeason}
             harvestSeasonFilterValue={selectedHarvestSeason}
@@ -121,7 +125,7 @@ export default function SeasonalPlantingGuide() {
             usStateFilterValue={selectedUsState}
             searchTerm={searchTerm}
           />
-        </>
+        </PlantListContainer>
       )}
     </PageContainer>
   );

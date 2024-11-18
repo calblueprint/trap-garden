@@ -8,12 +8,13 @@ function processPlantMonth(month: string) {
     return month;
   }
 
+  // uppercase to ensure that returned month is in uppercase
   if (month.startsWith('LATE')) {
-    return month.substring(5);
+    return month.substring(5).toLocaleUpperCase();
   } else if (month.startsWith('EARLY')) {
-    return month.substring(6);
+    return month.substring(6).toLocaleUpperCase();
   } else {
-    return month;
+    return month.toLocaleUpperCase();
   }
 }
 

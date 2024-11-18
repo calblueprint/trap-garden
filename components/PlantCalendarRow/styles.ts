@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const PlantCalendarRowContainer = styled.div`
-  display: grid;
+  display: flex;
   width: 100%;
-  grid-template-columns: 1fr 12fr;
+  flex-direction: row;
   gap: 12px;
 `;
 
@@ -11,6 +11,10 @@ export const PlantText = styled.p`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  font-size: 0.625rem;
+  min-width: 10%;
+  max-width: 10%;
+  word-wrap: break-word;
 `;
 
 export const CalendarGrid = styled.div`

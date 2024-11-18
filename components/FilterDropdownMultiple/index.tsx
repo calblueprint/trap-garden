@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyledMultiSelect } from './styles';
 import { DropdownOption } from '@/types/schema';
+import { StyledMultiSelect } from './styles';
 
 interface FilterDropdownProps {
   value: DropdownOption[];
