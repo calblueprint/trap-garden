@@ -169,26 +169,27 @@ export function checkSunlight(
   ]);
 
   // For each sunlight selected, check if plant's min_hours and max_hours are
-  // within that enum's range
-  const sunlightBoolean: boolean[] = [];
+  // within that enum's range, return true if so
   for (const sunlight of sunlightFilterValue) {
     const [minHours, maxHours] = sunlightToHours.get(sunlight.value)!;
     // if max_hours is null then plant can only receive min_hours of sunlight
     if (plant.sunlight_max_hours === null) {
-      sunlightBoolean.push(
+      if (
         plant.sunlight_min_hours >= minHours &&
-          plant.sunlight_min_hours <= maxHours,
-      );
-    } else {
-      sunlightBoolean.push(
-        plant.sunlight_min_hours >= minHours &&
-          plant.sunlight_max_hours <= maxHours,
-      );
+        plant.sunlight_min_hours <= maxHours
+      ) {
+        return true;
+      }
+    } else if (
+      plant.sunlight_min_hours >= minHours &&
+      plant.sunlight_max_hours <= maxHours
+    ) {
+      return true;
     }
   }
 
-  // Return true if any of the sunlightBooleans are true
-  return sunlightBoolean.includes(true);
+  // Return false if no matches found
+  return false;
 }
 
 export function checkDifficulty(
@@ -200,13 +201,14 @@ export function checkDifficulty(
     return true;
   }
 
-  // For each difficulty selected,
-  // check if plant's difficulty_level matches difficulty
-  const difficultyBoolean: boolean[] = [];
+  // For each difficulty selected check if plant's difficulty_level matches difficulty
+  // If it does, return true
   for (const difficulty of difficultyFilterValue) {
-    difficultyBoolean.push(plant.difficulty_level === difficulty.value);
+    if (plant.difficulty_level === difficulty.value) {
+      return true;
+    }
   }
 
-  // Return true if any of the difficultyBooleans are true
-  return difficultyBoolean.includes(true);
+  // Return false if no matches found
+  return false;
 }
