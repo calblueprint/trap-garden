@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { getUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
 import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
-import { DropdownOption, Plant } from '@/types/schema';
+import { DropdownOption, OwnedPlant, Plant } from '@/types/schema';
 import {
   checkDifficulty,
   checkGrowingSeason,
@@ -16,7 +16,6 @@ import {
   checkSunlight,
 } from '@/utils/helpers';
 import { FilterContainer, TopRowContainer } from './styles';
-
 export default function Page() {
   const router = useRouter();
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
@@ -37,7 +36,7 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const user_id: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
   const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
-  const [ownedPlants, setOwnedPlants] = useState<Map<UUID, UUID>>();
+  const [ownedPlants, setOwnedPlants] = useState<OwnedPlant[]>([]);
 
   const userState = 'TENNESSEE';
   const sunlightOptions: DropdownOption[] = [
@@ -59,35 +58,33 @@ export default function Page() {
   ];
 
   async function fetchUserPlants(user_id: UUID) {
-    const data = await getUserPlantsByUserId(user_id);
+    const fetchedUserPlants = await getUserPlantsByUserId(user_id);
 
-    data.map(row => {
-      setOwnedPlants(prevOwnedPlants =>
-        new Map(prevOwnedPlants).set(row.plant_id, row.id),
-      );
-    });
-
-    const plantsUser: Plant[] = await Promise.all(
-      data.map(row => getMatchingPlantForUserPlants(row)),
+    const ownedPlants: OwnedPlant[] = await Promise.all(
+      fetchedUserPlants.map(async userPlant => {
+        const plant = await getMatchingPlantForUserPlant(userPlant);
+        return {
+          userPlantId: userPlant.id,
+          plant,
+        };
+      }),
     );
 
-    return plantsUser;
+    return ownedPlants;
   }
 
   useEffect(() => {
-    const fetchPlantSeasonality = async () => {
+    (async () => {
       const plantList = await getAllPlants();
       const result = plantList.filter(plant => plant.us_state === userState);
       setPlants(result);
-    };
-
-    fetchPlantSeasonality();
+    })();
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetchUserPlants(user_id);
-      setUserPlants(result);
+      setOwnedPlants(result);
     };
     fetchData();
   }, []);
@@ -129,25 +126,19 @@ export default function Page() {
     selectedGrowingSeason,
     searchTerm,
   ]);
+  function handleUserPlantCardClick(ownedPlant: OwnedPlant) {
+    router.push(`my-garden/${ownedPlant.userPlantId}`);
+  }
+
   function handlePlantCardClick(plant: Plant) {
-    //if in my plants go to [userPlantId] page
-    if (viewingOption == 'myPlants' && ownedPlants) {
-      router.push(`my-plants/${ownedPlants.get(plant.id)}`);
-    }
-    //if in all plants
-    else {
-      //if in select mode add plant to selected
-      if (inAddMode) {
-        if (selectedPlants.includes(plant)) {
-          setSelectedPlants(selectedPlants.filter(item => item !== plant));
-        } else {
-          setSelectedPlants([...selectedPlants, plant]);
-        }
+    if (inAddMode) {
+      if (selectedPlants.includes(plant)) {
+        setSelectedPlants(selectedPlants.filter(item => item !== plant));
+      } else {
+        setSelectedPlants([...selectedPlants, plant]);
       }
-      //if not in select mode go to [plantId] page
-      else {
-        router.push(`all-plants/${plant.id}`);
-      }
+    } else {
+      router.push(`all-plants/${plant.id}`);
     }
   }
 
@@ -209,7 +200,7 @@ export default function Page() {
                 {filteredPlantList.map((plant, key) => (
                   <PlantCard key={key} plant={plant} canSelect={true} />
                 ))}
-                <div className="footer">
+                <div>
                   <button onClick={() => setInAddMode(false)}>
                     Select Plants
                   </button>
@@ -220,7 +211,7 @@ export default function Page() {
                 {filteredPlantList.map((plant, key) => (
                   <PlantCard key={key} plant={plant} canSelect={false} />
                 ))}
-                <div className="footer">
+                <div>
                   <button onClick={() => setInAddMode(true)}>
                     Add to my plants
                   </button>

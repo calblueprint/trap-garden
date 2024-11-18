@@ -14,22 +14,18 @@ export default function PlantCard({
   plant,
   canSelect,
   isSelected,
-  onToggleSelect,
+  onClick,
 }: {
   plant: Plant;
   canSelect: boolean;
   isSelected?: boolean;
-  onToggleSelect?: () => void;
+  onClick?: () => void;
 }) {
   return (
-    <Card
-      className={isSelected ? 'greenBorder' : ''}
-      onClick={canSelect ? onToggleSelect : undefined}
-      id={plant.id}
-    >
+    <Card isSelected={isSelected} onClick={onClick} id={plant.id}>
       {canSelect && (
         <TopRight>
-          <RoundCheck checked={isSelected} readOnly id={plant.id + 'check'} />
+          <RoundCheck checked={isSelected} readOnly id={`${plant.id}-check`} />
         </TopRight>
       )}
       <CardPic>
@@ -39,7 +35,7 @@ export default function PlantCard({
         <h2>{plant.plant_name}</h2>
         <PlantAttributes>
           <Attribute>
-            <p>{plant.harvest_start + ' - ' + plant.harvest_end}</p>
+            <p>{`${plant.harvest_start} - ${plant.harvest_end}`}</p>
           </Attribute>
           <Attribute>
             <p>{plant.water_frequency}</p>
@@ -48,7 +44,7 @@ export default function PlantCard({
             <p>
               {plant.sunlight_min_hours}
               {plant.sunlight_max_hours
-                ? ' - ' + plant.sunlight_max_hours
+                ? ` - ${plant.sunlight_max_hours}`
                 : ''}{' '}
               hours/day
             </p>

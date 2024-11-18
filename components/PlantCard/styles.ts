@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Card = styled.div`
+export const Card = styled.div<{ isSelected?: boolean }>`
   position: relative;
   height: 40vh;
   width: 20vw;
@@ -14,9 +14,7 @@ export const Card = styled.div`
     0 9px 46px 8px rgba(0, 0, 0, 0.12),
     0 11px 15px -7px rgba(0, 0, 0, 0.2);
 
-  &.greenBorder {
-    border: 1px solid #95b509;
-  }
+  border: ${({ isSelected }) => (isSelected ? '1px solid #95b509' : 'none')};
 `;
 
 export const CardPic = styled.div`
