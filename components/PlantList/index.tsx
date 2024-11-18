@@ -67,6 +67,7 @@ export const PlantList = ({
         {filteredPlantList.map((plant, key) => (
           //this should display PlantCalendarRows instead of this temporary div
           <PlantCalendarRow
+            key={key}
             plantName={plant.plant_name}
             harvestStart={plant.harvest_start}
             harvestEnd={plant.harvest_end}
@@ -76,8 +77,6 @@ export const PlantList = ({
             indoorsEnd={plant.indoors_end}
             outdoorsStart={plant.outdoors_start}
             outdoorsEnd={plant.outdoors_end}
-            // only show months header for the first plant
-            showMonths={key === 0}
           />
         ))}
       </CalendarRowsContainer>

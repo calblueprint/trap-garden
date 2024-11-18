@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { fillCalendarGridArrayRowWithColor } from '@/utils/helpers';
 import {
   CalendarCell,
@@ -17,7 +17,6 @@ interface PlantCalendarRowProps {
   indoorsEnd: string;
   outdoorsStart: string;
   outdoorsEnd: string;
-  showMonths: boolean;
 }
 
 export default function PlantCalendarRow({
@@ -30,7 +29,6 @@ export default function PlantCalendarRow({
   indoorsEnd,
   outdoorsStart,
   outdoorsEnd,
-  showMonths,
 }: PlantCalendarRowProps) {
   const colors = {
     indoors: '#F5B868',

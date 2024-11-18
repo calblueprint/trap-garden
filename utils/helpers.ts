@@ -282,10 +282,10 @@ export function fillCalendarGridArrayRowWithColor(
   // if the start month is LATE_MONTH, start column should be the second column for that month
   // if the end month is EARLY_MONTH, end column should be the first column for that month
   // otherwise, start column should be the first column and end column should be the second column for that month
-  let startColumn = startMonth.startsWith('LATE')
+  const startColumn = startMonth.startsWith('LATE')
     ? monthToIndex.get(processedStartMonth)! * 2 + 1
     : monthToIndex.get(processedStartMonth)! * 2;
-  let endColumn = endMonth.startsWith('EARLY')
+  const endColumn = endMonth.startsWith('EARLY')
     ? monthToIndex.get(processedEndMonth)! * 2
     : monthToIndex.get(processedEndMonth)! * 2 + 1;
 
