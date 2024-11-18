@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { useAuth } from '@/app/utils/AuthProvider';
 import PasswordComplexity from '@/app/utils/PasswordComplexity';
 import TextInput from '@/components/TextInput';
-import { useAuth } from '../../utils/AuthProvider';
 
 export default function SignUp() {
   const { signUp } = useAuth();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState<string | null>(null);
-  const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordComplexityError, setPasswordComplexityError] = useState<
     string | null
