@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Fetch the current user
   useEffect(() => {
-    const getUser = async () => {
+    const initializeSession = async () => {
       setLoading(true);
       const { data, error } = await supabase.auth.getSession();
       if (error) {
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAll(data.session);
       setLoading(false);
     };
-    getUser();
+    initializeSession();
 
     // Listen for auth state changes
     const {
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription?.unsubscribe();
-  }, []);
+  }, [setAll]);
 
   // Sign Up function
   const signUp = useCallback(async (email: string, password: string) => {
