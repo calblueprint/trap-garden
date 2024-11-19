@@ -3,21 +3,21 @@
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react';
-import { useRouter } from 'next/navigation';
-import { Session } from '@supabase/supabase-js';
+import { UUID } from 'crypto';
+import { AuthResponse, Session } from '@supabase/supabase-js';
 import supabase from '../api/supabase/createClient';
 
 interface AuthContextType {
   userId: string | null;
   email: string | null;
   session: Session | null;
-  isLoggedIn: boolean;
-  signUp: (email: string, password: string) => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<AuthResponse>;
+  signIn: (email: string, password: string) => Promise<AuthResponse>;
   signOut: () => Promise<void>;
   loading: boolean;
 }
@@ -37,63 +37,43 @@ export function useAuth() {
 // AuthProvider component that wraps around the app
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<UUID | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { push } = useRouter();
+
+  const setAll = useCallback((newSession: Session | null) => {
+    if (!newSession) return;
+    setSession(newSession);
+    const sessionUserId = (newSession.user.id as UUID) ?? null;
+    const sessionUserEmail = newSession.user.email ?? null;
+    setUserId(sessionUserId);
+    setEmail(sessionUserEmail);
+  }, []);
 
   // Sign Up function
   const signUp = async (email: string, password: string) => {
-    try {
-      const { data, error } = await supabase.auth.signUp({ email, password });
-      if (error) throw new Error(error.message);
-
-      if (data.user) {
-        setUserId(data.user.id ?? null);
-        setEmail(data.user.email ?? null);
-        setIsLoggedIn(true);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Sign-up Error:', error.message);
-      }
-    }
+    const value = await supabase.auth.signUp({ email, password });
+    // will trigger onAuthStateChange to update the session
+    return value;
   };
 
   // Sign In function
   const signIn = async (email: string, password: string) => {
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw new Error(error.message);
-
-      setUserId(data.user.id ?? null);
-      setEmail(data.user.email ?? null);
-      setIsLoggedIn(true);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Sign-in Error:', error.message);
-      }
-    }
+    const value = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    }); // will trigger onAuthStateChange to update the session
+    return value;
   };
 
   // Sign Out function
   const signOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw new Error(error.message);
+    const { error } = await supabase.auth.signOut();
+    // signOut also triggers onAuthStateChange
+    if (!error) {
       setUserId(null);
       setEmail(null);
-      setIsLoggedIn(false);
       setSession(null);
-      // push('/login'); // Redirect to login after sign-out
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Sign-out Error:', error.message);
-      }
     }
   };
 
@@ -104,19 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase.auth.getSession();
       if (error) {
         console.error('Session Error:', error.message);
-      } else if (data.session) {
-        setSession(data.session);
-        const { user } = data.session;
-        if (user) {
-          setUserId(user.id ?? null);
-          setEmail(user.email ?? null);
-          setIsLoggedIn(true);
-        }
-      } else {
-        setUserId(null);
-        setEmail(null);
-        setIsLoggedIn(false);
       }
+      setAll(data.session);
       setLoading(false);
     };
     getUser();
@@ -124,35 +93,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth state changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        setSession(session);
-        const { user } = session;
-        if (user) {
-          setUserId(user.id ?? null);
-          setEmail(user.email ?? null);
-          setIsLoggedIn(true);
-        }
-      } else {
-        setUserId(null);
-        setEmail(null);
-        setIsLoggedIn(false);
-        setSession(null);
-
-        // if (!loading && window.location.pathname !== '/signup') {
-        // push('/login');
-        // }
-      }
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setAll(newSession);
     });
 
     return () => subscription?.unsubscribe();
-  }, [push, loading]);
+  }, [loading]);
 
   const value: AuthContextType = {
     userId,
     email,
     session,
-    isLoggedIn,
     signUp,
     signIn,
     signOut,
@@ -166,20 +117,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 EXAMPLE USAGE: app/dashboard/page.tsx
 'use client';
 
-import { AuthProvider, useAuth } from '../utils/AuthProvider';
+import { useAuth } from '@/utils/AuthProvider';
 
-export default function DashboardPage() {
-  return (
-    <AuthProvider>
-      <Dashboard />
-    </AuthProvider>
-  );
-}
+export default function Dashboard() {
+  const { userId, email, signOut } = useAuth();
 
-function Dashboard() {
-  const { authUser, isLoggedIn, signOut } = useAuth();
-
-  if (!authUser) {
+  if (!userId) {
     return <p>Loading...</p>;
   }
 
@@ -188,14 +131,12 @@ function Dashboard() {
       <header>
         <h1>Dashboard</h1>
       </header>
-
       <main>
-        <p>User is currently: {isLoggedIn ? 'Logged In' : 'Logged Out'}</p>
-        {authUser && <p>User name: {authUser.email}</p>}{' '}
-        <button onClick={signOut}>Log Out</button> 
+        <p>User is currently: {userId ? 'Logged In' : 'Logged Out'}</p>
+        {userId && <p>User name: {email}</p>}{' '}
+        <button onClick={signOut}>Log Out</button>
       </main>
     </>
   );
 }
-
 */
