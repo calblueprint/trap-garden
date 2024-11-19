@@ -4,20 +4,20 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../utils/AuthProvider';
 
-export default function Login() {
-  const { signIn } = useAuth(); // Use `signIn` function from AuthProvider
+export default function SignUp() {
+  const { signUp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = async () => {
-    // Define handleLogin
+  const handleSignUp = async () => {
+    // Define handleSignUp
     try {
-      await signIn(email, password);
-      router.push('/'); // Redirect to the home page on success
+      await signUp(email, password);
+      router.push('/');
     } catch (error) {
       if (error instanceof Error) {
-        console.error('Login Error:', error.message);
+        console.error(error.message);
       }
     }
   };
@@ -37,9 +37,17 @@ export default function Login() {
         value={password}
         placeholder="Password"
       />
-      <button type="button" onClick={handleLogin}>
-        Sign in
-      </button>
+      <input
+        type="password"
+        name="Confirm Password"
+        onChange={e => setPassword(e.target.value)}
+        value={password}
+        placeholder="Confirm Password"
+      />
+      <button type="button" onClick={handleSignUp}>
+        Sign up
+      </button>{' '}
+      {/* Sign up button */}
     </>
   );
 }
