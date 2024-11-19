@@ -3,10 +3,11 @@
 import React, { useState } from 'react';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
+import Icon from '@/components/Icon';
 import { PlantList } from '@/components/PlantList';
 import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
-import { H1 } from '@/styles/text';
+import { H1, H3 } from '@/styles/text';
 import { DropdownOption } from '@/types/schema';
 import {
   FilterContainer,
@@ -68,6 +69,7 @@ export default function SeasonalPlantingGuide() {
           <H1 $color={COLORS.shrub} $align="left">
             Planting Timeline
           </H1>
+          <Icon type="info" />
         </PageTitle>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <FilterContainer>
@@ -106,13 +108,13 @@ export default function SeasonalPlantingGuide() {
       </HeaderContainer>
       {!selectedUsState ? (
         <StateOptionsContainer>
-          <p>Choose your state</p>
+          <H3 $color={COLORS.shrub}>Choose Your State</H3>
           <FilterDropdownSingle
             name="usState"
             id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}
-            placeholder="US State"
+            placeholder="State"
             options={usStateOptions}
           />
         </StateOptionsContainer>

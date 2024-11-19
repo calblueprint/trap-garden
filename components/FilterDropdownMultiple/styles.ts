@@ -12,5 +12,13 @@ export const StyledMultiSelect = styled(MultiSelect)`
     background-color: #1f5a2a; !important
     border: 0.5px solid #888; !important
     color: #fff;
+    position: relative;
+  }
+
+  .dropdown-content {
+    display: block; !important
+    position: absolute; !important
+    z-index: 10000; !important
+    top: 100%;
   }
 `;
