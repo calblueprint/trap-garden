@@ -6,6 +6,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { UUID } from 'crypto';
@@ -14,7 +15,7 @@ import supabase from '../api/supabase/createClient';
 
 interface AuthContextType {
   userId: string | null;
-  email: string | null;
+  userEmail: string | null;
   session: Session | null;
   signUp: (email: string, password: string) => Promise<AuthResponse>;
   signIn: (email: string, password: string) => Promise<AuthResponse>;
@@ -38,7 +39,7 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [userId, setUserId] = useState<UUID | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const setAll = useCallback((newSession: Session | null) => {
@@ -47,37 +48,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const sessionUserId = (newSession.user.id as UUID) ?? null;
     const sessionUserEmail = newSession.user.email ?? null;
     setUserId(sessionUserId);
-    setEmail(sessionUserEmail);
+    setUserEmail(sessionUserEmail);
   }, []);
 
-  // Sign Up function
-  const signUp = async (email: string, password: string) => {
-    const value = await supabase.auth.signUp({ email, password });
-    // will trigger onAuthStateChange to update the session
-    return value;
-  };
-
-  // Sign In function
-  const signIn = async (email: string, password: string) => {
-    const value = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    }); // will trigger onAuthStateChange to update the session
-    return value;
-  };
-
-  // Sign Out function
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    // signOut also triggers onAuthStateChange
-    if (!error) {
-      setUserId(null);
-      setEmail(null);
-      setSession(null);
-    }
-  };
-
-  // Fetch the currently logged-in user on mount and redirect to dashboard if signed in
+  // Fetch the current user
   useEffect(() => {
     const getUser = async () => {
       setLoading(true);
@@ -98,17 +72,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription?.unsubscribe();
-  }, [loading]);
+  }, []);
 
-  const value: AuthContextType = {
-    userId,
-    email,
-    session,
-    signUp,
-    signIn,
-    signOut,
-    loading,
-  };
+  // Sign Up function
+  const signUp = useCallback(async (email: string, password: string) => {
+    const value = await supabase.auth.signUp({ email, password });
+    // will trigger onAuthStateChange to update the session
+    // check if email already exists
+    return value;
+  }, []);
+
+  // Sign In function
+  const signIn = useCallback(async (email: string, password: string) => {
+    const value = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    }); // will trigger onAuthStateChange to update the session
+    return value;
+  }, []);
+
+  // Sign Out function
+  const signOut = useCallback(async () => {
+    const { error } = await supabase.auth.signOut();
+    // signOut also triggers onAuthStateChange
+    if (!error) {
+      setUserId(null);
+      setUserEmail(null);
+      setSession(null);
+    }
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      session,
+      userId,
+      userEmail,
+      signIn,
+      signOut,
+      signUp,
+      loading,
+    }),
+    [session, userId, userEmail, signIn, signOut, signUp, loading],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
