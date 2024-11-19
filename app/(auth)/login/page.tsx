@@ -2,17 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AuthProvider, useAuth } from '../../utils/AuthProvider';
+import { useAuth } from '../../../utils/AuthProvider';
 
-export default function LoginLayout() {
-  return (
-    <AuthProvider>
-      <Login />
-    </AuthProvider>
-  );
-}
-
-function Login() {
+export default function Login() {
   const { signIn } = useAuth(); // Use `signIn` function from AuthProvider
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

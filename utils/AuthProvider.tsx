@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/supabase-js';
-import supabase from '../../api/supabase/createClient';
+import supabase from '../api/supabase/createClient';
 
 interface AuthContextType {
   userId: string | null;
@@ -34,7 +34,7 @@ export function useAuth() {
   return context;
 }
 
-// AuthProvider component that wraps around your app or specific pages
+// AuthProvider component that wraps around the app
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -161,3 +161,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+/*
+EXAMPLE USAGE: app/dashboard/page.tsx
+'use client';
+
+import { AuthProvider, useAuth } from '../utils/AuthProvider';
+
+export default function DashboardPage() {
+  return (
+    <AuthProvider>
+      <Dashboard />
+    </AuthProvider>
+  );
+}
+
+function Dashboard() {
+  const { authUser, isLoggedIn, signOut } = useAuth();
+
+  if (!authUser) {
+    return <p>Loading...</p>;
+  }
+
+  return (
+    <>
+      <header>
+        <h1>Dashboard</h1>
+      </header>
+
+      <main>
+        <p>User is currently: {isLoggedIn ? 'Logged In' : 'Logged Out'}</p>
+        {authUser && <p>User name: {authUser.email}</p>}{' '}
+        <button onClick={signOut}>Log Out</button> 
+      </main>
+    </>
+  );
+}
+
+*/
