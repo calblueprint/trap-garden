@@ -6,9 +6,9 @@ export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
 
 export interface Profile {
   user_id: UUID;
-  state: string;
+  us_state: string;
   user_type: string;
-  has_plot: boolean;
+  // has_plot: boolean;
 }
 
 export interface Plant {
@@ -43,7 +43,7 @@ export interface UserPlants {
   planting_type: string;
 }
 
-export interface DropdownOption {
+export interface DropdownOption<T = string> {
   label: string;
-  value: string;
+  value: T;
 }

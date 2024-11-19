@@ -2,10 +2,17 @@
 
 import React, { useState } from 'react';
 import { upsertProfile } from '@/api/supabase/queries/profiles';
-import { Profile } from '@/types/schema';
+import { BigButton } from '@/components/Buttons';
+import LabeledCustomSelect from '@/components/EditableInput';
+import COLORS from '@/styles/colors';
+import { DropdownOption, Profile } from '@/types/schema';
+import { H3, PageContainer, ReviewContainer } from './styles';
 
 // Define the possible options for each question
-const states = ['Tennessee', 'Missouri'];
+const states = [
+  { label: 'Tennesse', value: 'TENNESSE' },
+  { label: 'Missouri', value: 'MISSOURI' },
+];
 const gardenTypes = ['Individual', 'Community', 'School'];
 const plotOptions = [
   { label: 'yes', value: true },
@@ -26,6 +33,14 @@ interface PlotSelectionProps {
   selectedPlot: boolean | null;
   setSelectedPlot: React.Dispatch<React.SetStateAction<boolean>>;
 }
+interface ReviewPageProps {
+  selectedState: string;
+  setSelectedState: React.Dispatch<React.SetStateAction<string>>;
+  selectedGardenType: string;
+  setSelectedGardenType: React.Dispatch<React.SetStateAction<string>>;
+  selectedPlot: boolean;
+  setSelectedPlot: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 // Select State
 const StateSelection: React.FC<StateSelectionProps> = ({
@@ -43,8 +58,8 @@ const StateSelection: React.FC<StateSelectionProps> = ({
           Select a state
         </option>
         {states.map(state => (
-          <option key={state} value={state}>
-            {state}
+          <option key={state.label} value={state.value}>
+            {state.label}
           </option>
         ))}
       </select>
@@ -100,6 +115,79 @@ const PlotSelection: React.FC<PlotSelectionProps> = ({
     </div>
   );
 };
+const stateOptions: DropdownOption<string>[] = [
+  { label: 'Tennessee', value: 'TENNESSE' },
+  { label: 'Missouri', value: 'MISSOURI' },
+];
+
+const gardenTypeOptions: DropdownOption<string>[] = [
+  { label: 'Individual', value: 'Individual' },
+  { label: 'Community', value: 'Community' },
+  { label: 'School', value: 'School' },
+];
+
+const plot: DropdownOption<boolean>[] = [
+  { label: 'Yes, I own a plot', value: true },
+  { label: "No, I don't own a plot", value: false },
+];
+
+// Updated ReviewPage component to accept necessary props
+
+const ReviewPage = ({
+  selectedState,
+  setSelectedState,
+  selectedGardenType,
+  setSelectedGardenType,
+  selectedPlot,
+  setSelectedPlot,
+}: ReviewPageProps) => {
+  const handleSubmit = async () => {
+    const profile: Profile = {
+      user_id: '2abd7296-374a-42d1-bb4f-b813da1615ae',
+      us_state: selectedState,
+      user_type: selectedGardenType,
+      // has_plot: selectedPlot,
+    };
+
+    try {
+      await upsertProfile(profile);
+      console.log('Profile submitted successfully:', profile);
+    } catch (error) {
+      console.error('Error upserting profile:', error);
+    }
+  };
+
+  return (
+    <PageContainer>
+      <ReviewContainer>
+        <H3 style={{ textAlign: 'center' }}>Review Your Response</H3>
+        <LabeledCustomSelect
+          label="State Location"
+          value={selectedState}
+          options={stateOptions}
+          onChange={setSelectedState}
+        />
+
+        <LabeledCustomSelect
+          label="Garden Type"
+          value={selectedGardenType}
+          options={gardenTypeOptions}
+          onChange={setSelectedGardenType} // Directly pass the selected value
+        />
+        <LabeledCustomSelect
+          label="Plot Status"
+          value={selectedPlot}
+          options={plot}
+          onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
+        />
+        <div style={{ height: '12.625rem' }} />
+        <BigButton color={COLORS.shrub} onClick={handleSubmit}>
+          Let&apos;s Start Growing !
+        </BigButton>
+      </ReviewContainer>
+    </PageContainer>
+  );
+};
 
 // Main Onboarding Component
 const OnboardingFlow = () => {
@@ -115,26 +203,6 @@ const OnboardingFlow = () => {
   const handleBack = () => {
     setStep(step - 1);
   };
-
-  const handleSubmit = async () => {
-    const profile: Profile = {
-      user_id: '2abd7296-374a-42d1-bb4f-b813da1615ae',
-      state: selectedState,
-      user_type: selectedGardenType,
-      has_plot: selectedPlot,
-    };
-    try {
-      upsertProfile(profile);
-    } catch (error) {
-      console.error('Error upserting profile:', error);
-      throw new Error('Error upserting profile');
-    } finally {
-      //TODO: Remove console log.
-      console.log('Submitted data: ', profile);
-    }
-    // Handle form submission, e.g., send to a server or display a confirmation
-  };
-
   return (
     <div>
       {step === 1 && (
@@ -155,15 +223,24 @@ const OnboardingFlow = () => {
           setSelectedPlot={setSelectedPlot}
         />
       )}
+      {step === 4 && (
+        <ReviewPage
+          selectedState={selectedState}
+          setSelectedState={setSelectedState}
+          selectedGardenType={selectedGardenType}
+          setSelectedGardenType={setSelectedGardenType}
+          selectedPlot={selectedPlot}
+          setSelectedPlot={setSelectedPlot}
+        />
+      )}
 
       <div>
         {step > 1 && <button onClick={handleBack}>Back</button>}
-        {step < 3 && (
+        {step < 4 && (
           <button onClick={handleNext} disabled={!selectedState && step === 1}>
             Next
           </button>
         )}
-        {step === 3 && <button onClick={handleSubmit}>Submit</button>}
       </div>
     </div>
   );
