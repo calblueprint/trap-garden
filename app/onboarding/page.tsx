@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { upsertProfile } from '@/api/supabase/queries/profiles';
-import BigButton from '@/components/BigButton';
+import { BigButton } from '@/components/Buttons';
 import LabeledCustomSelect from '@/components/EditableInput';
 import COLORS from '@/styles/colors';
 import { DropdownOption, Profile } from '@/types/schema';

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
 
-const BigButton = styled.button<{ $color?: string }>`
-  background-color: ${props => props.color || 'blue'};
+export const BigButton = styled.button<{ $color?: string }>`
+  background-color: ${props => props.color || COLORS.shrub};
 
   color: white;
   padding: 0.625rem 1.25rem;
@@ -12,5 +13,3 @@ const BigButton = styled.button<{ $color?: string }>`
   height: 3rem;
   max-height: 3rem;
 `;
-
-export default BigButton;
