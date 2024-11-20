@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
 import { SmallRoundedButton } from '../Button';
 
 export const Container = styled.div`
   padding: 1rem;
-  background-color: #f9fafb;
+  background-color: ${COLORS.backgroundGrey};
   border-radius: 0.5rem;
 `;
 
@@ -11,13 +12,7 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-`;
-
-export const Title = styled.h2`
-  color: #1b5e20;
-  font-size: 1.25rem;
-  font-weight: 600;
+  margin-bottom: 18px;
 `;
 
 export const EditButton = styled(SmallRoundedButton)`
@@ -27,13 +22,13 @@ export const EditButton = styled(SmallRoundedButton)`
 export const DetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 6px;
 `;
 
 export const DetailRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 6px;
 `;
 
 export const DetailText = styled.span`

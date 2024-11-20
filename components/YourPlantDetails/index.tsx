@@ -1,6 +1,9 @@
 'use client';
 
+import COLORS from '@/styles/colors';
+import { H3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
+import { formatTimestampToDate, useTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
 import {
   Container,
@@ -10,7 +13,6 @@ import {
   EditButton,
   Header,
   StyledIcon,
-  Title,
 } from './style';
 
 export default function YourPlantDetails({
@@ -20,40 +22,40 @@ export default function YourPlantDetails({
 }: {
   datePlanted: string;
   plantingType: PlantingTypeEnum;
-  recentHarvestDate: string;
+  recentHarvestDate: string | null;
 }) {
   return (
     <Container>
       <Header>
-        <Title>Your Plant Details</Title>
-        <EditButton secondaryColor="#1b5e20">Edit</EditButton>
+        <H3 $color={COLORS.shrub}>Your Plant Details</H3>
+        <EditButton secondaryColor={COLORS.shrub}>Edit</EditButton>
       </Header>
 
       <DetailsContainer>
         <DetailRow>
           <StyledIcon>
-            <Icon type="watering_can" />
+            <Icon type="calendar" />
           </StyledIcon>
-          <DetailText>Date Planted: {datePlanted}</DetailText>
+          <DetailText>
+            Date Planted: {formatTimestampToDate(datePlanted)}
+          </DetailText>
         </DetailRow>
 
         <DetailRow>
           <StyledIcon>
-            <Icon type="watering_can" />
+            <Icon type="plant_hand" />
           </StyledIcon>
-          <DetailText>
-            Planting Type:{' '}
-            {plantingType.charAt(0) + plantingType.slice(1).toLowerCase()}
-          </DetailText>
+          <DetailText>Planting Type: {useTitleCase(plantingType)}</DetailText>
         </DetailRow>
 
         {recentHarvestDate && (
           <DetailRow>
             <StyledIcon>
-              <Icon type="watering_can" />
+              <Icon type="plant" />
             </StyledIcon>
             <DetailText>
-              Most Recent Harvest Date: {recentHarvestDate}
+              Most Recent Harvest Date:{' '}
+              {formatTimestampToDate(recentHarvestDate)}
             </DetailText>
           </DetailRow>
         )}

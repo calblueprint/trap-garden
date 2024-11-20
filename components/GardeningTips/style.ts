@@ -12,16 +12,14 @@ export const Container = styled.div`
   color: #333;
 `;
 
-export const Title = styled.h3`
+export const TitleWrapper = styled.div`
   display: flex;
   align-items: center;
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-  color: #2e7d32;
+  margin-bottom: 6px;
 `;
 
 export const IconWrapper = styled.span`
-  margin-right: 0.5rem;
+  margin-right: 6px;
   color: #8bc34a;
 `;
 
