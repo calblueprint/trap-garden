@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
 
 export const Card = styled.div<{ isSelected?: boolean }>`
   position: relative;
@@ -14,7 +15,8 @@ export const Card = styled.div<{ isSelected?: boolean }>`
     0 9px 46px 8px rgba(0, 0, 0, 0.12),
     0 11px 15px -7px rgba(0, 0, 0, 0.2);
 
-  border: ${({ isSelected }) => (isSelected ? '1px solid #95b509' : 'none')};
+  border: ${({ isSelected }) =>
+    isSelected ? `1px solid ${COLORS.sprout}` : 'none'};
 `;
 
 export const CardPic = styled.div`
@@ -40,7 +42,7 @@ export const CardContent = styled.div`
   }
 
   > h2 {
-    font-size: 1.5vw;
+    font-size: 1rem;
     margin-top: 1vh;
   }
 `;
@@ -57,7 +59,7 @@ export const Attribute = styled.div`
 
   > * {
     margin: 0;
-    font-size: 1vw;
+    font-size: 0.625rem;
   }
 `;
 
