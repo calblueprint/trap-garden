@@ -30,6 +30,7 @@ export default function Login() {
         value={email}
         placeholder="Email"
       />
+      {/* Email input*/}
       <input
         type="password"
         name="password"
@@ -39,7 +40,8 @@ export default function Login() {
       />
       <button type="button" onClick={handleLogin}>
         Sign in
-      </button>
+      </button>{' '}
+      {/* Sign in button */}
     </>
   );
 }
