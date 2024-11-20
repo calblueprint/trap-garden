@@ -5,7 +5,7 @@ import { UUID } from 'crypto';
 import { getAllPlants, getPlantById, getMatchingPlantForUserPlants, } from '@/api/supabase/queries/plants';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import { useRouter } from 'next/navigation';
-import { getUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
+import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
 import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
 import { DropdownOption, OwnedPlant, Plant } from '@/types/schema';
@@ -57,22 +57,6 @@ export default function Page() {
     { label: 'Winter', value: 'WINTER' },
   ];
 
-  async function fetchUserPlants(user_id: UUID) {
-    const fetchedUserPlants = await getUserPlantsByUserId(user_id);
-
-    const ownedPlants: OwnedPlant[] = await Promise.all(
-      fetchedUserPlants.map(async userPlant => {
-        const plant = await getMatchingPlantForUserPlant(userPlant);
-        return {
-          userPlantId: userPlant.id,
-          plant,
-        };
-      }),
-    );
-
-    return ownedPlants;
-  }
-
   useEffect(() => {
     (async () => {
       const plantList = await getAllPlants();
@@ -82,11 +66,21 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetchUserPlants(user_id);
-      setOwnedPlants(result);
+    const fetchUserPlants = async () => {
+      const fetchedUserPlants = await getCurrentUserPlantsByUserId(user_id);
+
+      const ownedPlants: OwnedPlant[] = await Promise.all(
+        fetchedUserPlants.map(async userPlant => {
+          const plant = await getMatchingPlantForUserPlant(userPlant);
+          return {
+            userPlantId: userPlant.id,
+            plant,
+          };
+        }),
+      );
+      setOwnedPlants(ownedPlants);
     };
-    fetchData();
+    fetchUserPlants();
   }, []);
 
   const clearFilters = () => {

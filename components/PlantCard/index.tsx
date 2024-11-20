@@ -13,7 +13,7 @@ import {
 export default function PlantCard({
   plant,
   canSelect,
-  isSelected,
+  isSelected = false,
   onClick,
 }: {
   plant: Plant;

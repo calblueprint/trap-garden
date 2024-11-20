@@ -31,7 +31,7 @@ export async function getUserPlantById(userPlantId: UUID): Promise<UserPlant> {
   }
   return data;
 }
-export async function getUserPlantsByUserId(
+export async function getCurrentUserPlantsByUserId(
   user_id: UUID,
 ): Promise<UserPlant[]> {
   const { data, error } = await supabase
