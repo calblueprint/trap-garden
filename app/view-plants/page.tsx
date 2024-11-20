@@ -60,6 +60,7 @@ export default function Page() {
     { label: 'Winter', value: 'WINTER' },
   ];
 
+  // Fetch All Plants
   useEffect(() => {
     (async () => {
       const plantList = await getAllPlants();
@@ -68,6 +69,7 @@ export default function Page() {
     })();
   }, []);
 
+  // Fetch User Plants for My Garden tab
   useEffect(() => {
     const fetchUserPlants = async () => {
       const fetchedUserPlants = await getCurrentUserPlantsByUserId(user_id);
@@ -123,6 +125,7 @@ export default function Page() {
     selectedGrowingSeason,
     searchTerm,
   ]);
+
   function handleUserPlantCardClick(ownedPlant: OwnedPlant) {
     router.push(`my-garden/${ownedPlant.userPlantId}`);
   }
