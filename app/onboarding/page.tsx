@@ -5,12 +5,24 @@ import { UUID } from 'crypto';
 import { Profile, UserTypeEnum } from '@/types/schema';
 import { useProfile } from '@/utils/ProfileProvider';
 
+type Options<T> = {
+  label: string; // Represents the text for UI
+  value: T; // Represents the value stored in the DB
+};
+
 // Define the possible options for each question
-const states = ['TENNESSEE', 'MISSOURI'];
-const gardenTypes: UserTypeEnum[] = ['INDIV', 'SCHOOL', 'ORG'];
-const plotOptions = [
-  { label: 'Yes', value: true },
-  { label: 'No', value: false },
+const states: Options<string>[] = [
+  { label: 'Tennesee', value: 'TENNESSEE' },
+  { label: 'Missouri', value: 'MISSOUR' },
+];
+const gardenTypes: Options<UserTypeEnum>[] = [
+  { label: 'Individual', value: 'INDIV' },
+  { label: 'School', value: 'SCHOOL' },
+  { label: 'Organization', value: 'ORG' },
+];
+const plotOptions: Options<boolean>[] = [
+  { label: 'yes', value: true },
+  { label: 'no', value: false },
 ];
 const placeholderUserId: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
 
@@ -69,8 +81,8 @@ const UserTypeSelection = ({
           <input
             type="radio"
             name="gardenType"
-            value={type}
-            checked={selectedUserType === type}
+            value={type.value}
+            checked={selectedUserType === type.value}
             onChange={e => setSelectedUserType(e.target.value as UserTypeEnum)}
           />
           {type.label}
