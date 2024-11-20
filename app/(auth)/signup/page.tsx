@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import PasswordComplexity from '@/components/PasswordComplexity';
+import PasswordInput from '@/components/PasswordInput';
 import { useAuth } from '@/utils/AuthProvider';
-import PasswordComplexity from '@/app/utils/PasswordComplexity';
-import PasswordInput from '@/app/utils/PasswordInput';
 
 export default function SignUp() {
   const { signUp } = useAuth();
