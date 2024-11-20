@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
-import { updateUserPlants } from '@/api/supabase/queries/updateUserPlants';
+import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import PlantDetails from '@/components/PlantDetails';
-import { Plant, UserPlants } from '@/types/schema';
+import { Plant, UserPlant } from '@/types/schema';
 
 const plants: Plant[] = [
   {
@@ -57,7 +57,7 @@ const user_id: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState<number>(1);
-  const [details, setDetails] = useState<Partial<UserPlants>[]>(
+  const [details, setDetails] = useState<Partial<UserPlant>[]>(
     plants.map(plant => ({ plant_id: plant.id, user_id: user_id })),
   );
   const router = useRouter();
@@ -103,7 +103,7 @@ export default function Home() {
   }
 
   async function updateDB() {
-    await updateUserPlants(user_id, details);
+    await insertUserPlants(user_id, details);
     router.push('/view-plants');
   }
 

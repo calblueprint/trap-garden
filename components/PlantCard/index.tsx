@@ -1,43 +1,56 @@
 import React from 'react';
 import { Plant } from '@/types/schema';
-import styles from './PlantCardStyles.module.css';
+import {
+  Attribute,
+  Card,
+  CardContent,
+  CardPic,
+  PlantAttributes,
+  RoundCheck,
+  TopRight,
+} from './styles';
 
 export default function PlantCard({
   plant,
   canSelect,
+  isSelected = false,
+  onClick,
 }: {
   plant: Plant;
   canSelect: boolean;
+  isSelected?: boolean;
+  onClick?: () => void;
 }) {
-  console.log(canSelect);
   return (
-    <div className={styles.Card}>
-      <div className={styles.CardPic}>
-        <img alt={plant.plant_name}></img>
-      </div>
-      <div className={styles.CardContent}>
+    <Card isSelected={isSelected} onClick={onClick} id={plant.id}>
+      {canSelect && (
+        <TopRight>
+          <RoundCheck checked={isSelected} readOnly id={`${plant.id}-check`} />
+        </TopRight>
+      )}
+      <CardPic>
+        <img alt={plant.plant_name} />
+      </CardPic>
+      <CardContent>
         <h2>{plant.plant_name}</h2>
-        <div className={styles.PlantAttributes}>
-          <div className={styles.Attribute}>
-            {/* icon */}
-            <p>{plant.harvest_start + ' - ' + plant.harvest_end}</p>
-          </div>
-          <div className={styles.Attribute}>
-            {/* icon */}
+        <PlantAttributes>
+          <Attribute>
+            <p>{`${plant.harvest_start} - ${plant.harvest_end}`}</p>
+          </Attribute>
+          <Attribute>
             <p>{plant.water_frequency}</p>
-          </div>
-          <div className={styles.Attribute}>
-            {/* icon */}
+          </Attribute>
+          <Attribute>
             <p>
               {plant.sunlight_min_hours}
               {plant.sunlight_max_hours
-                ? ' - ' + plant.sunlight_max_hours
+                ? ` - ${plant.sunlight_max_hours}`
                 : ''}{' '}
               hours/day
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </Attribute>
+        </PlantAttributes>
+      </CardContent>
+    </Card>
   );
 }

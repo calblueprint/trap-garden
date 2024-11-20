@@ -34,7 +34,7 @@ export interface Plant {
   sunlight_max_hours: int;
 }
 
-export interface UserPlants {
+export interface UserPlant {
   id: UUID;
   user_id: UUID;
   plant_id: UUID;
@@ -46,4 +46,8 @@ export interface UserPlants {
 export interface DropdownOption<T = string> {
   label: string;
   value: T;
+}
+export interface OwnedPlant {
+  userPlantId: UUID;
+  plant: Plant;
 }
