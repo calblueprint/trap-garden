@@ -8,8 +8,8 @@ import PasswordInput from '@/app/utils/PasswordInput';
 export default function SignUp() {
   const { signUp } = useAuth();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState<string | null>(null);
-  const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordComplexityError, setPasswordComplexityError] = useState<
     string | null
@@ -114,7 +114,7 @@ export default function SignUp() {
         password={password || ''} // Set default value if password is null
       />
       {/* Password complexity requirements */}
-      {password && passwordComplexity === false && passwordComplexityError && (
+      {password && !passwordComplexity && passwordComplexityError && (
         <p style={{ color: 'red' }}>{passwordComplexityError}</p>
       )}
       {/* Password complexity error message */}
