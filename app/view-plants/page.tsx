@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { UUID } from 'crypto';
-import { getAllPlants, getPlantById, getMatchingPlantForUserPlants, } from '@/api/supabase/queries/plants';
-import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import { useRouter } from 'next/navigation';
+import { UUID } from 'crypto';
+import {
+  getAllPlants,
+  getMatchingPlantForUserPlant,
+} from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
+import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
 import { DropdownOption, OwnedPlant, Plant } from '@/types/schema';
@@ -16,6 +19,7 @@ import {
   checkSunlight,
 } from '@/utils/helpers';
 import { FilterContainer, TopRowContainer } from './styles';
+
 export default function Page() {
   const router = useRouter();
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
@@ -23,7 +27,6 @@ export default function Page() {
   );
   const [inAddMode, setInAddMode] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
-  const [userPlants, setUserPlants] = useState<Plant[]>([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     DropdownOption[]
   >([]);
@@ -106,15 +109,15 @@ export default function Page() {
   ]);
 
   const filteredUserPlantList = useMemo(() => {
-    return userPlants.filter(
-      plant =>
-        checkGrowingSeason(selectedGrowingSeason, plant) &&
-        checkSunlight(selectedSunlight, plant) &&
-        checkDifficulty(selectedDifficulty, plant) &&
-        checkSearchTerm(searchTerm, plant),
+    return ownedPlants.filter(
+      ownedPlant =>
+        checkGrowingSeason(selectedGrowingSeason, ownedPlant.plant) &&
+        checkSunlight(selectedSunlight, ownedPlant.plant) &&
+        checkDifficulty(selectedDifficulty, ownedPlant.plant) &&
+        checkSearchTerm(searchTerm, ownedPlant.plant),
     );
   }, [
-    userPlants,
+    ownedPlants,
     selectedDifficulty,
     selectedSunlight,
     selectedGrowingSeason,
@@ -175,8 +178,13 @@ export default function Page() {
             <div>
               {filteredUserPlantList.length ? (
                 <div>
-                  {filteredUserPlantList.map((plant, key) => (
-                    <PlantCard key={key} plant={plant} canSelect={false} />
+                  {filteredUserPlantList.map(ownedPlant => (
+                    <PlantCard
+                      key={ownedPlant.userPlantId}
+                      plant={ownedPlant.plant}
+                      canSelect={false}
+                      onClick={() => handleUserPlantCardClick(ownedPlant)}
+                    />
                   ))}
                 </div>
               ) : (
@@ -192,7 +200,13 @@ export default function Page() {
             (inAddMode ? (
               <div>
                 {filteredPlantList.map((plant, key) => (
-                  <PlantCard key={key} plant={plant} canSelect={true} />
+                  <PlantCard
+                    key={key}
+                    plant={plant}
+                    canSelect={true}
+                    isSelected={selectedPlants.includes(plant)}
+                    onClick={() => handlePlantCardClick(plant)}
+                  />
                 ))}
                 <div>
                   <button onClick={() => setInAddMode(false)}>
@@ -203,7 +217,12 @@ export default function Page() {
             ) : (
               <div>
                 {filteredPlantList.map((plant, key) => (
-                  <PlantCard key={key} plant={plant} canSelect={false} />
+                  <PlantCard
+                    key={key}
+                    plant={plant}
+                    canSelect={false}
+                    onClick={() => handlePlantCardClick(plant)}
+                  />
                 ))}
                 <div>
                   <button onClick={() => setInAddMode(true)}>

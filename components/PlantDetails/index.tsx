@@ -1,4 +1,4 @@
-import { Plant, UserPlant } from '@/types/schema';
+import { Plant } from '@/types/schema';
 
 export default function PlantDetails({
   plant,
@@ -7,7 +7,6 @@ export default function PlantDetails({
   onDateChange,
   onPlantingTypeChange,
 }: {
-  detail: Partial<UserPlant>;
   plant: Plant;
   date: string;
   plantingType: string;
