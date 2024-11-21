@@ -12,7 +12,7 @@ export const Title = styled.h2`
 export const CareItem = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 10px;
 `;
 
 export const IconWrapper = styled.div`

@@ -8,11 +8,12 @@ export default function DifficultyLevelBar({
 }: {
   difficultyLevel: DifficultyLevelEnum;
 }) {
-  return (
-    <div>
-      {difficultyLevel === 'EASY' && <Icon type="easy_bar"></Icon>}
-      {difficultyLevel === 'MODERATE' && <Icon type="moderate_bar"></Icon>}
-      {difficultyLevel === 'HARD' && <Icon type="hard_bar"></Icon>}
-    </div>
-  );
+  if (difficultyLevel === 'EASY') {
+    return <Icon type="easy_bar" />;
+  } else if (difficultyLevel === 'MODERATE') {
+    return <Icon type="moderate_bar" />;
+  } else {
+    // difficultyLevel === 'HARD'
+    return <Icon type="hard_bar" />;
+  }
 }
