@@ -4,6 +4,8 @@ export type SeasonEnum = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
 
 export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
 
+export type PlantingTypeEnum = 'INDOORS' | 'OUTDOORS' | 'TRANSPLANT';
+
 export interface Profile {
   user_id: UUID;
   us_state: string;
