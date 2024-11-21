@@ -3,7 +3,7 @@
 import COLORS from '@/styles/colors';
 import { H3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
-import { formatTimestampToDate, useTitleCase } from '@/utils/helpers';
+import { formatTimestamp, useTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
 import {
   Container,
@@ -28,7 +28,7 @@ export default function YourPlantDetails({
     <Container>
       <Header>
         <H3 $color={COLORS.shrub}>Your Plant Details</H3>
-        <EditButton secondaryColor={COLORS.shrub}>Edit</EditButton>
+        <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton>
       </Header>
 
       <DetailsContainer>
@@ -36,9 +36,7 @@ export default function YourPlantDetails({
           <StyledIcon>
             <Icon type="calendar" />
           </StyledIcon>
-          <DetailText>
-            Date Planted: {formatTimestampToDate(datePlanted)}
-          </DetailText>
+          <DetailText>Date Planted: {formatTimestamp(datePlanted)}</DetailText>
         </DetailRow>
 
         <DetailRow>
@@ -54,8 +52,7 @@ export default function YourPlantDetails({
               <Icon type="plant" />
             </StyledIcon>
             <DetailText>
-              Most Recent Harvest Date:{' '}
-              {formatTimestampToDate(recentHarvestDate)}
+              Most Recent Harvest Date: {formatTimestamp(recentHarvestDate)}
             </DetailText>
           </DetailRow>
         )}

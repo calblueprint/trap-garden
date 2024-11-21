@@ -215,7 +215,7 @@ export function checkDifficulty(
 export function useTitleCase(text: string) {
   return text.charAt(0) + text.slice(1).toLowerCase();
 }
-export function formatTimestampToDate(timestamp: string | number): string {
+export function formatTimestamp(timestamp: string): string {
   // Convert the input to a Date object
   const date = new Date(timestamp);
 

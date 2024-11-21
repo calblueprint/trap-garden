@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  font-family: Arial, sans-serif;
   color: #333;
 `;
 
@@ -17,7 +16,7 @@ export const CareItem = styled.div`
 `;
 
 export const IconWrapper = styled.div`
-  margin-right: 0.5rem;
+  margin-right: 6px;
   color: #8bc34a;
 `;
 

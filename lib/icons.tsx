@@ -189,6 +189,65 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
+  easy_bar: (
+    <svg
+      width="24"
+      height="6"
+      viewBox="0 0 24 6"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 3C0 1.34315 1.34315 0 3 0H7.55556V6H3C1.34315 6 0 4.65685 0 3Z"
+        fill="#A1BE23"
+      />
+      <path d="M8.22223 0H15.7778V6H8.22223V0Z" fill="#DEDEDE" />
+      <path
+        d="M16.4445 0H21C22.6569 0 24 1.34315 24 3C24 4.65685 22.6569 6 21 6H16.4445V0Z"
+        fill="#DDDDDD"
+        fill-opacity="0.866667"
+      />
+    </svg>
+  ),
+  moderate_bar: (
+    <svg
+      width="24"
+      height="6"
+      viewBox="0 0 24 6"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 3C0 1.34315 1.34315 0 3 0H7.55556V6H3C1.34315 6 0 4.65685 0 3Z"
+        fill="#EDB73A"
+      />
+      <path d="M8.22222 0H15.7778V6H8.22222V0Z" fill="#EDB73A" />
+      <path
+        d="M16.4444 0H21C22.6569 0 24 1.34315 24 3C24 4.65685 22.6569 6 21 6H16.4444V0Z"
+        fill="#DDDDDD"
+        fill-opacity="0.866667"
+      />
+    </svg>
+  ),
+  hard_bar: (
+    <svg
+      width="24"
+      height="6"
+      viewBox="0 0 24 6"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 3C0 1.34315 1.34315 0 3 0H7.55556V6H3C1.34315 6 0 4.65685 0 3Z"
+        fill="#D94E4E"
+      />
+      <path d="M8.22222 0H15.7778V6H8.22222V0Z" fill="#D94E4E" />
+      <path
+        d="M16.4444 0H21C22.6569 0 24 1.34315 24 3C24 4.65685 22.6569 6 21 6H16.4444V0Z"
+        fill="#D94E4E"
+      />
+    </svg>
+  ),
 };
 
 export type IconType = keyof typeof IconSvgs;
