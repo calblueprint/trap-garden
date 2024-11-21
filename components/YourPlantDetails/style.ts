@@ -3,9 +3,9 @@ import COLORS from '@/styles/colors';
 import { SmallRoundedButton } from '../Button';
 
 export const Container = styled.div`
-  padding: 1rem;
+  padding: 16px;
   background-color: ${COLORS.backgroundGrey};
-  border-radius: 0.5rem;
+  border-radius: 5px;
 `;
 
 export const Header = styled.div`
@@ -32,11 +32,11 @@ export const DetailRow = styled.div`
 `;
 
 export const DetailText = styled.span`
-  color: #374151;
+  color: ${COLORS.black};
 `;
 
 export const StyledIcon = styled.div`
-  color: #1b5e20;
+  color: ${COLORS.shrub};
   display: flex;
   align-items: center;
 `;

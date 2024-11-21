@@ -30,7 +30,6 @@ export default function YourPlantDetails({
         <H3 $color={COLORS.shrub}>Your Plant Details</H3>
         <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton>
       </Header>
-
       <DetailsContainer>
         <DetailRow>
           <StyledIcon>
