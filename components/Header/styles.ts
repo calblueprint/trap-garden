@@ -5,6 +5,7 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px 12px;
+  z-index: 500;
 `;
 
 export const HamburgerButton = styled.button`

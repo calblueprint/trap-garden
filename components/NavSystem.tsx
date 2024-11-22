@@ -14,7 +14,10 @@ export default function NavSystem() {
   return (
     <>
       <Header toggleNavColumn={toggleNavColumn} />
-      <NavColumn isOpen={isNavColumnOpen} />
+      <NavColumn
+        isOpen={isNavColumnOpen}
+        onClose={() => setIsNavColumnOpen(false)}
+      />
     </>
   );
 }
