@@ -1,7 +1,14 @@
 'use client';
 
 import Icon from '../Icon';
-import { CareItem, CareText, Container, IconWrapper, Title } from './style';
+import {
+  CareItem,
+  CareText,
+  Container,
+  IconWrapper,
+  Strong,
+  Title,
+} from './style';
 
 export default function PlantCareDescription({
   waterFreq,
@@ -22,7 +29,7 @@ export default function PlantCareDescription({
           <Icon type="watering_can" />
         </IconWrapper>
         <CareText>
-          <strong>Water Frequency:</strong> {waterFreq}
+          <Strong>Water Frequency:</Strong> {waterFreq}
         </CareText>
       </CareItem>
       <CareItem>
@@ -30,7 +37,7 @@ export default function PlantCareDescription({
           <Icon type="watering_can" />
         </IconWrapper>
         <CareText>
-          <strong>Weeding Frequency:</strong> {weedingFreq}
+          <Strong>Weeding Frequency:</Strong> {weedingFreq}
         </CareText>
       </CareItem>
       <CareItem>
@@ -38,7 +45,7 @@ export default function PlantCareDescription({
           <Icon type="sun" />
         </IconWrapper>
         <CareText>
-          <strong>Sunlight Requirement:</strong> {sunlightMinHours}-
+          <Strong>Sunlight Requirement:</Strong> {sunlightMinHours}-
           {sunlightMaxHours} hours (Full Sun)
         </CareText>
       </CareItem>

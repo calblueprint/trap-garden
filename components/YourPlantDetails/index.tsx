@@ -1,7 +1,6 @@
 'use client';
 
 import COLORS from '@/styles/colors';
-import { H3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
 import { formatTimestamp, useTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
@@ -12,6 +11,7 @@ import {
   DetailText,
   EditButton,
   Header,
+  StyledHeading,
   StyledIcon,
 } from './style';
 
@@ -27,7 +27,7 @@ export default function YourPlantDetails({
   return (
     <Container>
       <Header>
-        <H3 $color={COLORS.shrub}>Your Plant Details</H3>
+        <StyledHeading $color={COLORS.shrub}>Your Plant Details</StyledHeading>
         <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton>
       </Header>
       <DetailsContainer>

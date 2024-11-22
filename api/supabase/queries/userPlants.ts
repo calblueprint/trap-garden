@@ -44,3 +44,15 @@ export async function getCurrentUserPlantsByUserId(
   }
   return data;
 }
+export async function removeUserPlantById(id: UUID) {
+  const { data, error } = await supabase
+    .from('user_plants')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting row:', error);
+    return null;
+  }
+  return data;
+}

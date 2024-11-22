@@ -5,8 +5,10 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 `;
 
 export const CareItem = styled.div`
@@ -21,5 +23,11 @@ export const IconWrapper = styled.div`
 `;
 
 export const CareText = styled.span`
-  font-size: 1rem;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+`;
+export const Strong = styled.span`
+  font-weight: 500;
 `;

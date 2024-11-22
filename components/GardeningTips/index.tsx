@@ -1,9 +1,14 @@
 'use client';
 
 import COLORS from '@/styles/colors';
-import { H3 } from '@/styles/text';
 import Icon from '../Icon';
-import { Container, IconWrapper, TipsList, TitleWrapper } from './style';
+import {
+  Container,
+  IconWrapper,
+  StyledTitle,
+  TipsList,
+  TitleWrapper,
+} from './style';
 
 export default function GardeningTips({
   plantName,
@@ -20,7 +25,9 @@ export default function GardeningTips({
         <IconWrapper>
           <Icon type="lightbulb" />
         </IconWrapper>
-        <H3 $color={COLORS.shrub}>Gardening Tips for {plantName}</H3>
+        <StyledTitle $color={COLORS.shrub}>
+          Gardening Tips for {plantName}
+        </StyledTitle>
       </TitleWrapper>
       <TipsList>
         {tipsArray.map((tip, index) => (

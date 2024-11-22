@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
+import { H3 } from '@/styles/text';
 
 export const Container = styled.div`
-  background-color: #f9f9f9;
+  background-color: ${COLORS.backgroundGrey};
   padding: 1.5rem;
   border-radius: 8px;
   display: flex;
@@ -25,7 +27,16 @@ export const IconWrapper = styled.span`
 export const TipsList = styled.ol`
   margin: 0;
   padding-left: 0;
-  font-size: 1rem;
-  line-height: 1.5;
   list-style-position: inside;
+  font-size: 0.875rem;
+  font-style: inherit;
+  font-weight: 400;
+  line-height: normal;
+`;
+
+export const StyledTitle = styled(H3)`
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
