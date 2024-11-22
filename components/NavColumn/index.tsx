@@ -72,8 +72,9 @@ export default function NavColumn({
                 </HamburgerButton>
               </NavColumnHeader>
               <NavLinksContainer>
-                {navLinks.map((link: NavLink) => (
+                {navLinks.map((link: NavLink, key) => (
                   <NavColumnItem
+                    key={key}
                     name={link.name}
                     path={link.path}
                     isSelected={currentPath === link.path}
