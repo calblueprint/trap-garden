@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 import Icon from '../Icon';
@@ -13,6 +14,8 @@ export const NavColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
   transition: transform 1s ease-in-out;
+  padding-bottom: 3rem;
+  justify-content: space-between;
 `;
 
 export const Overlay = styled.div<{ isOpen: boolean }>`
@@ -21,8 +24,8 @@ export const Overlay = styled.div<{ isOpen: boolean }>`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  z-index: 999; /* Ensure it is below the NavColumn but above other elements */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
   display: ${props => (props.isOpen ? 'block' : 'none')};
 `;
 
@@ -44,4 +47,41 @@ export const NavColumnHeader = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   padding: 24px 16px;
+  z-index: 1001;
+`;
+
+export const NavLinksContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const LoginButtonsContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0 16px 3rem 16px;
+`;
+
+export const LoginButton = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  border: 1px solid ${COLORS.shrub};
+  background-color: #f7f6f3;
+  padding: 12px 0px 12px 0px;
+  color: ${COLORS.shrub};
+  text-decoration: none;
+`;
+
+export const SignUpButton = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  border: none;
+  background-color: ${COLORS.shrub};
+  padding: 12px 0px 12px 0px;
+  color: #ffffff;
+  text-decoration: none;
 `;

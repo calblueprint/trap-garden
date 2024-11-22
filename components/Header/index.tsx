@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '@/utils/AuthProvider';
 import Icon from '../Icon';
 import { Container, HamburgerButton } from './styles';
 
 interface HeaderProps {
   toggleNavColumn: () => void;
+  isLoggedIn: boolean;
 }
 
-export default function Header({ toggleNavColumn }: HeaderProps) {
-  const { userId } = useAuth();
+export default function Header({ toggleNavColumn, isLoggedIn }: HeaderProps) {
   const currentPath = usePathname();
 
   const onNavColumnClick = () => {
@@ -30,7 +29,7 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
         <Icon type="logo" />
       </Link>
       {/* still need to check if onboarding completed or not, after ProfileContext merged*/}
-      {userId ? (
+      {isLoggedIn ? (
         <Icon type="profile" />
       ) : (
         <Link href="/login">Login/Sign Up</Link>
