@@ -1,16 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { upsertProfile } from '@/api/supabase/queries/profiles';
 import { BigButton } from '@/components/Buttons';
 import LabeledCustomSelect from '@/components/EditableInput';
 import COLORS from '@/styles/colors';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
+import { useProfile } from '@/utils/ProfileProvider';
 import { H3, PageContainer, ReviewContainer } from './styles';
 
 // Define the possible options for each question
 const stateOptions: DropdownOption<string>[] = [
-  { label: 'Tennessee', value: 'TENNESSE' },
+  { label: 'Tennessee', value: 'TENNESSEE' },
   { label: 'Missouri', value: 'MISSOURI' },
 ];
 
@@ -40,11 +40,11 @@ interface PlotSelectionProps {
   setSelectedPlot: (selected: boolean) => void;
 }
 interface ReviewPageProps {
-  selectedState: string | undefined;
+  selectedState: string;
   setSelectedState: (selected: string) => void;
-  selectedGardenType: UserTypeEnum | undefined;
+  selectedGardenType: UserTypeEnum;
   setSelectedGardenType: (selected: UserTypeEnum) => void;
-  selectedPlot: boolean | undefined;
+  selectedPlot: boolean;
   setSelectedPlot: (selected: boolean) => void;
 }
 
@@ -131,17 +131,20 @@ const ReviewPage = ({
   selectedPlot,
   setSelectedPlot,
 }: ReviewPageProps) => {
+  const { setProfile, setHasPlot } = useProfile();
+
   const handleSubmit = async () => {
     const profile: Profile = {
       user_id: '2abd7296-374a-42d1-bb4f-b813da1615ae',
-      us_state: selectedState!,
-      user_type: selectedGardenType!,
+      us_state: selectedState,
+      user_type: selectedGardenType,
       // has_plot: selectedPlot,
     };
 
     try {
-      await upsertProfile(profile);
+      await setProfile(profile);
       console.log('Profile submitted successfully:', profile);
+      setHasPlot(selectedPlot);
     } catch (error) {
       console.error('Error upserting profile:', error);
     }
@@ -153,20 +156,20 @@ const ReviewPage = ({
         <H3 style={{ textAlign: 'center' }}>Review Your Response</H3>
         <LabeledCustomSelect
           label="State Location"
-          value={selectedState!}
+          value={selectedState}
           options={stateOptions}
           onChange={setSelectedState}
         />
 
         <LabeledCustomSelect
           label="Garden Type"
-          value={selectedGardenType!}
+          value={selectedGardenType}
           options={gardenTypeOptions}
           onChange={setSelectedGardenType} // Directly pass the selected value
         />
         <LabeledCustomSelect
           label="Plot Status"
-          value={selectedPlot!}
+          value={selectedPlot}
           options={plotOptions}
           onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
         />
@@ -221,9 +224,9 @@ export default function OnboardingFlow() {
         <ReviewPage
           selectedState={selectedState}
           setSelectedState={setSelectedState}
-          selectedGardenType={selectedGardenType}
+          selectedGardenType={selectedGardenType!}
           setSelectedGardenType={setSelectedGardenType}
-          selectedPlot={selectedPlot}
+          selectedPlot={selectedPlot!}
           setSelectedPlot={setSelectedPlot}
         />
       )}
