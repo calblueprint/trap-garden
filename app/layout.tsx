@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import StyledComponentsRegistry from '@/lib/registry';
+import ProfileProvider from '@/utils/ProfileProvider';
 import { AuthProvider } from '../utils/AuthProvider';
 
 // font definitions
@@ -24,7 +25,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={sans.className}>
         <AuthProvider>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          <ProfileProvider>
+            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          </ProfileProvider>
         </AuthProvider>
       </body>
     </html>

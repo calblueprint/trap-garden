@@ -1,52 +1,58 @@
 'use client';
 
 import React, { useState } from 'react';
-import { upsertProfile } from '@/api/supabase/queries/profiles';
 import { BigButton } from '@/components/Buttons';
 import LabeledCustomSelect from '@/components/EditableInput';
 import COLORS from '@/styles/colors';
-import { DropdownOption, Profile } from '@/types/schema';
+import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
+import { useProfile } from '@/utils/ProfileProvider';
 import { H3, PageContainer, ReviewContainer } from './styles';
 
 // Define the possible options for each question
-const states = [
-  { label: 'Tennesse', value: 'TENNESSE' },
+const stateOptions: DropdownOption<string>[] = [
+  { label: 'Tennessee', value: 'TENNESSEE' },
   { label: 'Missouri', value: 'MISSOURI' },
 ];
-const gardenTypes = ['Individual', 'Community', 'School'];
-const plotOptions = [
-  { label: 'yes', value: true },
-  { label: 'no', value: false },
+
+const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = [
+  { label: 'Individual', value: 'INDIV' },
+  { label: 'Community', value: 'ORG' },
+  { label: 'School', value: 'SCHOOL' },
 ];
-//Interfaces and props to avoid typ errors on Lint
+
+const plotOptions: DropdownOption<boolean>[] = [
+  { label: 'Yes, I own a plot', value: true },
+  { label: "No, I don't own a plot", value: false },
+];
+
 interface StateSelectionProps {
-  selectedState: string;
-  setSelectedState: React.Dispatch<React.SetStateAction<string>>;
+  selectedState: string | undefined; // undefined b/c <select> only accepts undefined
+  setSelectedState: (selected: string) => void;
 }
 
 interface GardenTypeSelectionProps {
-  selectedGardenType: string;
-  setSelectedGardenType: React.Dispatch<React.SetStateAction<string>>;
+  selectedGardenType: UserTypeEnum | undefined;
+  setSelectedGardenType: (selected: UserTypeEnum) => void;
 }
 
 interface PlotSelectionProps {
-  selectedPlot: boolean | null;
-  setSelectedPlot: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedPlot: boolean | undefined;
+  setSelectedPlot: (selected: boolean) => void;
 }
 interface ReviewPageProps {
   selectedState: string;
-  setSelectedState: React.Dispatch<React.SetStateAction<string>>;
-  selectedGardenType: string;
-  setSelectedGardenType: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedState: (selected: string) => void;
+  selectedGardenType: UserTypeEnum;
+  setSelectedGardenType: (selected: UserTypeEnum) => void;
   selectedPlot: boolean;
-  setSelectedPlot: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedPlot: (selected: boolean) => void;
 }
 
-// Select State
-const StateSelection: React.FC<StateSelectionProps> = ({
+// Step 1: Select State
+const StateSelection = ({
   selectedState,
   setSelectedState,
-}) => {
+}: StateSelectionProps) => {
   return (
     <div>
       <h2>Which state do you live in?</h2>
@@ -57,7 +63,7 @@ const StateSelection: React.FC<StateSelectionProps> = ({
         <option value="" disabled>
           Select a state
         </option>
-        {states.map(state => (
+        {stateOptions.map(state => (
           <option key={state.label} value={state.value}>
             {state.label}
           </option>
@@ -68,24 +74,25 @@ const StateSelection: React.FC<StateSelectionProps> = ({
 };
 
 // Step 2: Select garden type
-
-const GardenTypeSelection: React.FC<GardenTypeSelectionProps> = ({
+const GardenTypeSelection = ({
   selectedGardenType,
   setSelectedGardenType,
-}) => {
+}: GardenTypeSelectionProps) => {
   return (
     <div>
       <h2>What type of garden do you want to create?</h2>
-      {gardenTypes.map(type => (
-        <label key={type}>
+      {gardenTypeOptions.map(type => (
+        <label key={type.label}>
           <input
             type="radio"
             name="gardenType"
-            value={type}
-            checked={selectedGardenType === type}
-            onChange={e => setSelectedGardenType(e.target.value)}
+            value={type.value}
+            checked={selectedGardenType === type.value}
+            onChange={e =>
+              setSelectedGardenType(e.target.value as UserTypeEnum)
+            }
           />
-          {type}
+          {type.label}
         </label>
       ))}
     </div>
@@ -93,10 +100,10 @@ const GardenTypeSelection: React.FC<GardenTypeSelectionProps> = ({
 };
 
 // Step 3: Do you have a plot?
-const PlotSelection: React.FC<PlotSelectionProps> = ({
+const PlotSelection = ({
   selectedPlot,
   setSelectedPlot,
-}) => {
+}: PlotSelectionProps) => {
   return (
     <div>
       <h2>Do you already have a plot?</h2>
@@ -115,23 +122,6 @@ const PlotSelection: React.FC<PlotSelectionProps> = ({
     </div>
   );
 };
-const stateOptions: DropdownOption<string>[] = [
-  { label: 'Tennessee', value: 'TENNESSE' },
-  { label: 'Missouri', value: 'MISSOURI' },
-];
-
-const gardenTypeOptions: DropdownOption<string>[] = [
-  { label: 'Individual', value: 'Individual' },
-  { label: 'Community', value: 'Community' },
-  { label: 'School', value: 'School' },
-];
-
-const plot: DropdownOption<boolean>[] = [
-  { label: 'Yes, I own a plot', value: true },
-  { label: "No, I don't own a plot", value: false },
-];
-
-// Updated ReviewPage component to accept necessary props
 
 const ReviewPage = ({
   selectedState,
@@ -141,6 +131,8 @@ const ReviewPage = ({
   selectedPlot,
   setSelectedPlot,
 }: ReviewPageProps) => {
+  const { setProfile, setHasPlot } = useProfile();
+
   const handleSubmit = async () => {
     const profile: Profile = {
       user_id: '2abd7296-374a-42d1-bb4f-b813da1615ae',
@@ -150,8 +142,9 @@ const ReviewPage = ({
     };
 
     try {
-      await upsertProfile(profile);
+      await setProfile(profile);
       console.log('Profile submitted successfully:', profile);
+      setHasPlot(selectedPlot);
     } catch (error) {
       console.error('Error upserting profile:', error);
     }
@@ -177,7 +170,7 @@ const ReviewPage = ({
         <LabeledCustomSelect
           label="Plot Status"
           value={selectedPlot}
-          options={plot}
+          options={plotOptions}
           onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
         />
         <div style={{ height: '12.625rem' }} />
@@ -190,11 +183,15 @@ const ReviewPage = ({
 };
 
 // Main Onboarding Component
-const OnboardingFlow = () => {
+export default function OnboardingFlow() {
   const [step, setStep] = useState(1);
   const [selectedState, setSelectedState] = useState<string>('');
-  const [selectedGardenType, setSelectedGardenType] = useState<string>('');
-  const [selectedPlot, setSelectedPlot] = useState<boolean>(false);
+  const [selectedGardenType, setSelectedGardenType] = useState<
+    UserTypeEnum | undefined
+  >(undefined);
+  const [selectedPlot, setSelectedPlot] = useState<boolean | undefined>(
+    undefined,
+  );
 
   const handleNext = () => {
     setStep(step + 1);
@@ -227,9 +224,9 @@ const OnboardingFlow = () => {
         <ReviewPage
           selectedState={selectedState}
           setSelectedState={setSelectedState}
-          selectedGardenType={selectedGardenType}
+          selectedGardenType={selectedGardenType!}
           setSelectedGardenType={setSelectedGardenType}
-          selectedPlot={selectedPlot}
+          selectedPlot={selectedPlot!}
           setSelectedPlot={setSelectedPlot}
         />
       )}
@@ -244,6 +241,4 @@ const OnboardingFlow = () => {
       </div>
     </div>
   );
-};
-
-export default OnboardingFlow;
+}

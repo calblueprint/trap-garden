@@ -6,6 +6,8 @@ export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
 
 export type PlantingTypeEnum = 'INDOORS' | 'OUTDOORS' | 'TRANSPLANT';
 
+export type UserTypeEnum = 'INDIV' | 'SCHOOL' | 'ORG';
+
 export interface Profile {
   user_id: UUID;
   us_state: string;
