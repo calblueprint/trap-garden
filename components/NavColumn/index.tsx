@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import CONFIG from '@/lib/configs';
 import { IconType } from '@/lib/icons';
+import COLORS from '@/styles/colors';
+import { H3, H4 } from '@/styles/text';
+import { useAuth } from '@/utils/AuthProvider';
 import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
 import {
@@ -10,10 +13,14 @@ import {
   HamburgerIcon,
   LoginButton,
   LoginButtonsContainer,
+  NameAndStatus,
   NavColumnContainer,
   NavColumnHeader,
   NavLinksContainer,
   Overlay,
+  Profile,
+  ProfileDisplayContainer,
+  SignOutButton,
   SignUpButton,
 } from './styles';
 
@@ -44,6 +51,7 @@ export default function NavColumn({
   isLoggedIn,
 }: NavColumnProps) {
   const currentPath = usePathname();
+  const { signOut } = useAuth();
 
   return (
     <>
@@ -76,11 +84,28 @@ export default function NavColumn({
               </NavLinksContainer>
             </div>
             {isLoggedIn ? (
-              <div></div>
+              <ProfileDisplayContainer>
+                <Profile>
+                  <Icon type="profile" />
+                  <NameAndStatus>
+                    <H3 $color={COLORS.shrub} style={{ fontWeight: 300 }}>
+                      Name
+                    </H3>
+                    <H4 $color={COLORS.shrub} style={{ fontWeight: 300 }}>
+                      Type of Garden
+                    </H4>
+                  </NameAndStatus>
+                </Profile>
+                <SignOutButton onClick={signOut}>Sign Out</SignOutButton>
+              </ProfileDisplayContainer>
             ) : (
               <LoginButtonsContainer>
-                <LoginButton href={'/login'}>Log In</LoginButton>
-                <SignUpButton href={'/signup'}>Sign Up</SignUpButton>
+                <LoginButton href={'/login'} onClick={onClose}>
+                  Log In
+                </LoginButton>
+                <SignUpButton href={'/signup'} onClick={onClose}>
+                  Sign Up
+                </SignUpButton>
               </LoginButtonsContainer>
             )}
           </NavColumnContainer>

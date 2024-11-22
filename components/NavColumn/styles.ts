@@ -85,3 +85,37 @@ export const SignUpButton = styled(Link)`
   color: #ffffff;
   text-decoration: none;
 `;
+
+export const ProfileDisplayContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0px 24px 24px 24px;
+`;
+
+export const Profile = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+`;
+
+export const NameAndStatus = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const SignOutButton = styled.button`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  border: 1px solid ${COLORS.error};
+  background-color: #f7f6f3;
+  padding: 4px 0px 4px 0px;
+  color: ${COLORS.error};
+  text-decoration: none;
+  cursor: pointer;
+`;
