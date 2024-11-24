@@ -1,6 +1,5 @@
 import React from 'react';
 import { IconType } from '@/lib/icons';
-import Icon from '../Icon';
 import {
   NavColumnItemContainer,
   NavColumnItemOuterContainer,
