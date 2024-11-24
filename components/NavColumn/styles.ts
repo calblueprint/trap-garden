@@ -4,7 +4,7 @@ import COLORS from '@/styles/colors';
 import Icon from '../Icon';
 
 export const NavColumnContainer = styled.div`
-  width: 289px;
+  min-width: 289px;
   height: 100vh;
   background: #f7f6f3;
   position: fixed;
@@ -46,13 +46,14 @@ export const NavColumnHeader = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  padding: 24px 16px;
+  padding: 24px 16px 12px;
   z-index: 1001;
 `;
 
 export const NavLinksContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 4px;
 `;
 
 export const LoginButtonsContainer = styled.div`
@@ -68,10 +69,11 @@ export const LoginButton = styled(Link)`
   align-items: center;
   border-radius: 20px;
   border: 1px solid ${COLORS.shrub};
-  background-color: #f7f6f3;
+  background-color: inherit;
   padding: 12px 0px 12px 0px;
   color: ${COLORS.shrub};
   text-decoration: none;
+  font-size: 0.875rem;
 `;
 
 export const SignUpButton = styled(Link)`
@@ -84,13 +86,14 @@ export const SignUpButton = styled(Link)`
   padding: 12px 0px 12px 0px;
   color: #ffffff;
   text-decoration: none;
+  font-size: 0.875rem;
 `;
 
 export const ProfileDisplayContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin: 0px 24px 24px 24px;
+  margin: 0px 24px 3rem 24px;
 `;
 
 export const Profile = styled.div`
@@ -114,8 +117,9 @@ export const SignOutButton = styled.button`
   border-radius: 20px;
   border: 1px solid ${COLORS.error};
   background-color: #f7f6f3;
-  padding: 4px 0px 4px 0px;
+  padding: 12px 0px;
   color: ${COLORS.error};
   text-decoration: none;
   cursor: pointer;
+  font-size: 0.875rem;
 `;

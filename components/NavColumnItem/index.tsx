@@ -5,6 +5,7 @@ import {
   NavColumnItemContainer,
   NavColumnItemOuterContainer,
   SelectedIndicator,
+  StyledIcon,
   StyledLink,
 } from './styles';
 
@@ -24,10 +25,10 @@ export default function NavColumnItem({
   onClose,
 }: NavColumnItemProps) {
   return (
-    <NavColumnItemOuterContainer>
+    <NavColumnItemOuterContainer isSelected={isSelected}>
       {isSelected && <SelectedIndicator />}
-      <NavColumnItemContainer isSelected={isSelected}>
-        <Icon type={icon} />
+      <NavColumnItemContainer>
+        <StyledIcon type={icon} />
         <StyledLink href={path} onClick={onClose}>
           {name}
         </StyledLink>

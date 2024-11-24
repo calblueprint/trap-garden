@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import CONFIG from '@/lib/configs';
 import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
@@ -52,6 +52,13 @@ export default function NavColumn({
 }: NavColumnProps) {
   const currentPath = usePathname();
   const { signOut } = useAuth();
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    router.push(CONFIG.login);
+    onClose();
+    signOut();
+  };
 
   return (
     <>
@@ -97,14 +104,14 @@ export default function NavColumn({
                     </H4>
                   </NameAndStatus>
                 </Profile>
-                <SignOutButton onClick={signOut}>Sign Out</SignOutButton>
+                <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
               </ProfileDisplayContainer>
             ) : (
               <LoginButtonsContainer>
-                <LoginButton href={'/login'} onClick={onClose}>
+                <LoginButton href={CONFIG.login} onClick={onClose}>
                   Log In
                 </LoginButton>
-                <SignUpButton href={'/signup'} onClick={onClose}>
+                <SignUpButton href={CONFIG.signup} onClick={onClose}>
                   Sign Up
                 </SignUpButton>
               </LoginButtonsContainer>
