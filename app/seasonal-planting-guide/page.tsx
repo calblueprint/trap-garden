@@ -65,9 +65,9 @@ export default function SeasonalPlantingGuide() {
   };
 
   useEffect(() => {
-    // if (profileReady && profileData) {
-    //   setSelectedUsState(profileData.us_state);
-    // }
+    if (profileReady && profileData) {
+      setSelectedUsState(profileData.us_state);
+    }
   }, [profileData, profileReady]);
 
   return (
