@@ -7,7 +7,7 @@ export const Container = styled.div`
 
 export const Header = styled.div`
   background-color: ${COLORS.backgroundGrey};
-  margin: -20px -20px 24px -20px;
+  margin: -28px -28px 24px -28px;
   padding: 12px 20px;
   padding-bottom: 27px;
 `;
