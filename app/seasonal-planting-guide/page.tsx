@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
-import { PlantList } from '@/components/PlantList';
+import { PlantCalendarList } from '@/components/PlantCalendarList';
 import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
 import { H1, H3 } from '@/styles/text';
@@ -117,7 +117,7 @@ export default function SeasonalPlantingGuide() {
         </StateOptionsContainer>
       ) : (
         <PlantListContainer>
-          <PlantList
+          <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}
             harvestSeasonFilterValue={selectedHarvestSeason}
             plantingTypeFilterValue={selectedPlantingType}

@@ -25,7 +25,7 @@ interface PlantListProps {
   searchTerm: string;
 }
 
-export const PlantList = ({
+export const PlantCalendarList = ({
   harvestSeasonFilterValue,
   plantingTypeFilterValue,
   growingSeasonFilterValue,
