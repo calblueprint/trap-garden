@@ -14,7 +14,7 @@ import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1 } from '@/styles/text';
-import { DropdownOption, OwnedPlant, Plant } from '@/types/schema';
+import { DropdownOption, OwnedPlant, Plant, SeasonEnum } from '@/types/schema';
 import {
   checkDifficulty,
   checkGrowingSeason,
@@ -47,7 +47,7 @@ export default function Page() {
     [],
   );
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
-    DropdownOption[]
+    DropdownOption<SeasonEnum>[]
   >([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const user_id: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
@@ -66,7 +66,7 @@ export default function Page() {
     { label: 'Moderate', value: 'MODERATE' },
     { label: 'Hard', value: 'HARD' },
   ];
-  const growingSeasonOptions: DropdownOption[] = [
+  const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
     { label: 'Spring', value: 'SPRING' },
     { label: 'Summer', value: 'SUMMER' },
     { label: 'Fall', value: 'FALL' },

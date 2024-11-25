@@ -1,20 +1,26 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getAllPlants } from '@/api/supabase/queries/plants';
-import { DropdownOption, Plant } from '@/types/schema';
+import {
+  DropdownOption,
+  Plant,
+  PlantingTypeEnum,
+  SeasonEnum,
+} from '@/types/schema';
 import {
   checkGrowingSeason,
   checkHarvestSeason,
   checkPlantingType,
   checkSearchTerm,
+  checkUsState,
 } from '@/utils/helpers';
 import MonthHeader from '../MonthHeader';
 import PlantCalendarRow from '../PlantCalendarRow';
 import { CalendarRowsContainer } from './styles';
 
 interface PlantListProps {
-  harvestSeasonFilterValue: DropdownOption[];
-  plantingTypeFilterValue: DropdownOption[];
-  growingSeasonFilterValue: DropdownOption[];
+  harvestSeasonFilterValue: DropdownOption<SeasonEnum>[];
+  plantingTypeFilterValue: DropdownOption<PlantingTypeEnum>[];
+  growingSeasonFilterValue: DropdownOption<SeasonEnum>[];
   usStateFilterValue: string;
   searchTerm: string;
 }
@@ -29,20 +35,14 @@ export const PlantList = ({
   const [plants, setPlants] = useState<Plant[]>([]);
 
   useEffect(() => {
-    const fetchPlantSeasonality = async () => {
+    (async () => {
       const plantList = await getAllPlants();
-      const us_state = usStateFilterValue;
-      const filteredPlantList = plantList.filter(
-        plant => plant.us_state === us_state,
-      );
-      const sortedAndFilteredPlantList = filteredPlantList.sort((a, b) =>
+      const alphabeticalPlantList = plantList.sort((a, b) =>
         a.plant_name.localeCompare(b.plant_name),
       );
-      setPlants(sortedAndFilteredPlantList);
-    };
-
-    fetchPlantSeasonality();
-  }, [usStateFilterValue]);
+      setPlants(alphabeticalPlantList);
+    })();
+  }, []);
 
   const filteredPlantList = useMemo(() => {
     return plants.filter(
@@ -50,7 +50,8 @@ export const PlantList = ({
         checkGrowingSeason(growingSeasonFilterValue, plant) &&
         checkHarvestSeason(harvestSeasonFilterValue, plant) &&
         checkPlantingType(plantingTypeFilterValue, plant) &&
-        checkSearchTerm(searchTerm, plant),
+        checkSearchTerm(searchTerm, plant) &&
+        checkUsState(usStateFilterValue, plant),
     );
   }, [
     plants,
@@ -58,6 +59,7 @@ export const PlantList = ({
     harvestSeasonFilterValue,
     plantingTypeFilterValue,
     searchTerm,
+    usStateFilterValue,
   ]);
 
   return (

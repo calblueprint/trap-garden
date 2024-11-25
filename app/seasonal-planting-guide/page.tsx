@@ -3,12 +3,11 @@
 import React, { useState } from 'react';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
-import Icon from '@/components/Icon';
 import { PlantList } from '@/components/PlantList';
 import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
 import { H1, H3 } from '@/styles/text';
-import { DropdownOption } from '@/types/schema';
+import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
 import {
   FilterContainer,
   HeaderContainer,
@@ -19,24 +18,24 @@ import {
 } from './styles';
 
 export default function SeasonalPlantingGuide() {
-  const growingSeasonOptions: DropdownOption[] = [
+  const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
     { label: 'Spring', value: 'SPRING' },
     { label: 'Summer', value: 'SUMMER' },
     { label: 'Fall', value: 'FALL' },
     { label: 'Winter', value: 'WINTER' },
   ];
-  const harvestSeasonOptions: DropdownOption[] = [
+  const harvestSeasonOptions: DropdownOption<SeasonEnum>[] = [
     { label: 'Spring', value: 'SPRING' },
     { label: 'Summer', value: 'SUMMER' },
     { label: 'Fall', value: 'FALL' },
     { label: 'Winter', value: 'WINTER' },
   ];
-  const plantingTypeOptions: DropdownOption[] = [
-    { label: 'Start Seeds Indoors', value: 'Start Seeds Indoors' },
-    { label: 'Start Seeds Outdoors', value: 'Start Seeds Outdoors' },
+  const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
+    { label: 'Start Seeds Indoors', value: 'INDOORS' },
+    { label: 'Start Seeds Outdoors', value: 'OUTDOORS' },
     {
       label: 'Plant Seedlings/Transplant Outdoors',
-      value: 'Plant Seedlings/Transplant Outdoors',
+      value: 'TRANSPLANT',
     },
   ];
   const usStateOptions: DropdownOption[] = [
@@ -45,13 +44,13 @@ export default function SeasonalPlantingGuide() {
   ];
 
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
-    DropdownOption[]
+    DropdownOption<SeasonEnum>[]
   >([]);
   const [selectedHarvestSeason, setSelectedHarvestSeason] = useState<
-    DropdownOption[]
+    DropdownOption<SeasonEnum>[]
   >([]);
   const [selectedPlantingType, setSelectedPlantingType] = useState<
-    DropdownOption[]
+    DropdownOption<PlantingTypeEnum>[]
   >([]);
   const [selectedUsState, setSelectedUsState] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -69,12 +68,10 @@ export default function SeasonalPlantingGuide() {
           <H1 $color={COLORS.shrub} $align="left">
             Planting Timeline
           </H1>
-          <Icon type="info" />
         </PageTitle>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <FilterContainer>
           <FilterDropdownSingle
-            name="usState"
             id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}

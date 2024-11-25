@@ -1,4 +1,9 @@
-import { DropdownOption, Plant, SeasonEnum } from '@/types/schema';
+import {
+  DropdownOption,
+  Plant,
+  PlantingTypeEnum,
+  SeasonEnum,
+} from '@/types/schema';
 
 // Helper function to process late/early month fields
 function processPlantMonth(month: string | null) {
@@ -19,7 +24,7 @@ function processPlantMonth(month: string | null) {
 }
 
 // helper constants for processing months to indexes
-const growingSeasonToIndex = new Map<string, number[]>([
+const growingSeasonToIndex = new Map<SeasonEnum, number[]>([
   ['SPRING', [2, 3, 4]],
   ['SUMMER', [5, 6, 7]],
   ['FALL', [8, 9, 10]],
@@ -43,7 +48,7 @@ const monthToIndex = new Map<string, number>([
 
 // Helper function to check if selected growing season(s) match plant's growing_season
 export function checkGrowingSeason(
-  growingSeasonFilterValue: DropdownOption[],
+  growingSeasonFilterValue: DropdownOption<SeasonEnum>[],
   plant: Plant,
 ) {
   // Automatically returns true if selected growing season is []
@@ -116,7 +121,7 @@ export function checkHarvestSeason(
 
 // Helper function to check if selected planting type(s) match plant's planting_type
 export function checkPlantingType(
-  plantingTypeFilterValue: DropdownOption[],
+  plantingTypeFilterValue: DropdownOption<PlantingTypeEnum>[],
   plant: Plant,
 ) {
   // Automatically returns true if selected plantingType is []
@@ -128,11 +133,11 @@ export function checkPlantingType(
   // If it is not null, add true to plantingTypeBoolean
   const plantingTypeBoolean: boolean[] = [];
   for (const plantingType of plantingTypeFilterValue) {
-    if (plantingType.value === 'Start Seeds Indoors') {
+    if (plantingType.value === 'INDOORS') {
       plantingTypeBoolean.push(plant.indoors_start !== null);
-    } else if (plantingType.value === 'Start Seeds Outdoors') {
+    } else if (plantingType.value === 'OUTDOORS') {
       plantingTypeBoolean.push(plant.outdoors_start !== null);
-    } else if (plantingType.value === 'Plant Seedlings/Transplant Outdoors') {
+    } else if (plantingType.value === 'TRANSPLANT') {
       plantingTypeBoolean.push(plant.transplant_start !== null);
     }
   }
@@ -215,6 +220,12 @@ export function checkDifficulty(
   return false;
 }
 
+export function checkUsState(usStateFilterValue: string, plant: Plant) {
+  // Automatically returns true if no selected usState
+  // Check if plant's us_state matches usStateFilterValue
+  return usStateFilterValue === '' || plant.us_state === usStateFilterValue;
+}
+
 export function useTitleCase(text: string) {
   return text.charAt(0) + text.slice(1).toLowerCase();
 }
@@ -263,13 +274,15 @@ export function fillCalendarGridArrayRowWithColor(
   gridArray: string[],
 ) {
   // if startMonth and endMonth is both null, row should be empty
-  if (startMonth === null && endMonth === null) {
+  // occurs when plant cannot be planted indoors and/or transplanted
+  if (!startMonth && !endMonth) {
     return gridArray;
   }
 
-  // if endMonth is null, it is set to startMonth
+  // if endMonth is null, it is set to startMonth (occurs when duration is only one month)
+  // startMonth is assumed to not be null in this case
   // this makes the time frame only one month long
-  if (endMonth === null) {
+  if (!endMonth) {
     endMonth = startMonth;
   }
 
@@ -290,7 +303,7 @@ export function fillCalendarGridArrayRowWithColor(
   // fill gridArray with corresponding colour from startColumn to endColumn
   if (startColumn > endColumn) {
     // handle case when the season goes from November - February, e.g.
-    for (let i = startColumn; i <= 24; i++) {
+    for (let i = startColumn; i < 24; i++) {
       gridArray[rowIndex * 24 + i] = color;
     }
     for (let i = 0; i <= endColumn; i++) {
