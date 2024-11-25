@@ -1,7 +1,7 @@
 import { DropdownOption, Plant, SeasonEnum } from '@/types/schema';
 
 // Helper function to process late/early month fields
-function processPlantMonth(month: string) {
+function processPlantMonth(month: string | null) {
   // If field is not null and starts with 'LATE' or 'EARLY,
   // get substring after 'LATE_ or 'EARLY_'
   if (!month) {
@@ -81,13 +81,13 @@ export function checkGrowingSeason(
   // exclamation marks to assert values are not undefined
   return (
     isInRange(
-      monthToIndex.get(indoorsStart)!,
-      monthToIndex.get(indoorsEnd)!,
+      monthToIndex.get(indoorsStart!)!,
+      monthToIndex.get(indoorsEnd!)!,
       validIndexes!,
     ) ||
     isInRange(
-      monthToIndex.get(outdoorsStart)!,
-      monthToIndex.get(outdoorsEnd)!,
+      monthToIndex.get(outdoorsStart!)!,
+      monthToIndex.get(outdoorsEnd!)!,
       validIndexes!,
     )
   );
@@ -256,8 +256,8 @@ export function mapMonthToSeason(month: string): SeasonEnum | null {
 }
   
 export function fillCalendarGridArrayRowWithColor(
-  startMonth: string,
-  endMonth: string,
+  startMonth: string | null,
+  endMonth: string | null,
   color: string,
   rowIndex: number,
   gridArray: string[],
@@ -267,11 +267,9 @@ export function fillCalendarGridArrayRowWithColor(
     return gridArray;
   }
 
-  // if either startMonth or endMonth are null, the null one should be set to the other
+  // if endMonth is null, it is set to startMonth
   // this makes the time frame only one month long
-  if (startMonth === null) {
-    startMonth = endMonth;
-  } else if (endMonth === null) {
+  if (endMonth === null) {
     endMonth = startMonth;
   }
 
@@ -282,12 +280,12 @@ export function fillCalendarGridArrayRowWithColor(
   // if the start month is LATE_MONTH, start column should be the second column for that month
   // if the end month is EARLY_MONTH, end column should be the first column for that month
   // otherwise, start column should be the first column and end column should be the second column for that month
-  const startColumn = startMonth.startsWith('LATE')
-    ? monthToIndex.get(processedStartMonth)! * 2 + 1
-    : monthToIndex.get(processedStartMonth)! * 2;
-  const endColumn = endMonth.startsWith('EARLY')
-    ? monthToIndex.get(processedEndMonth)! * 2
-    : monthToIndex.get(processedEndMonth)! * 2 + 1;
+  const startColumn = startMonth!.startsWith('LATE')
+    ? monthToIndex.get(processedStartMonth!)! * 2 + 1
+    : monthToIndex.get(processedStartMonth!)! * 2;
+  const endColumn = endMonth!.startsWith('EARLY')
+    ? monthToIndex.get(processedEndMonth!)! * 2
+    : monthToIndex.get(processedEndMonth!)! * 2 + 1;
 
   // fill gridArray with corresponding colour from startColumn to endColumn
   if (startColumn > endColumn) {

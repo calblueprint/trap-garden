@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import COLORS from '@/styles/colors';
 import { fillCalendarGridArrayRowWithColor } from '@/utils/helpers';
 import {
   CalendarCell,
@@ -30,46 +31,38 @@ export default function PlantCalendarRow({
   outdoorsStart,
   outdoorsEnd,
 }: PlantCalendarRowProps) {
-  const colors = {
-    indoors: '#F5B868',
-    outdoors: '#89BF8D',
-    transplant: '#8EDBFF',
-    harvest: '#FBA7A7',
-    background: '#D9D9D9',
-  };
-
   // translate all the starts and ends to corresponding colours in an array
   const CalendarGridArray: string[] = useMemo(() => {
     // 4 rows, 24 columns = 96 cells
     let returnArray: string[] = new Array(96);
     // fill with grey
-    returnArray.fill(colors.background, 0, returnArray.length);
+    returnArray.fill(COLORS.lightgray, 0, returnArray.length);
     // fill array in order of indoors -> outdoors -> transplant -> harvest
     returnArray = fillCalendarGridArrayRowWithColor(
       indoorsStart,
       indoorsEnd,
-      colors.indoors,
+      COLORS.indoors,
       0,
       returnArray,
     );
     returnArray = fillCalendarGridArrayRowWithColor(
       outdoorsStart,
       outdoorsEnd,
-      colors.outdoors,
+      COLORS.outdoors,
       1,
       returnArray,
     );
     returnArray = fillCalendarGridArrayRowWithColor(
       transplantStart,
       transplantEnd,
-      colors.transplant,
+      COLORS.transplant,
       2,
       returnArray,
     );
     returnArray = fillCalendarGridArrayRowWithColor(
       harvestStart,
       harvestEnd,
-      colors.harvest,
+      COLORS.harvest,
       3,
       returnArray,
     );

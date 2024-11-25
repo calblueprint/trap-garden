@@ -38,7 +38,7 @@ export default function FilterDropdownSingle({
       onClick={handleToggle}
       onBlur={() => setIsOpen(false)}
       value={value}
-      hasValue={value !== ''}
+      $hasValue={value !== ''}
     >
       {/*Default placeholder text*/}
       <option value="" disabled hidden>

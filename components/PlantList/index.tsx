@@ -65,7 +65,6 @@ export const PlantList = ({
       <MonthHeader />
       <CalendarRowsContainer>
         {filteredPlantList.map((plant, key) => (
-          //this should display PlantCalendarRows instead of this temporary div
           <PlantCalendarRow
             key={key}
             plantName={plant.plant_name}

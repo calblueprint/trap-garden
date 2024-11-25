@@ -16,5 +16,11 @@ const COLORS = {
 
   // error
   errorRed: '#D94E4E',
+  
+  //seasonality chart colors
+  indoors: '#F5B868',
+  outdoors: '#89BF8D',
+  transplant: '#8EDBFF',
+  harvest: '#FBA7A7',
 };
 export default COLORS;
