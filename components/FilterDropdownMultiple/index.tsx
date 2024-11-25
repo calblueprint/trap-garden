@@ -7,6 +7,7 @@ interface FilterDropdownProps<T> {
   setStateAction: React.Dispatch<React.SetStateAction<DropdownOption<T>[]>>;
   options: DropdownOption<T>[];
   placeholder: string;
+  disabled: boolean;
 }
 
 export default function FilterDropdownMultiple<T>({
@@ -14,6 +15,7 @@ export default function FilterDropdownMultiple<T>({
   setStateAction,
   options,
   placeholder,
+  disabled,
 }: FilterDropdownProps<T>) {
   return (
     <StyledMultiSelect
@@ -24,6 +26,7 @@ export default function FilterDropdownMultiple<T>({
       hasSelectAll={false}
       overrideStrings={{ selectSomeItems: placeholder }}
       disableSearch
+      disabled={disabled}
     />
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantCalendarList } from '@/components/PlantCalendarList';
@@ -8,6 +8,7 @@ import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
 import { H1, H3 } from '@/styles/text';
 import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
+import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
   HeaderContainer,
@@ -18,6 +19,8 @@ import {
 } from './styles';
 
 export default function SeasonalPlantingGuide() {
+  const { profileData, profileReady } = useProfile();
+
   const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
     { label: 'Spring', value: 'SPRING' },
     { label: 'Summer', value: 'SUMMER' },
@@ -61,6 +64,12 @@ export default function SeasonalPlantingGuide() {
     setSelectedPlantingType([]);
   };
 
+  useEffect(() => {
+    // if (profileReady && profileData) {
+    //   setSelectedUsState(profileData.us_state);
+    // }
+  }, [profileData, profileReady]);
+
   return (
     <PageContainer>
       <HeaderContainer>
@@ -84,6 +93,7 @@ export default function SeasonalPlantingGuide() {
             setStateAction={setSelectedGrowingSeason}
             options={growingSeasonOptions}
             placeholder="Growing Season"
+            disabled={selectedUsState === ''}
           />
 
           <FilterDropdownMultiple
@@ -91,6 +101,7 @@ export default function SeasonalPlantingGuide() {
             setStateAction={setSelectedHarvestSeason}
             options={harvestSeasonOptions}
             placeholder="Harvest Season"
+            disabled={selectedUsState === ''}
           />
 
           <FilterDropdownMultiple
@@ -98,6 +109,7 @@ export default function SeasonalPlantingGuide() {
             setStateAction={setSelectedPlantingType}
             options={plantingTypeOptions}
             placeholder="Planting Type"
+            disabled={selectedUsState === ''}
           />
 
           <button onClick={clearFilters}>Clear filters</button>
