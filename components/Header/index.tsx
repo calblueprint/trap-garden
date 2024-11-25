@@ -13,7 +13,7 @@ interface HeaderProps {
 
 export default function Header({ toggleNavColumn, isLoggedIn }: HeaderProps) {
   const currentPath = usePathname();
-  const { profileReady } = useProfile();
+  const { profileReady, profileData } = useProfile();
 
   const onNavColumnClick = () => {
     toggleNavColumn();
@@ -32,8 +32,9 @@ export default function Header({ toggleNavColumn, isLoggedIn }: HeaderProps) {
         <Icon type="logo" />
       </Link>
       {isLoggedIn ? (
-        profileReady ? (
+        profileReady && profileData !== null ? (
           // display profile icon if user is logged in and onboarded
+          // this should route to /my-account in the future
           <Icon type="profile" />
         ) : (
           // display onboarding link if user is logged in but not onboarded

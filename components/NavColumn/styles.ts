@@ -123,3 +123,8 @@ export const SignOutButton = styled.button`
   cursor: pointer;
   font-size: 0.875rem;
 `;
+
+export const ProfileIcon = styled(Icon)`
+  min-height: 40px;
+  min-width: 40px;
+`;

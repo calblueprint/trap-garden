@@ -6,6 +6,7 @@ import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
 import { H3, H4 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
+import { useProfile } from '@/utils/ProfileProvider';
 import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
 import {
@@ -20,6 +21,7 @@ import {
   Overlay,
   Profile,
   ProfileDisplayContainer,
+  ProfileIcon,
   SignOutButton,
   SignUpButton,
 } from './styles';
@@ -53,6 +55,7 @@ export default function NavColumn({
   const currentPath = usePathname();
   const { signOut } = useAuth();
   const router = useRouter();
+  const { profileData } = useProfile();
 
   const handleSignOut = () => {
     router.push(CONFIG.login);
@@ -94,13 +97,13 @@ export default function NavColumn({
             {isLoggedIn ? (
               <ProfileDisplayContainer>
                 <Profile>
-                  <Icon type="profile" />
+                  <ProfileIcon type="profile" />
                   <NameAndStatus>
                     <H3 $color={COLORS.shrub} style={{ fontWeight: 300 }}>
-                      Name
+                      Your Account
                     </H3>
                     <H4 $color={COLORS.shrub} style={{ fontWeight: 300 }}>
-                      Type of Garden
+                      {profileData?.user_type}
                     </H4>
                   </NameAndStatus>
                 </Profile>
