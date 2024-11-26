@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import StyledComponentsRegistry from '@/lib/registry';
 import ProfileProvider from '@/utils/ProfileProvider';
 import { AuthProvider } from '../utils/AuthProvider';
-import './global.css';
+import './globals.css';
 
 // font definitions
 const sans = Inter({
