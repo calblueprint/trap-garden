@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import StyledComponentsRegistry from '@/lib/registry';
+import { GlobalStyle } from '@/styles/globalStyles';
 import ProfileProvider from '@/utils/ProfileProvider';
 import { AuthProvider } from '../utils/AuthProvider';
 
@@ -12,8 +13,9 @@ const sans = Inter({
 
 // site metadata - what shows up on embeds
 export const metadata: Metadata = {
-  title: 'Project Name',
-  description: 'Description of project',
+  title: 'Trap Garden',
+  description:
+    'A web app to assist individuals, schools, and small organizations in establishing and maintaining their own gardens.',
 };
 
 export default function RootLayout({
@@ -23,6 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <GlobalStyle />
+      </head>
       <body className={sans.className}>
         <AuthProvider>
           <ProfileProvider>
