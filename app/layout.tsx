@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import StyledComponentsRegistry from '@/lib/registry';
 import ProfileProvider from '@/utils/ProfileProvider';
 import { AuthProvider } from '../utils/AuthProvider';
+import './global.css';
 
 // font definitions
 const sans = Inter({
@@ -12,8 +13,8 @@ const sans = Inter({
 
 // site metadata - what shows up on embeds
 export const metadata: Metadata = {
-  title: 'Project Name',
-  description: 'Description of project',
+  title: 'Trap Garden',
+  description: 'Created by Blueprint',
 };
 
 export default function RootLayout({
