@@ -18,7 +18,14 @@ import {
   checkSearchTerm,
   checkSunlight,
 } from '@/utils/helpers';
-import { FilterContainer, TopRowContainer } from './styles';
+import {
+  AddButton,
+  FilterContainer,
+  HeaderButton,
+  PlantGridContainer,
+  PlantGridView,
+  TopRowContainer,
+} from './styles';
 
 export default function Page() {
   const router = useRouter();
@@ -145,12 +152,6 @@ export default function Page() {
   return (
     <div className="main">
       <div id="plantContent">
-        <div className="plantSelectionHeader">
-          <button onClick={() => setViewingOption('myPlants')}>
-            My Plants
-          </button>
-          <button onClick={() => setViewingOption('all')}>All</button>
-        </div>
         <div className="componentsDisplay">
           <TopRowContainer>
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -179,16 +180,35 @@ export default function Page() {
           </TopRowContainer>
           {viewingOption === 'myPlants' && (
             <div>
+              <div className="plantSelection">
+                <HeaderButton
+                  $isCurrentMode={viewingOption == 'myPlants'}
+                  onClick={() => setViewingOption('myPlants')}
+                >
+                  My Plants
+                </HeaderButton>
+                <HeaderButton
+                  $isCurrentMode={false}
+                  onClick={() => setViewingOption('all')}
+                >
+                  All
+                </HeaderButton>
+              </div>
+
               {filteredUserPlantList.length ? (
                 <div>
-                  {filteredUserPlantList.map(ownedPlant => (
-                    <PlantCard
-                      key={ownedPlant.userPlantId}
-                      plant={ownedPlant.plant}
-                      canSelect={false}
-                      onClick={() => handleUserPlantCardClick(ownedPlant)}
-                    />
-                  ))}
+                  <PlantGridContainer>
+                    <PlantGridView>
+                      {filteredUserPlantList.map(ownedPlant => (
+                        <PlantCard
+                          key={ownedPlant.userPlantId}
+                          plant={ownedPlant.plant}
+                          canSelect={false}
+                          onClick={() => handleUserPlantCardClick(ownedPlant)}
+                        />
+                      ))}
+                    </PlantGridView>
+                  </PlantGridContainer>
                 </div>
               ) : (
                 <div>
@@ -202,35 +222,83 @@ export default function Page() {
           {viewingOption === 'all' &&
             (inAddMode ? (
               <div>
-                {filteredPlantList.map((plant, key) => (
-                  <PlantCard
-                    key={key}
-                    plant={plant}
-                    canSelect={true}
-                    isSelected={selectedPlants.includes(plant)}
-                    onClick={() => handlePlantCardClick(plant)}
-                  />
-                ))}
                 <div>
-                  <button onClick={() => setInAddMode(false)}>
-                    Select Plants
-                  </button>
+                  <div className="plantSelection">
+                    <HeaderButton
+                      $isCurrentMode={false}
+                      onClick={() => setViewingOption('myPlants')}
+                    >
+                      My Plants
+                    </HeaderButton>
+                    <HeaderButton
+                      $isCurrentMode={true}
+                      onClick={() => setViewingOption('all')}
+                    >
+                      All
+                    </HeaderButton>
+                  </div>
+                </div>
+                <PlantGridContainer>
+                  <PlantGridView>
+                    {filteredPlantList.map((plant, key) => (
+                      <PlantCard
+                        key={key}
+                        plant={plant}
+                        canSelect={true}
+                        isSelected={selectedPlants.includes(plant)}
+                        onClick={() => handlePlantCardClick(plant)}
+                      />
+                    ))}
+                  </PlantGridView>
+                </PlantGridContainer>
+
+                <div>
+                  {selectedPlants.length ? (
+                    <AddButton onClick={() => setInAddMode(false)}>
+                      Add to My Garden
+                    </AddButton>
+                  ) : (
+                    <AddButton onClick={() => setInAddMode(false)}>
+                      Select Plants
+                    </AddButton>
+                  )}
                 </div>
               </div>
             ) : (
               <div>
-                {filteredPlantList.map((plant, key) => (
-                  <PlantCard
-                    key={key}
-                    plant={plant}
-                    canSelect={false}
-                    onClick={() => handlePlantCardClick(plant)}
-                  />
-                ))}
                 <div>
-                  <button onClick={() => setInAddMode(true)}>
+                  <div className="plantSelection">
+                    <HeaderButton
+                      $isCurrentMode={false}
+                      onClick={() => setViewingOption('myPlants')}
+                    >
+                      My Plants
+                    </HeaderButton>
+                    <HeaderButton
+                      $isCurrentMode={true}
+                      onClick={() => setViewingOption('all')}
+                    >
+                      All
+                    </HeaderButton>
+                  </div>
+                </div>
+                <PlantGridContainer>
+                  <PlantGridView>
+                    {filteredPlantList.map((plant, key) => (
+                      <PlantCard
+                        key={key}
+                        plant={plant}
+                        canSelect={false}
+                        onClick={() => handlePlantCardClick(plant)}
+                      />
+                    ))}
+                  </PlantGridView>
+                </PlantGridContainer>
+
+                <div>
+                  <AddButton onClick={() => setInAddMode(true)}>
                     Add to my plants
-                  </button>
+                  </AddButton>
                 </div>
               </div>
             ))}

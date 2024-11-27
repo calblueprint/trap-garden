@@ -248,6 +248,60 @@ export const IconSvgs = {
       />
     </svg>
   ),
+  outdoors_growing_start: (
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 11 11"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="11" height="11" fill="url(#pattern0_1568_3494)" />
+      <defs>
+        <pattern
+          id="pattern0_1568_3494"
+          patternContentUnits="objectBoundingBox"
+          width="1"
+          height="1"
+        >
+          <use href="#image0_1568_3494" transform="scale(0.0111111)" />
+        </pattern>
+        <image
+          id="image0_1568_3494"
+          width="90"
+          height="90"
+          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEAUlEQVR4nO2cTYgcVRDHn2aqOmHFD5R4UfxCPYlechMU9BBEFJTgRUERBcGTZ2FFkARDTGZezejeEj2oI0Q3W9VJzGER9GQEjWC8qRcD0aAhIomQ7fB6l2UTZ2ZnN/P6zU7/f1C3Xrrfr2uqX71+vc4BAAAAAAAAAAAAgJLWHD0oRrvEaFaMjk1ozHqjnd7ogcpv+3TXsTf+wCsviHFRk7goSjJz3FFlosX44zEYeJEoPqpGsvLTYzDYImV44yfjizY6knqgklw0aQWi+c/UA5XkovmP6KL7PgBzfsJNIF7J/idaeSH6ifve6RqJFuMi+okhmiE6BsjoioDoioDoioDoioDoioDoioDoioDo2oquWTiIZoiWMchEZLSll4fSYenFokYbRCfPOkFGc3JRKB2WXiJqtI1PoGExiC6qkUC/eeWOV97hld5BRttIxF7wxj+K8f6W0sudw3x/j7WZ71A6rL9Er3xOjE5646+88adhJ6c3eksse72t/EyQOj3vGqsugil9CdF2eXaK8ictpednDrlbRrfaGPY442FYlNlr/M37h7M7YzzJxWgeoo0LUT6x+6ibiiG5FK38LURbWYt3xJJcijY6WXvRXnlh5pi7Yb0Sp6fdtasd441O1V60GBfdrtu0VsH75vje8hsaoy8GHRe+Nym/PcHDkIvO0amtw8htH9l8u1d6tZzuKS94pd+b+ZbbBv2N6OY70LDY8ozj2V6SmrnLJM8eE6PdS03Jijk2/RKyerWbI3njYYi2ZdEfLouZd9eJ0ote6ZAo/9O7kaHP/EF38zC/AjF6BaJtSZ7yeVF6yBu9t9gN9m0u/hKlF9waCHUcom24bs0r/yfGM8PW8itEH4doG0p0t6PZ3W4d7Om6LeWvBevRPCiLf/Bz2aPrEbyczXP8VMzlWBebmBcviw87H2YcV3udXvkARFsfycZvjCIZOupuEuN/Idp6SaamGxFe6e3YvzwXmygXrnzmatY8VtKaze7qNweHaKW9/cQVhbtmLTONsLYdW/LGzei88VrPc2m2XZS/bueNbatd197P3Y1V/ueFKHIvG3yUC6ddV54nvA8U4++XjrkYJLaMngtt+srjwksDb/SSN/q1KskbV7TyGW9838py4Y3e7Xd8kFqWCOUTMZuSyRNti2+9y7UJ5TdjveeDaEsvrjYZLRssINogukidhchoSy8OpcPqWqMTzVtlnEL5fHTRXunn5AO1tOGNfoovekDHVpfwRjuji943O3VraJlTD1ZShfLpUW4rHkg7bzwiymdrl8nKf4dNOa5KwiKQGB1c2g5QTHhcCBt3mnl2j0tFeDMS1otbmj0+idHOG9uaubs+mWAAAAAAAAAAAAC4NXAJlfdJRDtIgt0AAAAASUVORK5CYII="
+        />
+      </defs>
+    </svg>
+  ),
+  outdoors_growing_end: (
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 11 11"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M0 0H11V11H0V0Z" fill="url(#pattern0_1568_1472)" />
+      <defs>
+        <pattern
+          id="pattern0_1568_1472"
+          patternContentUnits="objectBoundingBox"
+          width="1"
+          height="1"
+        >
+          <use href="#image0_1568_1472" transform="scale(0.0111111)" />
+        </pattern>
+        <image
+          id="image0_1568_1472"
+          width="90"
+          height="90"
+          href="data:image/png;base64,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"
+        />
+      </defs>
+    </svg>
+  ),
 };
 
 export type IconType = keyof typeof IconSvgs;

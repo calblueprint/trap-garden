@@ -227,3 +227,26 @@ export function formatTimestamp(timestamp: string): string {
   // Return in MM/DD/YYYY format
   return `${month}/${day}/${year}`;
 }
+export function mapMonthToSeason(month: string): string {
+  month = processPlantMonth(month).toUpperCase();
+  const monthToSeason: { [key: string]: string } = {
+    JANUARY: 'WINTER',
+    FEBRUARY: 'WINTER',
+    MARCH: 'SPRING',
+    APRIL: 'SPRING',
+    MAY: 'SPRING',
+    JUNE: 'SUMMER',
+    JULY: 'SUMMER',
+    AUGUST: 'SUMMER',
+    SEPTEMBER: 'FALL',
+    OCTOBER: 'FALL',
+    NOVEMBER: 'FALL',
+    DECEMBER: 'WINTER',
+  };
+
+  const season = monthToSeason[month];
+  if (!season) {
+    throw new Error(`Invalid month: ${month}`);
+  }
+  return season;
+}
