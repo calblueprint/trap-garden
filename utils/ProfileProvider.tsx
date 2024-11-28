@@ -15,9 +15,7 @@ import {
   upsertProfile,
 } from '@/api/supabase/queries/profiles';
 import { Profile } from '@/types/schema';
-
-// Define a placeholder user ID for development purposes
-const placeholderUserId = '0802d796-ace8-480d-851b-d16293c74a21';
+import { useAuth } from './AuthProvider';
 
 export interface ProfileContextType {
   profileData: Profile | null;
@@ -42,50 +40,64 @@ interface ProfileProviderProps {
   children: ReactNode;
 }
 export default function ProfileProvider({ children }: ProfileProviderProps) {
+  const { userId, loading: authLoading } = useAuth();
   const [profileData, setProfileData] = useState<Profile | null>(null);
   const [profileReady, setProfileReady] = useState<boolean>(false);
   const [hasPlot, setHasPlot] = useState<boolean | null>(null);
 
-  const loadProfile = useCallback(async (id?: UUID) => {
-    setProfileReady(false);
-
-    // If user isn't signed in, return null
-    if (!id && !placeholderUserId) {
+  const loadProfile = useCallback(async () => {
+    if (!userId) {
+      setProfileData(null);
       setProfileReady(true);
       return;
     }
-
-    const fetchedProfile = await fetchProfileById(placeholderUserId);
-
-    setProfileData(fetchedProfile);
-    setProfileReady(true);
-  }, []);
+    try {
+      setProfileReady(false);
+      const fetchedProfile = await fetchProfileById(userId as UUID);
+      setProfileData(fetchedProfile);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    } finally {
+      setProfileReady(true);
+    }
+  }, [userId]);
 
   useEffect(() => {
-    loadProfile();
-  }, [loadProfile]);
+    if (!authLoading) {
+      loadProfile();
+    }
+  }, [authLoading, loadProfile]);
 
   const setProfile = useCallback(async (completeProfile: Profile) => {
     try {
       const updatedProfile = await upsertProfile(completeProfile);
       setProfileData(updatedProfile);
-      // Update has_plot if necessary by separate logic
     } catch (error) {
       console.error('Error setting profile:', error);
       throw new Error('Error setting profile');
     }
   }, []);
-
+  const updateHasPlot = useCallback((plotValue: boolean | null) => {
+    setHasPlot(plotValue); // Explicit setter for hasPlot
+  }, []);
   const providerValue = useMemo(
     () => ({
       profileData,
       profileReady,
-      hasPlot: hasPlot,
+      hasPlot,
+      setProfile,
+      loadProfile,
+      setHasPlot: updateHasPlot,
+    }),
+    [
+      profileData,
+      profileReady,
+      hasPlot,
       setProfile,
       loadProfile,
       setHasPlot,
-    }),
-    [profileData, profileReady, hasPlot, setProfile, loadProfile, setHasPlot],
+      updateHasPlot,
+    ],
   );
 
   return (

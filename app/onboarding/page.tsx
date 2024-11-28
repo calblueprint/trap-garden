@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { UUID } from 'crypto';
 import { BigButton } from '@/components/Buttons';
 import LabeledCustomSelect from '@/components/EditableInput';
 import COLORS from '@/styles/colors';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
+import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
 import { H3, PageContainer, ReviewContainer } from './styles';
 
@@ -131,20 +134,26 @@ const ReviewPage = ({
   selectedPlot,
   setSelectedPlot,
 }: ReviewPageProps) => {
+  const { userId } = useAuth();
   const { setProfile, setHasPlot } = useProfile();
+  const router = useRouter();
 
   const handleSubmit = async () => {
+    if (!userId) {
+      console.error('User ID is not available. Please log in.');
+      return;
+    }
     const profile: Profile = {
-      user_id: '2abd7296-374a-42d1-bb4f-b813da1615ae',
+      user_id: userId as UUID,
       us_state: selectedState,
       user_type: selectedGardenType,
-      // has_plot: selectedPlot,
     };
 
     try {
       await setProfile(profile);
       console.log('Profile submitted successfully:', profile);
       setHasPlot(selectedPlot);
+      router.push('/view-plants');
     } catch (error) {
       console.error('Error upserting profile:', error);
     }

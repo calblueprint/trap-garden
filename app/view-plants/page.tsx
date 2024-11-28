@@ -38,6 +38,7 @@ import {
   TopRowContainer,
   ViewSelection,
 } from './styles';
+import { useProfile } from '@/utils/ProfileProvider';
 
 // Declaring (static) filter options outside so they're not re-rendered
 // TODO: Maybe export shared filter options from a centralized file
@@ -61,8 +62,9 @@ const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
 
 export default function Page() {
   const router = useRouter();
+  const { hasPlot } = useProfile();
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
-    'myPlants',
+    hasPlot ? 'myPlants' : 'all',
   );
   const [inAddMode, setInAddMode] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
