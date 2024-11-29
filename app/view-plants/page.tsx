@@ -224,6 +224,18 @@ export default function Page() {
                       ))}
                     </PlantGridView>
                   </PlantGridContainer>
+                  <PlantGridContainer>
+                    <PlantGridView>
+                      {filteredUserPlantList.map(ownedPlant => (
+                        <PlantCard
+                          key={ownedPlant.userPlantId}
+                          plant={ownedPlant.plant}
+                          canSelect={false}
+                          onClick={() => handleUserPlantCardClick(ownedPlant)}
+                        />
+                      ))}
+                    </PlantGridView>
+                  </PlantGridContainer>
                 </div>
               ) : (
                 <div>
