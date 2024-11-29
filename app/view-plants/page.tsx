@@ -11,6 +11,7 @@ import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants'
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
+import COLORS from '@/styles/colors';
 import { DropdownOption, OwnedPlant, Plant } from '@/types/schema';
 import {
   checkDifficulty,
@@ -22,8 +23,14 @@ import {
   AddButton,
   FilterContainer,
   HeaderButton,
+  NumberSelectedPlants,
+  NumberSelectedPlantsContainer,
   PlantGridContainer,
   PlantGridView,
+  PlantSelection,
+  PlantSelectionHeaderAllPlants,
+  PlantSelectionHeaderMyPlants,
+  SelectButton,
   TopRowContainer,
 } from './styles';
 
@@ -148,6 +155,12 @@ export default function Page() {
       router.push(`all-plants/${plant.id}`);
     }
   }
+  function finishSelectPlants() {
+    //TODO: route to add details with proper information
+  }
+  function handlePlantPlurality() {
+    return selectedPlants.length > 1 ? 'Plants' : 'Plant';
+  }
 
   return (
     <div className="main">
@@ -180,7 +193,7 @@ export default function Page() {
           </TopRowContainer>
           {viewingOption === 'myPlants' && (
             <div>
-              <div className="plantSelection">
+              <PlantSelectionHeaderMyPlants>
                 <HeaderButton
                   $isCurrentMode={viewingOption == 'myPlants'}
                   onClick={() => setViewingOption('myPlants')}
@@ -193,7 +206,7 @@ export default function Page() {
                 >
                   All
                 </HeaderButton>
-              </div>
+              </PlantSelectionHeaderMyPlants>
 
               {filteredUserPlantList.length ? (
                 <div>
@@ -222,8 +235,17 @@ export default function Page() {
           {viewingOption === 'all' &&
             (inAddMode ? (
               <div>
-                <div>
-                  <div className="plantSelection">
+                <NumberSelectedPlantsContainer>
+                  {selectedPlants.length ? (
+                    <NumberSelectedPlants>
+                      {selectedPlants.length} {handlePlantPlurality()} Selected
+                    </NumberSelectedPlants>
+                  ) : (
+                    <NumberSelectedPlants>Select Plants</NumberSelectedPlants>
+                  )}
+                </NumberSelectedPlantsContainer>
+                <PlantSelectionHeaderAllPlants>
+                  <PlantSelection>
                     <HeaderButton
                       $isCurrentMode={false}
                       onClick={() => setViewingOption('myPlants')}
@@ -236,8 +258,14 @@ export default function Page() {
                     >
                       All
                     </HeaderButton>
-                  </div>
-                </div>
+                  </PlantSelection>
+                  <SelectButton
+                    $secondaryColor="#D94E4E"
+                    onClick={() => setInAddMode(false)}
+                  >
+                    Cancel
+                  </SelectButton>
+                </PlantSelectionHeaderAllPlants>
                 <PlantGridContainer>
                   <PlantGridView>
                     {filteredPlantList.map((plant, key) => (
@@ -254,11 +282,14 @@ export default function Page() {
 
                 <div>
                   {selectedPlants.length ? (
-                    <AddButton onClick={() => setInAddMode(false)}>
+                    <AddButton
+                      $backgroundColor={COLORS.shrub}
+                      onClick={finishSelectPlants}
+                    >
                       Add to My Garden
                     </AddButton>
                   ) : (
-                    <AddButton onClick={() => setInAddMode(false)}>
+                    <AddButton $backgroundColor={COLORS.midgray}>
                       Select Plants
                     </AddButton>
                   )}
@@ -266,8 +297,8 @@ export default function Page() {
               </div>
             ) : (
               <div>
-                <div>
-                  <div className="plantSelection">
+                <PlantSelectionHeaderAllPlants>
+                  <PlantSelection>
                     <HeaderButton
                       $isCurrentMode={false}
                       onClick={() => setViewingOption('myPlants')}
@@ -280,8 +311,15 @@ export default function Page() {
                     >
                       All
                     </HeaderButton>
-                  </div>
-                </div>
+                  </PlantSelection>
+                  <SelectButton
+                    $primaryColor={COLORS.shrub}
+                    $secondaryColor="white"
+                    onClick={() => setInAddMode(true)}
+                  >
+                    Select
+                  </SelectButton>
+                </PlantSelectionHeaderAllPlants>
                 <PlantGridContainer>
                   <PlantGridView>
                     {filteredPlantList.map((plant, key) => (
@@ -294,12 +332,6 @@ export default function Page() {
                     ))}
                   </PlantGridView>
                 </PlantGridContainer>
-
-                <div>
-                  <AddButton onClick={() => setInAddMode(true)}>
-                    Add to my plants
-                  </AddButton>
-                </div>
               </div>
             ))}
         </div>
