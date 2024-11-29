@@ -195,12 +195,14 @@ export default function Page() {
             <div>
               <PlantSelectionHeaderMyPlants>
                 <HeaderButton
+                  $margin={24}
                   $isCurrentMode={viewingOption == 'myPlants'}
                   onClick={() => setViewingOption('myPlants')}
                 >
                   My Plants
                 </HeaderButton>
                 <HeaderButton
+                  $margin={20}
                   $isCurrentMode={false}
                   onClick={() => setViewingOption('all')}
                 >
@@ -247,12 +249,14 @@ export default function Page() {
                 <PlantSelectionHeaderAllPlants>
                   <PlantSelection>
                     <HeaderButton
+                      $margin={24}
                       $isCurrentMode={false}
                       onClick={() => setViewingOption('myPlants')}
                     >
                       My Plants
                     </HeaderButton>
                     <HeaderButton
+                      $margin={20}
                       $isCurrentMode={true}
                       onClick={() => setViewingOption('all')}
                     >
@@ -300,12 +304,14 @@ export default function Page() {
                 <PlantSelectionHeaderAllPlants>
                   <PlantSelection>
                     <HeaderButton
+                      $margin={24}
                       $isCurrentMode={false}
                       onClick={() => setViewingOption('myPlants')}
                     >
                       My Plants
                     </HeaderButton>
                     <HeaderButton
+                      $margin={20}
                       $isCurrentMode={true}
                       onClick={() => setViewingOption('all')}
                     >

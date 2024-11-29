@@ -16,7 +16,10 @@ export const TopRowContainer = styled.div`
   margin-bottom: 8px;
 `;
 
-export const HeaderButton = styled.button<{ $isCurrentMode: boolean }>`
+export const HeaderButton = styled.button<{
+  $isCurrentMode: boolean;
+  $margin: number;
+}>`
   background: none;
   border: none;
   color: ${COLORS.shrub};
@@ -30,6 +33,7 @@ export const HeaderButton = styled.button<{ $isCurrentMode: boolean }>`
     $isCurrentMode ? ` ${COLORS.shrub}` : `${COLORS.midgray}`};
   text-decoration: ${({ $isCurrentMode }) =>
     $isCurrentMode ? ` underline ` : `none`};
+  margin-left: ${({ $margin }) => `${$margin}px`};
 `;
 export const AddButton = styled.button<{ $backgroundColor: string }>`
   position: fixed;
@@ -71,6 +75,7 @@ export const SelectButton = styled(SmallRoundedButton)`
   width: 60px;
   height: 25px;
   padding: 0;
+  margin-right: 24px;
 `;
 export const PlantSelection = styled.div`
   display: flex;
