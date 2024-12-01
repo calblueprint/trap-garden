@@ -29,7 +29,6 @@ import {
   PlantGridView,
   PlantSelection,
   PlantSelectionHeaderAllPlants,
-  PlantSelectionHeaderMyPlants,
   SelectButton,
   TopRowContainer,
 } from './styles';
@@ -158,190 +157,159 @@ export default function Page() {
   function finishSelectPlants() {
     //TODO: route to add details with proper information
   }
-  function handlePlantPlurality() {
-    return selectedPlants.length > 1 ? 'Plants' : 'Plant';
+
+  function handleCancelAddMode() {
+    setSelectedPlants([]);
+    setInAddMode(false);
   }
 
+  const plantPluralityString = selectedPlants.length > 1 ? 'Plants' : 'Plant';
+
   return (
-    <div className="main">
-      <div id="plantContent">
-        <div className="componentsDisplay">
-          <TopRowContainer>
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            <FilterContainer>
-              <FilterDropdownMultiple
-                value={selectedDifficulty}
-                setStateAction={setSelectedDifficulty}
-                options={difficultyOptions}
-                placeholder="Difficulty Level"
-              />
-              <FilterDropdownMultiple
-                value={selectedSunlight}
-                setStateAction={setSelectedSunlight}
-                options={sunlightOptions}
-                placeholder="Sunlight"
-              />
-              <FilterDropdownMultiple
-                value={selectedGrowingSeason}
-                setStateAction={setSelectedGrowingSeason}
-                options={growingSeasonOptions}
-                placeholder="Growing Season"
-              />
+    <div id="plantContent">
+      <TopRowContainer>
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <FilterContainer>
+          <FilterDropdownMultiple
+            value={selectedDifficulty}
+            setStateAction={setSelectedDifficulty}
+            options={difficultyOptions}
+            placeholder="Difficulty Level"
+          />
+          <FilterDropdownMultiple
+            value={selectedSunlight}
+            setStateAction={setSelectedSunlight}
+            options={sunlightOptions}
+            placeholder="Sunlight"
+          />
+          <FilterDropdownMultiple
+            value={selectedGrowingSeason}
+            setStateAction={setSelectedGrowingSeason}
+            options={growingSeasonOptions}
+            placeholder="Growing Season"
+          />
 
-              <button onClick={clearFilters}>Clear filters</button>
-            </FilterContainer>
-          </TopRowContainer>
-          {viewingOption === 'myPlants' && (
-            <div>
-              <PlantSelectionHeaderMyPlants>
-                <HeaderButton
-                  $margin={24}
-                  $isCurrentMode={viewingOption == 'myPlants'}
-                  onClick={() => setViewingOption('myPlants')}
-                >
-                  My Plants
-                </HeaderButton>
-                <HeaderButton
-                  $margin={20}
-                  $isCurrentMode={false}
-                  onClick={() => setViewingOption('all')}
-                >
-                  All
-                </HeaderButton>
-              </PlantSelectionHeaderMyPlants>
-
-              {filteredUserPlantList.length ? (
-                <div>
-                  <PlantGridContainer>
-                    <PlantGridView>
-                      {filteredUserPlantList.map(ownedPlant => (
-                        <PlantCard
-                          key={ownedPlant.userPlantId}
-                          plant={ownedPlant.plant}
-                          canSelect={false}
-                          onClick={() => handleUserPlantCardClick(ownedPlant)}
-                        />
-                      ))}
-                    </PlantGridView>
-                  </PlantGridContainer>
-                </div>
-              ) : (
-                <div>
-                  <button onClick={() => setViewingOption('all')}>
-                    Add Plants
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+          <button onClick={clearFilters}>Clear filters</button>
+        </FilterContainer>
+        {viewingOption === 'all' && inAddMode && (
+          <NumberSelectedPlantsContainer>
+            <NumberSelectedPlants>
+              {selectedPlants.length
+                ? `${selectedPlants.length} ${plantPluralityString} Selected`
+                : 'Select Plants'}
+            </NumberSelectedPlants>
+          </NumberSelectedPlantsContainer>
+        )}
+        <PlantSelectionHeaderAllPlants>
+          <PlantSelection>
+            <HeaderButton
+              $margin={24}
+              $isCurrentMode={viewingOption !== 'all'}
+              onClick={() => setViewingOption('myPlants')}
+            >
+              My Plants
+            </HeaderButton>
+            <HeaderButton
+              $margin={20}
+              $isCurrentMode={viewingOption === 'all'}
+              onClick={() => setViewingOption('all')}
+            >
+              All
+            </HeaderButton>
+          </PlantSelection>
           {viewingOption === 'all' &&
             (inAddMode ? (
-              <div>
-                <NumberSelectedPlantsContainer>
-                  {selectedPlants.length ? (
-                    <NumberSelectedPlants>
-                      {selectedPlants.length} {handlePlantPlurality()} Selected
-                    </NumberSelectedPlants>
-                  ) : (
-                    <NumberSelectedPlants>Select Plants</NumberSelectedPlants>
-                  )}
-                </NumberSelectedPlantsContainer>
-                <PlantSelectionHeaderAllPlants>
-                  <PlantSelection>
-                    <HeaderButton
-                      $margin={24}
-                      $isCurrentMode={false}
-                      onClick={() => setViewingOption('myPlants')}
-                    >
-                      My Plants
-                    </HeaderButton>
-                    <HeaderButton
-                      $margin={20}
-                      $isCurrentMode={true}
-                      onClick={() => setViewingOption('all')}
-                    >
-                      All
-                    </HeaderButton>
-                  </PlantSelection>
-                  <SelectButton
-                    $secondaryColor="#D94E4E"
-                    onClick={() => setInAddMode(false)}
-                  >
-                    Cancel
-                  </SelectButton>
-                </PlantSelectionHeaderAllPlants>
-                <PlantGridContainer>
-                  <PlantGridView>
-                    {filteredPlantList.map((plant, key) => (
-                      <PlantCard
-                        key={key}
-                        plant={plant}
-                        canSelect={true}
-                        isSelected={selectedPlants.includes(plant)}
-                        onClick={() => handlePlantCardClick(plant)}
-                      />
-                    ))}
-                  </PlantGridView>
-                </PlantGridContainer>
-
-                <div>
-                  {selectedPlants.length ? (
-                    <AddButton
-                      $backgroundColor={COLORS.shrub}
-                      onClick={finishSelectPlants}
-                    >
-                      Add to My Garden
-                    </AddButton>
-                  ) : (
-                    <AddButton $backgroundColor={COLORS.midgray}>
-                      Select Plants
-                    </AddButton>
-                  )}
-                </div>
-              </div>
+              <SelectButton
+                $secondaryColor="#D94E4E"
+                onClick={handleCancelAddMode}
+              >
+                Cancel
+              </SelectButton>
             ) : (
-              <div>
-                <PlantSelectionHeaderAllPlants>
-                  <PlantSelection>
-                    <HeaderButton
-                      $margin={24}
-                      $isCurrentMode={false}
-                      onClick={() => setViewingOption('myPlants')}
-                    >
-                      My Plants
-                    </HeaderButton>
-                    <HeaderButton
-                      $margin={20}
-                      $isCurrentMode={true}
-                      onClick={() => setViewingOption('all')}
-                    >
-                      All
-                    </HeaderButton>
-                  </PlantSelection>
-                  <SelectButton
-                    $primaryColor={COLORS.shrub}
-                    $secondaryColor="white"
-                    onClick={() => setInAddMode(true)}
-                  >
-                    Select
-                  </SelectButton>
-                </PlantSelectionHeaderAllPlants>
-                <PlantGridContainer>
-                  <PlantGridView>
-                    {filteredPlantList.map((plant, key) => (
-                      <PlantCard
-                        key={key}
-                        plant={plant}
-                        canSelect={false}
-                        onClick={() => handlePlantCardClick(plant)}
-                      />
-                    ))}
-                  </PlantGridView>
-                </PlantGridContainer>
-              </div>
+              <SelectButton
+                $primaryColor={COLORS.shrub}
+                $secondaryColor="white"
+                onClick={() => setInAddMode(true)}
+              >
+                Select
+              </SelectButton>
             ))}
+        </PlantSelectionHeaderAllPlants>
+      </TopRowContainer>
+      {viewingOption === 'myPlants' && (
+        <div>
+          {filteredUserPlantList.length ? (
+            <div>
+              <PlantGridContainer>
+                <PlantGridView>
+                  {filteredUserPlantList.map(ownedPlant => (
+                    <PlantCard
+                      key={ownedPlant.userPlantId}
+                      plant={ownedPlant.plant}
+                      canSelect={false}
+                      onClick={() => handleUserPlantCardClick(ownedPlant)}
+                    />
+                  ))}
+                </PlantGridView>
+              </PlantGridContainer>
+            </div>
+          ) : (
+            <div>
+              <button onClick={() => setViewingOption('all')}>
+                Add Plants
+              </button>
+            </div>
+          )}
         </div>
-      </div>
+      )}
+      {viewingOption === 'all' &&
+        (inAddMode ? (
+          <div>
+            <PlantGridContainer>
+              <PlantGridView>
+                {filteredPlantList.map((plant, key) => (
+                  <PlantCard
+                    key={key}
+                    plant={plant}
+                    canSelect={true}
+                    isSelected={selectedPlants.includes(plant)}
+                    onClick={() => handlePlantCardClick(plant)}
+                  />
+                ))}
+              </PlantGridView>
+            </PlantGridContainer>
+
+            <div>
+              {selectedPlants.length ? (
+                <AddButton
+                  $backgroundColor={COLORS.shrub}
+                  onClick={finishSelectPlants}
+                >
+                  Add to My Garden
+                </AddButton>
+              ) : (
+                <AddButton $backgroundColor={COLORS.midgray}>
+                  Select Plants
+                </AddButton>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div>
+            <PlantGridContainer>
+              <PlantGridView>
+                {filteredPlantList.map((plant, key) => (
+                  <PlantCard
+                    key={key}
+                    plant={plant}
+                    canSelect={false}
+                    onClick={() => handlePlantCardClick(plant)}
+                  />
+                ))}
+              </PlantGridView>
+            </PlantGridContainer>
+          </div>
+        ))}
     </div>
   );
 }
