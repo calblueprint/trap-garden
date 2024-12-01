@@ -57,7 +57,8 @@ export const AddButton = styled.button<{ $backgroundColor: string }>`
 
 export const PlantGridView = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, 168px);
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  /* grid-template-columns: repeat(auto-fill, 168px); */
   gap: 8px;
   max-width: 100%;
   justify-content: center;
