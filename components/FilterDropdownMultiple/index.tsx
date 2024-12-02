@@ -7,7 +7,7 @@ interface FilterDropdownProps<T> {
   setStateAction: React.Dispatch<React.SetStateAction<DropdownOption<T>[]>>;
   options: DropdownOption<T>[];
   placeholder: string;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export default function FilterDropdownMultiple<T>({
@@ -15,7 +15,7 @@ export default function FilterDropdownMultiple<T>({
   setStateAction,
   options,
   placeholder,
-  disabled,
+  disabled = false,
 }: FilterDropdownProps<T>) {
   return (
     <StyledMultiSelect

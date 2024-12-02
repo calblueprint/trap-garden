@@ -5,15 +5,13 @@ import {
   SeasonEnum,
 } from '@/types/schema';
 
-// Helper function to process late/early month fields
-function processPlantMonth(month: string | null) {
-  // If field is not null and starts with 'LATE' or 'EARLY,
-  // get substring after 'LATE_ or 'EARLY_'
-  if (!month) {
-    return month;
-  }
-
-  // uppercase to ensure that returned month is in uppercase
+/* Helper function to process late/early month fields
+Assumes that month is not null. 
+Assumes that the month is a valid month string; 
+otherwise, returns all-caps version of the input 
+Returns all-caps month, without the LATE_ or EARLY_ prefix
+*/
+function processPlantMonth(month: string) {
   if (month.startsWith('LATE')) {
     return month.substring(5).toLocaleUpperCase();
   } else if (month.startsWith('EARLY')) {
@@ -76,10 +74,13 @@ export function checkGrowingSeason(
 
   // Handle late/early month logic
   // Set late/early month to just the month using processPlantMonth
-  const indoorsStart = processPlantMonth(plant.indoors_start);
-  const indoorsEnd = processPlantMonth(plant.indoors_end);
-  const outdoorsStart = processPlantMonth(plant.outdoors_start);
-  const outdoorsEnd = processPlantMonth(plant.outdoors_end);
+  const indoorsStart =
+    plant.indoors_start && processPlantMonth(plant.indoors_start);
+  const indoorsEnd = plant.indoors_end && processPlantMonth(plant.indoors_end);
+  const outdoorsStart =
+    plant.outdoors_start && processPlantMonth(plant.outdoors_start);
+  const outdoorsEnd =
+    plant.outdoors_end && processPlantMonth(plant.outdoors_end);
 
   // Checks if either indoor_start to indoor_end or outdoor_start to outdoor_end
   // is within the valid range of months
@@ -265,7 +266,7 @@ export function mapMonthToSeason(month: string): SeasonEnum | null {
   month = processPlantMonth(month).toUpperCase();
   return monthToSeason[month] || null;
 }
-  
+
 export function fillCalendarGridArrayRowWithColor(
   startMonth: string | null,
   endMonth: string | null,
@@ -273,9 +274,9 @@ export function fillCalendarGridArrayRowWithColor(
   rowIndex: number,
   gridArray: string[],
 ) {
-  // if startMonth and endMonth is both null, row should be empty
+  // if startMonth is null (assume endMonth also null), row should be empty
   // occurs when plant cannot be planted indoors and/or transplanted
-  if (!startMonth && !endMonth) {
+  if (!startMonth) {
     return gridArray;
   }
 

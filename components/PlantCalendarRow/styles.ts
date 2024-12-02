@@ -3,8 +3,9 @@ import styled from 'styled-components';
 export const PlantCalendarRowContainer = styled.div`
   display: flex;
   width: 100%;
+  height: 30px;
   flex-direction: row;
-  gap: 12px;
+  gap: 8px;
 `;
 
 export const PlantText = styled.p`
@@ -15,10 +16,12 @@ export const PlantText = styled.p`
   min-width: 10%;
   max-width: 10%;
   word-wrap: break-word;
+  align-self: center;
 `;
 
 export const CalendarGrid = styled.div`
   display: grid;
+  min-width: 272px;
   width: 100%;
   grid-template-columns: repeat(24, 1fr);
   grid-template-rows: repeat(4, 1fr);
