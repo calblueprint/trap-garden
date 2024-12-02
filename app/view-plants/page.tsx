@@ -217,6 +217,7 @@ export default function Page() {
               All
             </HeaderButton>
           </PlantSelection>
+          {/* Select/Cancel toggles Add Mode; appears in All plants only*/}
           {viewingOption === 'all' &&
             (inAddMode ? (
               <SelectButton
@@ -262,54 +263,35 @@ export default function Page() {
           )}
         </div>
       )}
-      {viewingOption === 'all' &&
-        (inAddMode ? (
-          <div>
-            <PlantGridContainer>
-              <PlantGridView>
-                {filteredPlantList.map((plant, key) => (
-                  <PlantCard
-                    key={key}
-                    plant={plant}
-                    canSelect={true}
-                    isSelected={selectedPlants.includes(plant)}
-                    onClick={() => handlePlantCardClick(plant)}
-                  />
-                ))}
-              </PlantGridView>
-            </PlantGridContainer>
-
-            <div>
-              {selectedPlants.length ? (
-                <AddButton
-                  $backgroundColor={COLORS.shrub}
-                  onClick={finishSelectPlants}
-                >
-                  Add to My Garden
-                </AddButton>
-              ) : (
-                <AddButton $backgroundColor={COLORS.midgray}>
-                  Select Plants
-                </AddButton>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div>
-            <PlantGridContainer>
-              <PlantGridView>
-                {filteredPlantList.map((plant, key) => (
-                  <PlantCard
-                    key={key}
-                    plant={plant}
-                    canSelect={false}
-                    onClick={() => handlePlantCardClick(plant)}
-                  />
-                ))}
-              </PlantGridView>
-            </PlantGridContainer>
-          </div>
-        ))}
+      {viewingOption === 'all' && (
+        <>
+          <PlantGridContainer>
+            <PlantGridView>
+              {filteredPlantList.map((plant, key) => (
+                <PlantCard
+                  key={key}
+                  plant={plant}
+                  canSelect={inAddMode}
+                  isSelected={selectedPlants.includes(plant)}
+                  onClick={() => handlePlantCardClick(plant)}
+                />
+              ))}
+            </PlantGridView>
+          </PlantGridContainer>
+          {inAddMode && selectedPlants.length ? (
+            <AddButton
+              $backgroundColor={COLORS.shrub}
+              onClick={finishSelectPlants}
+            >
+              Add to My Garden
+            </AddButton>
+          ) : (
+            <AddButton $backgroundColor={COLORS.midgray}>
+              Select Plants
+            </AddButton>
+          )}
+        </>
+      )}
     </div>
   );
 }
