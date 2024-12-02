@@ -1,7 +1,7 @@
 'use client';
 
 import { DifficultyLevelEnum } from '@/types/schema';
-import Icon from '../Icon';
+import Icon from './Icon';
 
 export default function DifficultyLevelBar({
   difficultyLevel,
@@ -9,11 +9,11 @@ export default function DifficultyLevelBar({
   difficultyLevel: DifficultyLevelEnum;
 }) {
   if (difficultyLevel === 'EASY') {
-    return <Icon type="easy_bar" />;
+    return <Icon type="easyBar" />;
   } else if (difficultyLevel === 'MODERATE') {
-    return <Icon type="moderate_bar" />;
+    return <Icon type="moderateBar" />;
   } else {
     // difficultyLevel === 'HARD'
-    return <Icon type="hard_bar" />;
+    return <Icon type="hardBar" />;
   }
 }

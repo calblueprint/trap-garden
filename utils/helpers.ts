@@ -1,4 +1,4 @@
-import { DropdownOption, Plant } from '@/types/schema';
+import { DropdownOption, Plant, SeasonEnum } from '@/types/schema';
 
 // Helper function to process late/early month fields for checkGrowingSeason
 function processPlantMonth(month: string) {
@@ -226,4 +226,27 @@ export function formatTimestamp(timestamp: string): string {
 
   // Return in MM/DD/YYYY format
   return `${month}/${day}/${year}`;
+}
+
+const monthToSeason: Record<string, SeasonEnum> = {
+  JANUARY: 'WINTER',
+  FEBRUARY: 'WINTER',
+  MARCH: 'SPRING',
+  APRIL: 'SPRING',
+  MAY: 'SPRING',
+  JUNE: 'SUMMER',
+  JULY: 'SUMMER',
+  AUGUST: 'SUMMER',
+  SEPTEMBER: 'FALL',
+  OCTOBER: 'FALL',
+  NOVEMBER: 'FALL',
+  DECEMBER: 'WINTER',
+};
+
+/* Maps a month to a season 
+if valid month (e.g. 'LATE_JANUARY' or 'FEBRUARY'), return SeasonEnum
+else return null*/
+export function mapMonthToSeason(month: string): SeasonEnum | null {
+  month = processPlantMonth(month).toUpperCase();
+  return monthToSeason[month] || null;
 }

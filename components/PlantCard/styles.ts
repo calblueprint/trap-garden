@@ -1,26 +1,33 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 
-export const Card = styled.div<{ isSelected?: boolean }>`
+export const CardContainer = styled.div<{ $isSelected?: boolean }>`
   position: relative;
-  height: 40vh;
-  width: 20vw;
+  width: 168px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   align-items: start;
   border-radius: 12px;
   background-color: white;
-  box-shadow:
-    0 24px 38px 3px rgba(0, 0, 0, 0.14),
-    0 9px 46px 8px rgba(0, 0, 0, 0.12),
-    0 11px 15px -7px rgba(0, 0, 0, 0.2);
+  box-shadow: ${({ $isSelected }) =>
+    $isSelected
+      ? `
+  0 24px 38px 3px rgb(148, 181, 6, 0.14),
+  0 9px 46px 8px rgb(148, 181, 6, 0.12),
+  0 11px 15px -7px rgb(148, 181, 6, 0.2)`
+      : `
+  0 24px 38px 3px rgba(0, 0, 0, 0.14),
+  0 9px 46px 8px rgba(0, 0, 0, 0.12),
+  0 11px 15px -7px rgba(0, 0, 0, 0.2)`};
 
-  border: ${({ isSelected }) =>
-    isSelected ? `1px solid ${COLORS.sprout}` : 'none'};
+  border: ${({ $isSelected }) =>
+    $isSelected ? `1px solid ${COLORS.sprout}` : '1px solid transparent'};
+  backdrop-filter: blur(40px);
 `;
 
 export const CardPic = styled.div`
-  height: 60%;
+  height: 92px;
   width: 100%;
   background-color: #f5f6f6;
   display: flex;
@@ -33,34 +40,22 @@ export const CardPic = styled.div`
 export const CardContent = styled.div`
   display: flex;
   flex-direction: column;
-  padding-left: 1vw;
-  height: 40%;
-  row-gap: 1vh;
-
-  > * {
-    margin: 0;
-  }
-
-  > h2 {
-    font-size: 1rem;
-    margin-top: 1vh;
-  }
+  padding: 12px 16px 8px 16px;
+  row-gap: 6px;
+  width: 100%;
 `;
 
 export const PlantAttributes = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1vh;
+  gap: 4px;
 `;
 
 export const Attribute = styled.div`
   display: flex;
   flex-direction: row;
-
-  > * {
-    margin: 0;
-    font-size: 0.625rem;
-  }
+  align-items: center;
+  gap: 6px;
 `;
 
 export const RoundCheck = styled.input.attrs({ type: 'checkbox' })`
@@ -94,4 +89,25 @@ export const TopRight = styled.div`
   top: 0;
   right: 0;
   padding: 10px 10px;
+`;
+
+export const AttributeContent = styled.p`
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  margin: 0;
+`;
+
+export const PlantHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const PlantImage = styled.img`
+  width: 60px;
+  height: 60px;
+  font-size: 10px;
 `;
