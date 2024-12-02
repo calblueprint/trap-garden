@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Plant } from '@/types/schema';
 import { mapMonthToSeason, useTitleCase } from '@/utils/helpers';
 import DifficultyLevelBar from '../DifficultyLevelBar';
@@ -17,7 +17,7 @@ import {
   TopRight,
 } from './styles';
 
-export default function PlantCard({
+const PlantCard = memo(function PlantCard({
   plant,
   canSelect,
   isSelected = false,
@@ -73,4 +73,6 @@ export default function PlantCard({
       </CardContent>
     </Card>
   );
-}
+});
+
+export default PlantCard;

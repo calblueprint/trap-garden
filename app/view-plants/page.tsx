@@ -156,7 +156,7 @@ export default function Page() {
   }
   function handleAddPlants() {
     //TODO: route to add details with proper information
-    router.push('/add-details');
+    router.push('/add-details'); // use CONFIG later
   }
 
   function handleCancelAddMode() {
@@ -241,20 +241,18 @@ export default function Page() {
       {viewingOption === 'myPlants' && (
         <div>
           {filteredUserPlantList.length ? (
-            <div>
-              <PlantGridContainer>
-                <PlantGridView>
-                  {filteredUserPlantList.map(ownedPlant => (
-                    <PlantCard
-                      key={ownedPlant.userPlantId}
-                      plant={ownedPlant.plant}
-                      canSelect={false}
-                      onClick={() => handleUserPlantCardClick(ownedPlant)}
-                    />
-                  ))}
-                </PlantGridView>
-              </PlantGridContainer>
-            </div>
+            <PlantGridContainer>
+              <PlantGridView>
+                {filteredUserPlantList.map(ownedPlant => (
+                  <PlantCard
+                    key={ownedPlant.userPlantId}
+                    plant={ownedPlant.plant}
+                    canSelect={false}
+                    onClick={() => handleUserPlantCardClick(ownedPlant)}
+                  />
+                ))}
+              </PlantGridView>
+            </PlantGridContainer>
           ) : (
             <div>
               <button onClick={() => setViewingOption('all')}>
@@ -279,16 +277,15 @@ export default function Page() {
               ))}
             </PlantGridView>
           </PlantGridContainer>
-          {inAddMode && selectedPlants.length ? (
+          {inAddMode && (
             <AddButton
-              $backgroundColor={COLORS.shrub}
+              $backgroundColor={
+                selectedPlants.length ? COLORS.shrub : COLORS.midgray
+              }
               onClick={handleAddPlants}
+              disabled={!selectedPlants.length}
             >
-              Add to My Garden
-            </AddButton>
-          ) : (
-            <AddButton $backgroundColor={COLORS.midgray}>
-              Select Plants
+              {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
             </AddButton>
           )}
         </>

@@ -93,12 +93,14 @@ export const TopRight = styled.div`
   right: 0;
   padding: 10px 10px;
 `;
+
 export const PlantName = styled(H2)`
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 `;
+
 export const AttributeContent = styled.p`
   font-size: 10px;
   font-style: normal;
@@ -106,6 +108,7 @@ export const AttributeContent = styled.p`
   line-height: normal;
   margin: 0;
 `;
+
 export const PlantHeader = styled.div`
   display: flex;
   flex-direction: row;
@@ -113,6 +116,7 @@ export const PlantHeader = styled.div`
   align-items: center;
   width: 136px;
 `;
+
 export const PlantImage = styled.img`
   width: 60px;
   height: 60px;
