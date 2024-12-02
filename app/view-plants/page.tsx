@@ -222,7 +222,7 @@ export default function Page() {
           {viewingOption === 'all' &&
             (inAddMode ? (
               <SelectButton
-                $secondaryColor="#D94E4E"
+                $secondaryColor={COLORS.errorRed}
                 onClick={handleCancelAddMode}
               >
                 Cancel

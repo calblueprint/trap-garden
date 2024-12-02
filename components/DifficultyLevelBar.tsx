@@ -1,7 +1,7 @@
 'use client';
 
 import { DifficultyLevelEnum } from '@/types/schema';
-import Icon from '../Icon';
+import Icon from './Icon';
 
 export default function DifficultyLevelBar({
   difficultyLevel,

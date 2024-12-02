@@ -35,6 +35,7 @@ export const HeaderButton = styled.button<{
     $isCurrentMode ? ` underline ` : `none`};
   margin-left: ${({ $margin }) => `${$margin}px`};
 `;
+
 export const AddButton = styled.button<{ $backgroundColor: string }>`
   position: fixed;
 
@@ -63,11 +64,13 @@ export const PlantGridView = styled.div`
   max-width: 100%;
   justify-content: center;
 `;
+
 export const PlantGridContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
 `;
+
 export const SelectButton = styled(SmallRoundedButton)`
   font-size: 0.75rem;
   font-style: normal;
@@ -78,10 +81,12 @@ export const SelectButton = styled(SmallRoundedButton)`
   padding: 0;
   margin-right: 24px;
 `;
+
 export const PlantSelection = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 export const PlantSelectionHeaderAllPlants = styled.div`
   display: flex;
   flex-direction: row;
@@ -89,12 +94,7 @@ export const PlantSelectionHeaderAllPlants = styled.div`
   margin-top: 8px;
   margin-bottom: 12px;
 `;
-export const PlantSelectionHeaderMyPlants = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 8px;
-  margin-bottom: 12px;
-`;
+
 export const NumberSelectedPlantsContainer = styled.div`
   background-color: ${COLORS.shrub};
   text-align: center;
@@ -102,6 +102,7 @@ export const NumberSelectedPlantsContainer = styled.div`
   height: 16px;
   padding: 0;
 `;
+
 export const NumberSelectedPlants = styled.p`
   font-size: 0.625rem;
   font-style: normal;
