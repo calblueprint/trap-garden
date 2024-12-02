@@ -15,7 +15,7 @@ export const MonthsContainer = styled.div`
   justify-items: center;
 `;
 
-export const MonthsText = styled.text`
+export const MonthsText = styled.p`
   color: #000;
   font-style: normal;
   font-size: 0.625rem;

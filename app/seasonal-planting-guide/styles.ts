@@ -44,5 +44,5 @@ export const PageTitle = styled.div`
 export const PlantListContainer = styled.div`
   width: 100%;
   overflow-x: auto; // Enable horizontal scrolling
-  white-space: nowrap;
+  /* white-space: nowrap; */
 `;

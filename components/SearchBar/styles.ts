@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
+import { P3 } from '@/styles/text';
 
 export const SearchBarContainer = styled.div`
   display: flex;
@@ -17,15 +19,11 @@ export const IconWrapper = styled.div`
   pointer-events: none; /* Prevent the icon from blocking input clicks */
 `;
 
-export const SearchBarInput = styled.input`
+export const SearchBarInput = styled(P3)`
   padding: 8px 8px 8px 32px;
   border: none;
   border-radius: 16px;
   background-color: #f7f7f7;
   width: 100%;
-  color: #888;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  color: ${COLORS.midgray};
 `;

@@ -84,7 +84,7 @@ const PlantCalendarRow = memo(function PlantCalendarRow({
       <PlantText>{plantName}</PlantText>
       <CalendarGrid>
         {CalendarGridArray.map((color, index) => (
-          <CalendarCell key={index} color={color} />
+          <CalendarCell key={index} $color={color} />
         ))}
       </CalendarGrid>
     </PlantCalendarRowContainer>
