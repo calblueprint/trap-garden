@@ -268,9 +268,9 @@ export default function Page() {
         {viewingOption === 'all' && (
           <>
             <PlantGridContainer>
-              {filteredPlantList.map((plant, key) => (
+              {filteredPlantList.map(plant => (
                 <PlantCard
-                  key={key}
+                  key={plant.id}
                   plant={plant}
                   canSelect={inAddMode}
                   isSelected={selectedPlants.includes(plant)}

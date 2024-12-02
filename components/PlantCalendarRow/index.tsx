@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import COLORS from '@/styles/colors';
 import { fillCalendarGridArrayRowWithColor } from '@/utils/helpers';
 import {
@@ -20,7 +20,7 @@ interface PlantCalendarRowProps {
   outdoorsEnd: string;
 }
 
-export default function PlantCalendarRow({
+const PlantCalendarRow = memo(function PlantCalendarRow({
   plantName,
   harvestStart,
   harvestEnd,
@@ -89,4 +89,6 @@ export default function PlantCalendarRow({
       </CalendarGrid>
     </PlantCalendarRowContainer>
   );
-}
+});
+
+export default PlantCalendarRow;

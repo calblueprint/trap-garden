@@ -13,6 +13,7 @@ const COLORS = {
   midgray: '#888888',
   lightgray: '#DDDDDD',
   backgroundGrey: '#f9fafb',
+  glimpse: '#F7F6F3',
 
   // error
   errorRed: '#D94E4E',
