@@ -135,7 +135,7 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
-  plant_hand: (
+  plantHand: (
     <svg
       width="15"
       height="15"
@@ -189,7 +189,7 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
-  easy_bar: (
+  easyBar: (
     <svg
       width="24"
       height="6"
@@ -209,7 +209,7 @@ export const IconSvgs = {
       />
     </svg>
   ),
-  moderate_bar: (
+  moderateBar: (
     <svg
       width="24"
       height="6"
@@ -229,7 +229,7 @@ export const IconSvgs = {
       />
     </svg>
   ),
-  hard_bar: (
+  hardBar: (
     <svg
       width="24"
       height="6"
@@ -248,7 +248,7 @@ export const IconSvgs = {
       />
     </svg>
   ),
-  outdoors_growing_start: (
+  outdoorsSeason: (
     <svg
       width="11"
       height="11"
@@ -275,7 +275,7 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
-  harvest_season: (
+  harvestSeason: (
     <svg
       width="11"
       height="11"

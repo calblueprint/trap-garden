@@ -40,7 +40,7 @@ export default function YourPlantDetails({
 
         <DetailRow>
           <StyledIcon>
-            <Icon type="plant_hand" />
+            <Icon type="plantHand" />
           </StyledIcon>
           <DetailText>Planting Type: {useTitleCase(plantingType)}</DetailText>
         </DetailRow>

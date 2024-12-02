@@ -46,7 +46,7 @@ const PlantCard = memo(function PlantCard({
 
         <PlantAttributes>
           <Attribute>
-            <Icon type="outdoors_growing_start"></Icon>
+            <Icon type="outdoorsSeason"></Icon>
             <AttributeContent>
               {useTitleCase(
                 mapMonthToSeason(plant.outdoors_start) || 'Unknown',
@@ -54,7 +54,7 @@ const PlantCard = memo(function PlantCard({
             </AttributeContent>
           </Attribute>
           <Attribute>
-            <Icon type="harvest_season"></Icon>
+            <Icon type="harvestSeason"></Icon>
             <AttributeContent>
               {useTitleCase(plant.harvest_season)}
             </AttributeContent>
