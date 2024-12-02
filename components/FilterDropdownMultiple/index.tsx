@@ -1,22 +1,24 @@
 import React from 'react';
-import { MultiSelect } from 'react-multi-select-component';
 import { DropdownOption } from '@/types/schema';
+import { StyledMultiSelect } from './styles';
 
-interface FilterDropdownProps {
-  value: DropdownOption[];
-  setStateAction: React.Dispatch<React.SetStateAction<DropdownOption[]>>;
-  options: DropdownOption[];
+interface FilterDropdownProps<T> {
+  value: DropdownOption<T>[];
+  setStateAction: React.Dispatch<React.SetStateAction<DropdownOption<T>[]>>;
+  options: DropdownOption<T>[];
   placeholder: string;
+  disabled?: boolean;
 }
 
-export default function FilterDropdownMultiple({
+export default function FilterDropdownMultiple<T>({
   value,
   setStateAction,
   options,
   placeholder,
-}: FilterDropdownProps) {
+  disabled = false,
+}: FilterDropdownProps<T>) {
   return (
-    <MultiSelect
+    <StyledMultiSelect
       options={options}
       value={value}
       onChange={setStateAction}
@@ -24,6 +26,7 @@ export default function FilterDropdownMultiple({
       hasSelectAll={false}
       overrideStrings={{ selectSomeItems: placeholder }}
       disableSearch
+      disabled={disabled}
     />
   );
 }

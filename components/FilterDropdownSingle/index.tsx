@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DropdownOption } from '@/types/schema';
+import { FilterDropdownInput } from './styles';
 
 interface FilterDropdownProps {
   name?: string;
@@ -8,6 +9,7 @@ interface FilterDropdownProps {
   setStateAction: React.Dispatch<React.SetStateAction<string>>;
   options: DropdownOption[];
   placeholder: string;
+  disabled?: boolean;
 }
 
 export default function FilterDropdownSingle({
@@ -17,6 +19,7 @@ export default function FilterDropdownSingle({
   setStateAction,
   options,
   placeholder,
+  disabled,
 }: FilterDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,13 +33,15 @@ export default function FilterDropdownSingle({
   };
 
   return (
-    <select
+    <FilterDropdownInput
       name={name}
       id={id}
       onChange={handleChange}
       onClick={handleToggle}
       onBlur={() => setIsOpen(false)}
       value={value}
+      $hasValue={value !== ''}
+      disabled={disabled}
     >
       {/*Default placeholder text*/}
       <option value="" disabled hidden>
@@ -47,6 +52,6 @@ export default function FilterDropdownSingle({
           {option.label}
         </option>
       ))}
-    </select>
+    </FilterDropdownInput>
   );
 }

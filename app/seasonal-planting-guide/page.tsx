@@ -1,52 +1,60 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
-import { PlantList } from '@/components/PlantList';
+import { PlantCalendarList } from '@/components/PlantCalendarList';
 import SearchBar from '@/components/SearchBar';
-import { DropdownOption } from '@/types/schema';
+import COLORS from '@/styles/colors';
+import { Box } from '@/styles/containers';
+import { H1, H3 } from '@/styles/text';
+import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
+import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
   HeaderContainer,
   PageContainer,
+  PageTitle,
   StateOptionsContainer,
 } from './styles';
 
-export default function SeasonalPlantingGuide() {
-  const growingSeasonOptions: DropdownOption[] = [
-    { label: 'Spring', value: 'SPRING' },
-    { label: 'Summer', value: 'SUMMER' },
-    { label: 'Fall', value: 'FALL' },
-    { label: 'Winter', value: 'WINTER' },
-  ];
-  const harvestSeasonOptions: DropdownOption[] = [
-    { label: 'Spring', value: 'SPRING' },
-    { label: 'Summer', value: 'SUMMER' },
-    { label: 'Fall', value: 'FALL' },
-    { label: 'Winter', value: 'WINTER' },
-  ];
-  const plantingTypeOptions: DropdownOption[] = [
-    { label: 'Start Seeds Indoors', value: 'Start Seeds Indoors' },
-    { label: 'Start Seeds Outdoors', value: 'Start Seeds Outdoors' },
-    {
-      label: 'Plant Seedlings/Transplant Outdoors',
-      value: 'Plant Seedlings/Transplant Outdoors',
-    },
-  ];
-  const usStateOptions: DropdownOption[] = [
-    { label: 'Tennessee', value: 'TENNESSEE' },
-    { label: 'Missouri', value: 'MISSOURI' },
-  ];
+// Declaring (static) filter options outside so they're not re-rendered
+// TODO: Maybe export shared filter options from a centralized file
+const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
+  { label: 'Spring', value: 'SPRING' },
+  { label: 'Summer', value: 'SUMMER' },
+  { label: 'Fall', value: 'FALL' },
+  { label: 'Winter', value: 'WINTER' },
+];
+const harvestSeasonOptions: DropdownOption<SeasonEnum>[] = [
+  { label: 'Spring', value: 'SPRING' },
+  { label: 'Summer', value: 'SUMMER' },
+  { label: 'Fall', value: 'FALL' },
+  { label: 'Winter', value: 'WINTER' },
+];
+const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
+  { label: 'Start Seeds Indoors', value: 'INDOORS' },
+  { label: 'Start Seeds Outdoors', value: 'OUTDOORS' },
+  {
+    label: 'Plant Seedlings/Transplant Outdoors',
+    value: 'TRANSPLANT',
+  },
+];
+const usStateOptions: DropdownOption[] = [
+  { label: 'Tennessee', value: 'TENNESSEE' },
+  { label: 'Missouri', value: 'MISSOURI' },
+];
 
+export default function SeasonalPlantingGuide() {
+  const { profileData, profileReady } = useProfile();
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
-    DropdownOption[]
+    DropdownOption<SeasonEnum>[]
   >([]);
   const [selectedHarvestSeason, setSelectedHarvestSeason] = useState<
-    DropdownOption[]
+    DropdownOption<SeasonEnum>[]
   >([]);
   const [selectedPlantingType, setSelectedPlantingType] = useState<
-    DropdownOption[]
+    DropdownOption<PlantingTypeEnum>[]
   >([]);
   const [selectedUsState, setSelectedUsState] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -57,69 +65,80 @@ export default function SeasonalPlantingGuide() {
     setSelectedPlantingType([]);
   };
 
+  useEffect(() => {
+    if (profileReady && profileData) {
+      setSelectedUsState(profileData.us_state);
+    }
+  }, [profileData, profileReady]);
+
   return (
     <PageContainer>
+      <HeaderContainer>
+        <PageTitle>
+          <H1 $color={COLORS.shrub} $align="left">
+            Planting Timeline
+          </H1>
+        </PageTitle>
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <FilterContainer>
+          <FilterDropdownSingle
+            id="usState"
+            value={selectedUsState}
+            setStateAction={setSelectedUsState}
+            placeholder="State"
+            options={usStateOptions}
+            disabled={!selectedUsState}
+          />
+
+          <FilterDropdownMultiple
+            value={selectedGrowingSeason}
+            setStateAction={setSelectedGrowingSeason}
+            options={growingSeasonOptions}
+            placeholder="Growing Season"
+            disabled={!selectedUsState}
+          />
+
+          <FilterDropdownMultiple
+            value={selectedHarvestSeason}
+            setStateAction={setSelectedHarvestSeason}
+            options={harvestSeasonOptions}
+            placeholder="Harvest Season"
+            disabled={!selectedUsState}
+          />
+
+          <FilterDropdownMultiple
+            value={selectedPlantingType}
+            setStateAction={setSelectedPlantingType}
+            options={plantingTypeOptions}
+            placeholder="Planting Type"
+            disabled={!selectedUsState}
+          />
+
+          <button onClick={clearFilters}>Clear filters</button>
+        </FilterContainer>
+      </HeaderContainer>
       {!selectedUsState ? (
-        <>
-          <p>Please select a US state to view planting information.</p>
-          <StateOptionsContainer>
-            <FilterDropdownSingle
-              name="usState"
-              id="usState"
-              value={selectedUsState}
-              setStateAction={setSelectedUsState}
-              placeholder="US State"
-              options={usStateOptions}
-            />
-          </StateOptionsContainer>
-        </>
+        <StateOptionsContainer>
+          <H3 $color={COLORS.shrub}>Choose Your State</H3>
+          <FilterDropdownSingle
+            name="usState"
+            id="usState"
+            value={selectedUsState}
+            setStateAction={setSelectedUsState}
+            placeholder="State"
+            options={usStateOptions}
+          />
+        </StateOptionsContainer>
       ) : (
-        <>
-          <HeaderContainer>
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            <FilterContainer>
-              <FilterDropdownSingle
-                name="usState"
-                id="usState"
-                value={selectedUsState}
-                setStateAction={setSelectedUsState}
-                placeholder="US State"
-                options={usStateOptions}
-              />
-
-              <FilterDropdownMultiple
-                value={selectedGrowingSeason}
-                setStateAction={setSelectedGrowingSeason}
-                options={growingSeasonOptions}
-                placeholder="Growing Season"
-              />
-
-              <FilterDropdownMultiple
-                value={selectedHarvestSeason}
-                setStateAction={setSelectedHarvestSeason}
-                options={harvestSeasonOptions}
-                placeholder="Harvest Season"
-              />
-
-              <FilterDropdownMultiple
-                value={selectedPlantingType}
-                setStateAction={setSelectedPlantingType}
-                options={plantingTypeOptions}
-                placeholder="Planting Type"
-              />
-
-              <button onClick={clearFilters}>Clear filters</button>
-            </FilterContainer>
-          </HeaderContainer>
-
-          <PlantList
+        <Box $pl="16px" $pt="12px">
+          <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}
             harvestSeasonFilterValue={selectedHarvestSeason}
             plantingTypeFilterValue={selectedPlantingType}
             usStateFilterValue={selectedUsState}
             searchTerm={searchTerm}
           />
-        </>
+        </Box>
       )}
     </PageContainer>
   );

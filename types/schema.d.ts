@@ -1,5 +1,7 @@
 import type { UUID } from 'crypto';
 
+export type SunlightEnum = 'SHADE' | 'PARTIAL_SHADE' | 'PARTIAL_SUN' | 'FULL';
+
 export type SeasonEnum = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
 
 export type DifficultyLevelEnum = 'EASY' | 'MODERATE' | 'HARD';
