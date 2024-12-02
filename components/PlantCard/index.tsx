@@ -29,7 +29,7 @@ export default function PlantCard({
   onClick?: () => void;
 }) {
   return (
-    <Card isSelected={isSelected} onClick={onClick} id={plant.id}>
+    <Card $isSelected={isSelected} onClick={onClick} id={plant.id}>
       {canSelect && (
         <TopRight>
           <RoundCheck checked={isSelected} readOnly id={`${plant.id}-check`} />

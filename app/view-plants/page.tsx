@@ -154,8 +154,9 @@ export default function Page() {
       router.push(`all-plants/${plant.id}`);
     }
   }
-  function finishSelectPlants() {
+  function handleAddPlants() {
     //TODO: route to add details with proper information
+    router.push('/add-details');
   }
 
   function handleCancelAddMode() {
@@ -281,7 +282,7 @@ export default function Page() {
           {inAddMode && selectedPlants.length ? (
             <AddButton
               $backgroundColor={COLORS.shrub}
-              onClick={finishSelectPlants}
+              onClick={handleAddPlants}
             >
               Add to My Garden
             </AddButton>

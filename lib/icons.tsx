@@ -205,7 +205,7 @@ export const IconSvgs = {
       <path
         d="M16.4445 0H21C22.6569 0 24 1.34315 24 3C24 4.65685 22.6569 6 21 6H16.4445V0Z"
         fill="#DDDDDD"
-        fill-opacity="0.866667"
+        fillOpacity="0.866667"
       />
     </svg>
   ),
@@ -225,7 +225,7 @@ export const IconSvgs = {
       <path
         d="M16.4444 0H21C22.6569 0 24 1.34315 24 3C24 4.65685 22.6569 6 21 6H16.4444V0Z"
         fill="#DDDDDD"
-        fill-opacity="0.866667"
+        fillOpacity="0.866667"
       />
     </svg>
   ),

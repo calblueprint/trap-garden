@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 import { H2 } from '@/styles/text';
 
-export const Card = styled.div<{ isSelected?: boolean }>`
+export const Card = styled.div<{ $isSelected?: boolean }>`
   position: relative;
   width: 168px;
   height: 200px;
@@ -11,8 +11,8 @@ export const Card = styled.div<{ isSelected?: boolean }>`
   align-items: start;
   border-radius: 12px;
   background-color: white;
-  box-shadow: ${({ isSelected }) =>
-    isSelected
+  box-shadow: ${({ $isSelected }) =>
+    $isSelected
       ? `
   0 24px 38px 3px rgb(148, 181, 6, 0.14),
   0 9px 46px 8px rgb(148, 181, 6, 0.12),
@@ -22,8 +22,8 @@ export const Card = styled.div<{ isSelected?: boolean }>`
   0 9px 46px 8px rgba(0, 0, 0, 0.12),
   0 11px 15px -7px rgba(0, 0, 0, 0.2)`};
 
-  border: ${({ isSelected }) =>
-    isSelected ? `1px solid ${COLORS.sprout}` : '1px solid transparent'};
+  border: ${({ $isSelected }) =>
+    $isSelected ? `1px solid ${COLORS.sprout}` : '1px solid transparent'};
   backdrop-filter: blur(40px);
 `;
 
