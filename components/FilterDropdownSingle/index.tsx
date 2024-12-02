@@ -9,6 +9,7 @@ interface FilterDropdownProps {
   setStateAction: React.Dispatch<React.SetStateAction<string>>;
   options: DropdownOption[];
   placeholder: string;
+  disabled?: boolean;
 }
 
 export default function FilterDropdownSingle({
@@ -18,6 +19,7 @@ export default function FilterDropdownSingle({
   setStateAction,
   options,
   placeholder,
+  disabled,
 }: FilterDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -39,6 +41,7 @@ export default function FilterDropdownSingle({
       onBlur={() => setIsOpen(false)}
       value={value}
       $hasValue={value !== ''}
+      disabled={disabled}
     >
       {/*Default placeholder text*/}
       <option value="" disabled hidden>

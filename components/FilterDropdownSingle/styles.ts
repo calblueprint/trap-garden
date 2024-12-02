@@ -8,4 +8,8 @@ export const FilterDropdownInput = styled.select<{ $hasValue: boolean }>`
   text-align: center;
   background-color: ${({ $hasValue }) => ($hasValue ? COLORS.shrub : '#fff')};
   color: ${({ $hasValue }) => ($hasValue ? '#fff' : '#000')};
+
+  &:disabled {
+    background-color: ${COLORS.lightgray};
+  }
 `;

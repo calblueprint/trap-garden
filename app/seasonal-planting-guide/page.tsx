@@ -84,8 +84,9 @@ export default function SeasonalPlantingGuide() {
             id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}
-            placeholder="US State"
+            placeholder="State"
             options={usStateOptions}
+            disabled={!selectedUsState}
           />
 
           <FilterDropdownMultiple
@@ -93,7 +94,7 @@ export default function SeasonalPlantingGuide() {
             setStateAction={setSelectedGrowingSeason}
             options={growingSeasonOptions}
             placeholder="Growing Season"
-            disabled={selectedUsState === ''}
+            disabled={!selectedUsState}
           />
 
           <FilterDropdownMultiple
@@ -101,7 +102,7 @@ export default function SeasonalPlantingGuide() {
             setStateAction={setSelectedHarvestSeason}
             options={harvestSeasonOptions}
             placeholder="Harvest Season"
-            disabled={selectedUsState === ''}
+            disabled={!selectedUsState}
           />
 
           <FilterDropdownMultiple
@@ -109,7 +110,7 @@ export default function SeasonalPlantingGuide() {
             setStateAction={setSelectedPlantingType}
             options={plantingTypeOptions}
             placeholder="Planting Type"
-            disabled={selectedUsState === ''}
+            disabled={!selectedUsState}
           />
 
           <button onClick={clearFilters}>Clear filters</button>

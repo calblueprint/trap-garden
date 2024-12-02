@@ -66,9 +66,9 @@ export const PlantCalendarList = ({
     <div>
       <MonthHeader />
       <CalendarRowsContainer>
-        {filteredPlantList.map((plant, key) => (
+        {filteredPlantList.map(plant => (
           <PlantCalendarRow
-            key={key}
+            key={plant.id}
             plantName={plant.plant_name}
             harvestStart={plant.harvest_start}
             harvestEnd={plant.harvest_end}

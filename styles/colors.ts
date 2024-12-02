@@ -23,4 +23,5 @@ const COLORS = {
   transplant: '#8EDBFF',
   harvest: '#FBA7A7',
 };
+
 export default COLORS;
