@@ -6,6 +6,7 @@ import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantCalendarList } from '@/components/PlantCalendarList';
 import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
+import { Box } from '@/styles/containers';
 import { H1, H3 } from '@/styles/text';
 import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
 import { useProfile } from '@/utils/ProfileProvider';
@@ -14,7 +15,6 @@ import {
   HeaderContainer,
   PageContainer,
   PageTitle,
-  PlantListContainer,
   StateOptionsContainer,
 } from './styles';
 
@@ -130,7 +130,7 @@ export default function SeasonalPlantingGuide() {
           />
         </StateOptionsContainer>
       ) : (
-        <PlantListContainer>
+        <Box $pl="16px" $pt="12px">
           <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}
             harvestSeasonFilterValue={selectedHarvestSeason}
@@ -138,7 +138,7 @@ export default function SeasonalPlantingGuide() {
             usStateFilterValue={selectedUsState}
             searchTerm={searchTerm}
           />
-        </PlantListContainer>
+        </Box>
       )}
     </PageContainer>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getAllPlants } from '@/api/supabase/queries/plants';
+import { P3 } from '@/styles/text';
 import {
   DropdownOption,
   Plant,
@@ -15,7 +16,7 @@ import {
 } from '@/utils/helpers';
 import MonthHeader from '../MonthHeader';
 import PlantCalendarRow from '../PlantCalendarRow';
-import { CalendarRowsContainer } from './styles';
+import * as Styles from './styles';
 
 interface PlantListProps {
   harvestSeasonFilterValue: DropdownOption<SeasonEnum>[];
@@ -63,24 +64,36 @@ export const PlantCalendarList = ({
   ]);
 
   return (
-    <div>
-      <MonthHeader />
-      <CalendarRowsContainer>
+    <Styles.StyledTable>
+      <thead>
+        <tr>
+          <Styles.StickyTd></Styles.StickyTd>
+          <Styles.ScrollableTd>
+            <MonthHeader />
+          </Styles.ScrollableTd>
+        </tr>
+      </thead>
+      <tbody>
         {filteredPlantList.map(plant => (
-          <PlantCalendarRow
-            key={plant.id}
-            plantName={plant.plant_name}
-            harvestStart={plant.harvest_start}
-            harvestEnd={plant.harvest_end}
-            transplantStart={plant.transplant_start}
-            transplantEnd={plant.transplant_end}
-            indoorsStart={plant.indoors_start}
-            indoorsEnd={plant.indoors_end}
-            outdoorsStart={plant.outdoors_start}
-            outdoorsEnd={plant.outdoors_end}
-          />
+          <tr key={plant.id}>
+            <Styles.StickyTd>
+              <P3>{plant.plant_name}</P3>
+            </Styles.StickyTd>
+            <Styles.ScrollableTd>
+              <PlantCalendarRow
+                harvestStart={plant.harvest_start}
+                harvestEnd={plant.harvest_end}
+                transplantStart={plant.transplant_start}
+                transplantEnd={plant.transplant_end}
+                indoorsStart={plant.indoors_start}
+                indoorsEnd={plant.indoors_end}
+                outdoorsStart={plant.outdoors_start}
+                outdoorsEnd={plant.outdoors_end}
+              />
+            </Styles.ScrollableTd>
+          </tr>
         ))}
-      </CalendarRowsContainer>
-    </div>
+      </tbody>
+    </Styles.StyledTable>
   );
 };

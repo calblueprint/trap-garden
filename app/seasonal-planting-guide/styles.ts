@@ -4,7 +4,7 @@ export const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  gap: 1rem;
+  /* width: max-content; */
 `;
 
 export const HeaderContainer = styled.div`
@@ -39,10 +39,4 @@ export const PageTitle = styled.div`
   margin-bottom: 8px;
   gap: 12px;
   align-items: center;
-`;
-
-export const PlantListContainer = styled.div`
-  width: 100%;
-  overflow-x: auto; // Enable horizontal scrolling
-  /* white-space: nowrap; */
 `;

@@ -1,28 +1,27 @@
-import {
-  MonthHeaderContainer,
-  MonthsContainer,
-  MonthsText,
-  WhiteSpace,
-} from './styles';
+import { P3 } from '@/styles/text';
+import { MonthsContainer } from './styles';
+
+const months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
 export default function MonthHeader() {
   return (
-    <MonthHeaderContainer>
-      <WhiteSpace />
-      <MonthsContainer>
-        <MonthsText>Jan</MonthsText>
-        <MonthsText>Feb</MonthsText>
-        <MonthsText>Mar</MonthsText>
-        <MonthsText>Apr</MonthsText>
-        <MonthsText>May</MonthsText>
-        <MonthsText>Jun</MonthsText>
-        <MonthsText>Jul</MonthsText>
-        <MonthsText>Aug</MonthsText>
-        <MonthsText>Sep</MonthsText>
-        <MonthsText>Oct</MonthsText>
-        <MonthsText>Nov</MonthsText>
-        <MonthsText>Dec</MonthsText>
-      </MonthsContainer>
-    </MonthHeaderContainer>
+    <MonthsContainer>
+      {months.map((month, index) => (
+        <P3 key={index}>{month}</P3>
+      ))}
+    </MonthsContainer>
   );
 }

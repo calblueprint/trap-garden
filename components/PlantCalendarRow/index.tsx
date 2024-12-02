@@ -1,15 +1,9 @@
 import React, { memo, useMemo } from 'react';
 import COLORS from '@/styles/colors';
 import { fillCalendarGridArrayRowWithColor } from '@/utils/helpers';
-import {
-  CalendarCell,
-  CalendarGrid,
-  PlantCalendarRowContainer,
-  PlantText,
-} from './styles';
+import { CalendarCell, CalendarGrid } from './styles';
 
 interface PlantCalendarRowProps {
-  plantName?: string;
   harvestStart: string;
   harvestEnd: string;
   transplantStart: string;
@@ -21,7 +15,6 @@ interface PlantCalendarRowProps {
 }
 
 const PlantCalendarRow = memo(function PlantCalendarRow({
-  plantName,
   harvestStart,
   harvestEnd,
   transplantStart,
@@ -80,14 +73,11 @@ const PlantCalendarRow = memo(function PlantCalendarRow({
   ]);
 
   return (
-    <PlantCalendarRowContainer>
-      <PlantText>{plantName}</PlantText>
-      <CalendarGrid>
-        {CalendarGridArray.map((color, index) => (
-          <CalendarCell key={index} $color={color} />
-        ))}
-      </CalendarGrid>
-    </PlantCalendarRowContainer>
+    <CalendarGrid>
+      {CalendarGridArray.map((color, index) => (
+        <CalendarCell key={index} $color={color} />
+      ))}
+    </CalendarGrid>
   );
 });
 
