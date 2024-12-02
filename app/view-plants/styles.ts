@@ -6,19 +6,20 @@ export const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 8px;
+  margin-bottom: 20px;
 `;
 
 export const TopRowContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const HeaderButton = styled.button<{
   $isCurrentMode: boolean;
-  $margin: number;
 }>`
   background: none;
   border: none;
@@ -33,7 +34,6 @@ export const HeaderButton = styled.button<{
     $isCurrentMode ? ` ${COLORS.shrub}` : `${COLORS.midgray}`};
   text-decoration: ${({ $isCurrentMode }) =>
     $isCurrentMode ? ` underline ` : `none`};
-  margin-left: ${({ $margin }) => `${$margin}px`};
 `;
 
 export const AddButton = styled.button<{ $backgroundColor: string }>`
@@ -56,19 +56,13 @@ export const AddButton = styled.button<{ $backgroundColor: string }>`
   line-height: normal;
 `;
 
-export const PlantGridView = styled.div`
+export const PlantGridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   /* grid-template-columns: repeat(auto-fill, 168px); */
   gap: 8px;
   max-width: 100%;
   justify-content: center;
-`;
-
-export const PlantGridContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
 `;
 
 export const SelectButton = styled(SmallRoundedButton)`
@@ -79,20 +73,12 @@ export const SelectButton = styled(SmallRoundedButton)`
   width: 60px;
   height: 25px;
   padding: 0;
-  margin-right: 24px;
 `;
 
-export const PlantSelection = styled.div`
+export const ViewSelection = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-export const PlantSelectionHeaderAllPlants = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 8px;
-  margin-bottom: 12px;
+  gap: 20px;
 `;
 
 export const NumberSelectedPlantsContainer = styled.div`

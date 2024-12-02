@@ -12,6 +12,8 @@ import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
+import { Box, Flex } from '@/styles/containers';
+import { H1 } from '@/styles/text';
 import { DropdownOption, OwnedPlant, Plant } from '@/types/schema';
 import {
   checkDifficulty,
@@ -26,11 +28,9 @@ import {
   NumberSelectedPlants,
   NumberSelectedPlantsContainer,
   PlantGridContainer,
-  PlantGridView,
-  PlantSelection,
-  PlantSelectionHeaderAllPlants,
   SelectButton,
   TopRowContainer,
+  ViewSelection,
 } from './styles';
 
 export default function Page() {
@@ -169,6 +169,9 @@ export default function Page() {
   return (
     <div id="plantContent">
       <TopRowContainer>
+        <H1 $color={COLORS.shrub} $fontWeight={500}>
+          View Plants
+        </H1>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <FilterContainer>
           <FilterDropdownMultiple
@@ -192,7 +195,9 @@ export default function Page() {
 
           <button onClick={clearFilters}>Clear filters</button>
         </FilterContainer>
-        {viewingOption === 'all' && inAddMode && (
+      </TopRowContainer>
+      <Box $h="24px">
+        {viewingOption === 'all' && inAddMode ? (
           <NumberSelectedPlantsContainer>
             <NumberSelectedPlants>
               {selectedPlants.length
@@ -200,24 +205,24 @@ export default function Page() {
                 : 'Select Plants'}
             </NumberSelectedPlants>
           </NumberSelectedPlantsContainer>
-        )}
-        <PlantSelectionHeaderAllPlants>
-          <PlantSelection>
+        ) : null}
+      </Box>
+      <Box $px="24px">
+        <Flex $justify="between" $pb="12px">
+          <ViewSelection>
             <HeaderButton
-              $margin={24}
               $isCurrentMode={viewingOption !== 'all'}
               onClick={() => setViewingOption('myPlants')}
             >
               My Plants
             </HeaderButton>
             <HeaderButton
-              $margin={20}
               $isCurrentMode={viewingOption === 'all'}
               onClick={() => setViewingOption('all')}
             >
               All
             </HeaderButton>
-          </PlantSelection>
+          </ViewSelection>
           {/* Select/Cancel toggles Add Mode; appears in All plants only*/}
           {viewingOption === 'all' &&
             (inAddMode ? (
@@ -236,36 +241,33 @@ export default function Page() {
                 Select
               </SelectButton>
             ))}
-        </PlantSelectionHeaderAllPlants>
-      </TopRowContainer>
-      {viewingOption === 'myPlants' && (
-        <div>
-          {filteredUserPlantList.length ? (
-            <PlantGridContainer>
-              <PlantGridView>
+        </Flex>
+        {viewingOption === 'myPlants' && (
+          <div>
+            {filteredUserPlantList.length ? (
+              <PlantGridContainer>
                 {filteredUserPlantList.map(ownedPlant => (
                   <PlantCard
                     key={ownedPlant.userPlantId}
                     plant={ownedPlant.plant}
                     canSelect={false}
                     onClick={() => handleUserPlantCardClick(ownedPlant)}
+                    // aspectRatio="168 / 200"
                   />
                 ))}
-              </PlantGridView>
-            </PlantGridContainer>
-          ) : (
-            <div>
-              <button onClick={() => setViewingOption('all')}>
-                Add Plants
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-      {viewingOption === 'all' && (
-        <>
-          <PlantGridContainer>
-            <PlantGridView>
+              </PlantGridContainer>
+            ) : (
+              <div>
+                <button onClick={() => setViewingOption('all')}>
+                  Add Plants
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        {viewingOption === 'all' && (
+          <>
+            <PlantGridContainer>
               {filteredPlantList.map((plant, key) => (
                 <PlantCard
                   key={key}
@@ -273,23 +275,24 @@ export default function Page() {
                   canSelect={inAddMode}
                   isSelected={selectedPlants.includes(plant)}
                   onClick={() => handlePlantCardClick(plant)}
+                  // aspectRatio="168 / 200"
                 />
               ))}
-            </PlantGridView>
-          </PlantGridContainer>
-          {inAddMode && (
-            <AddButton
-              $backgroundColor={
-                selectedPlants.length ? COLORS.shrub : COLORS.midgray
-              }
-              onClick={handleAddPlants}
-              disabled={!selectedPlants.length}
-            >
-              {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
-            </AddButton>
-          )}
-        </>
-      )}
+            </PlantGridContainer>
+            {inAddMode && (
+              <AddButton
+                $backgroundColor={
+                  selectedPlants.length ? COLORS.shrub : COLORS.midgray
+                }
+                onClick={handleAddPlants}
+                disabled={!selectedPlants.length}
+              >
+                {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
+              </AddButton>
+            )}
+          </>
+        )}
+      </Box>
     </div>
   );
 }
