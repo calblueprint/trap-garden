@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
-import { H2 } from '@/styles/text';
 
-export const Card = styled.div<{ $isSelected?: boolean }>`
+export const CardContainer = styled.div<{ $isSelected?: boolean }>`
   position: relative;
   width: 168px;
   height: 200px;
@@ -28,7 +27,7 @@ export const Card = styled.div<{ $isSelected?: boolean }>`
 `;
 
 export const CardPic = styled.div`
-  height: 96px;
+  height: 92px;
   width: 100%;
   background-color: #f5f6f6;
   display: flex;
@@ -41,16 +40,14 @@ export const CardPic = styled.div`
 export const CardContent = styled.div`
   display: flex;
   flex-direction: column;
-  padding-left: 16px;
-  height: 104px;
+  padding: 12px 16px 8px 16px;
   row-gap: 6px;
-  margin-top: 10px;
+  width: 100%;
 `;
 
 export const PlantAttributes = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 4px;
 `;
 
@@ -94,13 +91,6 @@ export const TopRight = styled.div`
   padding: 10px 10px;
 `;
 
-export const PlantName = styled(H2)`
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
-
 export const AttributeContent = styled.p`
   font-size: 10px;
   font-style: normal;
@@ -114,7 +104,6 @@ export const PlantHeader = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 136px;
 `;
 
 export const PlantImage = styled.img`

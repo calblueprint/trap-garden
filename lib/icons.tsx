@@ -275,7 +275,7 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
-  outdoors_growing_end: (
+  harvest_season: (
     <svg
       width="11"
       height="11"

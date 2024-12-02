@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { P1 } from '@/styles/text';
 import { Plant } from '@/types/schema';
 import { mapMonthToSeason, useTitleCase } from '@/utils/helpers';
 import DifficultyLevelBar from '../DifficultyLevelBar';
@@ -6,13 +7,12 @@ import Icon from '../Icon';
 import {
   Attribute,
   AttributeContent,
-  Card,
+  CardContainer,
   CardContent,
   CardPic,
   PlantAttributes,
   PlantHeader,
   PlantImage,
-  PlantName,
   RoundCheck,
   TopRight,
 } from './styles';
@@ -29,7 +29,7 @@ const PlantCard = memo(function PlantCard({
   onClick?: () => void;
 }) {
   return (
-    <Card $isSelected={isSelected} onClick={onClick} id={plant.id}>
+    <CardContainer $isSelected={isSelected} onClick={onClick} id={plant.id}>
       {canSelect && (
         <TopRight>
           <RoundCheck checked={isSelected} readOnly id={`${plant.id}-check`} />
@@ -40,27 +40,31 @@ const PlantCard = memo(function PlantCard({
       </CardPic>
       <CardContent>
         <PlantHeader>
-          <PlantName>{plant.plant_name}</PlantName>
+          <P1 $fontWeight={400}>{plant.plant_name}</P1>
           <DifficultyLevelBar difficultyLevel={plant.difficulty_level} />
         </PlantHeader>
 
         <PlantAttributes>
           <Attribute>
             <Icon type="outdoors_growing_start"></Icon>
-            <AttributeContent>{`${useTitleCase(mapMonthToSeason(plant.outdoors_start))}`}</AttributeContent>
+            <AttributeContent>
+              {useTitleCase(
+                mapMonthToSeason(plant.outdoors_start) || 'Unknown',
+              )}
+            </AttributeContent>
           </Attribute>
           <Attribute>
-            <Icon type="outdoors_growing_end"></Icon>
-            <AttributeContent>{`${useTitleCase(mapMonthToSeason(plant.outdoors_end))}`}</AttributeContent>
+            <Icon type="harvest_season"></Icon>
+            <AttributeContent>
+              {useTitleCase(plant.harvest_season)}
+            </AttributeContent>
           </Attribute>
           <Attribute>
             <Icon type="watering_can"></Icon>
-
             <AttributeContent>{plant.water_frequency}</AttributeContent>
           </Attribute>
           <Attribute>
             <Icon type="sun"></Icon>
-
             <AttributeContent>
               {plant.sunlight_min_hours}
               {plant.sunlight_max_hours
@@ -71,7 +75,7 @@ const PlantCard = memo(function PlantCard({
           </Attribute>
         </PlantAttributes>
       </CardContent>
-    </Card>
+    </CardContainer>
   );
 });
 
