@@ -18,34 +18,35 @@ import {
   StateOptionsContainer,
 } from './styles';
 
+// Declaring (static) filter options outside so they're not re-rendered
+// TODO: Maybe export shared filter options from a centralized file
+const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
+  { label: 'Spring', value: 'SPRING' },
+  { label: 'Summer', value: 'SUMMER' },
+  { label: 'Fall', value: 'FALL' },
+  { label: 'Winter', value: 'WINTER' },
+];
+const harvestSeasonOptions: DropdownOption<SeasonEnum>[] = [
+  { label: 'Spring', value: 'SPRING' },
+  { label: 'Summer', value: 'SUMMER' },
+  { label: 'Fall', value: 'FALL' },
+  { label: 'Winter', value: 'WINTER' },
+];
+const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
+  { label: 'Start Seeds Indoors', value: 'INDOORS' },
+  { label: 'Start Seeds Outdoors', value: 'OUTDOORS' },
+  {
+    label: 'Plant Seedlings/Transplant Outdoors',
+    value: 'TRANSPLANT',
+  },
+];
+const usStateOptions: DropdownOption[] = [
+  { label: 'Tennessee', value: 'TENNESSEE' },
+  { label: 'Missouri', value: 'MISSOURI' },
+];
+
 export default function SeasonalPlantingGuide() {
   const { profileData, profileReady } = useProfile();
-
-  const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
-    { label: 'Spring', value: 'SPRING' },
-    { label: 'Summer', value: 'SUMMER' },
-    { label: 'Fall', value: 'FALL' },
-    { label: 'Winter', value: 'WINTER' },
-  ];
-  const harvestSeasonOptions: DropdownOption<SeasonEnum>[] = [
-    { label: 'Spring', value: 'SPRING' },
-    { label: 'Summer', value: 'SUMMER' },
-    { label: 'Fall', value: 'FALL' },
-    { label: 'Winter', value: 'WINTER' },
-  ];
-  const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
-    { label: 'Start Seeds Indoors', value: 'INDOORS' },
-    { label: 'Start Seeds Outdoors', value: 'OUTDOORS' },
-    {
-      label: 'Plant Seedlings/Transplant Outdoors',
-      value: 'TRANSPLANT',
-    },
-  ];
-  const usStateOptions: DropdownOption[] = [
-    { label: 'Tennessee', value: 'TENNESSEE' },
-    { label: 'Missouri', value: 'MISSOURI' },
-  ];
-
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
     DropdownOption<SeasonEnum>[]
   >([]);

@@ -39,6 +39,26 @@ import {
   ViewSelection,
 } from './styles';
 
+// Declaring (static) filter options outside so they're not re-rendered
+// TODO: Maybe export shared filter options from a centralized file
+const sunlightOptions: DropdownOption<SunlightEnum>[] = [
+  { label: 'Less than 2 hours', value: 'SHADE' },
+  { label: '2-4 hours', value: 'PARTIAL_SHADE' },
+  { label: '4-6 hours', value: 'PARTIAL_SUN' },
+  { label: '6+ hours', value: 'FULL' },
+];
+const difficultyOptions: DropdownOption[] = [
+  { label: 'Easy', value: 'EASY' },
+  { label: 'Moderate', value: 'MODERATE' },
+  { label: 'Hard', value: 'HARD' },
+];
+const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
+  { label: 'Spring', value: 'SPRING' },
+  { label: 'Summer', value: 'SUMMER' },
+  { label: 'Fall', value: 'FALL' },
+  { label: 'Winter', value: 'WINTER' },
+];
+
 export default function Page() {
   const router = useRouter();
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
@@ -59,31 +79,19 @@ export default function Page() {
   const user_id: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
   const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
   const [ownedPlants, setOwnedPlants] = useState<OwnedPlant[]>([]);
-
+  // TODO: replace this with state from ProfileContext
   const userState = 'TENNESSEE';
-  const sunlightOptions: DropdownOption<SunlightEnum>[] = [
-    { label: 'Less than 2 hours', value: 'SHADE' },
-    { label: '2-4 hours', value: 'PARTIAL_SHADE' },
-    { label: '4-6 hours', value: 'PARTIAL_SUN' },
-    { label: '6+ hours', value: 'FULL' },
-  ];
-  const difficultyOptions: DropdownOption[] = [
-    { label: 'Easy', value: 'EASY' },
-    { label: 'Moderate', value: 'MODERATE' },
-    { label: 'Hard', value: 'HARD' },
-  ];
-  const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
-    { label: 'Spring', value: 'SPRING' },
-    { label: 'Summer', value: 'SUMMER' },
-    { label: 'Fall', value: 'FALL' },
-    { label: 'Winter', value: 'WINTER' },
-  ];
 
   // Fetch All Plants
   useEffect(() => {
     (async () => {
       const plantList = await getAllPlants();
-      const result = plantList.filter(plant => plant.us_state === userState);
+      // Filter by user's state, since they can only access when onboarded
+      // TODO: add userState to dependency array?
+      // Sort alphabetically first
+      const result = plantList
+        .filter(plant => plant.us_state === userState)
+        .sort((a, b) => a.plant_name.localeCompare(b.plant_name));
       setPlants(result);
     })();
   }, []);
