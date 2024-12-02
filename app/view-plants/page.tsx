@@ -14,7 +14,13 @@ import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1 } from '@/styles/text';
-import { DropdownOption, OwnedPlant, Plant, SeasonEnum } from '@/types/schema';
+import {
+  DropdownOption,
+  OwnedPlant,
+  Plant,
+  SeasonEnum,
+  SunlightEnum,
+} from '@/types/schema';
 import {
   checkDifficulty,
   checkGrowingSeason,
@@ -43,9 +49,9 @@ export default function Page() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     DropdownOption[]
   >([]);
-  const [selectedSunlight, setSelectedSunlight] = useState<DropdownOption[]>(
-    [],
-  );
+  const [selectedSunlight, setSelectedSunlight] = useState<
+    DropdownOption<SunlightEnum>[]
+  >([]);
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
     DropdownOption<SeasonEnum>[]
   >([]);
@@ -55,7 +61,7 @@ export default function Page() {
   const [ownedPlants, setOwnedPlants] = useState<OwnedPlant[]>([]);
 
   const userState = 'TENNESSEE';
-  const sunlightOptions: DropdownOption[] = [
+  const sunlightOptions: DropdownOption<SunlightEnum>[] = [
     { label: 'Less than 2 hours', value: 'SHADE' },
     { label: '2-4 hours', value: 'PARTIAL_SHADE' },
     { label: '4-6 hours', value: 'PARTIAL_SUN' },

@@ -3,6 +3,7 @@ import {
   Plant,
   PlantingTypeEnum,
   SeasonEnum,
+  SunlightEnum,
 } from '@/types/schema';
 
 /* Helper function to process late/early month fields
@@ -44,6 +45,7 @@ const monthToIndex = new Map<string, number>([
   ['DECEMBER', 11],
 ]);
 
+// TODO: Simplify this function using monthToSeason
 // Helper function to check if selected growing season(s) match plant's growing_season
 export function checkGrowingSeason(
   growingSeasonFilterValue: DropdownOption<SeasonEnum>[],
@@ -109,15 +111,9 @@ export function checkHarvestSeason(
     return true;
   }
 
-  // For each harvestSeason selected, check if plant's harvest_season matches harvestSeason
-  // If it does, add true to harvestSeasonBoolean
-  const harvestSeasonBoolean: boolean[] = [];
-  for (const harvestSeason of harvestSeasonFilterValue) {
-    harvestSeasonBoolean.push(plant.harvest_season === harvestSeason.value);
-  }
-
-  // Return true if any of the harvestSeasonBooleans are true
-  return harvestSeasonBoolean.includes(true);
+  return harvestSeasonFilterValue.some(
+    harvestSeason => plant.harvest_season === harvestSeason.value,
+  );
 }
 
 // Helper function to check if selected planting type(s) match plant's planting_type
@@ -130,21 +126,13 @@ export function checkPlantingType(
     return true;
   }
 
-  // For each plantingType selected, check if corresponding start field in table is not null
-  // If it is not null, add true to plantingTypeBoolean
-  const plantingTypeBoolean: boolean[] = [];
-  for (const plantingType of plantingTypeFilterValue) {
-    if (plantingType.value === 'INDOORS') {
-      plantingTypeBoolean.push(plant.indoors_start !== null);
-    } else if (plantingType.value === 'OUTDOORS') {
-      plantingTypeBoolean.push(plant.outdoors_start !== null);
-    } else if (plantingType.value === 'TRANSPLANT') {
-      plantingTypeBoolean.push(plant.transplant_start !== null);
-    }
-  }
-
-  // Return true if any of the plantingTypeBooleans are true
-  return plantingTypeBoolean.includes(true);
+  // if X_start is not null, then the plant matches plantingType X
+  return plantingTypeFilterValue.some(
+    plantingType =>
+      (plantingType.value === 'INDOORS' && plant.indoors_start) ||
+      (plantingType.value === 'OUTDOORS' && plant.outdoors_start) ||
+      (plantingType.value === 'TRANSPLANT' && plant.transplant_start),
+  );
 }
 
 export function checkSearchTerm(searchTerm: string, plant: Plant) {
@@ -161,7 +149,7 @@ export function checkSearchTerm(searchTerm: string, plant: Plant) {
 }
 
 export function checkSunlight(
-  sunlightFilterValue: DropdownOption[],
+  sunlightFilterValue: DropdownOption<SunlightEnum>[],
   plant: Plant,
 ) {
   // Automatically returns true if no selected sunlight
@@ -169,35 +157,22 @@ export function checkSunlight(
     return true;
   }
 
-  const sunlightToHours = new Map<string, [number, number]>([
-    ['SHADE', [0, 2]],
-    ['PARTIAL_SHADE', [2, 4]],
-    ['PARTIAL_SUN', [4, 6]],
-    ['FULL', [6, Number.MAX_VALUE]],
-  ]);
+  const sunlightToHours: Record<SunlightEnum, [number, number]> = {
+    SHADE: [0, 2],
+    PARTIAL_SHADE: [2, 4],
+    PARTIAL_SUN: [4, 6],
+    FULL: [6, Number.MAX_VALUE],
+  };
+
+  const plantMin = plant.sunlight_min_hours;
+  const plantMax = plant.sunlight_max_hours || plant.sunlight_min_hours;
 
   // For each sunlight selected, check if plant's min_hours and max_hours are
   // within that enum's range, return true if so
-  for (const sunlight of sunlightFilterValue) {
-    const [minHours, maxHours] = sunlightToHours.get(sunlight.value)!;
-    // if max_hours is null then plant can only receive min_hours of sunlight
-    if (plant.sunlight_max_hours === null) {
-      if (
-        plant.sunlight_min_hours >= minHours &&
-        plant.sunlight_min_hours <= maxHours
-      ) {
-        return true;
-      }
-    } else if (
-      plant.sunlight_min_hours >= minHours &&
-      plant.sunlight_max_hours <= maxHours
-    ) {
-      return true;
-    }
-  }
-
-  // Return false if no matches found
-  return false;
+  return sunlightFilterValue.some(sunlight => {
+    const [minHours, maxHours] = sunlightToHours[sunlight.value];
+    return plantMin >= minHours && plantMax <= maxHours;
+  });
 }
 
 export function checkDifficulty(
