@@ -225,6 +225,7 @@ export default function OnboardingFlow() {
   };
 
   return !userId ? (
+    // TODO: implement an actual loading screen (spinner?)
     <>Loading</>
   ) : (
     <div>
