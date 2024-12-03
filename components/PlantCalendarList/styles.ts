@@ -17,7 +17,7 @@ export const StickyTd = styled(P3).attrs({
   position: sticky;
   left: 0;
   background-color: white; // Optional: Adds a background color to keep text visible when scrolling
-  z-index: 2; // Ensures the sticky header is on top of other content
+  z-index: 1; // Ensures the sticky header is on top of other content
 `;
 
 // Scrollable container for PlantCalendarRow
