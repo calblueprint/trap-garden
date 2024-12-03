@@ -27,6 +27,7 @@ import {
   checkSearchTerm,
   checkSunlight,
 } from '@/utils/helpers';
+import { useProfile } from '@/utils/ProfileProvider';
 import {
   AddButton,
   FilterContainer,
@@ -38,7 +39,6 @@ import {
   TopRowContainer,
   ViewSelection,
 } from './styles';
-import { useProfile } from '@/utils/ProfileProvider';
 
 // Declaring (static) filter options outside so they're not re-rendered
 // TODO: Maybe export shared filter options from a centralized file

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { UUID } from 'crypto';
 import { BigButton } from '@/components/Buttons';
 import LabeledCustomSelect from '@/components/EditableInput';
 import COLORS from '@/styles/colors';
@@ -42,6 +43,7 @@ interface PlotSelectionProps {
   setSelectedPlot: (selected: boolean) => void;
 }
 interface ReviewPageProps {
+  userId: UUID;
   selectedState: string;
   setSelectedState: (selected: string) => void;
   selectedGardenType: UserTypeEnum;
@@ -125,7 +127,10 @@ const PlotSelection = ({
   );
 };
 
+// TODO: Maybe just directly include this inside OnboardingFlow
+// to mitigate needing to redefine router.
 const ReviewPage = ({
+  userId,
   selectedState,
   setSelectedState,
   selectedGardenType,
@@ -133,15 +138,12 @@ const ReviewPage = ({
   selectedPlot,
   setSelectedPlot,
 }: ReviewPageProps) => {
-  const { userId } = useAuth();
   const { setProfile, setHasPlot } = useProfile();
   const router = useRouter();
 
+  // assumes userId is not null, since the not-logged in case
+  // would have been handled by rerouting from the page
   const handleSubmit = async () => {
-    if (!userId) {
-      console.error('User ID is not available. Please log in.');
-      return;
-    }
     const profile: Profile = {
       user_id: userId,
       us_state: selectedState,
@@ -192,6 +194,8 @@ const ReviewPage = ({
 
 // Main Onboarding Component
 export default function OnboardingFlow() {
+  const { userId, loading: authLoading } = useAuth();
+  const { profileReady, profileData } = useProfile();
   const [step, setStep] = useState(1);
   const [selectedState, setSelectedState] = useState<string>('');
   const [selectedGardenType, setSelectedGardenType] = useState<
@@ -200,6 +204,17 @@ export default function OnboardingFlow() {
   const [selectedPlot, setSelectedPlot] = useState<boolean | undefined>(
     undefined,
   );
+  const { push } = useRouter();
+
+  // If user not logged in, re-route to /login
+  useEffect(() => {
+    if (!authLoading && !userId) push('/login');
+  }, [authLoading, userId, push]);
+
+  // If user already onboarded, re-route to /view-plants
+  useEffect(() => {
+    if (profileReady && profileData) push('/view-plants');
+  }, [profileReady, profileData, push]);
 
   const handleNext = () => {
     setStep(step + 1);
@@ -209,7 +224,9 @@ export default function OnboardingFlow() {
     setStep(step - 1);
   };
 
-  return (
+  return !userId ? (
+    <>Loading</>
+  ) : (
     <div>
       {step === 1 && (
         <StateSelection
@@ -231,6 +248,7 @@ export default function OnboardingFlow() {
       )}
       {step === 4 && (
         <ReviewPage
+          userId={userId}
           selectedState={selectedState}
           setSelectedState={setSelectedState}
           selectedGardenType={selectedGardenType!}
