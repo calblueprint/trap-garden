@@ -9,7 +9,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { UUID } from 'crypto';
 import {
   fetchProfileById,
   upsertProfile,
@@ -53,7 +52,7 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
     }
     try {
       setProfileReady(false);
-      const fetchedProfile = await fetchProfileById(userId as UUID);
+      const fetchedProfile = await fetchProfileById(userId);
       setProfileData(fetchedProfile);
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -77,9 +76,11 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
       throw new Error('Error setting profile');
     }
   }, []);
+
   const updateHasPlot = useCallback((plotValue: boolean | null) => {
     setHasPlot(plotValue); // Explicit setter for hasPlot
   }, []);
+
   const providerValue = useMemo(
     () => ({
       profileData,

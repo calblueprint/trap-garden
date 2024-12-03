@@ -14,7 +14,7 @@ import { AuthResponse, Session } from '@supabase/supabase-js';
 import supabase from '../api/supabase/createClient';
 
 interface AuthContextType {
-  userId: string | null;
+  userId: UUID | null;
   userEmail: string | null;
   session: Session | null;
   signUp: (email: string, password: string) => Promise<AuthResponse>;

@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { UUID } from 'crypto';
 import { BigButton } from '@/components/Buttons';
 import LabeledCustomSelect from '@/components/EditableInput';
 import COLORS from '@/styles/colors';
@@ -144,7 +143,7 @@ const ReviewPage = ({
       return;
     }
     const profile: Profile = {
-      user_id: userId as UUID,
+      user_id: userId,
       us_state: selectedState,
       user_type: selectedGardenType,
     };
@@ -209,6 +208,7 @@ export default function OnboardingFlow() {
   const handleBack = () => {
     setStep(step - 1);
   };
+
   return (
     <div>
       {step === 1 && (
