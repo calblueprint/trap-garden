@@ -27,6 +27,7 @@ import {
   checkSearchTerm,
   checkSunlight,
 } from '@/utils/helpers';
+import { useProfile } from '@/utils/ProfileProvider';
 import {
   AddButton,
   FilterContainer,
@@ -61,8 +62,9 @@ const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
 
 export default function Page() {
   const router = useRouter();
+  const { hasPlot } = useProfile();
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
-    'myPlants',
+    hasPlot ? 'myPlants' : 'all',
   );
   const [inAddMode, setInAddMode] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
