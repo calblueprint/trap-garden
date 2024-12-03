@@ -3,17 +3,16 @@ import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 import Icon from '../Icon';
 
-export const NavColumnItemOuterContainer = styled.div<{ isSelected: boolean }>`
+export const NavColumnItemOuterContainer = styled.div<{ $isSelected: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: ${props =>
-    props.isSelected ? '12px 12px 12px 0px' : '12px 12px 12px 0px'};
-  background-color: ${props =>
-    props.isSelected
-      ? 'rgba(148, 181, 6, 0.1)'
-      : '#f7f6f3'}; // this is COLORS.shrub with 10% opacity
-  border-radius: ${props => (props.isSelected ? '0px 50px 50px 0px' : 'none')};
+  padding: ${({ $isSelected }) =>
+    $isSelected ? '12px 12px 12px 0px' : '12px 12px 12px 0px'};
+  background-color: ${({ $isSelected }) =>
+    $isSelected ? COLORS.sproutLight : COLORS.glimpse};
+  border-radius: ${({ $isSelected }) =>
+    $isSelected ? '0px 50px 50px 0px' : 'none'};
   position: relative;
   z-index: 1;
   margin-right: 8px;

@@ -6,7 +6,7 @@ import Icon from '../Icon';
 export const NavColumnContainer = styled.div`
   min-width: 289px;
   height: 100vh;
-  background: #f7f6f3;
+  background: ${COLORS.glimpse};
   position: fixed;
   z-index: 1000;
   top: 0;
@@ -18,7 +18,7 @@ export const NavColumnContainer = styled.div`
   justify-content: space-between;
 `;
 
-export const Overlay = styled.div<{ isOpen: boolean }>`
+export const Overlay = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -26,7 +26,7 @@ export const Overlay = styled.div<{ isOpen: boolean }>`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
-  display: ${props => (props.isOpen ? 'block' : 'none')};
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
 `;
 
 export const HamburgerButton = styled.button`
@@ -84,7 +84,7 @@ export const SignUpButton = styled(Link)`
   border: none;
   background-color: ${COLORS.shrub};
   padding: 12px 0px 12px 0px;
-  color: #ffffff;
+  color: ${COLORS.glimpse};
   text-decoration: none;
   font-size: 0.875rem;
 `;
@@ -115,10 +115,10 @@ export const SignOutButton = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  border: 1px solid ${COLORS.error};
-  background-color: #f7f6f3;
+  border: 1px solid ${COLORS.errorRed};
+  background-color: ${COLORS.glimpse};
   padding: 12px 0px;
-  color: ${COLORS.error};
+  color: ${COLORS.errorRed};
   text-decoration: none;
   cursor: pointer;
   font-size: 0.875rem;

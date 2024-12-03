@@ -4,6 +4,7 @@ import {
   PlantingTypeEnum,
   SeasonEnum,
   SunlightEnum,
+  UserTypeEnum,
 } from '@/types/schema';
 
 export function getCurrentTimestamp(): string {
@@ -319,4 +320,14 @@ export function fillCalendarGridArrayRowWithColor(
   }
 
   return gridArray;
+}
+// return UserTypeEnum based on user type passed in
+export function getUserType(userType: UserTypeEnum) {
+  const userTypes: Record<UserTypeEnum, string> = {
+    INDIV: 'Individual Garden',
+    SCHOOL: 'School Garden',
+    ORG: 'Community Garden',
+  };
+
+  return userTypes[userType];
 }

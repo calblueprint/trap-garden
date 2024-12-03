@@ -5,7 +5,9 @@ import CONFIG from '@/lib/configs';
 import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
 import { H3, H4 } from '@/styles/text';
+import { UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
+import { getUserType } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
@@ -67,7 +69,7 @@ export default function NavColumn({
     <>
       {isOpen && (
         <>
-          <Overlay onClick={onClose} isOpen={isOpen} />
+          <Overlay onClick={onClose} $isOpen={isOpen} />
           <NavColumnContainer>
             <div>
               <NavColumnHeader>
@@ -85,7 +87,7 @@ export default function NavColumn({
                 {navLinks.map((link: NavLink, key) => (
                   <NavColumnItem
                     key={key}
-                    name={link.name}
+                    routeName={link.name}
                     path={link.path}
                     isSelected={currentPath === link.path}
                     icon={link.iconName}
@@ -103,7 +105,7 @@ export default function NavColumn({
                       Your Account
                     </H3>
                     <H4 $color={COLORS.shrub} style={{ fontWeight: 300 }}>
-                      {profileData?.user_type}
+                      {getUserType(profileData?.user_type as UserTypeEnum)}
                     </H4>
                   </NameAndStatus>
                 </Profile>

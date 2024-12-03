@@ -9,7 +9,7 @@ import {
 } from './styles';
 
 interface NavColumnItemProps {
-  name: string;
+  routeName: string;
   path: string;
   icon: IconType;
   isSelected: boolean;
@@ -17,19 +17,19 @@ interface NavColumnItemProps {
 }
 
 export default function NavColumnItem({
-  name,
+  routeName,
   path,
   icon,
   isSelected,
   onClose,
 }: NavColumnItemProps) {
   return (
-    <NavColumnItemOuterContainer isSelected={isSelected}>
+    <NavColumnItemOuterContainer $isSelected={isSelected}>
       {isSelected && <SelectedIndicator />}
       <NavColumnItemContainer>
         <StyledIcon type={icon} />
         <StyledLink href={path} onClick={onClose}>
-          {name}
+          {routeName}
         </StyledLink>
       </NavColumnItemContainer>
     </NavColumnItemOuterContainer>
