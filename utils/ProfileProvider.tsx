@@ -72,8 +72,9 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
       const updatedProfile = await upsertProfile(completeProfile);
       setProfileData(updatedProfile);
     } catch (error) {
+      // TODO: maybe add some additional type checking of the error
+      // if we only want error.message
       console.error('Error setting profile:', error);
-      throw new Error('Error setting profile');
     }
   }, []);
 
