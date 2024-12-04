@@ -1,4 +1,5 @@
 import React from 'react';
+import Select, { MultiValue } from 'react-select';
 import { DropdownOption } from '@/types/schema';
 import { StyledMultiSelect } from './styles';
 
@@ -17,16 +18,19 @@ export default function FilterDropdownMultiple<T>({
   placeholder,
   disabled = false,
 }: FilterDropdownProps<T>) {
+  const handleChange = (selectedOptions: MultiValue<DropdownOption<T>>) => {
+    setStateAction(selectedOptions as DropdownOption<T>[]);
+  };
+
   return (
-    <StyledMultiSelect
+    <Select
       options={options}
+      isMulti
       value={value}
-      onChange={setStateAction}
-      labelledBy={placeholder}
-      hasSelectAll={false}
-      overrideStrings={{ selectSomeItems: placeholder }}
-      disableSearch
-      disabled={disabled}
+      isDisabled={disabled}
+      placeholder={placeholder}
+      onChange={handleChange}
+      closeMenuOnSelect={false}
     />
   );
 }
