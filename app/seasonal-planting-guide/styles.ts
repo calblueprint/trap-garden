@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
 
 export const PageContainer = styled.div`
   display: flex;
@@ -31,6 +32,8 @@ export const StateOptionsContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  flex-grow: 1;
+  background-color: ${COLORS.glimpse};
 `;
 
 export const PageTitle = styled.div`
