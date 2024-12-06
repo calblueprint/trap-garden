@@ -223,10 +223,19 @@ export function checkDifficulty(
   return false;
 }
 
-export function checkUsState(usStateFilterValue: string, plant: Plant) {
+export function checkUsState(
+  usStateFilterValue: DropdownOption<string>,
+  plant: Plant,
+) {
   // Automatically returns true if no selected usState
+  if (!usStateFilterValue) {
+    return true;
+  }
+
+  console.log('usStateFilterValue', usStateFilterValue);
   // Check if plant's us_state matches usStateFilterValue
-  return usStateFilterValue === '' || plant.us_state === usStateFilterValue;
+  const selectedState = usStateFilterValue.value;
+  return plant.us_state === selectedState;
 }
 
 export function useTitleCase(text: string) {

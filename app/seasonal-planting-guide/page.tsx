@@ -39,7 +39,9 @@ export default function SeasonalPlantingGuide() {
   const [selectedPlantingType, setSelectedPlantingType] = useState<
     DropdownOption<PlantingTypeEnum>[]
   >([]);
-  const [selectedUsState, setSelectedUsState] = useState<string>('');
+  const [selectedUsState, setSelectedUsState] = useState<
+    DropdownOption<string>
+  >({ label: '', value: '' });
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const clearFilters = () => {
@@ -50,7 +52,10 @@ export default function SeasonalPlantingGuide() {
 
   useEffect(() => {
     if (profileReady && profileData) {
-      setSelectedUsState(profileData.us_state);
+      setSelectedUsState({
+        label: profileData.us_state,
+        value: profileData.us_state,
+      });
     }
   }, [profileData, profileReady]);
 
@@ -65,7 +70,6 @@ export default function SeasonalPlantingGuide() {
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <FilterContainer>
           <FilterDropdownSingle
-            id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}
             placeholder="State"
@@ -104,8 +108,6 @@ export default function SeasonalPlantingGuide() {
         <StateOptionsContainer>
           <H3 $color={COLORS.shrub}>Choose Your State</H3>
           <FilterDropdownSingle
-            name="usState"
-            id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}
             placeholder="State"
