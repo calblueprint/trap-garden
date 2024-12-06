@@ -26,16 +26,11 @@ export default function FilterDropdownMultiple<T>({
   placeholder,
   disabled = false,
 }: FilterDropdownProps<T>) {
-  const [userSelectedOptions, setUserSelectedOptions] = useState<
-    DropdownOption<T>[]
-  >([]);
-
   const handleChange = (
     selectedOptions: MultiValue<DropdownOption<T>>,
     _actionMeta: ActionMeta<DropdownOption<T>>,
   ) => {
     setStateAction(selectedOptions as DropdownOption<T>[]);
-    setUserSelectedOptions(selectedOptions as DropdownOption<T>[]);
   };
 
   // overrides the default MultiValue to display custom text
