@@ -1,3 +1,5 @@
+import COLORS from '@/styles/colors';
+
 export default function PasswordComplexity({ password }: { password: string }) {
   // Display requirements if there is input
   if (password.length > 0) {
@@ -19,7 +21,7 @@ export default function PasswordComplexity({ password }: { password: string }) {
 // Helper component to display each requirement with conditional styling
 function Requirement({ met, text }: { met: boolean; text: string }) {
   return (
-    <p style={{ color: met ? 'green' : 'red' }}>
+    <p style={{ color: met ? '#0D8817' : COLORS.error }}>
       {met ? '✓' : '✗'} {text}
     </p>
   );

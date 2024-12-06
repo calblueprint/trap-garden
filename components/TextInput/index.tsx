@@ -1,26 +1,27 @@
 import React from 'react';
-import { InputWrapper, StyledInput, StyledLabel } from './styles';
+import { IconSvgs } from '@/lib/icons';
+import { IconWrapper, InputWrapper, StyledInput, StyledLabel } from './styles';
 
 interface TextInputProps {
   label: string;
   id: string;
   type: string;
   value: string;
-  placeholder: string;
   onChange: (s: string) => void;
   isVisible?: boolean;
   toggleVisibility?: () => void;
+  error?: boolean;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
   label,
   id,
   type,
-  placeholder,
   onChange,
   isVisible,
   value,
   toggleVisibility,
+  error,
 }) => {
   const inputType = type === 'password' && isVisible ? 'text' : type;
 
@@ -29,29 +30,21 @@ const TextInput: React.FC<TextInputProps> = ({
   };
 
   return (
-    <div>
-      <InputWrapper>
-        {label && <StyledLabel htmlFor={id}>{label}</StyledLabel>}
-        <StyledInput
-          id={id}
-          type={inputType}
-          placeholder={placeholder}
-          value={value}
-          onChange={handleChange}
-        />
-      </InputWrapper>
+    <InputWrapper>
+      {label && <StyledLabel htmlFor={id}>{label}</StyledLabel>}
+      <StyledInput
+        id={id}
+        type={inputType}
+        value={value}
+        onChange={handleChange}
+        error={error}
+      />
       {type === 'password' && toggleVisibility && (
-        <button
-          type="button"
-          onClick={toggleVisibility}
-          style={{
-            marginBottom: '10px',
-          }}
-        >
-          {isVisible ? 'Hide' : 'Show'}
-        </button>
+        <IconWrapper onClick={toggleVisibility}>
+          {isVisible ? IconSvgs.hide : IconSvgs.eye}
+        </IconWrapper>
       )}
-    </div>
+    </InputWrapper>
   );
 };
 

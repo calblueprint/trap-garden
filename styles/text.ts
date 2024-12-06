@@ -11,6 +11,7 @@ const TextStyles = css<TextProps>`
   color: ${({ $color }) => $color || COLORS.black};
   text-align: ${({ $align }) => $align};
   margin: 0;
+  fontfamily: "'Lexend', sans-serif";
 `;
 
 export const H1 = styled.h1<TextProps>`
@@ -31,4 +32,10 @@ export const H3 = styled.h3<TextProps>`
 export const H4 = styled.h4<TextProps>`
   ${TextStyles}
   font-size: 1rem;
+`;
+
+export const body2text = css`
+  ${TextStyles};
+  fontsize: '14px';
+  fontweight: 300;
 `;

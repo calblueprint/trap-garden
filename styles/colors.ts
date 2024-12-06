@@ -12,5 +12,9 @@ const COLORS = {
   darkgray: '#555555',
   midgray: '#888888',
   lightgray: '#DDDDDD',
+  whitegray: 'F0F0F0',
+
+  //red
+  error: '#E94444',
 };
 export default COLORS;

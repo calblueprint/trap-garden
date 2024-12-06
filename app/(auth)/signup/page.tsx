@@ -1,28 +1,39 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/app/utils/AuthProvider';
-import PasswordComplexity from '@/app/utils/PasswordComplexity';
+import PasswordComplexity from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
+import {
+  StyledButton,
+  StyledPasswordComplexity,
+} from '@/components/TextInput/styles';
+import COLORS from '@/styles/colors';
+import { H2 } from '@/styles/text';
+import { useAuth } from '@/utils/AuthProvider';
 
 export default function SignUp() {
   const { signUp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordComplexityError, setPasswordComplexityError] = useState<
-    string | null
-  >(null);
-  const [passwordComplexity, setPasswordComplexity] = useState<boolean>(false);
+  const [samePasswordCheck, setSamePasswordCheck] = useState('');
+  const [passwordComplexityError] = useState<string | null>(null);
+  const [isPasswordComplexityMet, setIsPasswordComplexityMet] =
+    useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [blankEmailError, setBlankEmailError] = useState('');
+  const [blankPasswordError, setBlankPasswordError] = useState('');
+  const [blankConfirmPasswordError, setBlankConfirmPasswordError] =
+    useState('');
 
+  const isFormValid =
+    email && password && confirmPassword && password === confirmPassword;
   // Handles input to password
   const handlePasswordChange = (newPassword: string) => {
     setPassword(newPassword);
     validatePasswords(newPassword, confirmPassword);
-    validatePasswordComplexity(newPassword);
+    validateIsPasswordComplexityMet(newPassword);
   };
 
   // Handles input to confirm password
@@ -36,99 +47,154 @@ export default function SignUp() {
     password: string | null,
     confirmPassword: string | null,
   ) => {
-    if (password !== confirmPassword) {
-      setPasswordError('Passwords do not match.');
+    if (!password || !confirmPassword) {
+      setSamePasswordCheck(''); // Clear message if either field is empty
+    } else if (password !== confirmPassword) {
+      setSamePasswordCheck('✗ Passwords do not match');
     } else {
-      setPasswordError(''); // Clear error when passwords match
+      setSamePasswordCheck('✓ Passwords match');
     }
   };
 
   // Set password complexity error if requirements are not met
-  const validatePasswordComplexity = (password: string | null) => {
+  const validateIsPasswordComplexityMet = (password: string | null) => {
     const hasLowerCase = /[a-z]/.test(password || '');
     const hasNumber = /\d/.test(password || '');
     const longEnough = (password || '').length >= 8;
 
     if (password && hasLowerCase && hasNumber && longEnough) {
-      setPasswordComplexity(true);
-      setPasswordComplexityError(null); // Clear error if all conditions are met
+      setIsPasswordComplexityMet(true);
     } else if (password) {
-      setPasswordComplexity(false);
-      setPasswordComplexityError('Password must meet complexity requirements');
+      setIsPasswordComplexityMet(false);
     } else {
-      setPasswordComplexity(false);
-      setPasswordComplexityError(null); // Clear error if password is empty
+      setIsPasswordComplexityMet(false);
     }
   };
 
   const handleSignUp = async () => {
-    if (password) {
+    let isValid = true;
+
+    // Validate email
+    if (!email) {
+      setBlankEmailError('Please enter a valid email address');
+      isValid = false;
+    } else {
+      setBlankEmailError('');
+    }
+
+    // Validate password
+    if (!password) {
+      setBlankPasswordError('Please enter a password');
+      setBlankConfirmPasswordError(''); // Clear confirm password error
+      isValid = false;
+    } else {
+      setBlankPasswordError('');
+    }
+
+    // Validate confirm password
+    if (!confirmPassword && password) {
+      setBlankConfirmPasswordError('Please confirm password');
+      isValid = false;
+    } else if (password !== confirmPassword) {
+      setSamePasswordCheck('✗ Passwords do not match');
+      isValid = false;
+    } else {
+      setSamePasswordCheck('');
+      setBlankConfirmPasswordError('');
+    }
+
+    if (!isValid) return;
+
+    try {
       await signUp(email, password);
-    } 
+    } catch (error) {
+      console.error('Sign up failed:', error);
+      alert('There was an error during sign up. Please try again.');
+    }
   };
 
   return (
-    <div
+    <form
+      onSubmit={handleSignUp}
       style={{
-        backgroundColor: '#f5f5f5',
-        minHeight: '100vh',
-        padding: '20px',
+        backgroundColor: COLORS.whitegray,
+        padding: '1.5rem',
       }}
     >
-      <header>
-        <h1 style={{ color: '#1F5A2A' }}>Sign Up</h1>
-      </header>
-      <TextInput
-        id="email-input"
-        label="Email"
-        type="email"
-        onChange={setEmail}
-        value={email}
-        placeholder="Email"
-      />
-      {/* Email input*/}
-      <TextInput
-        id="password-input"
-        type="password"
-        value={password || ''}
-        onChange={handlePasswordChange}
-        placeholder="Password"
-        isVisible={showPassword}
-        toggleVisibility={() => setShowPassword(!showPassword)}
-        label="Password"
-      />
-      {/* Password input with toggle visibility */}
-      <TextInput
-        id="confirm-password-input"
-        type="password"
-        value={confirmPassword || ''}
-        onChange={handleConfirmPasswordChange}
-        placeholder="Confirm Password"
-        isVisible={showConfirmPassword}
-        toggleVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
-        label="Confirm Password"
-      />
-      {/* Confirm password input with toggle visibility */}
-      <button
-        type="button"
-        onClick={handleSignUp}
-        disabled={!email || !!passwordError || !!passwordComplexityError}
-      >
-        Sign up
-      </button>{' '}
-      {/* Sign up button */}
-      {confirmPassword && passwordError && (
-        <p style={{ color: 'red' }}>{passwordError}</p>
-      )}
-      {/* Conditional password validation error message */}
-      <PasswordComplexity
-        password={password || ''} // Set default value if password is null
-      />
-      {/* Password complexity requirements */}
-      {password && !passwordComplexity && passwordComplexityError && (
-        <p style={{ color: 'red' }}>{passwordComplexityError}</p>
-      )}
-      {/* Password complexity error message */}
-    </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <H2 style={{ color: COLORS.shrub }}>Sign Up</H2>
+        <TextInput
+          id="email-input"
+          label="Email"
+          type="email"
+          onChange={setEmail}
+          value={email}
+          error={!!blankEmailError}
+        />
+        {/* Email input*/}
+        {blankEmailError && (
+          <p style={{ color: COLORS.error, fontSize: '0.875rem' }}>
+            {blankEmailError}
+          </p>
+        )}
+        <TextInput
+          id="password-input"
+          type="password"
+          value={password || ''}
+          onChange={handlePasswordChange}
+          isVisible={showPassword}
+          toggleVisibility={() => setShowPassword(!showPassword)}
+          label="Password"
+          error={!!blankPasswordError}
+        />
+        {/* Password input*/}
+        {blankPasswordError && (
+          <p style={{ color: COLORS.error, fontSize: '0.875rem' }}>
+            {blankPasswordError}
+          </p>
+        )}
+        <StyledPasswordComplexity>
+          <PasswordComplexity
+            password={password} // Set default value if password is null
+          />
+        </StyledPasswordComplexity>
+        {/* Password complexity requirements */}
+        {password && (
+          <TextInput
+            id="confirm-password-input"
+            type="password"
+            value={confirmPassword || ''}
+            onChange={handleConfirmPasswordChange}
+            isVisible={showConfirmPassword}
+            toggleVisibility={() =>
+              setShowConfirmPassword(!showConfirmPassword)
+            }
+            label="Confirm Password"
+            error={!!blankConfirmPasswordError}
+          />
+        )}
+        {/* Confirm password input with toggle visibility */}
+        {blankConfirmPasswordError && (
+          <p style={{ color: COLORS.error, fontSize: '0.875rem' }}>
+            {blankConfirmPasswordError}
+          </p>
+        )}
+        {samePasswordCheck && (
+          <p style={{ color: COLORS.error, fontSize: '0.875rem' }}>
+            {samePasswordCheck}
+          </p>
+        )}
+        <StyledPasswordComplexity>
+          {confirmPassword && samePasswordCheck && (
+            <p style={{ color: '#0D8817' }}>{samePasswordCheck}</p>
+          )}
+          {/* Conditional password validation error message */}
+        </StyledPasswordComplexity>
+        <StyledButton type="button" onClick={handleSignUp}>
+          Sign up
+        </StyledButton>{' '}
+        {/* Sign up button */}
+      </div>
+    </form>
   );
 }
