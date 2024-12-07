@@ -6,8 +6,7 @@ import { H3 } from '@/styles/text';
 export const ImgHeader = styled.div`
   display: flex;
   background-color: ${COLORS.backgroundGrey};
-  padding: 12px 20px;
-  padding-bottom: 27px;
+  padding-bottom: 24px;
   position: relative;
   height: 220px;
 `;
