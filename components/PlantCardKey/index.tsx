@@ -85,7 +85,7 @@ export default function PlantCardKey() {
           label="Outdoors Growing Season"
         />
         <IconAndLabel iconName="harvestSeason" label="Harvest Time" />
-        <IconAndLabel iconName="watering_can" label="Water Frequency" />
+        <IconAndLabel iconName="wateringCan" label="Water Frequency" />
         <IconAndLabel iconName="sun" label="Sunlight Requirement" />
       </IconKeyContainer>
     </PlantCardKeyContainer>
