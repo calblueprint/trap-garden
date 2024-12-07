@@ -1,14 +1,9 @@
 'use client';
 
 import COLORS from '@/styles/colors';
+import { P1, P3 } from '@/styles/text';
 import Icon from '../Icon';
-import {
-  Container,
-  IconWrapper,
-  StyledTitle,
-  TipsList,
-  TitleWrapper,
-} from './style';
+import { Container, IconWrapper, TipsList, TitleWrapper } from './style';
 
 export default function GardeningTips({
   plantName,
@@ -25,13 +20,15 @@ export default function GardeningTips({
         <IconWrapper>
           <Icon type="lightbulb" />
         </IconWrapper>
-        <StyledTitle $color={COLORS.shrub}>
+        <P1 $fontWeight="400" $color={COLORS.shrub}>
           Gardening Tips for {plantName}
-        </StyledTitle>
+        </P1>
       </TitleWrapper>
       <TipsList>
         {tipsArray.map((tip, index) => (
-          <li key={index}>{tip.trim()}</li>
+          <P3 as="li" key={index}>
+            {tip.trim()}
+          </P3>
         ))}
       </TipsList>
     </Container>
