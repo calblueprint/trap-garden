@@ -24,6 +24,7 @@ export const FilterContainer = styled.div`
   gap: 0.5rem;
   margin-top: 12px;
   position: relative;
+  overflow-x: auto;
 `;
 
 export const StateOptionsContainer = styled.div`
