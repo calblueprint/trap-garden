@@ -10,6 +10,7 @@ import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, H3 } from '@/styles/text';
 import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
+import { useTitleCase } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
@@ -71,7 +72,7 @@ export default function SeasonalPlantingGuide() {
   useEffect(() => {
     if (profileReady && profileData) {
       setSelectedUsState({
-        label: profileData.us_state,
+        label: useTitleCase(profileData.us_state),
         value: profileData.us_state,
       });
     }
