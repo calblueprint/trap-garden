@@ -4,6 +4,7 @@ import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import { DifficultyLevelEnum } from '@/types/schema';
+import { useTitleCase } from '@/utils/helpers';
 import DifficultyLevelBar from '../DifficultyLevelBar';
 import Icon from '../Icon';
 import {
@@ -19,18 +20,12 @@ const DifficultyBarAndLabel = ({
 }: {
   difficultyLevel: DifficultyLevelEnum;
 }) => {
-  // to convert difficulty level enum to title case
-  const difficultyToTitleCase: Record<DifficultyLevelEnum, string> = {
-    EASY: 'Easy',
-    MODERATE: 'Moderate',
-    HARD: 'Hard',
-  };
   return (
     <Flex $direction="column" $align="center" $gap="4px">
       <DifficultyLevelBar
         difficultyLevel={difficultyLevel as DifficultyLevelEnum}
       />
-      <P3>{difficultyToTitleCase[difficultyLevel as DifficultyLevelEnum]}</P3>
+      <P3>{useTitleCase(difficultyLevel)}</P3>
     </Flex>
   );
 };

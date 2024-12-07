@@ -81,28 +81,17 @@ export function checkGrowingSeason(
 
   // Handle late/early month logic
   // Set late/early month to just the month using processPlantMonth
-  const indoorsStart =
-    plant.indoors_start && processPlantMonth(plant.indoors_start);
-  const indoorsEnd = plant.indoors_end && processPlantMonth(plant.indoors_end);
   const outdoorsStart =
     plant.outdoors_start && processPlantMonth(plant.outdoors_start);
   const outdoorsEnd =
     plant.outdoors_end && processPlantMonth(plant.outdoors_end);
 
-  // Checks if either indoor_start to indoor_end or outdoor_start to outdoor_end
-  // is within the valid range of months
+  // Checks if outdoor_start to outdoor_end is within the valid range of months
   // exclamation marks to assert values are not undefined
-  return (
-    isInRange(
-      monthToIndex.get(indoorsStart!)!,
-      monthToIndex.get(indoorsEnd!)!,
-      validIndexes!,
-    ) ||
-    isInRange(
-      monthToIndex.get(outdoorsStart!)!,
-      monthToIndex.get(outdoorsEnd!)!,
-      validIndexes!,
-    )
+  return isInRange(
+    monthToIndex.get(outdoorsStart!)!,
+    monthToIndex.get(outdoorsEnd!)!,
+    validIndexes!,
   );
 }
 

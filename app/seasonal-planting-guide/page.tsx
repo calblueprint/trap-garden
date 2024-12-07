@@ -15,6 +15,7 @@ import {
   seasonOptions,
   usStateOptions,
 } from '@/utils/dropdownOptions';
+import { useTitleCase } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
@@ -53,7 +54,7 @@ export default function SeasonalPlantingGuide() {
   useEffect(() => {
     if (profileReady && profileData) {
       setSelectedUsState({
-        label: profileData.us_state,
+        label: useTitleCase(profileData.us_state),
         value: profileData.us_state,
       });
     }
