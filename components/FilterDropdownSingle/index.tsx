@@ -45,6 +45,7 @@ export default function FilterDropdownSingle<T>({
       styles={customSelectStyles<T>(small)}
       isSearchable={false}
       hideSelectedOptions={false}
+      menuPosition="fixed"
     />
   );
 }
