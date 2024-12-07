@@ -1,14 +1,13 @@
 'use client';
 
-import Icon from '../Icon';
+import { Flex } from '@/styles/containers';
+import { H4, P3 } from '@/styles/text';
 import {
-  CareItem,
-  CareText,
-  Container,
-  IconWrapper,
-  Strong,
-  Title,
-} from './style';
+  mapHoursToSunlightEnum,
+  SunlightEnumDisplayMap,
+} from '@/utils/helpers';
+import Icon from '../Icon';
+import { CareItem, IconWrapper, Strong } from './style';
 
 export default function PlantCareDescription({
   waterFreq,
@@ -22,33 +21,36 @@ export default function PlantCareDescription({
   sunlightMaxHours: number;
 }) {
   return (
-    <Container>
-      <Title>Plant Description</Title>
-      <CareItem>
-        <IconWrapper>
-          <Icon type="watering_can" />
-        </IconWrapper>
-        <CareText>
-          <Strong>Water Frequency:</Strong> {waterFreq}
-        </CareText>
-      </CareItem>
-      <CareItem>
-        <IconWrapper>
-          <Icon type="watering_can" />
-        </IconWrapper>
-        <CareText>
-          <Strong>Weeding Frequency:</Strong> {weedingFreq}
-        </CareText>
-      </CareItem>
-      <CareItem>
-        <IconWrapper>
-          <Icon type="sun" />
-        </IconWrapper>
-        <CareText>
-          <Strong>Sunlight Requirement:</Strong> {sunlightMinHours}-
-          {sunlightMaxHours} hours (Full Sun)
-        </CareText>
-      </CareItem>
-    </Container>
+    <Flex $direction="column" $gap="12px">
+      <H4>Plant Description</H4>
+      <Flex $direction="column" $gap="8px">
+        <CareItem>
+          <IconWrapper>
+            <Icon type="watering_can" />
+          </IconWrapper>
+          <P3 as="span">
+            <Strong>Watering Frequency:</Strong> {waterFreq}
+          </P3>
+        </CareItem>
+        <CareItem>
+          <IconWrapper>
+            <Icon type="watering_can" />
+          </IconWrapper>
+          <P3 as="span">
+            <Strong>Weeding Frequency:</Strong> {weedingFreq}
+          </P3>
+        </CareItem>
+        <CareItem>
+          <IconWrapper>
+            <Icon type="sun" />
+          </IconWrapper>
+          <P3 as="span">
+            <Strong>Sunlight Requirement:</Strong> {sunlightMinHours}
+            {sunlightMaxHours ? ` - ${sunlightMaxHours}` : ''} hours (
+            {SunlightEnumDisplayMap[mapHoursToSunlightEnum(sunlightMinHours)]})
+          </P3>
+        </CareItem>
+      </Flex>
+    </Flex>
   );
 }

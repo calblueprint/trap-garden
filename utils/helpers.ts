@@ -148,6 +148,24 @@ export function checkSearchTerm(searchTerm: string, plant: Plant) {
   return plant.plant_name.toLowerCase().includes(searchTerm.toLowerCase());
 }
 
+/* Maps sunlight hours to SunlightEnum for display. Only considers sunlightMinHours.
+Assumes sunlightMinHours between 0-8. SunlightEnum ranges are as follows (left-inclusive):
+SHADE: [0, 2), PARTIAL_SUN: [2, 4), PARTIAL_SUN: [4, 6), FULL: [6, infin)
+*/
+export function mapHoursToSunlightEnum(sunlightMinHours: number): SunlightEnum {
+  if (sunlightMinHours < 2) return 'SHADE';
+  if (sunlightMinHours < 4) return 'PARTIAL_SHADE';
+  if (sunlightMinHours < 6) return 'PARTIAL_SUN';
+  else return 'FULL';
+}
+
+export const SunlightEnumDisplayMap: Record<SunlightEnum, String> = {
+  SHADE: 'Shade',
+  PARTIAL_SHADE: 'Partial Shade',
+  PARTIAL_SUN: 'Partial Sun',
+  FULL: 'Full Sun',
+};
+
 export function checkSunlight(
   sunlightFilterValue: DropdownOption<SunlightEnum>[],
   plant: Plant,
