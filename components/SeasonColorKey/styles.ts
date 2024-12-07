@@ -4,17 +4,16 @@ export const SeasonColorKeyContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
-  column-gap: 2rem;
-  row-gap: 0.75rem;
-  width: 244px;
-  justify-self: center;
+  column-gap: 32px;
+  row-gap: 12px;
+  width: max-content;
   margin-bottom: 12px;
 `;
 
 export const ColorKeyItemContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 0.625rem;
+  gap: 10px;
   align-items: center;
   min-width: 108px;
 `;

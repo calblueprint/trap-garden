@@ -21,7 +21,7 @@ export const HeaderContainer = styled.div`
 export const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 8px;
   margin-top: 12px;
   position: relative;
   overflow-x: auto;
@@ -34,7 +34,7 @@ export const StateOptionsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 16px;
   flex-grow: 1;
   background-color: ${COLORS.glimpse};
 `;
