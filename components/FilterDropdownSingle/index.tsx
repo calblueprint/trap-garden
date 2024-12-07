@@ -28,7 +28,6 @@ export default function FilterDropdownSingle<T>({
     selectedOptions:
       | SingleValue<DropdownOption<T>>
       | MultiValue<DropdownOption<T>>,
-    _actionMeta: ActionMeta<DropdownOption<T>>,
   ) => {
     if (!Array.isArray(selectedOptions)) {
       setStateAction(selectedOptions as DropdownOption<T>);
@@ -43,9 +42,10 @@ export default function FilterDropdownSingle<T>({
       placeholder={placeholder}
       onChange={handleChange}
       closeMenuOnSelect={false}
-      styles={customSelectStyles(small)}
+      styles={customSelectStyles<T>(small)}
       isSearchable={false}
       hideSelectedOptions={false}
+      // can bring this back if we want an 'x' to clear filters for each dropdown
       isClearable={false}
     />
   );

@@ -26,10 +26,7 @@ export default function FilterDropdownMultiple<T>({
   placeholder,
   disabled = false,
 }: FilterDropdownProps<T>) {
-  const handleChange = (
-    selectedOptions: MultiValue<DropdownOption<T>>,
-    _actionMeta: ActionMeta<DropdownOption<T>>,
-  ) => {
+  const handleChange = (selectedOptions: MultiValue<DropdownOption<T>>) => {
     setStateAction(selectedOptions as DropdownOption<T>[]);
   };
 
@@ -38,7 +35,6 @@ export default function FilterDropdownMultiple<T>({
   // StyledMultiValue appears for each selected option, so if more than 1 is selected,
   // the rest of the selected options are not shown, instead the + n is shown as part of the first option
   const StyledMultiValue = ({
-    children,
     ...props
   }: MultiValueProps<
     DropdownOption<T>,
@@ -101,10 +97,12 @@ export default function FilterDropdownMultiple<T>({
       placeholder={placeholder}
       onChange={handleChange}
       closeMenuOnSelect={false}
-      styles={customSelectStyles}
+      styles={customSelectStyles<T>()}
       isSearchable={false}
       hideSelectedOptions={false}
+      // can bring this back if we want an 'x' to clear filters for each dropdown
       isClearable={false}
+      // use custom styled components instead of default components
       components={{ MultiValue: StyledMultiValue, Option: CustomOption }}
     />
   );
