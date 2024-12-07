@@ -9,7 +9,12 @@ export const StyledOption = styled.div`
 `;
 
 // custom styles for react-select component
-export const customSelectStyles: StylesConfig<DropdownOption<any>, true> = {
+// Option type is DropdownOption<T> and isMulti is true
+export const customSelectStyles = <T>(): StylesConfig<
+  DropdownOption<T>,
+  true
+> => ({
+  // container
   control: (baseStyles, state) => ({
     ...baseStyles,
     borderRadius: '57px',
@@ -18,6 +23,7 @@ export const customSelectStyles: StylesConfig<DropdownOption<any>, true> = {
     padding: '8px 14px',
     color: COLORS.midgray,
   }),
+  // placeholder text
   placeholder: baseStyles => ({
     ...baseStyles,
     color: COLORS.midgray,
@@ -25,26 +31,24 @@ export const customSelectStyles: StylesConfig<DropdownOption<any>, true> = {
     padding: '0px',
     margin: '0px',
   }),
-  input: baseStyles => ({
-    ...baseStyles,
-    margin: '0px',
-    padding: '0px',
-  }),
   // hide vertical bar between arrow and text
   indicatorSeparator: baseStyles => ({
     ...baseStyles,
     display: 'none',
   }),
+  // 'x' to clear selected option(s)
   clearIndicator: baseStyles => ({
     ...baseStyles,
     padding: '0px',
   }),
+  // dropdown arrow
   dropdownIndicator: baseStyles => ({
     ...baseStyles,
     padding: '0px',
-    marginLeft: '-4px', // move the dropdown indicator to the left cant override text styles
+    marginLeft: '-4px', // move the dropdown indicator to the left, cant override text styles
     color: COLORS.midgray,
   }),
+  // container for selected multi option
   multiValue: baseStyles => ({
     ...baseStyles,
     backgroundColor: '#fff',
@@ -52,6 +56,7 @@ export const customSelectStyles: StylesConfig<DropdownOption<any>, true> = {
     padding: '0px',
     margin: '0px',
   }),
+  // multi option display text
   multiValueLabel: baseStyles => ({
     ...baseStyles,
     fontSize: '0.75rem',
@@ -59,8 +64,9 @@ export const customSelectStyles: StylesConfig<DropdownOption<any>, true> = {
     padding: '0px',
     paddingLeft: '0px',
   }),
+  // hide 'x' next to each multi option
   multiValueRemove: baseStyles => ({
     ...baseStyles,
     display: 'none',
   }),
-};
+});
