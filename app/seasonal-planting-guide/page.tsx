@@ -7,7 +7,7 @@ import { PlantCalendarList } from '@/components/PlantCalendarList';
 import SearchBar from '@/components/SearchBar';
 import SeasonColorKey from '@/components/SeasonColorKey';
 import COLORS from '@/styles/colors';
-import { Box } from '@/styles/containers';
+import { Box, Flex } from '@/styles/containers';
 import { H1, H3 } from '@/styles/text';
 import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
 import {
@@ -120,7 +120,9 @@ export default function SeasonalPlantingGuide() {
         </StateOptionsContainer>
       ) : (
         <Box $p="20px">
-          <SeasonColorKey />
+          <Flex $direction="row" $justify="center">
+            <SeasonColorKey />
+          </Flex>
           <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}
             harvestSeasonFilterValue={selectedHarvestSeason}
