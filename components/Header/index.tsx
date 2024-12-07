@@ -28,7 +28,7 @@ export default function Header({ toggleNavColumn, isLoggedIn }: HeaderProps) {
       <HamburgerButton onClick={onNavColumnClick}>
         <Icon type="hamburger" />
       </HamburgerButton>
-      <Link href="/">
+      <Link href={CONFIG.home}>
         <Icon type="logo" />
       </Link>
       {isLoggedIn ? (

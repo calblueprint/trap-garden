@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import CONFIG from '@/lib/configs';
@@ -20,6 +20,7 @@ import {
   NavColumnContainer,
   NavColumnHeader,
   NavLinksContainer,
+  OnboardingButton,
   Overlay,
   Profile,
   ProfileDisplayContainer,
@@ -57,13 +58,17 @@ export default function NavColumn({
   const currentPath = usePathname();
   const { signOut } = useAuth();
   const router = useRouter();
-  const { profileData } = useProfile();
+  const { profileData, profileReady } = useProfile();
 
   const handleSignOut = () => {
     router.push(CONFIG.login);
     onClose();
     signOut();
   };
+
+  useEffect(() => {
+    console.log('profileData', profileData);
+  }, [profileData]);
 
   return (
     <>
@@ -76,7 +81,7 @@ export default function NavColumn({
                 <div>
                   {/* empty whitespace for positioning logo and hamburger */}
                 </div>
-                <Link onClick={onClose} href="/">
+                <Link onClick={onClose} href={CONFIG.home}>
                   <Icon type="logo" />
                 </Link>
                 <HamburgerButton onClick={onClose}>
@@ -96,7 +101,13 @@ export default function NavColumn({
                 ))}
               </NavLinksContainer>
             </div>
-            {isLoggedIn ? (
+            {!profileReady ? (
+              <div>Loading...</div>
+            ) : isLoggedIn && profileReady && !profileData ? (
+              <OnboardingButton href={CONFIG.onboarding} onClick={onClose}>
+                Go to Onboarding
+              </OnboardingButton>
+            ) : isLoggedIn ? (
               <ProfileDisplayContainer>
                 <Profile>
                   <ProfileIcon type="profile" />

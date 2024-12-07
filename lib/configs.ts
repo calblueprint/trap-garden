@@ -1,5 +1,5 @@
 const CONFIG = {
-  homepage: '/',
+  home: '/',
   login: '/login',
   signup: '/signup',
   onboarding: '/onboarding',
