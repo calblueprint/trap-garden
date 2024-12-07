@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { UUID } from 'crypto';
 import {
   getAllPlants,
   getMatchingPlantForUserPlant,
@@ -21,6 +20,7 @@ import {
   SeasonEnum,
   SunlightEnum,
 } from '@/types/schema';
+import { useAuth } from '@/utils/AuthProvider';
 import {
   checkDifficulty,
   checkGrowingSeason,
@@ -62,7 +62,9 @@ const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
 
 export default function Page() {
   const router = useRouter();
-  const { hasPlot } = useProfile();
+  const { hasPlot, profileData, profileReady, setPlantsToAdd } = useProfile();
+  const { userId } = useAuth();
+
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
     hasPlot ? 'myPlants' : 'all',
   );
@@ -78,44 +80,45 @@ export default function Page() {
     DropdownOption<SeasonEnum>[]
   >([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const user_id: UUID = '0802d796-ace8-480d-851b-d16293c74a21';
   const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
   const [ownedPlants, setOwnedPlants] = useState<OwnedPlant[]>([]);
-  // TODO: replace this with state from ProfileContext
-  const userState = 'TENNESSEE';
+  const userState = profileData?.us_state ?? 'TENNESSEE';
 
   // Fetch All Plants
   useEffect(() => {
-    (async () => {
-      const plantList = await getAllPlants();
-      // Filter by user's state, since they can only access when onboarded
-      // TODO: add userState to dependency array?
-      // Sort alphabetically first
-      const result = plantList
-        .filter(plant => plant.us_state === userState)
-        .sort((a, b) => a.plant_name.localeCompare(b.plant_name));
-      setPlants(result);
-    })();
-  }, []);
+    // Only fetch plants when profile is ready and we have a state
+    if (profileReady && userState) {
+      (async () => {
+        const plantList = await getAllPlants();
+        const result = plantList
+          .filter(plant => plant.us_state === userState)
+          .sort((a, b) => a.plant_name.localeCompare(b.plant_name));
+        setPlants(result);
+      })();
+    }
+  }, [profileReady, userState]);
 
   // Fetch User Plants for My Garden tab
   useEffect(() => {
-    const fetchUserPlants = async () => {
-      const fetchedUserPlants = await getCurrentUserPlantsByUserId(user_id);
+    // Only fetch user plants if we have a valid userId
+    if (userId) {
+      const fetchUserPlants = async () => {
+        const fetchedUserPlants = await getCurrentUserPlantsByUserId(userId);
 
-      const ownedPlants: OwnedPlant[] = await Promise.all(
-        fetchedUserPlants.map(async userPlant => {
-          const plant = await getMatchingPlantForUserPlant(userPlant);
-          return {
-            userPlantId: userPlant.id,
-            plant,
-          };
-        }),
-      );
-      setOwnedPlants(ownedPlants);
-    };
-    fetchUserPlants();
-  }, []);
+        const ownedPlants: OwnedPlant[] = await Promise.all(
+          fetchedUserPlants.map(async userPlant => {
+            const plant = await getMatchingPlantForUserPlant(userPlant);
+            return {
+              userPlantId: userPlant.id,
+              plant,
+            };
+          }),
+        );
+        setOwnedPlants(ownedPlants);
+      };
+      fetchUserPlants();
+    }
+  }, [userId]);
 
   const clearFilters = () => {
     setSelectedGrowingSeason([]);
@@ -171,13 +174,36 @@ export default function Page() {
     }
   }
   function handleAddPlants() {
-    //TODO: route to add details with proper information
-    router.push('/add-details'); // use CONFIG later
+    setPlantsToAdd(selectedPlants);
+
+    router.push('/add-details');
   }
 
   function handleCancelAddMode() {
     setSelectedPlants([]);
     setInAddMode(false);
+  }
+  // Not logged in
+  if (!userId) {
+    return (
+      <div>
+        <p>Login to view all plants</p>
+        <button onClick={() => router.push('/login')}>Log In</button>
+      </div>
+    );
+  }
+
+  // Not onboarded
+  if (profileReady && !profileData) {
+    return (
+      <div>
+        <H1>Complete Your Profile</H1>
+        <p>Please complete your onboarding to access view plants</p>
+        <button onClick={() => router.push('/onboarding')}>
+          Go To Onboarding
+        </button>
+      </div>
+    );
   }
 
   const plantPluralityString = selectedPlants.length > 1 ? 'Plants' : 'Plant';
@@ -274,15 +300,18 @@ export default function Page() {
               </PlantGridContainer>
             ) : (
               <div>
-                <button onClick={() => setViewingOption('all')}>
-                  Add Plants
-                </button>
+                <p>No plants match your current filters.</p>
               </div>
             )}
           </div>
         )}
         {viewingOption === 'all' && (
           <>
+            filteredPlantList.length === 0 ? (
+            <div>
+              <p>No plants match your current filters.</p>
+            </div>
+            ) : (
             <PlantGridContainer>
               {filteredPlantList.map(plant => (
                 <PlantCard
@@ -295,6 +324,7 @@ export default function Page() {
                 />
               ))}
             </PlantGridContainer>
+            )
             {inAddMode && (
               <AddButton
                 $backgroundColor={
