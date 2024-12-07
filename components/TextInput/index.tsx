@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconSvgs } from '@/lib/icons';
+import Icon from '../Icon';
 import { IconWrapper, InputWrapper, StyledInput, StyledLabel } from './styles';
 
 interface TextInputProps {
@@ -41,7 +41,7 @@ const TextInput: React.FC<TextInputProps> = ({
       />
       {type === 'password' && toggleVisibility && (
         <IconWrapper onClick={toggleVisibility}>
-          {isVisible ? IconSvgs.hide : IconSvgs.eye}
+          <Icon type={isVisible ? 'hide' : 'eye'} />
         </IconWrapper>
       )}
     </InputWrapper>

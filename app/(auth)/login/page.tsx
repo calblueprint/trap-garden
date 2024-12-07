@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import TextInput from '@/components/TextInput';
-import { StyledButton } from '@/components/TextInput/styles';
+import { StyledButton, TextErrorWrapper } from '@/components/TextInput/styles';
 import COLORS from '@/styles/colors';
 import { H2 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
@@ -12,35 +13,32 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [blankEmailError, setBlankEmailError] = useState('');
-  const [blankPasswordError, setBlankPasswordError] = useState('');
+  const [invalidEmailError, setInvalidEmailError] = useState('');
+  const [invalidPasswordError, setInvalidPasswordError] = useState('');
 
+  const isFormValid = email && password;
+
+  const { push } = useRouter();
   const handleLogin = async () => {
-    // Define handleLogin
-    if (!email && !password) {
-      setBlankEmailError('Please enter a valid email address');
-      setBlankPasswordError('Please enter a password');
-      return;
-    }
-
-    if (!email) {
-      setBlankEmailError('Please enter a valid email address');
-    } else {
-      setBlankEmailError('');
-    }
-
-    if (!password) {
-      setBlankPasswordError('Please enter a password');
-    } else {
-      setBlankPasswordError('');
-    }
-
     try {
-      await signIn(email, password);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Login Error:', error.message);
+      const { error } = await signIn(email, password);
+      push('/');
+
+      if (error) {
+        // Match error messages from Supabase
+        if (error.message.includes('Invalid login credentials')) {
+          setInvalidEmailError('Invalid email address');
+          setInvalidPasswordError('Invalid password');
+        }
+        return;
       }
+
+      // Clear errors on success
+      setInvalidEmailError('');
+      setInvalidPasswordError('');
+    } catch (err) {
+      console.error('Login Error:', err);
+      setInvalidEmailError('An unexpected error occurred. Please try again.');
     }
   };
 
@@ -55,37 +53,41 @@ export default function Login() {
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         <H2 style={{ color: COLORS.shrub }}>Log In</H2>
-        <TextInput
-          id="email-input"
-          type="email"
-          label="Email"
-          onChange={setEmail}
-          value={email}
-          error={!!blankEmailError}
-        />
-        {/* Email input*/}
-        {blankEmailError && (
-          <p style={{ color: COLORS.error, fontSize: '0.875rem' }}>
-            {blankEmailError}
+        <TextErrorWrapper>
+          <TextInput
+            id="email-input"
+            type="email"
+            label="Email"
+            onChange={setEmail}
+            value={email}
+            error={!!invalidEmailError}
+          />
+          {/* Email input*/}
+          <p style={{ color: COLORS.error, marginTop: '0' }}>
+            {invalidEmailError}
           </p>
-        )}
-        <TextInput
-          id="password-input"
-          label="Password"
-          type="password"
-          onChange={setPassword}
-          value={password}
-          isVisible={showPassword}
-          toggleVisibility={() => setShowPassword(!showPassword)}
-          error={!!blankPasswordError}
-        />
-        {/* Password input*/}
-        {blankPasswordError && (
-          <p style={{ color: COLORS.error, fontSize: '0.875rem' }}>
-            {blankPasswordError}
+        </TextErrorWrapper>
+        <TextErrorWrapper>
+          <TextInput
+            id="password-input"
+            label="Password"
+            type="password"
+            onChange={setPassword}
+            value={password}
+            isVisible={showPassword}
+            toggleVisibility={() => setShowPassword(!showPassword)}
+            error={!!invalidPasswordError}
+          />
+          <p style={{ color: COLORS.error, marginTop: '0' }}>
+            {invalidPasswordError}
           </p>
-        )}
-        <StyledButton type="button" onClick={handleLogin}>
+          {/* Password input*/}
+        </TextErrorWrapper>
+        <StyledButton
+          type="button"
+          onClick={handleLogin}
+          disabled={!isFormValid}
+        >
           Log in
         </StyledButton>{' '}
         {/* Sign in button */}
