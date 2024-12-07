@@ -18,7 +18,7 @@ export default function PlantCareDescription({
   sunlightMaxHours: number;
 }) {
   return (
-    <Flex $direction="column" $gap="12px">
+    <Flex $direction="column" $gap="12px" $pl="8px">
       <H4>Plant Description</H4>
       <Flex $direction="column" $gap="8px">
         <CareItem>

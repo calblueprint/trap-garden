@@ -1,6 +1,7 @@
 'use client';
 
 import COLORS from '@/styles/colors';
+import { P1 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
 import { formatTimestamp, useTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
@@ -9,10 +10,8 @@ import {
   DetailRow,
   DetailsContainer,
   DetailText,
-  EditButton,
   Header,
-  StyledHeading,
-  StyledIcon,
+  // EditButton,
 } from './style';
 
 export default function YourPlantDetails({
@@ -27,29 +26,25 @@ export default function YourPlantDetails({
   return (
     <Container>
       <Header>
-        <StyledHeading $color={COLORS.shrub}>Your Plant Details</StyledHeading>
-        <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton>
+        <P1 $fontWeight={500} $color={COLORS.shrub}>
+          Your Plant Details
+        </P1>
+        {/* <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton> */}
       </Header>
       <DetailsContainer>
         <DetailRow>
-          <StyledIcon>
-            <Icon type="calendar" />
-          </StyledIcon>
+          <Icon type="calendar" />
           <DetailText>Date Planted: {formatTimestamp(datePlanted)}</DetailText>
         </DetailRow>
 
         <DetailRow>
-          <StyledIcon>
-            <Icon type="plantHand" />
-          </StyledIcon>
+          <Icon type="plantHand" />
           <DetailText>Planting Type: {useTitleCase(plantingType)}</DetailText>
         </DetailRow>
 
         {recentHarvestDate && (
           <DetailRow>
-            <StyledIcon>
-              <Icon type="plant" />
-            </StyledIcon>
+            <Icon type="plant" />
             <DetailText>
               Most Recent Harvest Date: {formatTimestamp(recentHarvestDate)}
             </DetailText>
