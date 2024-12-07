@@ -43,3 +43,9 @@ export const PageTitle = styled.div`
   gap: 12px;
   align-items: center;
 `;
+
+export const VerticalSeparator = styled.div`
+  height: inherit;
+  width: 1px;
+  background-color: ${COLORS.lightgray};
+`;

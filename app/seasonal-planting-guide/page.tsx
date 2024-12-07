@@ -22,6 +22,7 @@ import {
   PageContainer,
   PageTitle,
   StateOptionsContainer,
+  VerticalSeparator,
 } from './styles';
 
 // (static) filter options imported from utils/dropdownOptions
@@ -74,8 +75,11 @@ export default function SeasonalPlantingGuide() {
             placeholder="State"
             options={usStateOptions}
             disabled={!selectedUsState}
-            small={false}
+            small={true}
           />
+
+          {/* vertical bar to separate state and other filters */}
+          <VerticalSeparator />
 
           <FilterDropdownMultiple
             value={selectedGrowingSeason}
@@ -112,7 +116,6 @@ export default function SeasonalPlantingGuide() {
             setStateAction={setSelectedUsState}
             placeholder="State"
             options={usStateOptions}
-            small={true}
           />
         </StateOptionsContainer>
       ) : (

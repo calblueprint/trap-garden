@@ -22,6 +22,7 @@ export const customSelectStyles = <T>(): StylesConfig<
     backgroundColor: state.isDisabled ? COLORS.lightgray : '#fff',
     padding: '8px 14px',
     color: COLORS.midgray,
+    minWidth: '138px',
   }),
   // placeholder text
   placeholder: baseStyles => ({
