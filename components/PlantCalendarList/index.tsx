@@ -14,7 +14,6 @@ import {
   checkSearchTerm,
   checkUsState,
 } from '@/utils/helpers';
-import MonthHeader from '../MonthHeader';
 import PlantCalendarRow from '../PlantCalendarRow';
 import * as Styles from './styles';
 
@@ -25,6 +24,31 @@ interface PlantListProps {
   usStateFilterValue: DropdownOption<string> | null;
   searchTerm: string;
 }
+
+const months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+const MonthHeader = () => {
+  return (
+    <Styles.MonthsContainer>
+      {months.map((month, index) => (
+        <P3 key={index}>{month}</P3>
+      ))}
+    </Styles.MonthsContainer>
+  );
+};
 
 export const PlantCalendarList = ({
   harvestSeasonFilterValue,
