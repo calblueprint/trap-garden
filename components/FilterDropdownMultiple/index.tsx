@@ -99,8 +99,6 @@ export default function FilterDropdownMultiple<T>({
       styles={customSelectStyles<T>()}
       isSearchable={false}
       hideSelectedOptions={false}
-      // can bring this back if we want an 'x' to clear filters for each dropdown
-      isClearable={false}
       // use custom styled components instead of default components
       components={{ MultiValue: StyledMultiValue, Option: CustomOption }}
     />

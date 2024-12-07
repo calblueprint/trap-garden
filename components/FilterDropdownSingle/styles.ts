@@ -25,12 +25,15 @@ export const customSelectStyles = <T>(
   control: (baseStyles, state) => ({
     ...baseStyles,
     borderRadius: '57px',
-    border: `0.5px solid ${COLORS.midgray}`,
-    backgroundColor: state.isDisabled ? COLORS.lightgray : '#fff',
+    border: `0.5px solid ${state.hasValue ? COLORS.shrub : COLORS.midgray}`,
+    backgroundColor: state.isDisabled
+      ? COLORS.lightgray
+      : state.hasValue
+        ? COLORS.shrub
+        : '#fff',
     padding: '8px 14px',
     color: COLORS.midgray,
-    // if small is true, set min width to 150px, if undefined don't set min width
-    ...($isSmall && { minWidth: '150px' }),
+    minWidth: $isSmall ? '93px' : '150px',
   }),
   // placeholder text
   placeholder: baseStyles => ({
@@ -52,21 +55,20 @@ export const customSelectStyles = <T>(
     padding: '0px',
   }),
   // dropdown arrow
-  dropdownIndicator: baseStyles => ({
+  dropdownIndicator: (baseStyles, state) => ({
     ...baseStyles,
     padding: '0px',
     marginLeft: '-4px', // move the dropdown indicator to the left, cant override text styles
-    color: COLORS.midgray,
+    color: state.hasValue ? '#fff' : COLORS.midgray,
   }),
   // selected option display text
-  singleValue: baseStyles => ({
+  singleValue: (baseStyles, state) => ({
     ...baseStyles,
-    backgroundColor: '#fff',
     border: '0px',
     padding: '0px',
     margin: '0px',
     fontSize: '0.75rem',
-    color: `${COLORS.black} !important`,
+    color: state.hasValue ? `#fff` : `${COLORS.black} !important`,
     paddingLeft: '0px',
   }),
 });
