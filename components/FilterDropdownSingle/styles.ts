@@ -17,9 +17,11 @@ export const FilterDropdownInput = styled.select<{ $hasValue: boolean }>`
 `;
 
 // custom styles for react-select component
-export const customSelectStyles = (
+// Option type is DropdownOption<T>
+export const customSelectStyles = <T>(
   $isSmall: boolean,
-): StylesConfig<DropdownOption<any>, true> => ({
+): StylesConfig<DropdownOption<T>, true> => ({
+  // container
   control: (baseStyles, state) => ({
     ...baseStyles,
     borderRadius: '57px',
@@ -30,6 +32,7 @@ export const customSelectStyles = (
     // if small is true, set min width to 150px, if undefined don't set min width
     ...($isSmall && { minWidth: '150px' }),
   }),
+  // placeholder text
   placeholder: baseStyles => ({
     ...baseStyles,
     color: COLORS.midgray,
@@ -38,26 +41,24 @@ export const customSelectStyles = (
     margin: '0px',
     justifySelf: 'center',
   }),
-  input: baseStyles => ({
-    ...baseStyles,
-    margin: '0px',
-    padding: '0px',
-  }),
   // hide vertical bar between arrow and text
   indicatorSeparator: baseStyles => ({
     ...baseStyles,
     display: 'none',
   }),
+  // 'x' to clear selected option(s)
   clearIndicator: baseStyles => ({
     ...baseStyles,
     padding: '0px',
   }),
+  // dropdown arrow
   dropdownIndicator: baseStyles => ({
     ...baseStyles,
     padding: '0px',
-    marginLeft: '-4px', // move the dropdown indicator to the left cant override text styles
+    marginLeft: '-4px', // move the dropdown indicator to the left, cant override text styles
     color: COLORS.midgray,
   }),
+  // selected option display text
   singleValue: baseStyles => ({
     ...baseStyles,
     backgroundColor: '#fff',
