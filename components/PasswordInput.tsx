@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface PasswordInputProps {
-  value: string | null;
+  value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
   isVisible: boolean;
@@ -14,7 +14,6 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   onChange,
   placeholder,
   isVisible,
-  toggleVisibility,
   name,
 }) => {
   return (
@@ -26,9 +25,6 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
         value={value || ''}
         placeholder={placeholder}
       />
-      <button type="button" onClick={toggleVisibility}>
-        {isVisible ? 'Hide' : 'Show'}
-      </button>
     </div>
   );
 };
