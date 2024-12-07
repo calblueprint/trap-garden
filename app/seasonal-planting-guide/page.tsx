@@ -36,7 +36,7 @@ const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
   { label: 'Start Seeds Indoors', value: 'INDOORS' },
   { label: 'Start Seeds Outdoors', value: 'OUTDOORS' },
   {
-    label: 'Plant Seedlings/Transplant Outdoors',
+    label: 'Plant Seedlings / Transplant Outdoors',
     value: 'TRANSPLANT',
   },
 ];
@@ -56,9 +56,8 @@ export default function SeasonalPlantingGuide() {
   const [selectedPlantingType, setSelectedPlantingType] = useState<
     DropdownOption<PlantingTypeEnum>[]
   >([]);
-  const [selectedUsState, setSelectedUsState] = useState<
-    DropdownOption<string>
-  >({ label: '', value: '' });
+  const [selectedUsState, setSelectedUsState] =
+    useState<DropdownOption<string> | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const clearFilters = () => {
@@ -92,6 +91,7 @@ export default function SeasonalPlantingGuide() {
             placeholder="State"
             options={usStateOptions}
             disabled={!selectedUsState}
+            small={false}
           />
 
           <FilterDropdownMultiple
@@ -129,6 +129,7 @@ export default function SeasonalPlantingGuide() {
             setStateAction={setSelectedUsState}
             placeholder="State"
             options={usStateOptions}
+            small={true}
           />
         </StateOptionsContainer>
       ) : (

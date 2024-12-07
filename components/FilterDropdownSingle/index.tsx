@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
-import Select, {
-  ActionMeta,
-  components,
-  GroupBase,
-  MultiValue,
-  OptionProps,
-  SingleValue,
-} from 'react-select';
+import React from 'react';
+import Select, { ActionMeta, MultiValue, SingleValue } from 'react-select';
 import { DropdownOption } from '@/types/schema';
-import { customSelectStyles } from '../FilterDropdownMultiple/styles';
-import { FilterDropdownInput } from './styles';
+import { customSelectStyles } from './styles';
 
 interface FilterDropdownProps<T> {
-  value: DropdownOption<T>;
-  setStateAction: React.Dispatch<React.SetStateAction<DropdownOption<T>>>;
+  value: DropdownOption<T> | null;
+  setStateAction: React.Dispatch<
+    React.SetStateAction<DropdownOption<T> | null>
+  >;
   options: DropdownOption<T>[];
   placeholder: string;
   disabled?: boolean;
+  // for custom styling since initial dropdown to select user's state
+  // is a different size to a normal single dropdown
+  small: boolean;
 }
 
 export default function FilterDropdownSingle<T>({
@@ -25,14 +22,8 @@ export default function FilterDropdownSingle<T>({
   options,
   placeholder,
   disabled,
+  small,
 }: FilterDropdownProps<T>) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setStateAction(event.target.value);
-  //   setIsOpen(false);
-  // };
-
   const handleChange = (
     selectedOptions:
       | SingleValue<DropdownOption<T>>
@@ -44,31 +35,7 @@ export default function FilterDropdownSingle<T>({
     }
   };
 
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
-    // <FilterDropdownInput
-    //   name={name}
-    //   id={id}
-    //   onChange={handleChange}
-    //   onClick={handleToggle}
-    //   onBlur={() => setIsOpen(false)}
-    //   value={value}
-    //   $hasValue={value !== ''}
-    //   disabled={disabled}
-    // >
-    //   {/*Default placeholder text*/}
-    //   <option value="" disabled hidden>
-    //     {placeholder}
-    //   </option>
-    //   {options.map((option, index) => (
-    //     <option key={index} value={option.value}>
-    //       {option.label}
-    //     </option>
-    //   ))}
-    // </FilterDropdownInput>
     <Select
       options={options}
       value={value}
@@ -76,7 +43,7 @@ export default function FilterDropdownSingle<T>({
       placeholder={placeholder}
       onChange={handleChange}
       closeMenuOnSelect={false}
-      styles={customSelectStyles}
+      styles={customSelectStyles(small)}
       isSearchable={false}
       hideSelectedOptions={false}
       isClearable={false}
