@@ -12,7 +12,7 @@ const COLORS = {
   darkgray: '#555555',
   midgray: '#888888',
   lightgray: '#DDDDDD',
-  backgroundGrey: '#f9fafb',
+  backgroundGrey: '#F7F6F3',
   glimpse: '#F7F6F3',
 
   // error

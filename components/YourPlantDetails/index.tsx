@@ -1,19 +1,26 @@
 'use client';
 
+import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
-import { H3 } from '@/styles/text';
+import { Flex } from '@/styles/containers';
+import { P1, P3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
 import { formatTimestamp, useTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
 import {
   Container,
-  DetailRow,
-  DetailsContainer,
-  DetailText,
-  EditButton,
   Header,
-  StyledIcon,
+  // EditButton,
 } from './style';
+
+function DetailRow(iconType: IconType, text: string) {
+  return (
+    <Flex $align="center" $gap="8px">
+      <Icon type={iconType} />
+      <P3 $fontWeight={400}>{text}</P3>
+    </Flex>
+  );
+}
 
 export default function YourPlantDetails({
   datePlanted,
@@ -27,35 +34,20 @@ export default function YourPlantDetails({
   return (
     <Container>
       <Header>
-        <H3 $color={COLORS.shrub}>Your Plant Details</H3>
-        <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton>
+        <P1 $fontWeight={500} $color={COLORS.shrub}>
+          Your Plant Details
+        </P1>
+        {/* <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton> */}
       </Header>
-      <DetailsContainer>
-        <DetailRow>
-          <StyledIcon>
-            <Icon type="calendar" />
-          </StyledIcon>
-          <DetailText>Date Planted: {formatTimestamp(datePlanted)}</DetailText>
-        </DetailRow>
-
-        <DetailRow>
-          <StyledIcon>
-            <Icon type="plantHand" />
-          </StyledIcon>
-          <DetailText>Planting Type: {useTitleCase(plantingType)}</DetailText>
-        </DetailRow>
-
-        {recentHarvestDate && (
-          <DetailRow>
-            <StyledIcon>
-              <Icon type="plant" />
-            </StyledIcon>
-            <DetailText>
-              Most Recent Harvest Date: {formatTimestamp(recentHarvestDate)}
-            </DetailText>
-          </DetailRow>
-        )}
-      </DetailsContainer>
+      <Flex $direction="column" $gap="8px">
+        {DetailRow('calendar', `Date Planted: ${formatTimestamp(datePlanted)}`)}
+        {DetailRow('plantHand', `Planting Type: ${useTitleCase(plantingType)}`)}
+        {recentHarvestDate &&
+          DetailRow(
+            'plant',
+            `Most Recent Harvest Date: ${formatTimestamp(recentHarvestDate)}`,
+          )}
+      </Flex>
     </Container>
   );
 }

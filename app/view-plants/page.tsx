@@ -159,7 +159,7 @@ export default function Page() {
   ]);
 
   function handleUserPlantCardClick(ownedPlant: OwnedPlant) {
-    router.push(`my-garden/${ownedPlant.userPlantId}`);
+    router.push(`/plant-page/my-garden/${ownedPlant.userPlantId}`);
   }
 
   function handlePlantCardClick(plant: Plant) {
@@ -170,7 +170,7 @@ export default function Page() {
         setSelectedPlants([...selectedPlants, plant]);
       }
     } else {
-      router.push(`all-plants/${plant.id}`);
+      router.push(`/plant-page/all-plants/${plant.id}`);
     }
   }
   function handleAddPlants() {
@@ -286,7 +286,11 @@ export default function Page() {
         </Flex>
         {viewingOption === 'myPlants' && (
           <div>
-            {filteredUserPlantList.length ? (
+            {ownedPlants.length === 0 ? (
+              <>Add Plants To Your Garden</>
+            ) : filteredUserPlantList.length === 0 ? (
+              <p>No plants match your current filters.</p>
+            ) : (
               <PlantGridContainer>
                 {filteredUserPlantList.map(ownedPlant => (
                   <PlantCard
@@ -298,33 +302,31 @@ export default function Page() {
                   />
                 ))}
               </PlantGridContainer>
-            ) : (
-              <div>
-                <p>No plants match your current filters.</p>
-              </div>
             )}
           </div>
         )}
         {viewingOption === 'all' && (
           <>
-            filteredPlantList.length === 0 ? (
-            <div>
-              <p>No plants match your current filters.</p>
-            </div>
+            {plants.length === 0 ? (
+              <>Loading...</>
+            ) : filteredPlantList.length === 0 ? (
+              <div>
+                <p>No plants match your current filters.</p>
+              </div>
             ) : (
-            <PlantGridContainer>
-              {filteredPlantList.map(plant => (
-                <PlantCard
-                  key={plant.id}
-                  plant={plant}
-                  canSelect={inAddMode}
-                  isSelected={selectedPlants.includes(plant)}
-                  onClick={() => handlePlantCardClick(plant)}
-                  // aspectRatio="168 / 200"
-                />
-              ))}
-            </PlantGridContainer>
-            )
+              <PlantGridContainer>
+                {filteredPlantList.map(plant => (
+                  <PlantCard
+                    key={plant.id}
+                    plant={plant}
+                    canSelect={inAddMode}
+                    isSelected={selectedPlants.includes(plant)}
+                    onClick={() => handlePlantCardClick(plant)}
+                    // aspectRatio="168 / 200"
+                  />
+                ))}
+              </PlantGridContainer>
+            )}
             {inAddMode && (
               <AddButton
                 $backgroundColor={

@@ -17,6 +17,7 @@ export async function insertUserPlants(
     if (error) throw new Error(`Error inserting data: ${error.message}`);
   });
 }
+
 export async function getUserPlantById(userPlantId: UUID): Promise<UserPlant> {
   const { data, error } = await supabase
     .from('user_plants')
@@ -27,10 +28,11 @@ export async function getUserPlantById(userPlantId: UUID): Promise<UserPlant> {
     .single();
 
   if (error) {
-    throw new Error(`Error fetching plant ID: ${error}`);
+    throw new Error(`Error fetching plant ID ${userPlantId}: ${error.message}`);
   }
   return data;
 }
+
 export async function getCurrentUserPlantsByUserId(
   user_id: UUID,
 ): Promise<UserPlant[]> {
@@ -39,8 +41,36 @@ export async function getCurrentUserPlantsByUserId(
     .select('*')
     .eq('user_id', user_id)
     .is('date_removed', null);
+
   if (error) {
-    throw new Error(`Error fetching userPlant: ${error}`);
+    throw new Error(
+      `Error fetching userPlants for user ${user_id}: ${error.message}`,
+    );
+  }
+  return data;
+}
+
+export async function upsertUserPlant(userPlant: UserPlant) {
+  const { data, error } = await supabase
+    .from('user_plants')
+    .upsert(userPlant)
+    .select();
+
+  if (error) {
+    throw new Error(`Error upserting plant ${userPlant.id}: ${error.message}`);
+  }
+  return data;
+}
+
+// removeUserPlantById is not currenlty being used
+export async function removeUserPlantById(id: UUID) {
+  const { data, error } = await supabase
+    .from('user_plants')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(`Error deleting plant ${id}:' ${error}`);
   }
   return data;
 }
