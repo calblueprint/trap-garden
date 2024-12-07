@@ -14,19 +14,20 @@ import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
 import YourPlantDetails from '@/components/YourPlantDetails';
 import { Flex } from '@/styles/containers';
-import { H3, H4 } from '@/styles/text';
+import { H4 } from '@/styles/text';
 import { Plant, UserPlant } from '@/types/schema';
 import { getCurrentTimestamp } from '@/utils/helpers';
 import {
   BackButton,
   ButtonWrapper,
-  Header,
-  HeaderContent,
+  ComponentWrapper,
+  Content,
+  ImgHeader,
+  NameWrapper,
   PlantImage,
-  RemoveButton,
-  Subtitle,
-  TitleWrapper,
-} from './style';
+  PlantName,
+} from '../../style';
+import { RemoveButton, Subtitle } from './style';
 
 export default function UserPlantPage() {
   const router = useRouter();
@@ -59,33 +60,31 @@ export default function UserPlantPage() {
 
   return currentPlant && currentUserPlant ? (
     <>
-      <Header>
-        <HeaderContent>
-          <ButtonWrapper>
-            <BackButton
-              onClick={() => {
-                router.push(`/view-plants`);
-              }}
-            >
-              ←
-            </BackButton>
-            <RemoveButton onClick={removePlant}>X Remove</RemoveButton>
-          </ButtonWrapper>
-          <PlantImage src={currentPlant.img} alt={currentPlant.plant_name} />
-        </HeaderContent>
-      </Header>
+      <ImgHeader>
+        <ButtonWrapper>
+          <BackButton
+            onClick={() => {
+              router.push(`/view-plants`);
+            }}
+          >
+            ←
+          </BackButton>
+          <RemoveButton onClick={removePlant}>X Remove</RemoveButton>
+        </ButtonWrapper>
+        <PlantImage src={currentPlant.img} alt={currentPlant.plant_name} />
+      </ImgHeader>
 
-      <Flex $direction="column" $p="24px">
-        <TitleWrapper>
-          <Flex $gap="8px" $align="center">
-            <H3 $fontWeight={400}>{currentPlant.plant_name}</H3>
+      <Content>
+        <Flex $direction="column" $gap="2px" $mb="12px">
+          <NameWrapper>
+            <PlantName>{currentPlant.plant_name}</PlantName>
             <DifficultyLevelBar
               difficultyLevel={currentPlant.difficulty_level}
             />
-          </Flex>
+          </NameWrapper>
           <Subtitle>You have this plant in your garden!</Subtitle>
-        </TitleWrapper>
-        <Flex $direction="column" $gap="32px">
+        </Flex>
+        <ComponentWrapper>
           <YourPlantDetails
             datePlanted={currentUserPlant.date_added}
             plantingType={currentUserPlant.planting_type}
@@ -118,8 +117,8 @@ export default function UserPlantPage() {
               outdoorsEnd={currentPlant.outdoors_end}
             />
           </Flex>
-        </Flex>
-      </Flex>
+        </ComponentWrapper>
+      </Content>
     </>
   ) : (
     <>Loading</>

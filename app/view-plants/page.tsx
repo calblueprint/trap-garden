@@ -156,7 +156,7 @@ export default function Page() {
   ]);
 
   function handleUserPlantCardClick(ownedPlant: OwnedPlant) {
-    router.push(`my-garden/${ownedPlant.userPlantId}`);
+    router.push(`/plant-page/my-garden/${ownedPlant.userPlantId}`);
   }
 
   function handlePlantCardClick(plant: Plant) {
@@ -167,7 +167,7 @@ export default function Page() {
         setSelectedPlants([...selectedPlants, plant]);
       }
     } else {
-      router.push(`all-plants/${plant.id}`);
+      router.push(`/plant-page/all-plants/${plant.id}`);
     }
   }
   function handleAddPlants() {
