@@ -45,7 +45,8 @@ export interface UserPlant {
   user_id: UUID;
   plant_id: UUID;
   date_added: string;
-  date_harvested: string;
+  date_removed: string;
+  // recent_date_harvest: string;
   planting_type: PlantingTypeEnum;
 }
 

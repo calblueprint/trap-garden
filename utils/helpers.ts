@@ -6,6 +6,10 @@ import {
   SunlightEnum,
 } from '@/types/schema';
 
+export function getCurrentTimestamp(): string {
+  return new Date().toISOString();
+}
+
 /* Helper function to process late/early month fields
 Assumes that month is not null. 
 Assumes that the month is a valid month string; 

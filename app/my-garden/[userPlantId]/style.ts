@@ -1,13 +1,9 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
-
-export const Container = styled.div`
-  padding: 20px;
-`;
+import { P3 } from '@/styles/text';
 
 export const Header = styled.div`
   background-color: ${COLORS.backgroundGrey};
-  margin: -28px -28px 24px -28px;
   padding: 12px 20px;
   padding-bottom: 27px;
 `;
@@ -21,6 +17,8 @@ export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  // padding will need to be replaced by
+  // absolutely styled to lie above the image in the future
   padding-top: 24px;
 `;
 
@@ -52,19 +50,6 @@ export const PlantImage = styled.img`
   display: block;
 `;
 
-export const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-export const NameWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 8.5px;
-`;
-
 export const PlantName = styled.h1`
   text-align: center;
   font-size: 1.5rem;
@@ -74,12 +59,9 @@ export const PlantName = styled.h1`
   margin: 0;
 `;
 
-export const Subtitle = styled.h4`
-  font-size: 0.75rem;
+export const Subtitle = styled(P3)`
   font-style: italic;
   font-weight: 400;
-  line-height: normal;
-  margin: 0;
   color: ${COLORS.shrub};
 `;
 
@@ -87,4 +69,5 @@ export const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
+  margin-bottom: 12px;
 `;

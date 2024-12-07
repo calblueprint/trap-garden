@@ -6,23 +6,23 @@ import { UUID } from 'crypto';
 import { getMatchingPlantForUserPlant } from '@/api/supabase/queries/plants';
 import {
   getUserPlantById,
-  removeUserPlantById,
+  upsertUserPlant,
 } from '@/api/supabase/queries/userPlants';
 import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
+import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
 import YourPlantDetails from '@/components/YourPlantDetails';
-import { Plant, PlantingTypeEnum, UserPlant } from '@/types/schema';
+import { Flex } from '@/styles/containers';
+import { H3, H4 } from '@/styles/text';
+import { Plant, UserPlant } from '@/types/schema';
+import { getCurrentTimestamp } from '@/utils/helpers';
 import {
   BackButton,
   ButtonWrapper,
-  Container,
-  Content,
   Header,
   HeaderContent,
-  NameWrapper,
   PlantImage,
-  PlantName,
   RemoveButton,
   Subtitle,
   TitleWrapper,
@@ -44,65 +44,84 @@ export default function UserPlantPage() {
     };
     getPlant();
   }, [userPlantId]);
+
   async function removePlant() {
-    await removeUserPlantById(userPlantId);
+    if (!currentUserPlant) return;
+    try {
+      // Originally, removeUserPlantById(userPlantId);
+      currentUserPlant.date_removed = getCurrentTimestamp();
+      await upsertUserPlant(currentUserPlant);
+    } catch (error) {
+      console.error(error);
+    }
     router.push(`/view-plants`);
   }
 
-  return (
-    <Container>
-      {currentPlant && currentUserPlant && (
-        <>
-          <Header>
-            <HeaderContent>
-              <ButtonWrapper>
-                <BackButton
-                  onClick={() => {
-                    router.push(`/view-plants`);
-                  }}
-                >
-                  ←
-                </BackButton>
-                <RemoveButton onClick={removePlant}>X Remove</RemoveButton>
-              </ButtonWrapper>
-              <PlantImage
-                src={currentPlant.img}
-                alt={currentPlant.plant_name}
-              />
-            </HeaderContent>
-          </Header>
+  return currentPlant && currentUserPlant ? (
+    <>
+      <Header>
+        <HeaderContent>
+          <ButtonWrapper>
+            <BackButton
+              onClick={() => {
+                router.push(`/view-plants`);
+              }}
+            >
+              ←
+            </BackButton>
+            <RemoveButton onClick={removePlant}>X Remove</RemoveButton>
+          </ButtonWrapper>
+          <PlantImage src={currentPlant.img} alt={currentPlant.plant_name} />
+        </HeaderContent>
+      </Header>
 
-          <Content>
-            <TitleWrapper>
-              <NameWrapper>
-                <PlantName>{currentPlant.plant_name}</PlantName>
-                <DifficultyLevelBar
-                  difficultyLevel={currentPlant.difficulty_level}
-                />
-              </NameWrapper>
-              <Subtitle>You have this plant in your garden!</Subtitle>
-            </TitleWrapper>
-
-            <YourPlantDetails
-              datePlanted={currentUserPlant.date_added}
-              plantingType={currentUserPlant.planting_type as PlantingTypeEnum}
-              recentHarvestDate={currentUserPlant.date_harvested}
+      <Flex $direction="column" $p="24px">
+        <TitleWrapper>
+          <Flex $gap="8px" $align="center">
+            <H3 $fontWeight={400}>{currentPlant.plant_name}</H3>
+            <DifficultyLevelBar
+              difficultyLevel={currentPlant.difficulty_level}
             />
+          </Flex>
+          <Subtitle>You have this plant in your garden!</Subtitle>
+        </TitleWrapper>
+        <Flex $direction="column" $gap="32px">
+          <YourPlantDetails
+            datePlanted={currentUserPlant.date_added}
+            plantingType={currentUserPlant.planting_type}
+            recentHarvestDate={null} // eventually currentUserPlant.recent_date_harvested
+          />
 
-            <GardeningTips
-              plantName={currentPlant.plant_name}
-              plantTips={currentPlant.plant_tips}
-            />
+          <GardeningTips
+            plantName={currentPlant.plant_name}
+            plantTips={currentPlant.plant_tips}
+          />
 
-            <PlantCareDescription
-              waterFreq={currentPlant.water_frequency}
-              weedingFreq={currentPlant.weeding_frequency}
-              sunlightMaxHours={currentPlant.sunlight_max_hours}
-              sunlightMinHours={currentPlant.sunlight_min_hours}
+          <PlantCareDescription
+            waterFreq={currentPlant.water_frequency}
+            weedingFreq={currentPlant.weeding_frequency}
+            sunlightMaxHours={currentPlant.sunlight_max_hours}
+            sunlightMinHours={currentPlant.sunlight_min_hours}
+          />
+
+          <Flex $direction="column" $gap="8px">
+            <H4>Planting Timeline</H4>
+            {/*add SeasonalColorKey here */}
+            <PlantCalendarRow
+              harvestStart={currentPlant.harvest_start}
+              harvestEnd={currentPlant.harvest_end}
+              transplantStart={currentPlant.transplant_start}
+              transplantEnd={currentPlant.transplant_end}
+              indoorsStart={currentPlant.indoors_start}
+              indoorsEnd={currentPlant.indoors_end}
+              outdoorsStart={currentPlant.outdoors_start}
+              outdoorsEnd={currentPlant.outdoors_end}
             />
-          </Content>
-        </>
-      )}
-    </Container>
+          </Flex>
+        </Flex>
+      </Flex>
+    </>
+  ) : (
+    <>Loading</>
   );
 }
