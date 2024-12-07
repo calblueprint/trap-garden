@@ -163,14 +163,14 @@ function mapHoursToSunlightEnum(sunlightMinHours: number): SunlightEnum {
   else return 'FULL';
 }
 
-const SunlightEnumDisplayMap: Record<SunlightEnum, String> = {
+const SunlightEnumDisplayMap: Record<SunlightEnum, string> = {
   SHADE: 'Shade',
   PARTIAL_SHADE: 'Partial Shade',
   PARTIAL_SUN: 'Partial Sun',
   FULL: 'Full Sun',
 };
 
-export function displaySunlightEnumFromHours(sunlightMinHours: number): String {
+export function displaySunlightEnumFromHours(sunlightMinHours: number): string {
   return SunlightEnumDisplayMap[mapHoursToSunlightEnum(sunlightMinHours)];
 }
 
