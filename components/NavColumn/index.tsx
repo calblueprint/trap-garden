@@ -7,7 +7,7 @@ import COLORS from '@/styles/colors';
 import { H3, H4 } from '@/styles/text';
 import { UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { getUserType } from '@/utils/helpers';
+import { formatUserType } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
@@ -116,7 +116,7 @@ export default function NavColumn({
                       Your Account
                     </H3>
                     <H4 $color={COLORS.shrub} style={{ fontWeight: 300 }}>
-                      {getUserType(profileData?.user_type as UserTypeEnum)}
+                      {formatUserType(profileData?.user_type as UserTypeEnum)}
                     </H4>
                   </NameAndStatus>
                 </Profile>
