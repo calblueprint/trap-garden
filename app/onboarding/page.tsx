@@ -148,6 +148,7 @@ const ReviewPage = ({
       user_id: userId,
       us_state: selectedState,
       user_type: selectedGardenType,
+      has_plot: selectedPlot,
     };
 
     try {

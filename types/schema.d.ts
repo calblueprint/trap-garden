@@ -14,7 +14,7 @@ export interface Profile {
   user_id: UUID;
   us_state: string;
   user_type: string;
-  // has_plot: boolean;
+  has_plot: boolean;
 }
 
 export interface Plant {
