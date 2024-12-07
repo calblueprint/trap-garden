@@ -7,6 +7,7 @@ export const FilterContainer = styled.div`
   flex-direction: row;
   gap: 8px;
   margin-bottom: 20px;
+  overflow-x: auto;
 `;
 
 export const TopRowContainer = styled.div`
@@ -95,4 +96,13 @@ export const NumberSelectedPlants = styled.p`
   font-weight: 400;
   line-height: 16px;
   color: #fff;
+`;
+
+export const InfoButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
 `;
