@@ -101,6 +101,7 @@ export default function FilterDropdownMultiple<T>({
       hideSelectedOptions={false}
       // use custom styled components instead of default components
       components={{ MultiValue: StyledMultiValue, Option: CustomOption }}
+      menuPosition="fixed"
     />
   );
 }
