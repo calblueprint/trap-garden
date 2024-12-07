@@ -13,7 +13,7 @@ interface FilterDropdownProps<T> {
   disabled?: boolean;
   // for custom styling since initial dropdown to select user's state
   // is a different size to a normal single dropdown
-  small: boolean;
+  small?: boolean;
 }
 
 export default function FilterDropdownSingle<T>({
@@ -22,7 +22,7 @@ export default function FilterDropdownSingle<T>({
   options,
   placeholder,
   disabled,
-  small,
+  small = false,
 }: FilterDropdownProps<T>) {
   const handleChange = (
     selectedOptions:
@@ -45,8 +45,6 @@ export default function FilterDropdownSingle<T>({
       styles={customSelectStyles<T>(small)}
       isSearchable={false}
       hideSelectedOptions={false}
-      // can bring this back if we want an 'x' to clear filters for each dropdown
-      isClearable={false}
     />
   );
 }
