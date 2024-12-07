@@ -22,8 +22,9 @@ interface SmallRoundedButtonProps {
 
 export const SmallRoundedButton = styled.button<SmallRoundedButtonProps>`
   padding: 10px 20px;
-  border-radius: 50px;
-  border: 2px solid ${({ $secondaryColor }) => $secondaryColor};
+  border-radius: 15px;
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.05);
+  border: 0.5px solid ${({ $secondaryColor }) => $secondaryColor};
   background-color: ${({ $primaryColor }) =>
     $primaryColor ? $primaryColor : 'white'};
   color: ${({ $primaryColor, $secondaryColor }) =>

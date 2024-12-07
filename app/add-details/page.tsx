@@ -88,8 +88,9 @@ export default function Home() {
   function disableNext() {
     // disable next if planting type is "SELECT" or undefined
     return !(
-      details[currentIndex - 1].planting_type &&
-      details[currentIndex - 1].planting_type !== 'SELECT'
+      details[currentIndex - 1].planting_type
+      // requires refactor of details to ensure that planting_type is PlantingTypeEnum
+      // && details[currentIndex - 1].planting_type !== 'SELECT'
     );
   }
 

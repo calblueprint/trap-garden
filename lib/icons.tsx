@@ -27,7 +27,7 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
-  watering_can: (
+  wateringCan: (
     <svg
       width="10"
       height="11"

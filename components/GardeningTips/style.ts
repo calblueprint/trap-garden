@@ -1,14 +1,14 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
 
 export const Container = styled.div`
-  background-color: #f9f9f9;
-  padding: 1.5rem;
+  background-color: ${COLORS.backgroundGrey};
+  padding: 16px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  color: #333;
 `;
 
 export const TitleWrapper = styled.div`
@@ -19,13 +19,9 @@ export const TitleWrapper = styled.div`
 
 export const IconWrapper = styled.span`
   margin-right: 6px;
-  color: #8bc34a;
+  color: ${COLORS.shrub};
 `;
 
 export const TipsList = styled.ol`
-  margin: 0;
-  padding-left: 0;
-  font-size: 1rem;
-  line-height: 1.5;
   list-style-position: inside;
 `;

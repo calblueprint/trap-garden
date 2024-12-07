@@ -45,8 +45,9 @@ export interface UserPlant {
   user_id: UUID;
   plant_id: UUID;
   date_added: string;
-  date_harvested: string;
-  planting_type: string;
+  date_removed: string;
+  // recent_date_harvest: string;
+  planting_type: PlantingTypeEnum;
 }
 
 export interface DropdownOption<T = string> {
