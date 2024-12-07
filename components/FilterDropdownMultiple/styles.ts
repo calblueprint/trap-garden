@@ -55,7 +55,7 @@ export const customSelectStyles: StylesConfig<DropdownOption<any>, true> = {
   multiValueLabel: baseStyles => ({
     ...baseStyles,
     fontSize: '0.75rem',
-    color: `${COLORS.midgray} !important`,
+    color: `${COLORS.black} !important`,
     padding: '0px',
     paddingLeft: '0px',
   }),

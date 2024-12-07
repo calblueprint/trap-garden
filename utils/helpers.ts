@@ -224,7 +224,7 @@ export function checkDifficulty(
 }
 
 export function checkUsState(
-  usStateFilterValue: DropdownOption<string>,
+  usStateFilterValue: DropdownOption<string> | null,
   plant: Plant,
 ) {
   // Automatically returns true if no selected usState
@@ -232,7 +232,6 @@ export function checkUsState(
     return true;
   }
 
-  console.log('usStateFilterValue', usStateFilterValue);
   // Check if plant's us_state matches usStateFilterValue
   const selectedState = usStateFilterValue.value;
   return plant.us_state === selectedState;

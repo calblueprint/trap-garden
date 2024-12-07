@@ -22,7 +22,7 @@ interface PlantListProps {
   harvestSeasonFilterValue: DropdownOption<SeasonEnum>[];
   plantingTypeFilterValue: DropdownOption<PlantingTypeEnum>[];
   growingSeasonFilterValue: DropdownOption<SeasonEnum>[];
-  usStateFilterValue: DropdownOption<string>;
+  usStateFilterValue: DropdownOption<string> | null;
   searchTerm: string;
 }
 
