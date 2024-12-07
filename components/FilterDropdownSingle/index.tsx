@@ -1,5 +1,5 @@
 import React from 'react';
-import Select, { ActionMeta, MultiValue, SingleValue } from 'react-select';
+import Select, { MultiValue, SingleValue } from 'react-select';
 import { DropdownOption } from '@/types/schema';
 import { customSelectStyles } from './styles';
 

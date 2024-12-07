@@ -1,6 +1,5 @@
 import React from 'react';
 import Select, {
-  ActionMeta,
   components,
   GroupBase,
   MultiValue,
