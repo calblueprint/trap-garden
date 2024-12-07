@@ -1,18 +1,26 @@
 'use client';
 
+import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
-import { P1 } from '@/styles/text';
+import { Flex } from '@/styles/containers';
+import { P1, P3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
 import { formatTimestamp, useTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
 import {
   Container,
-  DetailRow,
-  DetailsContainer,
-  DetailText,
   Header,
   // EditButton,
 } from './style';
+
+function DetailRow(iconType: IconType, text: string) {
+  return (
+    <Flex $align="center" $gap="8px">
+      <Icon type={iconType} />
+      <P3 $fontWeight={400}>{text}</P3>
+    </Flex>
+  );
+}
 
 export default function YourPlantDetails({
   datePlanted,
@@ -31,26 +39,15 @@ export default function YourPlantDetails({
         </P1>
         {/* <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton> */}
       </Header>
-      <DetailsContainer>
-        <DetailRow>
-          <Icon type="calendar" />
-          <DetailText>Date Planted: {formatTimestamp(datePlanted)}</DetailText>
-        </DetailRow>
-
-        <DetailRow>
-          <Icon type="plantHand" />
-          <DetailText>Planting Type: {useTitleCase(plantingType)}</DetailText>
-        </DetailRow>
-
-        {recentHarvestDate && (
-          <DetailRow>
-            <Icon type="plant" />
-            <DetailText>
-              Most Recent Harvest Date: {formatTimestamp(recentHarvestDate)}
-            </DetailText>
-          </DetailRow>
-        )}
-      </DetailsContainer>
+      <Flex $direction="column" $gap="8px">
+        {DetailRow('calendar', `Date Planted: ${formatTimestamp(datePlanted)}`)}
+        {DetailRow('plantHand', `Planting Type: ${useTitleCase(plantingType)}`)}
+        {recentHarvestDate &&
+          DetailRow(
+            'plant',
+            `Most Recent Harvest Date: ${formatTimestamp(recentHarvestDate)}`,
+          )}
+      </Flex>
     </Container>
   );
 }

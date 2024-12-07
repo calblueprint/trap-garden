@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
-import { P3 } from '@/styles/text';
 import { SmallRoundedButton } from '../Button';
 
 export const Container = styled.div`
@@ -14,22 +13,6 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-`;
-
-export const DetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-`;
-
-export const DetailRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-`;
-
-export const DetailText = styled(P3)`
-  font-weight: 400;
 `;
 
 // Not Used Yet

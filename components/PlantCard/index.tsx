@@ -60,7 +60,7 @@ const PlantCard = memo(function PlantCard({
             </AttributeContent>
           </Attribute>
           <Attribute>
-            <Icon type="watering_can"></Icon>
+            <Icon type="wateringCan"></Icon>
             <AttributeContent>{plant.water_frequency}</AttributeContent>
           </Attribute>
           <Attribute>
