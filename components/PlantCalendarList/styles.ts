@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import { P3 } from '@/styles/text';
 
+// Container for the table to handle overflow
+export const TableContainer = styled.div`
+  width: 100%;
+  overflow-x: auto; // Allow horizontal scrolling
+`;
+
 // Styled Table
 export const StyledTable = styled.table`
   width: 100%;
@@ -22,7 +28,8 @@ export const StickyTd = styled(P3).attrs({
 
 // Scrollable container for PlantCalendarRow
 export const ScrollableTd = styled.td`
-  overflow-x: scroll;
+  // overflow-x: scroll;
+  width: inherit;
   padding-bottom: 8px;
   // maybe replace with 4px above and below to center padding?
 `;
