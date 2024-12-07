@@ -26,3 +26,12 @@ export const ScrollableTd = styled.td`
   padding-bottom: 8px;
   // maybe replace with 4px above and below to center padding?
 `;
+
+// month header at the top of PlantCalendarList
+export const MonthsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  /* gap: 0.75rem; */
+  width: 100%;
+  justify-items: center;
+`;
