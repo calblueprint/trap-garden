@@ -2,10 +2,7 @@
 
 import { Flex } from '@/styles/containers';
 import { H4, P3 } from '@/styles/text';
-import {
-  mapHoursToSunlightEnum,
-  SunlightEnumDisplayMap,
-} from '@/utils/helpers';
+import { displaySunlightEnumFromHours } from '@/utils/helpers';
 import Icon from '../Icon';
 import { CareItem, IconWrapper, Strong } from './style';
 
@@ -47,7 +44,7 @@ export default function PlantCareDescription({
           <P3 as="span">
             <Strong>Sunlight Requirement:</Strong> {sunlightMinHours}
             {sunlightMaxHours ? ` - ${sunlightMaxHours}` : ''} hours (
-            {SunlightEnumDisplayMap[mapHoursToSunlightEnum(sunlightMinHours)]})
+            {displaySunlightEnumFromHours(sunlightMinHours)})
           </P3>
         </CareItem>
       </Flex>
