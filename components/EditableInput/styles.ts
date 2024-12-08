@@ -1,8 +1,6 @@
 import styled from 'styled-components';
-import COLORS from '@/styles/colors';
 
 export const Label = styled.p`
-  color: ${COLORS.shrub};
   font-size: 1rem;
   font-weight: 400;
   margin: 0px;
