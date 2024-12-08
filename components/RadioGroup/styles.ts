@@ -10,6 +10,7 @@ export const ComponentContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
 `;
 
 export const RadioButton = styled.button<SelectedProps>`
@@ -19,7 +20,6 @@ export const RadioButton = styled.button<SelectedProps>`
     $isSelected ? COLORS.sproutLight : 'white'};
   border: 1px solid transparent;
   border-radius: 8px;
-  width: 345px;
   height: 48px;
   align-items: center;
   justify-content: space-between;
