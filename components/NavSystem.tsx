@@ -7,7 +7,6 @@ import NavColumn from './NavColumn';
 
 export default function NavSystem() {
   const [isNavColumnOpen, setIsNavColumnOpen] = useState(false);
-  const { userId } = useAuth();
 
   const toggleNavColumn = () => {
     setIsNavColumnOpen(!isNavColumnOpen);

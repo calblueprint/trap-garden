@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import CONFIG from '@/lib/configs';
+import { Flex } from '@/styles/containers';
 import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
 import Icon from '../Icon';
@@ -48,7 +49,10 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
         )
       ) : (
         // display login link if user is not logged in
-        <Link href={CONFIG.login}>Login/Sign Up</Link>
+        <Flex $direction="row" $gap="8px" $w="max-content">
+          <Link href={CONFIG.login}>Login</Link>
+          <Link href={CONFIG.signup}>Sign Up</Link>
+        </Flex>
       )}
     </Container>
   );
