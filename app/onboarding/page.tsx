@@ -8,6 +8,7 @@ import LabeledCustomSelect from '@/components/EditableInput';
 import ProgressBar from '@/components/ProgressBar';
 import RadioGroup from '@/components/RadioGroup';
 import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
 import { H3, P1, P3 } from '@/styles/text';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
@@ -65,18 +66,20 @@ const StateSelection = ({
 }: StateSelectionProps & { onNext: () => void }) => {
   return (
     <OnboardingContainer>
-      <ProgressBar progress={2.6} />
-      <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
-        QUESTION 1 OF 3
-      </P3>
-      <QuestionDiv>
-        <H3 $color={COLORS.shrub}>What state are you in?</H3>
-      </QuestionDiv>
-      <RadioGroup
-        name="StateRadioGroup"
-        options={usStateOptions}
-        onChange={setSelectedState}
-      />
+      <Flex $direction="column" $align="center">
+        <ProgressBar progress={2.6} />
+        <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
+          QUESTION 1 OF 3
+        </P3>
+        <QuestionDiv>
+          <H3 $color={COLORS.shrub}>What state are you in?</H3>
+        </QuestionDiv>
+        <RadioGroup
+          name="StateRadioGroup"
+          options={usStateOptions}
+          onChange={setSelectedState}
+        />
+      </Flex>
       <ButtonDiv>
         <Button
           onClick={onNext}
@@ -101,20 +104,22 @@ const GardenTypeSelection = ({
 }) => {
   return (
     <OnboardingContainer>
-      <ProgressBar progress={33} />
-      <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
-        QUESTION 2 OF 3
-      </P3>
-      <QuestionDiv>
-        <H3 $color={COLORS.shrub} style={{ textAlign: 'center' }}>
-          What type of garden are you starting?
-        </H3>
-      </QuestionDiv>
-      <RadioGroup
-        name="GardenTypeRadioGroup"
-        options={gardenTypeOptions}
-        onChange={setSelectedGardenType}
-      />
+      <Flex $direction="column" $align="center">
+        <ProgressBar progress={33} />
+        <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
+          QUESTION 2 OF 3
+        </P3>
+        <QuestionDiv>
+          <H3 $color={COLORS.shrub} style={{ textAlign: 'center' }}>
+            What type of garden are you starting?
+          </H3>
+        </QuestionDiv>
+        <RadioGroup
+          name="GardenTypeRadioGroup"
+          options={gardenTypeOptions}
+          onChange={setSelectedGardenType}
+        />
+      </Flex>
       <ButtonDiv>
         <Button
           onClick={onBack}
@@ -147,20 +152,22 @@ const PlotSelection = ({
 }) => {
   return (
     <OnboardingContainer>
-      <ProgressBar progress={66} />
-      <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
-        QUESTION 3 OF 3
-      </P3>
-      <QuestionDiv>
-        <H3 $color={COLORS.shrub} style={{ textAlign: 'center' }}>
-          Do you already have a plot?
-        </H3>
-      </QuestionDiv>
-      <RadioGroup
-        name="PlotSelectionRadioGroup"
-        options={plotOptions}
-        onChange={setSelectedPlot}
-      />
+      <Flex $direction="column" $align="center">
+        <ProgressBar progress={66} />
+        <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
+          QUESTION 3 OF 3
+        </P3>
+        <QuestionDiv>
+          <H3 $color={COLORS.shrub} style={{ textAlign: 'center' }}>
+            Do you already have a plot?
+          </H3>
+        </QuestionDiv>
+        <RadioGroup
+          name="PlotSelectionRadioGroup"
+          options={plotOptions}
+          onChange={setSelectedPlot}
+        />
+      </Flex>
       <ButtonDiv>
         <Button
           onClick={onBack}
@@ -218,47 +225,49 @@ const ReviewPage = ({
 
   return (
     <OnboardingContainer>
-      <ProgressBar progress={100} />
-      <QuestionDiv>
-        <H3
-          $color={COLORS.shrub}
-          style={{
-            textAlign: 'center',
-            marginTop: '90px',
-            marginBottom: '40px',
-          }}
-        >
-          Review & Submit
-        </H3>
-      </QuestionDiv>
-      <ContentContainer>
-        <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
-          Your Responses
-        </P1>
-        <LabeledCustomSelect
-          label="State Location"
-          value={selectedState}
-          options={usStateOptions}
-          onChange={setSelectedState}
-        />
+      <Flex $direction="column" $justify="start">
+        <ProgressBar progress={100} />
+        <QuestionDiv>
+          <H3
+            $color={COLORS.shrub}
+            style={{
+              textAlign: 'center',
+              marginTop: '90px',
+              marginBottom: '40px',
+            }}
+          >
+            Review & Submit
+          </H3>
+        </QuestionDiv>
+        <ContentContainer>
+          <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
+            Your Responses
+          </P1>
+          <LabeledCustomSelect
+            label="State Location"
+            value={selectedState}
+            options={usStateOptions}
+            onChange={setSelectedState}
+          />
 
-        <LabeledCustomSelect
-          label="Garden Type"
-          value={selectedGardenType}
-          options={gardenTypeOptions}
-          onChange={setSelectedGardenType} // Directly pass the selected value
-        />
-        <LabeledCustomSelect
-          label="Plot Status"
-          value={selectedPlot}
-          options={plotOptions}
-          onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
-        />
-        <div style={{ height: '12.625rem' }} />
-        <BigButton color={COLORS.shrub} onClick={handleSubmit}>
-          Let&apos;s Start Growing !
-        </BigButton>
-      </ContentContainer>
+          <LabeledCustomSelect
+            label="Garden Type"
+            value={selectedGardenType}
+            options={gardenTypeOptions}
+            onChange={setSelectedGardenType} // Directly pass the selected value
+          />
+          <LabeledCustomSelect
+            label="Plot Status"
+            value={selectedPlot}
+            options={plotOptions}
+            onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
+          />
+          <div style={{ height: '12.625rem' }} />
+          <BigButton color={COLORS.shrub} onClick={handleSubmit}>
+            Let&apos;s Start Growing !
+          </BigButton>
+        </ContentContainer>
+      </Flex>
     </OnboardingContainer>
   );
 };
@@ -299,7 +308,7 @@ export default function OnboardingFlow() {
     // TODO: implement an actual loading screen (spinner?)
     <>Loading</>
   ) : (
-    <div>
+    <Flex>
       {step === 1 && (
         <StateSelection
           selectedState={selectedState}
@@ -334,6 +343,6 @@ export default function OnboardingFlow() {
           setSelectedPlot={setSelectedPlot}
         />
       )}
-    </div>
+    </Flex>
   );
 }
