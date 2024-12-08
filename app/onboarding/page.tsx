@@ -8,7 +8,6 @@ import LabeledCustomSelect from '@/components/EditableInput';
 import ProgressBar from '@/components/ProgressBar';
 import RadioGroup from '@/components/RadioGroup';
 import COLORS from '@/styles/colors';
-import { Flex } from '@/styles/containers';
 import { H3, P1, P3 } from '@/styles/text';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
