@@ -54,7 +54,9 @@ export default function SeasonalPlantingGuide() {
   useEffect(() => {
     if (profileReady && profileData) {
       setSelectedUsState({
-        label: useTitleCase(profileData.us_state),
+        label:
+          profileData.us_state.charAt(0) +
+          profileData.us_state.slice(1).toLowerCase(), // can't use useTitleCase here, lint error
         value: profileData.us_state,
       });
     }
