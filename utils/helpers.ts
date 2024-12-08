@@ -80,28 +80,17 @@ export function checkGrowingSeason(
 
   // Handle late/early month logic
   // Set late/early month to just the month using processPlantMonth
-  const indoorsStart =
-    plant.indoors_start && processPlantMonth(plant.indoors_start);
-  const indoorsEnd = plant.indoors_end && processPlantMonth(plant.indoors_end);
   const outdoorsStart =
     plant.outdoors_start && processPlantMonth(plant.outdoors_start);
   const outdoorsEnd =
     plant.outdoors_end && processPlantMonth(plant.outdoors_end);
 
-  // Checks if either indoor_start to indoor_end or outdoor_start to outdoor_end
-  // is within the valid range of months
+  // Checks if outdoor_start to outdoor_end is within the valid range of months
   // exclamation marks to assert values are not undefined
-  return (
-    isInRange(
-      monthToIndex.get(indoorsStart!)!,
-      monthToIndex.get(indoorsEnd!)!,
-      validIndexes!,
-    ) ||
-    isInRange(
-      monthToIndex.get(outdoorsStart!)!,
-      monthToIndex.get(outdoorsEnd!)!,
-      validIndexes!,
-    )
+  return isInRange(
+    monthToIndex.get(outdoorsStart!)!,
+    monthToIndex.get(outdoorsEnd!)!,
+    validIndexes!,
   );
 }
 
@@ -222,10 +211,18 @@ export function checkDifficulty(
   return false;
 }
 
-export function checkUsState(usStateFilterValue: string, plant: Plant) {
+export function checkUsState(
+  usStateFilterValue: DropdownOption<string> | null,
+  plant: Plant,
+) {
   // Automatically returns true if no selected usState
+  if (!usStateFilterValue) {
+    return true;
+  }
+
   // Check if plant's us_state matches usStateFilterValue
-  return usStateFilterValue === '' || plant.us_state === usStateFilterValue;
+  const selectedState = usStateFilterValue.value;
+  return plant.us_state === selectedState;
 }
 
 export function useTitleCase(text: string) {

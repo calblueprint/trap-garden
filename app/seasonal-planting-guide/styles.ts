@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
 
 export const PageContainer = styled.div`
   display: flex;
@@ -20,9 +21,12 @@ export const HeaderContainer = styled.div`
 export const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 8px;
   margin-top: 12px;
   position: relative;
+  overflow-x: auto;
+  padding-top: 1px;
+  padding-bottom: 1px;
 `;
 
 export const StateOptionsContainer = styled.div`
@@ -30,7 +34,9 @@ export const StateOptionsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 16px;
+  flex-grow: 1;
+  background-color: ${COLORS.glimpse};
 `;
 
 export const PageTitle = styled.div`
@@ -39,4 +45,10 @@ export const PageTitle = styled.div`
   margin-bottom: 8px;
   gap: 12px;
   align-items: center;
+`;
+
+export const VerticalSeparator = styled.div`
+  height: inherit;
+  width: 1px;
+  background-color: ${COLORS.lightgray};
 `;
