@@ -61,7 +61,15 @@ export default function Home() {
     };
     setDetails(updatedDetails);
   }
-
+  // const handleSubmit = async () => {
+  //   try {
+  //     await insertUserPlants(userId!, details);
+  //     router.push('/view-plants');
+  //   } catch (error) {
+  //     console.error('Error inserting user plants:', error);
+  //     // Optionally, add user-facing error handling
+  //   }
+  // };
   async function updateDB() {
     await insertUserPlants(userId!, details);
     router.push('/view-plants');
@@ -78,19 +86,29 @@ export default function Home() {
             onDateChange={date => updateInput('date_added', date)}
             onPlantingTypeChange={type => updateInput('planting_type', type)}
           />
-          <button onClick={() => move(-1)}>Back</button>
+          <button type="button" onClick={() => move(-1)}>
+            Back
+          </button>
           <p>
             {currentIndex} / {plantsToAdd.length}
           </p>
-          <button disabled={disableNext()} onClick={() => move(1)}>
+          <button
+            type="button"
+            disabled={disableNext()}
+            onClick={() => move(1)}
+          >
             Next
           </button>
         </div>
       )}
       {currentIndex === plantsToAdd.length + 1 && (
         <div>
-          <button onClick={() => move(-1)}>Back</button>
-          <button onClick={updateDB}>Submit</button>
+          <button type="button" onClick={() => move(-1)}>
+            Back
+          </button>
+          <button type="button" onClick={updateDB}>
+            Submit
+          </button>
         </div>
       )}
     </div>
