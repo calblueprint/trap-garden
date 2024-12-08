@@ -15,11 +15,10 @@ export default function NavSystem() {
 
   return (
     <>
-      <Header toggleNavColumn={toggleNavColumn} isLoggedIn={userId !== null} />
+      <Header toggleNavColumn={toggleNavColumn} />
       <NavColumn
         isOpen={isNavColumnOpen}
         onClose={() => setIsNavColumnOpen(false)}
-        isLoggedIn={userId !== null}
       />
     </>
   );

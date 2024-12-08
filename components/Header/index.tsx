@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import CONFIG from '@/lib/configs';
+import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
 import Icon from '../Icon';
 import { Container, HamburgerButton } from './styles';
 
 interface HeaderProps {
   toggleNavColumn: () => void;
-  isLoggedIn: boolean;
 }
 
-export default function Header({ toggleNavColumn, isLoggedIn }: HeaderProps) {
+export default function Header({ toggleNavColumn }: HeaderProps) {
   const currentPath = usePathname();
   const { profileReady, profileData } = useProfile();
+  const { userId } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(userId !== null);
+  }, [userId]);
 
   const onNavColumnClick = () => {
     toggleNavColumn();

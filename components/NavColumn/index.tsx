@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import CONFIG from '@/lib/configs';
@@ -32,7 +32,6 @@ import {
 interface NavColumnProps {
   isOpen: boolean;
   onClose: () => void;
-  isLoggedIn: boolean;
 }
 
 type NavLink = {
@@ -50,25 +49,22 @@ const navLinks: NavLink[] = [
   },
 ];
 
-export default function NavColumn({
-  isOpen,
-  onClose,
-  isLoggedIn,
-}: NavColumnProps) {
+export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const currentPath = usePathname();
-  const { signOut } = useAuth();
+  const { signOut, userId } = useAuth();
   const router = useRouter();
   const { profileData, profileReady } = useProfile();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(userId !== null);
+  }, [userId]);
 
   const handleSignOut = () => {
     router.push(CONFIG.login);
     onClose();
     signOut();
   };
-
-  useEffect(() => {
-    console.log('profileData', profileData);
-  }, [profileData]);
 
   return (
     <>
