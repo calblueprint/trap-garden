@@ -10,7 +10,6 @@ import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, H3 } from '@/styles/text';
 import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
-import { useTitleCase } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
