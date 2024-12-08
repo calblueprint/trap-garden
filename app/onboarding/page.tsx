@@ -3,18 +3,27 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
-import { BigButton } from '@/components/Buttons';
+import { BigButton, Button } from '@/components/Buttons';
 import LabeledCustomSelect from '@/components/EditableInput';
+import ProgressBar from '@/components/ProgressBar';
+import RadioGroup from '@/components/RadioGroup';
 import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
+import { H3, P1, P3 } from '@/styles/text';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
-import { H3, PageContainer, ReviewContainer } from './styles';
+import {
+  ButtonDiv,
+  ContentContainer,
+  OnboardingContainer,
+  QuestionDiv,
+} from './styles';
 
 // Define the possible options for each question
 const stateOptions: DropdownOption<string>[] = [
-  { label: 'Tennessee', value: 'TENNESSEE' },
   { label: 'Missouri', value: 'MISSOURI' },
+  { label: 'Tennessee', value: 'TENNESSEE' },
 ];
 
 const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = [
@@ -56,24 +65,34 @@ interface ReviewPageProps {
 const StateSelection = ({
   selectedState,
   setSelectedState,
-}: StateSelectionProps) => {
+  onNext,
+}: StateSelectionProps & { onNext: () => void }) => {
   return (
-    <div>
-      <h2>Which state do you live in?</h2>
-      <select
-        value={selectedState}
-        onChange={e => setSelectedState(e.target.value)}
-      >
-        <option value="" disabled>
-          Select a state
-        </option>
-        {stateOptions.map(state => (
-          <option key={state.label} value={state.value}>
-            {state.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <OnboardingContainer>
+      <Flex $direction="column" $align="center">
+        <ProgressBar progress={2.6} />
+        <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
+          QUESTION 1 OF 3
+        </P3>
+        <QuestionDiv>
+          <H3 $color={COLORS.shrub}>What state are you in?</H3>
+        </QuestionDiv>
+        <RadioGroup
+          name="StateRadioGroup"
+          options={stateOptions}
+          onChange={setSelectedState}
+        />
+      </Flex>
+      <ButtonDiv>
+        <Button
+          onClick={onNext}
+          disabled={!selectedState}
+          $primaryColor={COLORS.shrub}
+        >
+          Next
+        </Button>
+      </ButtonDiv>
+    </OnboardingContainer>
   );
 };
 
@@ -81,25 +100,47 @@ const StateSelection = ({
 const GardenTypeSelection = ({
   selectedGardenType,
   setSelectedGardenType,
-}: GardenTypeSelectionProps) => {
+  onNext,
+  onBack,
+}: GardenTypeSelectionProps & { onNext: () => void } & {
+  onBack: () => void;
+}) => {
   return (
-    <div>
-      <h2>What type of garden do you want to create?</h2>
-      {gardenTypeOptions.map(type => (
-        <label key={type.label}>
-          <input
-            type="radio"
-            name="gardenType"
-            value={type.value}
-            checked={selectedGardenType === type.value}
-            onChange={e =>
-              setSelectedGardenType(e.target.value as UserTypeEnum)
-            }
-          />
-          {type.label}
-        </label>
-      ))}
-    </div>
+    <OnboardingContainer>
+      <Flex $direction="column" $align="center">
+        <ProgressBar progress={33} />
+        <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
+          QUESTION 2 OF 3
+        </P3>
+        <QuestionDiv>
+          <H3 $color={COLORS.shrub} style={{ textAlign: 'center' }}>
+            What type of garden are you starting?
+          </H3>
+        </QuestionDiv>
+        <RadioGroup
+          name="GardenTypeRadioGroup"
+          options={gardenTypeOptions}
+          onChange={setSelectedGardenType}
+        />
+      </Flex>
+      <ButtonDiv>
+        <Button
+          onClick={onBack}
+          $primaryColor="white"
+          $secondaryColor={COLORS.shrub}
+          $textColor={COLORS.shrub}
+        >
+          Back
+        </Button>
+        <Button
+          onClick={onNext}
+          disabled={!selectedGardenType}
+          $primaryColor={COLORS.shrub}
+        >
+          Next
+        </Button>
+      </ButtonDiv>
+    </OnboardingContainer>
   );
 };
 
@@ -107,23 +148,47 @@ const GardenTypeSelection = ({
 const PlotSelection = ({
   selectedPlot,
   setSelectedPlot,
-}: PlotSelectionProps) => {
+  onNext,
+  onBack,
+}: PlotSelectionProps & { onNext: () => void } & {
+  onBack: () => void;
+}) => {
   return (
-    <div>
-      <h2>Do you already have a plot?</h2>
-      {plotOptions.map(option => (
-        <label key={option.label}>
-          <input
-            type="radio"
-            name="plot"
-            value={String(option.value)}
-            checked={selectedPlot === option.value}
-            onChange={() => setSelectedPlot(option.value)}
-          />
-          {option.label}
-        </label>
-      ))}
-    </div>
+    <OnboardingContainer>
+      <Flex $direction="column" $align="center">
+        <ProgressBar progress={66} />
+        <P3 $color={COLORS.shrub} style={{ marginTop: '2.5rem' }}>
+          QUESTION 3 OF 3
+        </P3>
+        <QuestionDiv>
+          <H3 $color={COLORS.shrub} style={{ textAlign: 'center' }}>
+            Do you already have a plot?
+          </H3>
+        </QuestionDiv>
+        <RadioGroup
+          name="PlotSelectionRadioGroup"
+          options={plotOptions}
+          onChange={setSelectedPlot}
+        />
+      </Flex>
+      <ButtonDiv>
+        <Button
+          onClick={onBack}
+          $primaryColor="white"
+          $secondaryColor={COLORS.shrub}
+          $textColor={COLORS.shrub}
+        >
+          Back
+        </Button>
+        <Button
+          onClick={onNext}
+          disabled={selectedPlot === undefined}
+          $primaryColor={COLORS.shrub}
+        >
+          Next
+        </Button>
+      </ButtonDiv>
+    </OnboardingContainer>
   );
 };
 
@@ -162,34 +227,51 @@ const ReviewPage = ({
   };
 
   return (
-    <PageContainer>
-      <ReviewContainer>
-        <H3 style={{ textAlign: 'center' }}>Review Your Response</H3>
-        <LabeledCustomSelect
-          label="State Location"
-          value={selectedState}
-          options={stateOptions}
-          onChange={setSelectedState}
-        />
+    <OnboardingContainer>
+      <Flex $direction="column" $justify="start">
+        <ProgressBar progress={100} />
+        <QuestionDiv>
+          <H3
+            $color={COLORS.shrub}
+            style={{
+              textAlign: 'center',
+              marginTop: '90px',
+              marginBottom: '40px',
+            }}
+          >
+            Review & Submit
+          </H3>
+        </QuestionDiv>
+        <ContentContainer>
+          <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
+            Your Responses
+          </P1>
+          <LabeledCustomSelect
+            label="State Location"
+            value={selectedState}
+            options={stateOptions}
+            onChange={setSelectedState}
+          />
 
-        <LabeledCustomSelect
-          label="Garden Type"
-          value={selectedGardenType}
-          options={gardenTypeOptions}
-          onChange={setSelectedGardenType} // Directly pass the selected value
-        />
-        <LabeledCustomSelect
-          label="Plot Status"
-          value={selectedPlot}
-          options={plotOptions}
-          onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
-        />
-        <div style={{ height: '12.625rem' }} />
-        <BigButton color={COLORS.shrub} onClick={handleSubmit}>
-          Let&apos;s Start Growing !
-        </BigButton>
-      </ReviewContainer>
-    </PageContainer>
+          <LabeledCustomSelect
+            label="Garden Type"
+            value={selectedGardenType}
+            options={gardenTypeOptions}
+            onChange={setSelectedGardenType} // Directly pass the selected value
+          />
+          <LabeledCustomSelect
+            label="Plot Status"
+            value={selectedPlot}
+            options={plotOptions}
+            onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
+          />
+          <div style={{ height: '12.625rem' }} />
+          <BigButton color={COLORS.shrub} onClick={handleSubmit}>
+            Let&apos;s Start Growing !
+          </BigButton>
+        </ContentContainer>
+      </Flex>
+    </OnboardingContainer>
   );
 };
 
@@ -229,23 +311,28 @@ export default function OnboardingFlow() {
     // TODO: implement an actual loading screen (spinner?)
     <>Loading</>
   ) : (
-    <div>
+    <Flex>
       {step === 1 && (
         <StateSelection
           selectedState={selectedState}
           setSelectedState={setSelectedState}
+          onNext={handleNext}
         />
       )}
       {step === 2 && (
         <GardenTypeSelection
           selectedGardenType={selectedGardenType}
           setSelectedGardenType={setSelectedGardenType}
+          onNext={handleNext}
+          onBack={handleBack}
         />
       )}
       {step === 3 && (
         <PlotSelection
           selectedPlot={selectedPlot}
           setSelectedPlot={setSelectedPlot}
+          onNext={handleNext}
+          onBack={handleBack}
         />
       )}
       {step === 4 && (
@@ -259,15 +346,6 @@ export default function OnboardingFlow() {
           setSelectedPlot={setSelectedPlot}
         />
       )}
-
-      <div>
-        {step > 1 && <button onClick={handleBack}>Back</button>}
-        {step < 4 && (
-          <button onClick={handleNext} disabled={!selectedState && step === 1}>
-            Next
-          </button>
-        )}
-      </div>
-    </div>
+    </Flex>
   );
 }
