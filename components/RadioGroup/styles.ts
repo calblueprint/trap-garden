@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { P1 } from '@/styles/text';
 
 interface SelectedProps {
   $isSelected: boolean;
@@ -26,6 +27,7 @@ export const RadioButton = styled.button<SelectedProps>`
   padding-right: 16px;
   border-color: ${({ $isSelected }) =>
     $isSelected ? COLORS.shrub : COLORS.lightgray};
+  font-family: inherit;
 `;
 
 export const RadioInput = styled.input.attrs({ type: 'radio' })`
@@ -35,8 +37,7 @@ export const RadioInput = styled.input.attrs({ type: 'radio' })`
     accent-color: ${COLORS.shrub}; // Changes the radio fill color
   }
 `;
-export const RadioLabel = styled.label<SelectedProps>`
+
+export const RadioLabel = styled(P1).attrs({ as: 'label' })<SelectedProps>`
   color: ${({ $isSelected }) => ($isSelected ? COLORS.shrub : COLORS.midgray)};
-  font-size: 1rem;
-  font-weight: 300;
 `;

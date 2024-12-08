@@ -2,14 +2,14 @@ import styled from 'styled-components';
 
 export const OnboardingContainer = styled.div`
   min-height: 100vh;
+  width: min(392px, 100vw);
   background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-self: center;
   padding: 1rem;
-  width: 24.563rem;
   position: relative;
+  margin: auto; // center horizontally and vertically
 `;
 export const ContentContainer = styled.div`
   width: 100%;
