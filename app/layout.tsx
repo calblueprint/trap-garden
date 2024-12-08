@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import NavSystem from '@/components/NavSystem';
 import StyledComponentsRegistry from '@/lib/registry';
 import ProfileProvider from '@/utils/ProfileProvider';
 import { AuthProvider } from '../utils/AuthProvider';
@@ -27,7 +28,10 @@ export default function RootLayout({
       <body className={sans.className}>
         <AuthProvider>
           <ProfileProvider>
-            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+            <StyledComponentsRegistry>
+              <NavSystem />
+              {children}
+            </StyledComponentsRegistry>
           </ProfileProvider>
         </AuthProvider>
       </body>
