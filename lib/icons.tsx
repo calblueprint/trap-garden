@@ -405,6 +405,33 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
+
+  check: (
+    <svg
+      width="12"
+      height="9"
+      viewBox="0 0 12 9"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3.81353 7.10067L0.968732 4.30201L0 5.24832L3.81353 9L12 0.946309L11.0381 0L3.81353 7.10067Z"
+        fill="#0D8817"
+      />
+    </svg>
+  ),
+  x: (
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 11 11"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M10 1L1 10" stroke="#E94444" stroke-width="1.5" />
+      <path d="M1 1L10 10" stroke="#E94444" stroke-width="1.5" />
+    </svg>
+  ),
 };
 
 export type IconType = keyof typeof IconSvgs;
