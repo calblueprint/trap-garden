@@ -1,4 +1,6 @@
 import { Plant } from '@/types/schema';
+import CustomSelect from '../CustomSelect';
+import DateInput from '../DateInput';
 
 export default function PlantDetails({
   plant,
@@ -13,29 +15,38 @@ export default function PlantDetails({
   onDateChange: (date: string) => void;
   onPlantingTypeChange: (type: string) => void;
 }) {
+  const plantingTypeOptions = [
+    { value: 'SELECT', label: 'Select option' },
+    { value: 'TRANSPLANT', label: 'Transplant' },
+    { value: 'INDOORS', label: 'Indoors' },
+    { value: 'OUTDOORS', label: 'Outdoors' },
+  ];
+
   return (
     <div>
       <h2>{plant.plant_name}</h2>
 
       <label htmlFor="date">Date Planted:</label>
-      <input
+      {/* <input
         id="date"
         type="date"
         value={date}
         onChange={e => onDateChange(e.target.value)}
+      /> */}
+      <DateInput
+        value={date}
+        onChange={onDateChange}
+        label="Select planting date"
       />
 
       <label htmlFor="plantingType">Planting type:</label>
-      <select
-        id="plantingType"
+
+      <CustomSelect
         value={plantingType}
-        onChange={e => onPlantingTypeChange(e.target.value)}
-      >
-        <option value="SELECT">Select option</option>
-        <option value="TRANSPLANT">Transplant</option>
-        <option value="INDOORS">Indoors</option>
-        <option value="OUTDOORS">Outdoors</option>
-      </select>
+        options={plantingTypeOptions}
+        onChange={onPlantingTypeChange}
+        label="Select option"
+      />
     </div>
   );
 }
