@@ -7,8 +7,7 @@ export const NavColumnItemOuterContainer = styled.div<{ $isSelected: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: ${({ $isSelected }) =>
-    $isSelected ? '12px 12px 12px 0px' : '12px 12px 12px 0px'};
+  padding: 12px 12px 12px 0px;
   background-color: ${({ $isSelected }) =>
     $isSelected ? COLORS.sproutLight : COLORS.glimpse};
   border-radius: ${({ $isSelected }) =>

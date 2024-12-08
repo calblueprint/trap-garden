@@ -86,7 +86,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                   Your Account
                 </H4>
                 <P3 $color={COLORS.shrub} $fontWeight={300}>
-                  {formatUserType(profileData?.user_type as UserTypeEnum)}
+                  {formatUserType(profileData.user_type as UserTypeEnum)}
                 </P3>
               </NameAndStatus>
             </Profile>
