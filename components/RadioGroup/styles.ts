@@ -38,4 +38,5 @@ export const RadioInput = styled.input.attrs({ type: 'radio' })`
 export const RadioLabel = styled.label<SelectedProps>`
   color: ${({ $isSelected }) => ($isSelected ? COLORS.shrub : COLORS.midgray)};
   font-size: 1rem;
+  font-weight: 300;
 `;
