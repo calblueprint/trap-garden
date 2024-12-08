@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 
-export const BigButton = styled.button<{ $color?: string }>`
+interface ButtonProps {
+  $primaryColor?: string;
+  $secondaryColor?: string;
+  $textColor?: string;
+}
+
+export const BigButton = styled.button<ButtonProps>`
   background-color: ${props => props.color || COLORS.shrub};
 
   color: white;
@@ -12,4 +18,19 @@ export const BigButton = styled.button<{ $color?: string }>`
   width: 100%;
   height: 3rem;
   max-height: 3rem;
+`;
+
+export const Button = styled.button<ButtonProps>`
+  width: 9.375rem;
+  height: 2.813rem;
+  border-radius: 25rem;
+  font-size: 14px;
+  border: 0.5px solid;
+  color: ${({ $textColor }) => $textColor || 'white'};
+  background: ${({ $primaryColor }) => $primaryColor || 'white'};
+  border-color: ${({ $secondaryColor, $primaryColor }) =>
+    $secondaryColor || $primaryColor || 'white'};
+  &:disabled {
+    background: ${({ $secondaryColor }) => $secondaryColor ?? COLORS.midgray};
+  }
 `;
