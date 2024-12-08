@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import CONFIG from '@/lib/configs';
 import { Flex } from '@/styles/containers';
 import { useAuth } from '@/utils/AuthProvider';
@@ -13,22 +12,37 @@ interface HeaderProps {
 }
 
 export default function Header({ toggleNavColumn }: HeaderProps) {
-  const currentPath = usePathname();
   const { profileReady, profileData } = useProfile();
-  const { userId } = useAuth();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    setIsLoggedIn(userId !== null);
-  }, [userId]);
+  const { userId, loading: authLoading } = useAuth();
 
   const onNavColumnClick = () => {
     toggleNavColumn();
   };
 
-  if (currentPath === '/onboarding') {
-    return null;
-  }
+  const AuthOrProfileButtons = () => {
+    // If not (both profile and auth ready)
+    if (authLoading || !profileReady) return <div></div>;
+
+    // Logged-in user
+    if (userId) {
+      // Logged in AND onboarded
+      // TODO: this should route to /my-account in the future
+      if (profileData) {
+        return <Icon type="profile" />;
+      }
+
+      // Not onboarded
+      return <Link href={CONFIG.onboarding}>Complete Onboarding</Link>;
+    }
+
+    // Not logged-in user
+    return (
+      <Flex $direction="row" $gap="8px" $w="max-content">
+        <Link href={CONFIG.login}>Login</Link>
+        <Link href={CONFIG.signup}>Sign Up</Link>
+      </Flex>
+    );
+  };
 
   return (
     <Container>
@@ -38,22 +52,7 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
       <Link href={CONFIG.home}>
         <Icon type="logo" />
       </Link>
-      {isLoggedIn ? (
-        profileReady && profileData !== null ? (
-          // display profile icon if user is logged in and onboarded
-          // this should route to /my-account in the future
-          <Icon type="profile" />
-        ) : (
-          // display onboarding link if user is logged in but not onboarded
-          <Link href={CONFIG.onboarding}>Complete Onboarding</Link>
-        )
-      ) : (
-        // display login link if user is not logged in
-        <Flex $direction="row" $gap="8px" $w="max-content">
-          <Link href={CONFIG.login}>Login</Link>
-          <Link href={CONFIG.signup}>Sign Up</Link>
-        </Flex>
-      )}
+      <AuthOrProfileButtons />
     </Container>
   );
 }
