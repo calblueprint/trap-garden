@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import CONFIG from '@/lib/configs';
 import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
-import { H3, H4 } from '@/styles/text';
+import { Flex } from '@/styles/containers';
+import { H4, P3 } from '@/styles/text';
 import { UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { formatUserType } from '@/utils/helpers';
@@ -51,19 +52,61 @@ const navLinks: NavLink[] = [
 
 export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const currentPath = usePathname();
-  const { signOut, userId } = useAuth();
+  const { signOut, userId, loading: authLoading } = useAuth();
   const router = useRouter();
   const { profileData, profileReady } = useProfile();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    setIsLoggedIn(userId !== null);
-  }, [userId]);
 
   const handleSignOut = () => {
     router.push(CONFIG.login);
     onClose();
     signOut();
+  };
+
+  const AuthOrProfileButtons = () => {
+    const authAndProfileReady = profileReady && !authLoading;
+    if (!authAndProfileReady) {
+      return <div>Loading...</div>;
+    }
+
+    // Logged in Users
+    if (userId) {
+      // Logged in, not onboarded -> Go To Onboarding button
+      // Logged in, Onboarded -> Show My Account Info
+      return (
+        <ProfileDisplayContainer>
+          {!profileData ? (
+            <OnboardingButton href={CONFIG.onboarding} onClick={onClose}>
+              Go to Onboarding
+            </OnboardingButton>
+          ) : (
+            <Profile>
+              <ProfileIcon type="profile" />
+              <NameAndStatus>
+                <H4 $color={COLORS.shrub} $fontWeight={300}>
+                  Your Account
+                </H4>
+                <P3 $color={COLORS.shrub} $fontWeight={300}>
+                  {formatUserType(profileData?.user_type as UserTypeEnum)}
+                </P3>
+              </NameAndStatus>
+            </Profile>
+          )}
+          <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
+        </ProfileDisplayContainer>
+      );
+    }
+
+    // Not logged -> Go to Auth Pages
+    return (
+      <LoginButtonsContainer>
+        <LoginButton href={CONFIG.login} onClick={onClose}>
+          Log In
+        </LoginButton>
+        <SignUpButton href={CONFIG.signup} onClick={onClose}>
+          Sign Up
+        </SignUpButton>
+      </LoginButtonsContainer>
+    );
   };
 
   return (
@@ -97,37 +140,15 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                 ))}
               </NavLinksContainer>
             </div>
-            {!profileReady ? (
-              <div>Loading...</div>
-            ) : isLoggedIn && profileReady && !profileData ? (
-              <OnboardingButton href={CONFIG.onboarding} onClick={onClose}>
-                Go to Onboarding
-              </OnboardingButton>
-            ) : isLoggedIn ? (
-              <ProfileDisplayContainer>
-                <Profile>
-                  <ProfileIcon type="profile" />
-                  <NameAndStatus>
-                    <H3 $color={COLORS.shrub} style={{ fontWeight: 300 }}>
-                      Your Account
-                    </H3>
-                    <H4 $color={COLORS.shrub} style={{ fontWeight: 300 }}>
-                      {formatUserType(profileData?.user_type as UserTypeEnum)}
-                    </H4>
-                  </NameAndStatus>
-                </Profile>
-                <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
-              </ProfileDisplayContainer>
-            ) : (
-              <LoginButtonsContainer>
-                <LoginButton href={CONFIG.login} onClick={onClose}>
-                  Log In
-                </LoginButton>
-                <SignUpButton href={CONFIG.signup} onClick={onClose}>
-                  Sign Up
-                </SignUpButton>
-              </LoginButtonsContainer>
-            )}
+            <Flex
+              $direction="column"
+              $pb="52px"
+              $px="16px"
+              $w="100%"
+              $h="max-content"
+            >
+              <AuthOrProfileButtons />
+            </Flex>
           </NavColumnContainer>
         </>
       )}

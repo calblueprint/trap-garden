@@ -13,8 +13,8 @@ export const NavColumnContainer = styled.div`
   left: 0;
   display: flex;
   flex-direction: column;
-  transition: transform 1s ease-in-out;
-  padding-bottom: 48px;
+  transition: transform 5s ease-in-out;
+  /* padding-bottom: 52px; */
   justify-content: space-between;
 `;
 
@@ -60,7 +60,6 @@ export const LoginButtonsContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin: 0 16px 48px 16px;
 `;
 
 export const LoginButton = styled(Link)`
@@ -96,18 +95,16 @@ export const OnboardingButton = styled(Link)`
   border-radius: 20px;
   border: none;
   background-color: ${COLORS.shrub};
-  padding: 12px 0px 12px 0px;
   color: ${COLORS.glimpse};
   text-decoration: none;
   font-size: 0.875rem;
-  margin: 0 16px 48px 16px;
+  height: 40px;
 `;
 
 export const ProfileDisplayContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin: 0px 24px 48px 24px;
 `;
 
 export const Profile = styled.div`
