@@ -15,7 +15,7 @@ import {
   seasonOptions,
   usStateOptions,
 } from '@/utils/dropdownOptions';
-import { useTitleCase } from '@/utils/helpers';
+import { useTitleCase } from '@/utils/helpers'; // is this necessary?
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
