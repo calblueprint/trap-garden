@@ -9,9 +9,8 @@ export const NavColumnItemOuterContainer = styled.div<{ $isSelected: boolean }>`
   align-items: center;
   padding: 12px 12px 12px 0px;
   background-color: ${({ $isSelected }) =>
-    $isSelected ? COLORS.sproutLight : COLORS.glimpse};
-  border-radius: ${({ $isSelected }) =>
-    $isSelected ? '0px 50px 50px 0px' : 'none'};
+    $isSelected ? COLORS.sproutLight : 'transparent'};
+  border-radius: 0px 50px 50px 0px;
   position: relative;
   z-index: 1;
   margin-right: 8px;
@@ -27,7 +26,6 @@ export const NavColumnItemContainer = styled.div`
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
-  color: ${COLORS.shrub};
   &:hover {
     text-decoration: none;
   }

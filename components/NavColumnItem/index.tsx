@@ -1,5 +1,7 @@
 import React from 'react';
 import { IconType } from '@/lib/icons';
+import COLORS from '@/styles/colors';
+import { P2 } from '@/styles/text';
 import {
   NavColumnItemContainer,
   NavColumnItemOuterContainer,
@@ -24,14 +26,14 @@ export default function NavColumnItem({
   onClose,
 }: NavColumnItemProps) {
   return (
-    <NavColumnItemOuterContainer $isSelected={isSelected}>
-      {isSelected && <SelectedIndicator />}
-      <NavColumnItemContainer>
-        <StyledIcon type={icon} />
-        <StyledLink href={path} onClick={onClose}>
-          {routeName}
-        </StyledLink>
-      </NavColumnItemContainer>
-    </NavColumnItemOuterContainer>
+    <StyledLink href={path} onClick={onClose}>
+      <NavColumnItemOuterContainer $isSelected={isSelected}>
+        {isSelected && <SelectedIndicator />}
+        <NavColumnItemContainer>
+          <StyledIcon type={icon} />
+          <P2 $color={COLORS.shrub}>{routeName}</P2>
+        </NavColumnItemContainer>
+      </NavColumnItemOuterContainer>
+    </StyledLink>
   );
 }
