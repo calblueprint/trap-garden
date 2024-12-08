@@ -56,10 +56,10 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const router = useRouter();
   const { profileData, profileReady } = useProfile();
 
-  const handleSignOut = () => {
-    router.push(CONFIG.login);
+  const handleSignOut = async () => {
+    await signOut();
     onClose();
-    signOut();
+    router.push(CONFIG.login);
   };
 
   const AuthOrProfileButtons = () => {

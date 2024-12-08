@@ -13,8 +13,7 @@ export const NavColumnContainer = styled.div`
   left: 0;
   display: flex;
   flex-direction: column;
-  transition: transform 5s ease-in-out;
-  /* padding-bottom: 52px; */
+  transition: transform 1s ease-in-out;
   justify-content: space-between;
 `;
 
