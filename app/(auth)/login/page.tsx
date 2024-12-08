@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import TextInput from '@/components/TextInput';
 import { StyledButton, StyledForm } from '@/components/TextInput/styles';
 import COLORS from '@/styles/colors';
@@ -18,11 +18,21 @@ export default function Login() {
 
   const isFormValid = email && password;
 
-  // const { push } = useRouter();
+  const router = useRouter();
+
+  const handleEmailChange = async (newEmail: string) => {
+    setEmail(newEmail);
+    setInvalidEmailError('');
+    setInvalidPasswordError('');
+  };
+
+  const handlePasswordChange = (newPassword: string) => {
+    setPassword(newPassword);
+  };
+
   const handleLogin = async () => {
     try {
       const { error } = await signIn(email, password);
-      // push('/');
 
       if (error) {
         // Match error messages from Supabase
@@ -36,6 +46,7 @@ export default function Login() {
       // Clear errors on success
       setInvalidEmailError('');
       setInvalidPasswordError('');
+      router.push('/view-plants');
     } catch (err) {
       console.error('Login Error:', err);
       setInvalidEmailError('An unexpected error occurred. Please try again.');
@@ -45,13 +56,13 @@ export default function Login() {
   return (
     <StyledForm onSubmit={handleLogin}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <H2 style={{ color: COLORS.shrub }}>Log In</H2>
+        <H2 $color={COLORS.shrub}>Log In</H2>
         <div>
           <TextInput
             id="email-input"
             type="email"
             label="Email"
-            onChange={setEmail}
+            onChange={handleEmailChange}
             value={email}
             error={!!invalidEmailError}
           />
@@ -63,7 +74,7 @@ export default function Login() {
             id="password-input"
             label="Password"
             type="password"
-            onChange={setPassword}
+            onChange={handlePasswordChange}
             value={password}
             isVisible={showPassword}
             toggleVisibility={() => setShowPassword(!showPassword)}

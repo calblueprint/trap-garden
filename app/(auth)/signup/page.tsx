@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Icon from '@/components/Icon';
 import PasswordComplexity from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
 import { StyledButton, StyledForm } from '@/components/TextInput/styles';
@@ -14,17 +16,17 @@ export default function SignUp() {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [samePasswordCheck, setSamePasswordCheck] = useState('');
-  const [mismatchError, setMismatchError] = useState('');
   const [isPasswordComplexityMet, setIsPasswordComplexityMet] =
     useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [checkEmailExistsError] = useState('');
+  const [checkEmailExistsError, setCheckEmailExistsError] = useState('');
   const [checkValidEmailError, setCheckValidEmailError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(true);
 
   const isFormValid = email && password && confirmPassword;
+  const router = useRouter();
 
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,6 +35,7 @@ export default function SignUp() {
 
   const handleEmailChange = async (newEmail: string) => {
     setEmail(newEmail);
+    setCheckEmailExistsError('');
 
     // Validate email format
     if (!isValidEmail(newEmail)) {
@@ -49,22 +52,18 @@ export default function SignUp() {
   const handlePasswordChange = (newPassword: string) => {
     setPassword(newPassword);
 
+    validateIsPasswordComplexityMet(newPassword);
     if (!newPassword || !confirmPassword) {
-      setMismatchError('');
       setSamePasswordCheck('');
       return;
     }
 
     // Set mismatch error if passwords do not match
     if (newPassword !== confirmPassword) {
-      setMismatchError('✗ Passwords do not match');
       setSamePasswordCheck('');
     } else {
-      setMismatchError('');
       setSamePasswordCheck('✓ Passwords match');
     }
-
-    validateIsPasswordComplexityMet(newPassword);
   };
 
   // Handles input to confirm password
@@ -73,17 +72,14 @@ export default function SignUp() {
 
     // Clear mismatch error if either field is empty
     if (!password || !newConfirmPassword) {
-      setMismatchError('');
       setSamePasswordCheck('');
       return;
     }
 
     // Set mismatch error if passwords do not match
     if (password !== newConfirmPassword) {
-      setMismatchError('✗ Passwords do not match');
       setSamePasswordCheck('');
     } else {
-      setMismatchError('');
       setSamePasswordCheck('✓ Passwords match');
     }
   };
@@ -94,11 +90,9 @@ export default function SignUp() {
     const hasNumber = /\d/.test(password || '');
     const longEnough = (password || '').length >= 8;
 
-    if (password && hasLowerCase && hasNumber && longEnough) {
-      setIsPasswordComplexityMet(true);
-    } else {
-      setIsPasswordComplexityMet(false);
-    }
+    setIsPasswordComplexityMet(
+      !!password && hasLowerCase && hasNumber && longEnough,
+    );
   };
 
   const handleSignUp = async () => {
@@ -111,7 +105,19 @@ export default function SignUp() {
     }
 
     try {
-      await signUp(email, password);
+      const result = await signUp(email, password);
+      if (result.error) {
+        // Handle the specific error (e.g., duplicate email)
+        if (result.error.message === 'Account already exists for this email') {
+          setCheckEmailExistsError(result.error.message);
+        } else if (checkValidEmailError == 'false') {
+          alert(result.error.message); // Show a generic alert for other errors
+        }
+      } else {
+        // Handle successful sign-up (e.g., navigate to another page)
+        setCheckEmailExistsError('');
+        router.push('/onboarding');
+      }
     } catch (error) {
       console.error('Sign up failed:', error);
       alert('There was an error during sign up. Please try again.');
@@ -121,7 +127,7 @@ export default function SignUp() {
   return (
     <StyledForm onSubmit={handleSignUp}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <H2 style={{ color: COLORS.shrub }}>Sign Up</H2>
+        <H2 $color={COLORS.shrub}>Sign Up</H2>
         <div>
           <TextInput
             id="email-input"
@@ -132,7 +138,7 @@ export default function SignUp() {
             error={!!checkEmailExistsError || (!isEmailValid && isSubmitted)}
           />
           {/* Email input*/}
-          {checkEmailExistsError && (
+          {checkEmailExistsError && isSubmitted && (
             <P3 style={{ color: COLORS.errorRed }}>{checkEmailExistsError}</P3>
           )}
           {!isEmailValid && isSubmitted && (
@@ -176,11 +182,25 @@ export default function SignUp() {
           {/* Confirm password input with toggle visibility */}
 
           {samePasswordCheck && (
-            <P3 style={{ color: '#0D8817' }}>{samePasswordCheck}</P3>
+            <P3 style={{ color: '#0D8817' }}>
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <Icon type="check" />
+                {'Passwords match'}
+              </div>
+            </P3>
           )}
 
           {isSubmitted && !samePasswordCheck && (
-            <P3 style={{ color: COLORS.errorRed }}>{mismatchError}</P3>
+            <P3 style={{ color: COLORS.errorRed }}>
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <Icon type="x" />
+                {'Passwords do not match'}
+              </div>
+            </P3>
           )}
           {/* Conditional password validation error message */}
         </div>

@@ -1,5 +1,6 @@
 import COLORS from '@/styles/colors';
 import { P3 } from '@/styles/text';
+import Icon from './Icon';
 
 export default function PasswordComplexity({ password }: { password: string }) {
   // Define complexity rules with their check logic
@@ -45,7 +46,10 @@ function Requirement({ met, text }: { met: boolean; text: string }) {
         color: met ? '#0D8817' : COLORS.errorRed,
       }}
     >
-      {met ? '✓' : '✗'} {text}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Icon type={met ? 'check' : 'x'} />
+        {text}
+      </div>
     </P3>
   );
 }
