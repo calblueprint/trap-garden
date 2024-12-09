@@ -11,7 +11,7 @@ import {
 interface DateInputProps {
   value: string;
   onChange: (value: string) => void;
-  label?: string;
+  placeholder?: string;
   min?: string;
   max?: string;
 }
@@ -19,7 +19,7 @@ interface DateInputProps {
 const DateInput = ({
   value,
   onChange,
-  label = 'Select Date',
+  placeholder = '',
   min,
   max,
 }: DateInputProps) => {
@@ -50,7 +50,7 @@ const DateInput = ({
   };
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return label;
+    if (!dateString) return placeholder;
 
     try {
       return new Date(dateString).toLocaleDateString('en-US', {
