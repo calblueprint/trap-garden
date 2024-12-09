@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import BPLogo from '@/assets/images/bp-logo.png'; // to do: remove this
+import BPLogo from '@/assets/images/bp-logo.png'; // TODO: remove this
 
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
@@ -27,10 +27,8 @@ export default function PlantDetails({
   onDateChange: (date: string) => void;
   onPlantingTypeChange: (type: string) => void;
 }) {
-  const defautImg = '';
-
   return (
-    <div>
+    <>
       <Flex
         $h="186px"
         $background={COLORS.backgroundGrey}
@@ -38,7 +36,7 @@ export default function PlantDetails({
         $align="center"
       >
         <Image
-          src={plant.img ?? BPLogo}
+          src={plant.img ?? BPLogo} // TODO: change the default image
           alt={`Plant Image for ${plant.plant_name}`}
           style={{ height: '120px', width: 'max-content' }}
         />
@@ -84,6 +82,6 @@ export default function PlantDetails({
           </Flex>
         </Flex>
       </Box>
-    </div>
+    </>
   );
 }
