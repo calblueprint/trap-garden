@@ -82,7 +82,7 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
   const [ownedPlants, setOwnedPlants] = useState<OwnedPlant[]>([]);
-  const userState = profileData?.us_state ?? 'TENNESSEE';
+  const userState = profileData?.us_state ?? null;
 
   // Fetch All Plants
   useEffect(() => {
