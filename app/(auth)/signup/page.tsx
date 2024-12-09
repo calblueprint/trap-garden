@@ -110,8 +110,6 @@ export default function SignUp() {
         // Handle the specific error (e.g., duplicate email)
         if (result.error.message === 'Account already exists for this email') {
           setCheckEmailExistsError(result.error.message);
-        } else if (checkValidEmailError == 'false') {
-          alert(result.error.message); // Show a generic alert for other errors
         }
       } else {
         // Handle successful sign-up (e.g., navigate to another page)
