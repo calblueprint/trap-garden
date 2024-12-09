@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import TextInput from '@/components/TextInput';
-import { StyledButton, StyledForm } from '@/components/TextInput/styles';
+import { StyledForm } from '@/components/TextInput/styles';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
@@ -55,8 +56,16 @@ export default function Login() {
 
   return (
     <StyledForm onSubmit={handleLogin}>
+      <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
+        Log In
+      </H2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <H2 $color={COLORS.shrub}>Log In</H2>
+        <P3 $color={COLORS.midgray}>
+          Don’t have an account?
+          <StyledLinkButton href="/signup" style={{ padding: '4px' }}>
+            Sign up
+          </StyledLinkButton>
+        </P3>
         <div>
           <TextInput
             id="email-input"
@@ -83,13 +92,9 @@ export default function Login() {
           <P3 $color={COLORS.errorRed}>{invalidPasswordError}</P3>
           {/* Password input*/}
         </div>
-        <StyledButton
-          type="button"
-          onClick={handleLogin}
-          disabled={!isFormValid}
-        >
-          Log in
-        </StyledButton>{' '}
+        <BigButton type="button" onClick={handleLogin} disabled={!isFormValid}>
+          Log In
+        </BigButton>{' '}
         {/* Sign in button */}
       </div>
     </StyledForm>

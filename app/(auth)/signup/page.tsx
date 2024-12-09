@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import Icon from '@/components/Icon';
 import PasswordComplexity from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
-import { StyledButton, StyledForm } from '@/components/TextInput/styles';
+import { StyledForm } from '@/components/TextInput/styles';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
@@ -124,8 +125,17 @@ export default function SignUp() {
 
   return (
     <StyledForm onSubmit={handleSignUp}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <H2 $color={COLORS.shrub}>Sign Up</H2>
+      <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
+        Sign Up
+      </H2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <P3 $color={COLORS.midgray}>
+          Already have an account?
+          <StyledLinkButton href="/login" style={{ padding: '4px' }}>
+            Log in
+          </StyledLinkButton>
+        </P3>
         <div>
           <TextInput
             id="email-input"
@@ -202,13 +212,9 @@ export default function SignUp() {
           )}
           {/* Conditional password validation error message */}
         </div>
-        <StyledButton
-          type="button"
-          onClick={handleSignUp}
-          disabled={!isFormValid}
-        >
-          <P3 style={{ color: '#FFF' }}>Sign up</P3>
-        </StyledButton>{' '}
+        <BigButton type="button" onClick={handleSignUp} disabled={!isFormValid}>
+          <P3 style={{ color: '#FFF' }}>Sign Up</P3>
+        </BigButton>{' '}
         {/* Sign up button */}
       </div>
     </StyledForm>
