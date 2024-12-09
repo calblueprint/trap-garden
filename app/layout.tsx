@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={sans.className}>
+        {/* <div style={{ height:"100vh", width:"100vw"}} > */}
         <AuthProvider>
           <ProfileProvider>
             <StyledComponentsRegistry>
@@ -34,6 +35,7 @@ export default function RootLayout({
             </StyledComponentsRegistry>
           </ProfileProvider>
         </AuthProvider>
+        {/* </div> */}
       </body>
     </html>
   );

@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <Container>
       <Image src={BPLogo} alt="Blueprint Logo" />
-      <p>Open up app/page.tsx to get started!</p>
+      <p>Home Page is currenlty under construction!</p>
     </Container>
   );
 }
