@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import PlantDetails from '@/components/PlantDetails';
+import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
+import { H1, P1 } from '@/styles/text';
 import { UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
@@ -76,30 +79,39 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <>
       {currentIndex !== plantsToAdd.length + 1 && (
-        <div>
-          <PlantDetails
-            plant={plantsToAdd[currentIndex - 1]}
-            date={details[currentIndex - 1].date_added || getDefaultDate()}
-            plantingType={details[currentIndex - 1].planting_type || 'SELECT'}
-            onDateChange={date => updateInput('date_added', date)}
-            onPlantingTypeChange={type => updateInput('planting_type', type)}
-          />
-          <button type="button" onClick={() => move(-1)}>
-            Back
-          </button>
-          <p>
-            {currentIndex} / {plantsToAdd.length}
-          </p>
-          <button
-            type="button"
-            disabled={disableNext()}
-            onClick={() => move(1)}
-          >
-            Next
-          </button>
-        </div>
+        <Flex $direction="column" $justify="between">
+          <Flex $direction="column" $justify="start">
+            <Flex $gap="16px" $direction="column" $textAlign="center">
+              <H1 $color={COLORS.shrub}>Add Plant Details</H1>
+              <P1 $color={COLORS.midgray}>
+                {currentIndex} / {plantsToAdd.length}
+              </P1>
+            </Flex>
+            <PlantDetails
+              plant={plantsToAdd[currentIndex - 1]}
+              date={details[currentIndex - 1].date_added || getDefaultDate()}
+              plantingType={details[currentIndex - 1].planting_type || 'SELECT'}
+              onDateChange={date => updateInput('date_added', date)}
+              onPlantingTypeChange={type => updateInput('planting_type', type)}
+            />
+          </Flex>
+          <Flex>
+            {' '}
+            {/*Style the Button Footer*/}
+            <button type="button" onClick={() => move(-1)}>
+              Back
+            </button>
+            <button
+              type="button"
+              disabled={disableNext()}
+              onClick={() => move(1)}
+            >
+              Next
+            </button>
+          </Flex>
+        </Flex>
       )}
       {currentIndex === plantsToAdd.length + 1 && (
         <div>
@@ -111,6 +123,6 @@ export default function Home() {
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 }
