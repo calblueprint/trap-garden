@@ -11,6 +11,7 @@ import PlantCareDescription from '@/components/PlantCareDescription';
 import { Flex } from '@/styles/containers';
 import { H4 } from '@/styles/text';
 import { Plant } from '@/types/schema';
+import { useProfile } from '@/utils/ProfileProvider';
 import {
   BackButton,
   ButtonWrapper,
@@ -29,6 +30,8 @@ export default function GeneralPlantPage() {
   const params = useParams();
   const plantId: UUID = params.plantId as UUID;
   const [currentPlant, setCurrentPlant] = useState<Plant>();
+  const { profileReady, profileData, setPlantsToAdd } = useProfile();
+
   useEffect(() => {
     const getPlant = async () => {
       const plant = await getPlantById(plantId);
@@ -36,6 +39,14 @@ export default function GeneralPlantPage() {
     };
     getPlant();
   }, [plantId]);
+
+  const handleAdd = () => {
+    // assume user is onboarded
+    if (!currentPlant) return;
+    setPlantsToAdd([currentPlant]);
+    router.push('/add-details');
+  };
+
   return currentPlant ? (
     <>
       <ImgHeader>
@@ -58,7 +69,10 @@ export default function GeneralPlantPage() {
               difficultyLevel={currentPlant.difficulty_level}
             />
           </NameWrapper>
-          <AddPlant>Add +</AddPlant>
+          {/*Add button only appears if user is logged in and onboarded*/}
+          {profileReady && profileData && (
+            <AddPlant onClick={handleAdd}>Add +</AddPlant>
+          )}
         </Flex>
         <ComponentWrapper>
           <GardeningTips
