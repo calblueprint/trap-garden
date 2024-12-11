@@ -64,7 +64,7 @@ const DateInput = ({
   };
 
   return (
-    <DateInputWrapper>
+    <DateInputWrapper onClick={handleDropdownClick}>
       <SelectContainer ref={containerRef} style={{ position: 'relative' }}>
         <SelectedValue>{formatDate(value)}</SelectedValue>
         <DropdownIcon onClick={handleDropdownClick}>

@@ -3,13 +3,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
+import NavigationBar from '@/components/NavigationBar';
 import PlantDetails from '@/components/PlantDetails';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { H1, P1 } from '@/styles/text';
+import { H1 } from '@/styles/text';
 import { UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
+import { FooterButton, MoveButton } from './styles';
 
 export default function Home() {
   const { profileData, profileReady, plantsToAdd } = useProfile();
@@ -77,6 +79,9 @@ export default function Home() {
     await insertUserPlants(userId!, details);
     router.push('/view-plants');
   }
+  const handlePlantSelection = (index: number) => {
+    setCurrentIndex(index);
+  };
 
   return (
     <>
@@ -85,9 +90,17 @@ export default function Home() {
           <Flex $direction="column" $justify="start">
             <Flex $gap="16px" $direction="column" $textAlign="center">
               <H1 $color={COLORS.shrub}>Add Plant Details</H1>
-              <P1 $color={COLORS.midgray}>
+              {/* <P1 $color={COLORS.midgray}>
                 {currentIndex} / {plantsToAdd.length}
-              </P1>
+              </P1> */}
+              <NavigationBar
+                currentIndex={currentIndex}
+                totalCount={plantsToAdd.length}
+                plantsToAdd={plantsToAdd}
+                onPrev={() => move(-1)}
+                onNext={() => move(1)}
+                onSelectPlant={handlePlantSelection}
+              />
             </Flex>
             <PlantDetails
               plant={plantsToAdd[currentIndex - 1]}
@@ -98,18 +111,26 @@ export default function Home() {
             />
           </Flex>
           <Flex>
-            {' '}
-            {/*Style the Button Footer*/}
-            <button type="button" onClick={() => move(-1)}>
-              Back
-            </button>
-            <button
-              type="button"
-              disabled={disableNext()}
-              onClick={() => move(1)}
-            >
-              Next
-            </button>
+            <FooterButton>
+              {currentIndex > 1 && (
+                <MoveButton
+                  type="button"
+                  onClick={() => move(-1)}
+                  $backgroundColor={COLORS.shrub}
+                >
+                  Back
+                </MoveButton>
+              )}
+
+              <MoveButton
+                type="button"
+                disabled={disableNext()}
+                onClick={() => move(1)}
+                $backgroundColor={disableNext() ? COLORS.midgray : COLORS.shrub}
+              >
+                Next
+              </MoveButton>
+            </FooterButton>
           </Flex>
         </Flex>
       )}
