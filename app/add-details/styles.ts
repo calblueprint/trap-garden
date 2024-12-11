@@ -1,10 +1,8 @@
 import styled from 'styled-components';
+import { SmallRoundedButton } from '@/components/Button';
 
-export const MoveButton = styled.button<{ $backgroundColor: string }>`
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
-  color: white;
-  border-radius: 20px;
-  border: none;
+export const MoveButton = styled(SmallRoundedButton)`
+  border: 1px solid;
   font-family: inherit;
   margin-bottom: 10px;
   width: 170px;
