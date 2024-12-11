@@ -77,6 +77,7 @@ export default function PlantDetails({
               options={plantingTypeOptions}
               onChange={onPlantingTypeChange}
               label="Choose Planting Type"
+              isContainerClickable={true}
               // TODO: rename prop label to placeholder
             />
           </Flex>

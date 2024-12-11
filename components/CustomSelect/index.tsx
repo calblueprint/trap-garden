@@ -14,6 +14,7 @@ interface CustomSelectProps<T> {
   options: DropdownOption<T>[];
   onChange: (value: T) => void;
   label?: string;
+  isContainerClickable?: boolean; // New boolean prop
 }
 
 const CustomSelect = <T extends string | number | boolean>({
@@ -21,6 +22,7 @@ const CustomSelect = <T extends string | number | boolean>({
   options,
   onChange,
   label,
+  isContainerClickable = false, // Default to false
 }: CustomSelectProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -47,7 +49,10 @@ const CustomSelect = <T extends string | number | boolean>({
   }, []);
 
   return (
-    <SelectContainer ref={containerRef}>
+    <SelectContainer
+      ref={containerRef}
+      onClick={isContainerClickable ? () => setIsOpen(!isOpen) : undefined}
+    >
       <SelectedValue>
         {options.find(option => option.value === value)?.label || label}
       </SelectedValue>
