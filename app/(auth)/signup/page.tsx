@@ -200,7 +200,7 @@ export default function SignUp() {
             </P3>
           )}
 
-          {isSubmitted && !samePasswordCheck && (
+          {isSubmitted && !samePasswordCheck && !!password && (
             <P3 style={{ color: COLORS.errorRed }}>
               <div
                 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
