@@ -116,7 +116,7 @@ export default function Home() {
                 <MoveButton
                   type="button"
                   onClick={() => move(-1)}
-                  $backgroundColor={COLORS.shrub}
+                  $secondaryColor={COLORS.shrub}
                 >
                   Back
                 </MoveButton>
@@ -126,7 +126,8 @@ export default function Home() {
                 type="button"
                 disabled={disableNext()}
                 onClick={() => move(1)}
-                $backgroundColor={disableNext() ? COLORS.midgray : COLORS.shrub}
+                $primaryColor={disableNext() ? COLORS.midgray : COLORS.shrub}
+                $secondaryColor="white"
               >
                 Next
               </MoveButton>
