@@ -5,8 +5,9 @@ import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantCalendarList } from '@/components/PlantCalendarList';
 import SearchBar from '@/components/SearchBar';
+import SeasonColorKey from '@/components/SeasonColorKey';
 import COLORS from '@/styles/colors';
-import { Box } from '@/styles/containers';
+import { Box, Flex } from '@/styles/containers';
 import { H1, H3 } from '@/styles/text';
 import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
 import { useProfile } from '@/utils/ProfileProvider';
@@ -16,6 +17,7 @@ import {
   PageContainer,
   PageTitle,
   StateOptionsContainer,
+  VerticalSeparator,
 } from './styles';
 
 // Declaring (static) filter options outside so they're not re-rendered
@@ -36,7 +38,7 @@ const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
   { label: 'Start Seeds Indoors', value: 'INDOORS' },
   { label: 'Start Seeds Outdoors', value: 'OUTDOORS' },
   {
-    label: 'Plant Seedlings/Transplant Outdoors',
+    label: 'Plant Seedlings / Transplant Outdoors',
     value: 'TRANSPLANT',
   },
 ];
@@ -56,7 +58,8 @@ export default function SeasonalPlantingGuide() {
   const [selectedPlantingType, setSelectedPlantingType] = useState<
     DropdownOption<PlantingTypeEnum>[]
   >([]);
-  const [selectedUsState, setSelectedUsState] = useState<string>('');
+  const [selectedUsState, setSelectedUsState] =
+    useState<DropdownOption<string> | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const clearFilters = () => {
@@ -67,7 +70,12 @@ export default function SeasonalPlantingGuide() {
 
   useEffect(() => {
     if (profileReady && profileData) {
-      setSelectedUsState(profileData.us_state);
+      setSelectedUsState({
+        label:
+          profileData.us_state.charAt(0) +
+          profileData.us_state.slice(1).toLowerCase(), // can't use useTitleCase here, lint error
+        value: profileData.us_state,
+      });
     }
   }, [profileData, profileReady]);
 
@@ -82,13 +90,16 @@ export default function SeasonalPlantingGuide() {
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <FilterContainer>
           <FilterDropdownSingle
-            id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}
             placeholder="State"
             options={usStateOptions}
             disabled={!selectedUsState}
+            small={true}
           />
+
+          {/* vertical bar to separate state and other filters */}
+          <VerticalSeparator />
 
           <FilterDropdownMultiple
             value={selectedGrowingSeason}
@@ -121,8 +132,6 @@ export default function SeasonalPlantingGuide() {
         <StateOptionsContainer>
           <H3 $color={COLORS.shrub}>Choose Your State</H3>
           <FilterDropdownSingle
-            name="usState"
-            id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}
             placeholder="State"
@@ -130,7 +139,10 @@ export default function SeasonalPlantingGuide() {
           />
         </StateOptionsContainer>
       ) : (
-        <Box $pl="16px" $pt="12px">
+        <Box $p="20px">
+          <Flex $direction="row" $justify="center">
+            <SeasonColorKey />
+          </Flex>
           <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}
             harvestSeasonFilterValue={selectedHarvestSeason}
