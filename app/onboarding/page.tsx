@@ -25,7 +25,7 @@ import {
 // usStateOptions imported from elsewhere
 const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = [
   { label: 'Individual', value: 'INDIV' },
-  { label: 'Community', value: 'ORG' },
+  { label: 'Community/Organization', value: 'ORG' },
   { label: 'School', value: 'SCHOOL' },
 ];
 
@@ -225,20 +225,18 @@ const ReviewPage = ({
 
   return (
     <OnboardingContainer>
-      <Flex $direction="column" $justify="start">
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
         <ProgressBar progress={100} />
-        <QuestionDiv>
-          <H3
-            $color={COLORS.shrub}
-            style={{
-              textAlign: 'center',
-              marginTop: '90px',
-              marginBottom: '40px',
-            }}
-          >
-            Review & Submit
-          </H3>
-        </QuestionDiv>
+        <H3
+          $color={COLORS.shrub}
+          style={{
+            textAlign: 'center',
+            marginTop: '90px',
+            marginBottom: '40px',
+          }}
+        >
+          Review & Submit
+        </H3>
         <ContentContainer>
           <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
             Your Responses
@@ -262,12 +260,11 @@ const ReviewPage = ({
             options={plotOptions}
             onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
           />
-          <div style={{ height: '12.625rem' }} />
-          <BigButton color={COLORS.shrub} onClick={handleSubmit}>
-            Let&apos;s Start Growing !
-          </BigButton>
         </ContentContainer>
-      </Flex>
+      </div>
+      <BigButton color={COLORS.shrub} onClick={handleSubmit}>
+        Let&apos;s Start Growing!
+      </BigButton>
     </OnboardingContainer>
   );
 };

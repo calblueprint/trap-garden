@@ -27,7 +27,7 @@ export const ContentContainer = styled.div`
 export const QuestionDiv = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 60px;
+  height: max(60px, max-content);
   align-items: center;
   justify-content: end;
   align-content: center;
