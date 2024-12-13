@@ -12,7 +12,7 @@ import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
-import { H1 } from '@/styles/text';
+import { H1, P1 } from '@/styles/text';
 import {
   DropdownOption,
   OwnedPlant,
@@ -63,7 +63,7 @@ const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
 export default function Page() {
   const router = useRouter();
   const { hasPlot, profileData, profileReady, setPlantsToAdd } = useProfile();
-  const { userId } = useAuth();
+  const { userId, loading: authLoading } = useAuth();
 
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
     hasPlot ? 'myPlants' : 'all',
@@ -84,6 +84,8 @@ export default function Page() {
   const [ownedPlants, setOwnedPlants] = useState<OwnedPlant[]>([]);
   const userState = profileData?.us_state ?? null;
 
+  const profileAndAuthReady = profileReady && !authLoading;
+
   // Fetch All Plants
   useEffect(() => {
     // Only fetch plants when profile is ready and we have a state
@@ -101,7 +103,7 @@ export default function Page() {
   // Fetch User Plants for My Garden tab
   useEffect(() => {
     // Only fetch user plants if we have a valid userId
-    if (userId) {
+    if (!authLoading && userId) {
       const fetchUserPlants = async () => {
         const fetchedUserPlants = await getCurrentUserPlantsByUserId(userId);
 
@@ -118,7 +120,7 @@ export default function Page() {
       };
       fetchUserPlants();
     }
-  }, [userId]);
+  }, [userId, authLoading]);
 
   const clearFilters = () => {
     setSelectedGrowingSeason([]);
@@ -183,26 +185,135 @@ export default function Page() {
     setSelectedPlants([]);
     setInAddMode(false);
   }
-  // Not logged in
-  if (!userId) {
+
+  function MainBody() {
+    // assume auth and profile are both ready
+    // Not logged in
+    if (!userId) {
+      return (
+        <Flex $direction="column" $textAlign="center" $justify="center">
+          <P1 $color={COLORS.midgray}>Login to view all plants</P1>
+          <button onClick={() => router.push('/login')}>Log In</button>
+        </Flex>
+      );
+    }
+
+    // Not onboarded
+    if (!profileData) {
+      return (
+        <Flex $direction="column" $textAlign="center" $justify="center">
+          <P1 $color={COLORS.midgray}>Complete your profile view all plants</P1>
+          <button onClick={() => router.push('/onboarding')}>
+            Go To Onboarding
+          </button>
+        </Flex>
+      );
+    }
+
+    // Onboarded and Logged in: Normal Screen
+    return (
+      <>
+        <Flex $justify="between" $pb="12px">
+          <ViewSelection>
+            <HeaderButton
+              $isCurrentMode={viewingOption !== 'all'}
+              onClick={() => setViewingOption('myPlants')}
+            >
+              My Plants
+            </HeaderButton>
+            <HeaderButton
+              $isCurrentMode={viewingOption === 'all'}
+              onClick={() => setViewingOption('all')}
+            >
+              All
+            </HeaderButton>
+          </ViewSelection>
+          {/* Select/Cancel toggles Add Mode; appears in All plants only*/}
+          {viewingOption === 'all' &&
+            (inAddMode ? (
+              <SelectButton
+                $secondaryColor={COLORS.errorRed}
+                onClick={handleCancelAddMode}
+              >
+                Cancel
+              </SelectButton>
+            ) : (
+              <SelectButton
+                $primaryColor={COLORS.shrub}
+                $secondaryColor="white"
+                onClick={() => setInAddMode(true)}
+              >
+                Select
+              </SelectButton>
+            ))}
+        </Flex>
+
+        {viewingOption === 'myPlants' ? (
+          <MyPlantsDisplay />
+        ) : (
+          <AllPlantsDisplay />
+        )}
+      </>
+    );
+  }
+
+  function MyPlantsDisplay() {
     return (
       <div>
-        <p>Login to view all plants</p>
-        <button onClick={() => router.push('/login')}>Log In</button>
+        {ownedPlants.length === 0 ? (
+          <>Add Plants To Your Garden</>
+        ) : filteredUserPlantList.length === 0 ? (
+          <p>No plants match your current filters.</p>
+        ) : (
+          <PlantGridContainer>
+            {filteredUserPlantList.map(ownedPlant => (
+              <PlantCard
+                key={ownedPlant.userPlantId}
+                plant={ownedPlant.plant}
+                canSelect={false}
+                onClick={() => handleUserPlantCardClick(ownedPlant)}
+                // aspectRatio="168 / 200"
+              />
+            ))}
+          </PlantGridContainer>
+        )}
       </div>
     );
   }
 
-  // Not onboarded
-  if (profileReady && !profileData) {
+  function AllPlantsDisplay() {
     return (
-      <div>
-        <H1>Complete Your Profile</H1>
-        <p>Please complete your onboarding to access view plants</p>
-        <button onClick={() => router.push('/onboarding')}>
-          Go To Onboarding
-        </button>
-      </div>
+      <>
+        {filteredPlantList.length === 0 ? (
+          <div>
+            <p>No plants match your current filters.</p>
+          </div>
+        ) : (
+          <PlantGridContainer>
+            {filteredPlantList.map(plant => (
+              <PlantCard
+                key={plant.id}
+                plant={plant}
+                canSelect={inAddMode}
+                isSelected={selectedPlants.includes(plant)}
+                onClick={() => handlePlantCardClick(plant)}
+                // aspectRatio="168 / 200"
+              />
+            ))}
+          </PlantGridContainer>
+        )}
+        {inAddMode && (
+          <AddButton
+            $backgroundColor={
+              selectedPlants.length ? COLORS.shrub : COLORS.midgray
+            }
+            onClick={handleAddPlants}
+            disabled={!selectedPlants.length}
+          >
+            {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
+          </AddButton>
+        )}
+      </>
     );
   }
 
@@ -250,96 +361,8 @@ export default function Page() {
         ) : null}
       </Box>
       <Box $px="24px">
-        <Flex $justify="between" $pb="12px">
-          <ViewSelection>
-            <HeaderButton
-              $isCurrentMode={viewingOption !== 'all'}
-              onClick={() => setViewingOption('myPlants')}
-            >
-              My Plants
-            </HeaderButton>
-            <HeaderButton
-              $isCurrentMode={viewingOption === 'all'}
-              onClick={() => setViewingOption('all')}
-            >
-              All
-            </HeaderButton>
-          </ViewSelection>
-          {/* Select/Cancel toggles Add Mode; appears in All plants only*/}
-          {viewingOption === 'all' &&
-            (inAddMode ? (
-              <SelectButton
-                $secondaryColor={COLORS.errorRed}
-                onClick={handleCancelAddMode}
-              >
-                Cancel
-              </SelectButton>
-            ) : (
-              <SelectButton
-                $primaryColor={COLORS.shrub}
-                $secondaryColor="white"
-                onClick={() => setInAddMode(true)}
-              >
-                Select
-              </SelectButton>
-            ))}
-        </Flex>
-        {viewingOption === 'myPlants' && (
-          <div>
-            {ownedPlants.length === 0 ? (
-              <>Add Plants To Your Garden</>
-            ) : filteredUserPlantList.length === 0 ? (
-              <p>No plants match your current filters.</p>
-            ) : (
-              <PlantGridContainer>
-                {filteredUserPlantList.map(ownedPlant => (
-                  <PlantCard
-                    key={ownedPlant.userPlantId}
-                    plant={ownedPlant.plant}
-                    canSelect={false}
-                    onClick={() => handleUserPlantCardClick(ownedPlant)}
-                    // aspectRatio="168 / 200"
-                  />
-                ))}
-              </PlantGridContainer>
-            )}
-          </div>
-        )}
-        {viewingOption === 'all' && (
-          <>
-            {plants.length === 0 ? (
-              <>Loading...</>
-            ) : filteredPlantList.length === 0 ? (
-              <div>
-                <p>No plants match your current filters.</p>
-              </div>
-            ) : (
-              <PlantGridContainer>
-                {filteredPlantList.map(plant => (
-                  <PlantCard
-                    key={plant.id}
-                    plant={plant}
-                    canSelect={inAddMode}
-                    isSelected={selectedPlants.includes(plant)}
-                    onClick={() => handlePlantCardClick(plant)}
-                    // aspectRatio="168 / 200"
-                  />
-                ))}
-              </PlantGridContainer>
-            )}
-            {inAddMode && (
-              <AddButton
-                $backgroundColor={
-                  selectedPlants.length ? COLORS.shrub : COLORS.midgray
-                }
-                onClick={handleAddPlants}
-                disabled={!selectedPlants.length}
-              >
-                {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
-              </AddButton>
-            )}
-          </>
-        )}
+        {/* Plant Cards and Body */}
+        {!profileAndAuthReady ? <>Loading</> : <MainBody />}
       </Box>
     </div>
   );
