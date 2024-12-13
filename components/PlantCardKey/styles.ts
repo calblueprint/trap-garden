@@ -54,7 +54,6 @@ export const HorizontalLine = styled.div`
   width: 100%;
   height: 1px;
   background-color: #e4e4e4;
-  margin: 0px 16px 0px 16px;
 `;
 
 export const IconKeyContainer = styled.div`
