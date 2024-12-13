@@ -1,10 +1,24 @@
+import { useEffect } from 'react';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import Icon from './Icon';
 
-export default function PasswordComplexity({ password }: { password: string }) {
-  // Define complexity rules with their check logic
+export default function PasswordComplexity({
+  password,
+  setPasswordComplexityMet,
+}: {
+  password: string;
+  setPasswordComplexityMet: (met: boolean) => void;
+}) {
+  useEffect(() => {
+    // didn't use requirements in the dependency array as that would
+    // require wrapping requirements in useMemo
+    const allRequirementsMet =
+      /[a-z]/.test(password) && /\d/.test(password) && password.length >= 8;
+    setPasswordComplexityMet(allRequirementsMet);
+  }, [password, setPasswordComplexityMet]);
+
   const requirements = [
     {
       met: /[a-z]/.test(password),
@@ -40,7 +54,7 @@ export default function PasswordComplexity({ password }: { password: string }) {
 }
 
 // Helper component to display each requirement with conditional styling
-function Requirement({ met, text }: { met: boolean; text: string }) {
+export function Requirement({ met, text }: { met: boolean; text: string }) {
   return (
     <P3 as="span" $color={met ? COLORS.successGreen : COLORS.errorRed}>
       <Flex $align="center" $gap="8px">

@@ -13,6 +13,7 @@ export const BigButton = styled.button<{ $color?: string }>`
   width: 100%;
   height: 3rem;
   max-height: 3rem;
+  font-family: inherit;
 
   &:disabled {
     background-color: ${COLORS.midgray}; // Change to a gray color to indicate disabled state

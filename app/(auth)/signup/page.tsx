@@ -13,21 +13,21 @@ import { StyledForm } from '../styles';
 
 export default function SignUp() {
   const { signUp } = useAuth();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [samePasswordCheck, setSamePasswordCheck] = useState('');
   const [isPasswordComplexityMet, setIsPasswordComplexityMet] =
     useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
   const [checkEmailExistsError, setCheckEmailExistsError] = useState('');
   const [checkValidEmailError, setCheckValidEmailError] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const isFormValid = email && password && confirmPassword;
   const router = useRouter();
+  const passwordsMatch = password === confirmPassword;
+  const canSubmitForm = email && password && confirmPassword && passwordsMatch;
 
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,64 +36,26 @@ export default function SignUp() {
 
   const handleEmailChange = async (newEmail: string) => {
     setEmail(newEmail);
+    // Clear out the email errors when user starts typing again
     setCheckEmailExistsError('');
+    setCheckValidEmailError('');
 
-    // Validate email format
-    if (!isValidEmail(newEmail)) {
-      setIsEmailValid(false);
-      setCheckValidEmailError('Please enter a valid email address');
-    } else {
-      setIsEmailValid(true);
-      setCheckValidEmailError('');
+    // If not first try, validate email format as user types
+    if (isSubmitted) {
+      setCheckValidEmailError(
+        !isValidEmail(newEmail) ? 'Please enter a valid email address' : '',
+      );
     }
-    // Check if the email already exists
   };
 
   // Handles input to password
   const handlePasswordChange = (newPassword: string) => {
     setPassword(newPassword);
-
-    validateIsPasswordComplexityMet(newPassword);
-    if (!newPassword || !confirmPassword) {
-      setSamePasswordCheck('');
-      return;
-    }
-
-    // Set mismatch error if passwords do not match
-    if (newPassword !== confirmPassword) {
-      setSamePasswordCheck('');
-    } else {
-      setSamePasswordCheck('✓ Passwords match');
-    }
   };
 
   // Handles input to confirm password
   const handleConfirmPasswordChange = (newConfirmPassword: string) => {
     setConfirmPassword(newConfirmPassword);
-
-    // Clear mismatch error if either field is empty
-    if (!password || !newConfirmPassword) {
-      setSamePasswordCheck('');
-      return;
-    }
-
-    // Set mismatch error if passwords do not match
-    if (password !== newConfirmPassword) {
-      setSamePasswordCheck('');
-    } else {
-      setSamePasswordCheck('✓ Passwords match');
-    }
-  };
-
-  // Set password complexity error if requirements are not met
-  const validateIsPasswordComplexityMet = (password: string | null) => {
-    const hasLowerCase = /[a-z]/.test(password || '');
-    const hasNumber = /\d/.test(password || '');
-    const longEnough = (password || '').length >= 8;
-
-    setIsPasswordComplexityMet(
-      !!password && hasLowerCase && hasNumber && longEnough,
-    );
   };
 
   const handleSignUp = async () => {
@@ -101,6 +63,7 @@ export default function SignUp() {
 
     if (!isValidEmail(email)) {
       setCheckValidEmailError('Please enter a valid email address');
+      return;
     } else {
       setCheckValidEmailError(''); // Clear email format error if valid
     }
@@ -141,14 +104,14 @@ export default function SignUp() {
             type="email"
             onChange={handleEmailChange}
             value={email}
-            error={!!checkEmailExistsError || (!isEmailValid && isSubmitted)}
+            error={!!checkEmailExistsError}
           />
           {/* Email input*/}
           {checkEmailExistsError && isSubmitted && (
-            <P3 style={{ color: COLORS.errorRed }}>{checkEmailExistsError}</P3>
+            <P3 $color={COLORS.errorRed}>{checkEmailExistsError}</P3>
           )}
-          {!isEmailValid && isSubmitted && (
-            <P3 style={{ color: COLORS.errorRed }}>{checkValidEmailError}</P3>
+          {checkValidEmailError && isSubmitted && (
+            <P3 $color={COLORS.errorRed}>{checkValidEmailError}</P3>
           )}
         </div>
         <div>
@@ -166,6 +129,7 @@ export default function SignUp() {
 
           <PasswordComplexity
             password={password} // Set default value if password is null
+            setPasswordComplexityMet={setIsPasswordComplexityMet}
           />
 
           {/* Password complexity requirements */}
@@ -182,12 +146,12 @@ export default function SignUp() {
                 setShowConfirmPassword(!showConfirmPassword)
               }
               label="Confirm Password"
-              error={isSubmitted && !samePasswordCheck}
+              error={isSubmitted && !passwordsMatch}
             />
           )}
           {/* Confirm password input with toggle visibility */}
 
-          {samePasswordCheck && (
+          {password && passwordsMatch && (
             <P3 as="span" $color="#0D8817">
               <div
                 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
@@ -198,7 +162,7 @@ export default function SignUp() {
             </P3>
           )}
 
-          {isSubmitted && !samePasswordCheck && !!password && (
+          {isSubmitted && !passwordsMatch && !!password && (
             <P3 as="span" $color={COLORS.errorRed}>
               <div
                 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
@@ -210,8 +174,12 @@ export default function SignUp() {
           )}
           {/* Conditional password validation error message */}
         </div>
-        <BigButton type="button" onClick={handleSignUp} disabled={!isFormValid}>
-          <P3 style={{ color: '#FFF' }}>Sign Up</P3>
+        <BigButton
+          type="button"
+          onClick={handleSignUp}
+          disabled={!canSubmitForm}
+        >
+          <P3 $color="white">Sign Up</P3>
         </BigButton>{' '}
         {/* Sign up button */}
       </div>
