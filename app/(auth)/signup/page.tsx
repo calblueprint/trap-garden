@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
-import Icon from '@/components/Icon';
-import PasswordComplexity from '@/components/PasswordComplexity';
+import PasswordComplexity, {
+  Requirement,
+} from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
@@ -41,11 +42,11 @@ export default function SignUp() {
     setCheckValidEmailError('');
 
     // If not first try, validate email format as user types
-    if (isSubmitted) {
-      setCheckValidEmailError(
-        !isValidEmail(newEmail) ? 'Please enter a valid email address' : '',
-      );
-    }
+    // if (isSubmitted) {
+    //   setCheckValidEmailError(
+    //     !isValidEmail(newEmail) ? 'Please enter a valid email address' : '',
+    //   );
+    // }
   };
 
   // Handles input to password
@@ -115,6 +116,7 @@ export default function SignUp() {
           )}
         </div>
         <div>
+          {/* Password input*/}
           <TextInput
             id="password-input"
             type="password"
@@ -125,16 +127,15 @@ export default function SignUp() {
             label="Password"
             error={isSubmitted && !isPasswordComplexityMet}
           />
-          {/* Password input*/}
 
+          {/* Password complexity requirements */}
           <PasswordComplexity
             password={password} // Set default value if password is null
             setPasswordComplexityMet={setIsPasswordComplexityMet}
           />
-
-          {/* Password complexity requirements */}
         </div>
         <div>
+          {/* Confirm password input with toggle visibility */}
           {password && (
             <TextInput
               id="confirm-password-input"
@@ -149,31 +150,15 @@ export default function SignUp() {
               error={isSubmitted && !passwordsMatch}
             />
           )}
-          {/* Confirm password input with toggle visibility */}
-
-          {password && passwordsMatch && (
-            <P3 as="span" $color="#0D8817">
-              <div
-                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                <Icon type="check" />
-                Passwords match
-              </div>
-            </P3>
-          )}
-
-          {isSubmitted && !passwordsMatch && !!password && (
-            <P3 as="span" $color={COLORS.errorRed}>
-              <div
-                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                <Icon type="x" />
-                Passwords do not match
-              </div>
-            </P3>
-          )}
           {/* Conditional password validation error message */}
+          {password && (
+            <Requirement
+              met={passwordsMatch}
+              text={`Passwords ${passwordsMatch ? '' : 'do not'} match`}
+            />
+          )}
         </div>
+        {/* Sign up button */}
         <BigButton
           type="button"
           onClick={handleSignUp}
@@ -181,7 +166,6 @@ export default function SignUp() {
         >
           <P3 $color="white">Sign Up</P3>
         </BigButton>{' '}
-        {/* Sign up button */}
       </div>
     </StyledForm>
   );
