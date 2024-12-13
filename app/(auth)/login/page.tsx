@@ -2,46 +2,105 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BigButton, StyledLinkButton } from '@/components/Buttons';
+import TextInput from '@/components/TextInput';
+import COLORS from '@/styles/colors';
+import { H2, P3 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
+import { StyledForm } from '../styles';
 
 export default function Login() {
   const { signIn } = useAuth(); // Use `signIn` function from AuthProvider
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [invalidEmailError, setInvalidEmailError] = useState('');
+  const [invalidPasswordError, setInvalidPasswordError] = useState('');
+
+  const canSubmitForm = email && password;
+
   const router = useRouter();
 
+  const handleEmailChange = async (newEmail: string) => {
+    setEmail(newEmail);
+    setInvalidEmailError('');
+    setInvalidPasswordError('');
+  };
+
+  const handlePasswordChange = (newPassword: string) => {
+    setPassword(newPassword);
+  };
+
   const handleLogin = async () => {
-    // Define handleLogin
     try {
-      await signIn(email, password);
-      router.push('/'); // Redirect to the home page on success
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Login Error:', error.message);
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        setInvalidEmailError(error.message);
+        // TODO: use error.code rather than error.messsage
+        // if (error.message.includes('Invalid login credentials')) {
+        //   setInvalidEmailError('Invalid email address');
+        //   setInvalidPasswordError('Invalid password');
+        // }
+        return;
       }
+      // Clear errors on success
+      setInvalidEmailError('');
+      setInvalidPasswordError('');
+      router.push('/view-plants');
+    } catch (err) {
+      console.error('Login Error:', err);
+      setInvalidEmailError('An unexpected error occurred. Please try again.');
     }
   };
 
   return (
-    <>
-      <input
-        name="email"
-        onChange={e => setEmail(e.target.value)}
-        value={email}
-        placeholder="Email"
-      />
-      {/* Email input*/}
-      <input
-        type="password"
-        name="password"
-        onChange={e => setPassword(e.target.value)}
-        value={password}
-        placeholder="Password"
-      />
-      <button type="button" onClick={handleLogin}>
-        Sign in
-      </button>{' '}
-      {/* Sign in button */}
-    </>
+    <StyledForm onSubmit={handleLogin}>
+      <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
+        Log In
+      </H2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <P3 as="span" $color={COLORS.midgray}>
+          Don’t have an account?
+          <StyledLinkButton href="/signup" style={{ padding: '4px' }}>
+            Sign up
+          </StyledLinkButton>
+        </P3>
+        <div>
+          <TextInput
+            id="email-input"
+            type="email"
+            label="Email"
+            onChange={handleEmailChange}
+            value={email}
+            error={!!invalidEmailError}
+          />
+          {/* Email input*/}
+          <P3 $color={COLORS.errorRed}>{invalidEmailError}</P3>
+        </div>
+        <div>
+          <TextInput
+            id="password-input"
+            label="Password"
+            type="password"
+            onChange={handlePasswordChange}
+            value={password}
+            isVisible={showPassword}
+            toggleVisibility={() => setShowPassword(!showPassword)}
+            error={!!invalidPasswordError}
+          />
+          <P3 $color={COLORS.errorRed}>{invalidPasswordError}</P3>
+          {/* Password input*/}
+        </div>
+        <BigButton
+          type="button"
+          onClick={handleLogin}
+          disabled={!canSubmitForm}
+        >
+          Log In
+        </BigButton>
+        {/* Sign in button */}
+      </div>
+    </StyledForm>
   );
 }

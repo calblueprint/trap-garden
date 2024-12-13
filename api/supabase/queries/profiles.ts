@@ -19,7 +19,7 @@ export async function fetchProfileById(userId: UUID) {
     .from('profiles')
     .select('*')
     .eq('user_id', userId)
-    .single();
+    .maybeSingle();
 
   if (error)
     throw new Error(`Error fetching profile id ${userId}: ${error.message}`);

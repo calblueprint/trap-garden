@@ -1,123 +1,166 @@
 'use client';
 
 import { useState } from 'react';
-import PasswordComplexity from '@/components/PasswordComplexity';
-import PasswordInput from '@/components/PasswordInput';
+import { useRouter } from 'next/navigation';
+import { BigButton, StyledLinkButton } from '@/components/Buttons';
+import PasswordComplexity, {
+  Requirement,
+} from '@/components/PasswordComplexity';
+import TextInput from '@/components/TextInput';
+import COLORS from '@/styles/colors';
+import { H2, P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
+import { StyledForm } from '../styles';
 
 export default function SignUp() {
   const { signUp } = useAuth();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordComplexityError, setPasswordComplexityError] = useState<
-    string | null
-  >(null);
-  const [passwordComplexity, setPasswordComplexity] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isPasswordComplexityMet, setIsPasswordComplexityMet] =
+    useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+  const [signupError, setSignupError] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
+  const router = useRouter();
+  const passwordsMatch = password === confirmPassword;
+  const canSubmitForm =
+    email && password && passwordsMatch && isPasswordComplexityMet;
+
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = async (newEmail: string) => {
+    setEmail(newEmail);
+    // Clear out the email errors when user starts typing again
+    setSignupError('');
+
+    // TODO: decide if we want to validate email as user is typing
+    // if (isSubmitted) {
+    //   setCheckValidEmailError(
+    //     !isValidEmail(newEmail) ? 'Please enter a valid email address' : '',
+    //   );
+    // }
+  };
 
   // Handles input to password
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPassword = e.target.value;
+  const handlePasswordChange = (newPassword: string) => {
     setPassword(newPassword);
-    validatePasswords(newPassword, confirmPassword);
-    validatePasswordComplexity(newPassword);
   };
 
   // Handles input to confirm password
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newConfirmPassword = e.target.value;
+  const handleConfirmPasswordChange = (newConfirmPassword: string) => {
     setConfirmPassword(newConfirmPassword);
-    validatePasswords(password, newConfirmPassword);
-  };
-
-  // Checks if passwords match and sets error
-  const validatePasswords = (
-    password: string | null,
-    confirmPassword: string | null,
-  ) => {
-    if (password !== confirmPassword) {
-      setPasswordError('Passwords do not match.');
-    } else {
-      setPasswordError(''); // Clear error when passwords match
-    }
-  };
-
-  // Set password complexity error if requirements are not met
-  const validatePasswordComplexity = (password: string | null) => {
-    const hasLowerCase = /[a-z]/.test(password || '');
-    const hasNumber = /\d/.test(password || '');
-    const longEnough = (password || '').length >= 8;
-
-    if (password && hasLowerCase && hasNumber && longEnough) {
-      setPasswordComplexity(true);
-      setPasswordComplexityError(null); // Clear error if all conditions are met
-    } else if (password) {
-      setPasswordComplexity(false);
-      setPasswordComplexityError('Password must meet complexity requirements');
-    } else {
-      setPasswordComplexity(false);
-      setPasswordComplexityError(null); // Clear error if password is empty
-    }
   };
 
   const handleSignUp = async () => {
-    if (password) {
-      await signUp(email, password);
+    setIsSubmitted(true);
+
+    if (!isValidEmail(email)) {
+      setSignupError('Please enter a valid email address');
+      return;
+    }
+
+    try {
+      const result = await signUp(email, password);
+      if (result.error) {
+        setSignupError(result.error.message);
+      } else {
+        // Handle successful sign-up (e.g., navigate to another page)
+        setSignupError('');
+        router.push('/onboarding');
+      }
+    } catch (error) {
+      console.error('Sign up failed:', error);
+      alert('There was an error during sign up. Please try again.');
     }
   };
 
   return (
-    <>
-      <input
-        name="email"
-        onChange={e => setEmail(e.target.value)}
-        value={email}
-        placeholder="Email"
-      />
-      {/* Email input*/}
-      <PasswordInput
-        value={password}
-        onChange={handlePasswordChange}
-        placeholder="Password"
-        isVisible={showPassword}
-        toggleVisibility={() => setShowPassword(!showPassword)}
-        name="password"
-      />
-      {/* Password input with toggle visibility */}
-      <PasswordInput
-        value={confirmPassword}
-        onChange={handleConfirmPasswordChange}
-        placeholder="Confirm Password"
-        isVisible={showConfirmPassword}
-        toggleVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
-        name="confirmPassword"
-      />
-      {/* Confirm password input with toggle visibility */}
-      <button
-        type="button"
-        onClick={handleSignUp}
-        disabled={!email || !!passwordError || !!passwordComplexityError}
-      >
-        Sign up
-      </button>{' '}
-      {/* Sign up button */}
-      {confirmPassword && passwordError && (
-        <p style={{ color: 'red' }}>{passwordError}</p>
-      )}
-      {/* Conditional password validation error message */}
-      <PasswordComplexity
-        password={password || ''} // Set default value if password is null
-      />
-      {/* Password complexity requirements */}
-      {password && !passwordComplexity && passwordComplexityError && (
-        <p style={{ color: 'red' }}>{passwordComplexityError}</p>
-      )}
-      {/* Password complexity error message */}
-    </>
+    <StyledForm onSubmit={handleSignUp}>
+      <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
+        Sign Up
+      </H2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <P3 as="span" $color={COLORS.midgray}>
+          Already have an account?
+          <StyledLinkButton href="/login" style={{ padding: '4px' }}>
+            Log in
+          </StyledLinkButton>
+        </P3>
+        <div>
+          {/* Email input*/}
+          <TextInput
+            id="email-input"
+            label="Email"
+            type="email"
+            onChange={handleEmailChange}
+            value={email}
+            error={!!signupError}
+          />
+          {signupError && isSubmitted && (
+            <P3 $color={COLORS.errorRed}>{signupError}</P3>
+          )}
+        </div>
+        <div>
+          {/* Password input*/}
+          <TextInput
+            id="password-input"
+            type="password"
+            value={password || ''}
+            onChange={handlePasswordChange}
+            isVisible={showPassword}
+            toggleVisibility={() => setShowPassword(!showPassword)}
+            label="Password"
+            error={isSubmitted && !isPasswordComplexityMet}
+          />
+
+          {/* Password complexity requirements */}
+          <PasswordComplexity
+            password={password} // Set default value if password is null
+            setPasswordComplexityMet={setIsPasswordComplexityMet}
+          />
+        </div>
+        <div>
+          {/* Confirm password input with toggle visibility */}
+          {password && (
+            <>
+              <TextInput
+                id="confirm-password-input"
+                type="password"
+                value={confirmPassword || ''}
+                onChange={handleConfirmPasswordChange}
+                isVisible={showConfirmPassword}
+                toggleVisibility={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+                label="Confirm Password"
+                error={isSubmitted && !passwordsMatch}
+              />
+              {confirmPassword && (
+                <Requirement
+                  met={passwordsMatch}
+                  text={`Passwords ${passwordsMatch ? '' : 'do not'} match`}
+                />
+              )}
+            </>
+          )}
+        </div>
+        {/* Sign up button */}
+        <BigButton
+          type="button"
+          onClick={handleSignUp}
+          disabled={!canSubmitForm}
+        >
+          <P3 $color="white">Sign Up</P3>
+        </BigButton>{' '}
+      </div>
+    </StyledForm>
   );
 }

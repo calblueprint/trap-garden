@@ -17,6 +17,7 @@ const COLORS = {
 
   // error
   errorRed: '#D94E4E',
+  successGreen: '#0D8817',
 
   //seasonality chart colors
   indoors: '#F5B868',
