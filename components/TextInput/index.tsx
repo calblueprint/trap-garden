@@ -13,7 +13,7 @@ interface TextInputProps {
   error?: boolean;
 }
 
-const TextInput: React.FC<TextInputProps> = ({
+export default function TextInput({
   label,
   id,
   type,
@@ -22,7 +22,7 @@ const TextInput: React.FC<TextInputProps> = ({
   value,
   toggleVisibility,
   error,
-}) => {
+}: TextInputProps) {
   const inputType = type === 'password' && isVisible ? 'text' : type;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const TextInput: React.FC<TextInputProps> = ({
         type={inputType}
         value={value}
         onChange={handleChange}
-        error={error}
+        $error={error}
       />
       {type === 'password' && toggleVisibility && (
         <IconWrapper onClick={toggleVisibility}>
@@ -46,6 +46,4 @@ const TextInput: React.FC<TextInputProps> = ({
       )}
     </InputWrapper>
   );
-};
-
-export default TextInput;
+}

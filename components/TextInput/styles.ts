@@ -14,18 +14,18 @@ export const StyledLabel = styled(P2).attrs({ as: 'label' })`
 `;
 
 export const StyledInput = styled(P2).attrs({ as: 'input' })<{
-  error?: boolean;
+  $error?: boolean;
 }>`
   padding: 0.75rem;
   border: 0.0625rem solid #ccc;
-  border: 1px solid ${({ error }) => (error ? COLORS.errorRed : '#ccc')};
+  border: 1px solid ${({ $error }) => ($error ? COLORS.errorRed : '#ccc')};
   border-radius: 0.3125rem;
   font-family: inherit; /* Inherit font-family from P2 */
   margin-bottom: 0.25rem;
   transition: border-color 0.3s ease;
 
   &:focus {
-    border-color: ${({ error }) => (error ? COLORS.errorRed : COLORS.shrub)};
+    border-color: ${({ $error }) => ($error ? COLORS.errorRed : COLORS.shrub)};
     outline: none;
   }
 `;

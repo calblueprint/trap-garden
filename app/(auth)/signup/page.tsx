@@ -130,7 +130,7 @@ export default function SignUp() {
       </H2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        <P3 $color={COLORS.midgray}>
+        <P3 as="span" $color={COLORS.midgray}>
           Already have an account?
           <StyledLinkButton href="/login" style={{ padding: '4px' }}>
             Log in
