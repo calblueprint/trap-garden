@@ -79,6 +79,7 @@ export default function FilterDropdownMultiple<T>({
           <input
             type="checkbox"
             checked={props.isSelected}
+            onChange={() => null} //no-op
             style={{ marginRight: 8 }} // spacing between checkbox and text
           />
           {props.label}
