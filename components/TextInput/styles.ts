@@ -6,7 +6,6 @@ export const InputWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  // overflow: visible;
 `;
 
 export const StyledLabel = styled(P2).attrs({ as: 'label' })`
@@ -60,10 +59,5 @@ export const StyledButton = styled.button`
 
 export const TextSpacingWrapper = styled.div`
   margin: 0;
-  marginbottom: 0.25rem;
-`;
-
-export const StyledForm = styled.form`
-  minheight: 100;
-  padding: 1.25rem;
+  margin-bottom: 0.25rem;
 `;

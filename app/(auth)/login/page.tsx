@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import TextInput from '@/components/TextInput';
-import { StyledForm } from '@/components/TextInput/styles';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
+import { StyledForm } from '../styles';
 
 export default function Login() {
   const { signIn } = useAuth(); // Use `signIn` function from AuthProvider

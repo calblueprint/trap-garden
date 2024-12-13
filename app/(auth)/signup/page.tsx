@@ -6,10 +6,10 @@ import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import Icon from '@/components/Icon';
 import PasswordComplexity from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
-import { StyledForm } from '@/components/TextInput/styles';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
+import { StyledForm } from '../styles';
 
 export default function SignUp() {
   const { signUp } = useAuth();
@@ -109,9 +109,7 @@ export default function SignUp() {
       const result = await signUp(email, password);
       if (result.error) {
         // Handle the specific error (e.g., duplicate email)
-        if (result.error.message === 'Account already exists for this email') {
-          setCheckEmailExistsError(result.error.message);
-        }
+        setCheckEmailExistsError(result.error.message);
       } else {
         // Handle successful sign-up (e.g., navigate to another page)
         setCheckEmailExistsError('');
@@ -190,23 +188,23 @@ export default function SignUp() {
           {/* Confirm password input with toggle visibility */}
 
           {samePasswordCheck && (
-            <P3 style={{ color: '#0D8817' }}>
+            <P3 as="span" $color="#0D8817">
               <div
                 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
               >
                 <Icon type="check" />
-                {'Passwords match'}
+                Passwords match
               </div>
             </P3>
           )}
 
           {isSubmitted && !samePasswordCheck && !!password && (
-            <P3 style={{ color: COLORS.errorRed }}>
+            <P3 as="span" $color={COLORS.errorRed}>
               <div
                 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
               >
                 <Icon type="x" />
-                {'Passwords do not match'}
+                Passwords do not match
               </div>
             </P3>
           )}

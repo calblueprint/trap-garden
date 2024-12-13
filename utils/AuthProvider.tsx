@@ -79,12 +79,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = useCallback(async (email: string, password: string) => {
     // will trigger onAuthStateChange to update the session
     // check if email already exists
-    const emailExists = await checkEmailExists(email);
-    if (emailExists) {
-      const authError = new AuthError('Account already exists for this email');
-      // return the authError in an AuthResponse object
-      return { data: { user: null, session: null }, error: authError };
-    }
+    // const emailExists = await checkEmailExists(email);
+    // if (emailExists) {
+    //   const authError = new AuthError('Account already exists for this email');
+    //   // return the authError in an AuthResponse object
+    //   return { data: { user: null, session: null }, error: authError };
+    // }
     const value = await supabase.auth.signUp({ email, password });
     return value;
   }, []);
