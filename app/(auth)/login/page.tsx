@@ -17,7 +17,7 @@ export default function Login() {
   const [invalidEmailError, setInvalidEmailError] = useState('');
   const [invalidPasswordError, setInvalidPasswordError] = useState('');
 
-  const isFormValid = email && password;
+  const canSubmitForm = email && password;
 
   const router = useRouter();
 
@@ -36,14 +36,14 @@ export default function Login() {
       const { error } = await signIn(email, password);
 
       if (error) {
-        // Match error messages from Supabase
-        if (error.message.includes('Invalid login credentials')) {
-          setInvalidEmailError('Invalid email address');
-          setInvalidPasswordError('Invalid password');
-        }
+        setInvalidEmailError(error.message);
+        // TODO: use error.code rather than error.messsage
+        // if (error.message.includes('Invalid login credentials')) {
+        //   setInvalidEmailError('Invalid email address');
+        //   setInvalidPasswordError('Invalid password');
+        // }
         return;
       }
-
       // Clear errors on success
       setInvalidEmailError('');
       setInvalidPasswordError('');
@@ -60,7 +60,7 @@ export default function Login() {
         Log In
       </H2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <P3 $color={COLORS.midgray}>
+        <P3 as="span" $color={COLORS.midgray}>
           Don’t have an account?
           <StyledLinkButton href="/signup" style={{ padding: '4px' }}>
             Sign up
@@ -92,9 +92,13 @@ export default function Login() {
           <P3 $color={COLORS.errorRed}>{invalidPasswordError}</P3>
           {/* Password input*/}
         </div>
-        <BigButton type="button" onClick={handleLogin} disabled={!isFormValid}>
+        <BigButton
+          type="button"
+          onClick={handleLogin}
+          disabled={!canSubmitForm}
+        >
           Log In
-        </BigButton>{' '}
+        </BigButton>
         {/* Sign in button */}
       </div>
     </StyledForm>
