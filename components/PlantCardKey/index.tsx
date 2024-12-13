@@ -70,7 +70,9 @@ export default function PlantCardKey() {
           <DifficultyBarAndLabel difficultyLevel="HARD" />
         </DifficultyLevelsContainer>
       </Flex>
-      <HorizontalLine />
+      <Flex $px="16px">
+        <HorizontalLine />
+      </Flex>
       <IconKeyContainer>
         <P3 $color={COLORS.shrub} $fontWeight={400}>
           Icon Key
