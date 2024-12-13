@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <Container>
       <Image src={BPLogo} alt="Blueprint Logo" />
-      <p>Home Page is currenlty under construction!</p>
+      <p>Home Page is currently under construction!</p>
     </Container>
   );
 }
