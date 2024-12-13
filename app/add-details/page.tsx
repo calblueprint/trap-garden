@@ -61,19 +61,16 @@ export default function Home() {
     };
     setDetails(updatedDetails);
   }
-  // const handleSubmit = async () => {
-  //   try {
-  //     await insertUserPlants(userId!, details);
-  //     router.push('/view-plants');
-  //   } catch (error) {
-  //     console.error('Error inserting user plants:', error);
-  //     // Optionally, add user-facing error handling
-  //   }
-  // };
-  async function updateDB() {
-    await insertUserPlants(userId!, details);
-    router.push('/view-plants');
-  }
+  const handleSubmit = async () => {
+    // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
+    // instead of doing userId!
+    try {
+      await insertUserPlants(userId!, details);
+      router.push('/view-plants');
+    } catch (error) {
+      console.error('Error inserting user plants:', error);
+    }
+  };
 
   return (
     <>
@@ -88,8 +85,8 @@ export default function Home() {
             </Flex>
             <PlantDetails
               plant={plantsToAdd[currentIndex - 1]}
-              date={details[currentIndex - 1].date_added || getDefaultDate()}
-              plantingType={details[currentIndex - 1].planting_type || 'SELECT'}
+              date={details[currentIndex - 1].date_added ?? getDefaultDate()}
+              plantingType={details[currentIndex - 1].planting_type ?? ''}
               onDateChange={date => updateInput('date_added', date)}
               onPlantingTypeChange={type => updateInput('planting_type', type)}
             />
@@ -124,7 +121,7 @@ export default function Home() {
           <button type="button" onClick={() => move(-1)}>
             Back
           </button>
-          <button type="button" onClick={updateDB}>
+          <button type="button" onClick={handleSubmit}>
             Submit
           </button>
         </div>
