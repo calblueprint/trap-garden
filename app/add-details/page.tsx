@@ -10,7 +10,7 @@ import { H1, P1 } from '@/styles/text';
 import { UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
-import { FooterButton, MoveButton } from './styles';
+import { ButtonDiv, FooterButton, MoveButton } from './styles';
 
 export default function Home() {
   const { profileData, profileReady, plantsToAdd } = useProfile();
@@ -48,14 +48,10 @@ export default function Home() {
     }
   }
 
-  function disableNext() {
-    // disable next if planting type is "SELECT" or undefined
-    return !(
-      details[currentIndex - 1].planting_type
-      // requires refactor of details to ensure that planting_type is PlantingTypeEnum
-      // && details[currentIndex - 1].planting_type !== 'SELECT'
-    );
-  }
+  // disable next if planting type not selected (undefined)
+  const disableNext =
+    currentIndex <= plantsToAdd.length &&
+    !details[currentIndex - 1].planting_type;
 
   function updateInput(field: string, value: string) {
     const updatedDetails = [...details];
@@ -98,8 +94,8 @@ export default function Home() {
               onPlantingTypeChange={type => updateInput('planting_type', type)}
             />
           </Flex>
-          <Flex>
-            <FooterButton>
+          <FooterButton>
+            <ButtonDiv>
               {currentIndex > 1 && (
                 <MoveButton
                   type="button"
@@ -112,15 +108,15 @@ export default function Home() {
 
               <MoveButton
                 type="button"
-                disabled={disableNext()}
+                disabled={disableNext}
                 onClick={() => move(1)}
-                $primaryColor={disableNext() ? COLORS.midgray : COLORS.shrub}
+                $primaryColor={disableNext ? COLORS.midgray : COLORS.shrub}
                 $secondaryColor="white"
               >
                 Next
               </MoveButton>
-            </FooterButton>
-          </Flex>
+            </ButtonDiv>
+          </FooterButton>
         </Flex>
       )}
       {currentIndex === plantsToAdd.length + 1 && (

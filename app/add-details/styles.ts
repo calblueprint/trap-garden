@@ -11,7 +11,6 @@ export const MoveButton = styled(SmallRoundedButton)`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-left: 24px;
 `;
 export const FooterButton = styled.div`
   display: flex;
@@ -23,4 +22,13 @@ export const FooterButton = styled.div`
   left: 50%;
   transform: translateX(-50%);
   padding: 24px;
+`;
+
+export const ButtonDiv = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  &:has(:only-child) {
+    justify-content: flex-end;
+  }
 `;
