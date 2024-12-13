@@ -219,7 +219,7 @@ export default function Page() {
               $isCurrentMode={viewingOption !== 'all'}
               onClick={() => setViewingOption('myPlants')}
             >
-              My Plants
+              My Garden
             </HeaderButton>
             <HeaderButton
               $isCurrentMode={viewingOption === 'all'}

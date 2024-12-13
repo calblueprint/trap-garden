@@ -34,7 +34,7 @@ export default function PlantCareDescription({
   const sunlightText = `${sunlightMinHours} ${sunlightMaxHours ? ` - ${sunlightMaxHours}` : ''} hours (${displaySunlightEnumFromHours(sunlightMinHours)})`;
   return (
     <Flex $direction="column" $gap="12px" $pl="8px">
-      <H4>Plant Description</H4>
+      <H4>Plant Care Description</H4>
       <Flex $direction="column" $gap="8px">
         {IconRow('wateringCan', 'Watering Frequency:', waterFreq)}
         {IconRow('wateringCan', 'Weeding Frequency:', weedingFreq)}
