@@ -22,13 +22,13 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const [checkEmailExistsError, setCheckEmailExistsError] = useState('');
-  const [checkValidEmailError, setCheckValidEmailError] = useState('');
+  const [signupError, setSignupError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const router = useRouter();
   const passwordsMatch = password === confirmPassword;
-  const canSubmitForm = email && password && confirmPassword && passwordsMatch;
+  const canSubmitForm =
+    email && password && passwordsMatch && isPasswordComplexityMet;
 
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,10 +38,9 @@ export default function SignUp() {
   const handleEmailChange = async (newEmail: string) => {
     setEmail(newEmail);
     // Clear out the email errors when user starts typing again
-    setCheckEmailExistsError('');
-    setCheckValidEmailError('');
+    setSignupError('');
 
-    // If not first try, validate email format as user types
+    // TODO: decide if we want to validate email as user is typing
     // if (isSubmitted) {
     //   setCheckValidEmailError(
     //     !isValidEmail(newEmail) ? 'Please enter a valid email address' : '',
@@ -63,20 +62,17 @@ export default function SignUp() {
     setIsSubmitted(true);
 
     if (!isValidEmail(email)) {
-      setCheckValidEmailError('Please enter a valid email address');
+      setSignupError('Please enter a valid email address');
       return;
-    } else {
-      setCheckValidEmailError(''); // Clear email format error if valid
     }
 
     try {
       const result = await signUp(email, password);
       if (result.error) {
-        // Handle the specific error (e.g., duplicate email)
-        setCheckEmailExistsError(result.error.message);
+        setSignupError(result.error.message);
       } else {
         // Handle successful sign-up (e.g., navigate to another page)
-        setCheckEmailExistsError('');
+        setSignupError('');
         router.push('/onboarding');
       }
     } catch (error) {
@@ -99,20 +95,17 @@ export default function SignUp() {
           </StyledLinkButton>
         </P3>
         <div>
+          {/* Email input*/}
           <TextInput
             id="email-input"
             label="Email"
             type="email"
             onChange={handleEmailChange}
             value={email}
-            error={!!checkEmailExistsError}
+            error={!!signupError}
           />
-          {/* Email input*/}
-          {checkEmailExistsError && isSubmitted && (
-            <P3 $color={COLORS.errorRed}>{checkEmailExistsError}</P3>
-          )}
-          {checkValidEmailError && isSubmitted && (
-            <P3 $color={COLORS.errorRed}>{checkValidEmailError}</P3>
+          {signupError && isSubmitted && (
+            <P3 $color={COLORS.errorRed}>{signupError}</P3>
           )}
         </div>
         <div>
@@ -137,25 +130,26 @@ export default function SignUp() {
         <div>
           {/* Confirm password input with toggle visibility */}
           {password && (
-            <TextInput
-              id="confirm-password-input"
-              type="password"
-              value={confirmPassword || ''}
-              onChange={handleConfirmPasswordChange}
-              isVisible={showConfirmPassword}
-              toggleVisibility={() =>
-                setShowConfirmPassword(!showConfirmPassword)
-              }
-              label="Confirm Password"
-              error={isSubmitted && !passwordsMatch}
-            />
-          )}
-          {/* Conditional password validation error message */}
-          {password && (
-            <Requirement
-              met={passwordsMatch}
-              text={`Passwords ${passwordsMatch ? '' : 'do not'} match`}
-            />
+            <>
+              <TextInput
+                id="confirm-password-input"
+                type="password"
+                value={confirmPassword || ''}
+                onChange={handleConfirmPasswordChange}
+                isVisible={showConfirmPassword}
+                toggleVisibility={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+                label="Confirm Password"
+                error={isSubmitted && !passwordsMatch}
+              />
+              {confirmPassword && (
+                <Requirement
+                  met={passwordsMatch}
+                  text={`Passwords ${passwordsMatch ? '' : 'do not'} match`}
+                />
+              )}
+            </>
           )}
         </div>
         {/* Sign up button */}
