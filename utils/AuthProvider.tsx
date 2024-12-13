@@ -10,8 +10,8 @@ import {
   useState,
 } from 'react';
 import { UUID } from 'crypto';
-import { AuthError, AuthResponse, Session } from '@supabase/supabase-js';
-import { checkEmailExists } from '@/api/supabase/queries/users';
+import { AuthResponse, Session } from '@supabase/supabase-js';
+// import { checkEmailExists } from '@/api/supabase/queries/users';
 import supabase from '../api/supabase/createClient';
 
 interface AuthContextType {
@@ -78,7 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Sign Up function
   const signUp = useCallback(async (email: string, password: string) => {
     // will trigger onAuthStateChange to update the session
-    // check if email already exists
+
+    // TODO: decide if we need to check if email already exists
     // const emailExists = await checkEmailExists(email);
     // if (emailExists) {
     //   const authError = new AuthError('Account already exists for this email');
