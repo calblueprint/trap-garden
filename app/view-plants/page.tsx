@@ -8,6 +8,7 @@ import {
 } from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
+import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
 import COLORS from '@/styles/colors';
@@ -36,6 +37,7 @@ import {
   NumberSelectedPlantsContainer,
   PlantGridContainer,
   SelectButton,
+  SomethingWrongButton,
   TopRowContainer,
   ViewSelection,
 } from './styles';
@@ -191,9 +193,25 @@ export default function Page() {
     // Not logged in
     if (!userId) {
       return (
-        <Flex $direction="column" $textAlign="center" $justify="center">
-          <P1 $color={COLORS.midgray}>Login to view all plants</P1>
-          <button onClick={() => router.push('/login')}>Log In</button>
+        <Flex
+          $direction="column"
+          $textAlign="center"
+          $justify="center"
+          $w="240px"
+          $align="center"
+          $m="auto"
+          $p="20px"
+          $gap="8px"
+          $h="60vh"
+        >
+          <Icon type="sprout"></Icon>
+          <P1 $color={COLORS.midgray}>Log In to view all plants</P1>
+          <SomethingWrongButton
+            $width="170px"
+            onClick={() => router.push('/login')}
+          >
+            Log In
+          </SomethingWrongButton>
         </Flex>
       );
     }
@@ -201,11 +219,25 @@ export default function Page() {
     // Not onboarded
     if (!profileData) {
       return (
-        <Flex $direction="column" $textAlign="center" $justify="center">
+        <Flex
+          $direction="column"
+          $textAlign="center"
+          $justify="center"
+          $w="320px"
+          $align="center"
+          $m="auto"
+          $p="20px"
+          $gap="8px"
+          $h="60vh"
+        >
+          <Icon type="sprout"></Icon>
           <P1 $color={COLORS.midgray}>Complete your profile view all plants</P1>
-          <button onClick={() => router.push('/onboarding')}>
+          <SomethingWrongButton
+            $width="170px"
+            onClick={() => router.push('/onboarding')}
+          >
             Go To Onboarding
-          </button>
+          </SomethingWrongButton>
         </Flex>
       );
     }
@@ -261,9 +293,44 @@ export default function Page() {
     return (
       <div>
         {ownedPlants.length === 0 ? (
-          <>Add Plants To Your Garden</>
+          <Flex
+            $direction="column"
+            $textAlign="center"
+            $justify="center"
+            $w="220px"
+            $align="center"
+            $m="auto"
+            $p="20px"
+            $gap="8px"
+            $h="60vh"
+          >
+            <Icon type="sprout"></Icon>
+            <P1 $color={COLORS.midgray}>Your plant list is empty</P1>
+            <SomethingWrongButton
+              $width="125px"
+              onClick={() => setViewingOption('all')}
+            >
+              Add Plants
+            </SomethingWrongButton>
+          </Flex>
         ) : filteredUserPlantList.length === 0 ? (
-          <p>No plants match your current filters.</p>
+          <Flex
+            $direction="column"
+            $textAlign="center"
+            $justify="center"
+            $w="220px"
+            $align="center"
+            $m="auto"
+            $p="20px"
+            $gap="8px"
+            $h="60vh"
+          >
+            <Icon type="sprout"></Icon>
+            <P1 $color={COLORS.midgray}>No matching plants</P1>
+            <SomethingWrongButton $width="125px" onClick={() => clearFilters()}>
+              Clear Filters
+            </SomethingWrongButton>
+          </Flex>
         ) : (
           <PlantGridContainer>
             {filteredUserPlantList.map(ownedPlant => (
@@ -285,9 +352,23 @@ export default function Page() {
     return (
       <>
         {filteredPlantList.length === 0 ? (
-          <div>
-            <p>No plants match your current filters.</p>
-          </div>
+          <Flex
+            $direction="column"
+            $textAlign="center"
+            $justify="center"
+            $w="220px"
+            $align="center"
+            $m="auto"
+            $p="20px"
+            $gap="8px"
+            $h="60vh"
+          >
+            <Icon type="sprout"></Icon>
+            <P1 $color={COLORS.midgray}>No matching plants</P1>
+            <SomethingWrongButton $width="125px" onClick={() => clearFilters()}>
+              Clear Filters
+            </SomethingWrongButton>
+          </Flex>
         ) : (
           <PlantGridContainer>
             {filteredPlantList.map(plant => (
