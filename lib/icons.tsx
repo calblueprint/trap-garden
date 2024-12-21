@@ -535,6 +535,33 @@ export const IconSvgs = {
       <path d="M1 1L10 10" stroke="#E94444" strokeWidth="1.5" />
     </svg>
   ),
+  sprout: (
+    <svg
+      width="46"
+      height="45"
+      viewBox="0 0 46 45"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect x="0.5" width="45" height="45" fill="url(#pattern0_1519_16733)" />
+      <defs>
+        <pattern
+          id="pattern0_1519_16733"
+          patternContentUnits="objectBoundingBox"
+          width="1"
+          height="1"
+        >
+          <use href="#image0_1519_16733" transform="scale(0.0111111)" />
+        </pattern>
+        <image
+          id="image0_1519_16733"
+          width="90"
+          height="90"
+          href="data:image/png;base64,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"
+        />
+      </defs>
+    </svg>
+  ),
 };
 
 export type IconType = keyof typeof IconSvgs;
