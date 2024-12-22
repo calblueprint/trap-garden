@@ -12,8 +12,8 @@ export default function ReviewAddDetails({
   updateInput,
   plantDictionary,
 }: {
-  details: Record<string, Partial<UserPlant>>;
-  updateInput: (field: string, value: string, plant_id: UUID) => void;
+  details: Partial<UserPlant>[];
+  updateInput: (field: string, value: string, index: number) => void;
   plantDictionary: Record<UUID, string>;
 }) {
   const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
@@ -24,22 +24,20 @@ export default function ReviewAddDetails({
 
   return (
     <ReviewContainer>
-      {Object.entries(details).map(([plant_id, detail]) => (
-        <Flex $direction="column" $gap="8px" $mb="16px" key={plant_id}>
-          <P1 $color={COLORS.shrub}>{plantDictionary[plant_id as UUID]}</P1>
+      {details.map((detail, index) => (
+        <Flex $direction="column" $gap="8px" $mb="16px" key={detail.plant_id}>
+          <P1 $color={COLORS.shrub}>
+            {plantDictionary[detail.plant_id as UUID]}
+          </P1>
           <CustomSelect
             label="Planting Type"
             value={detail.planting_type as string}
             options={plantingTypeOptions}
-            onChange={value =>
-              updateInput('planting_type', value, plant_id as UUID)
-            }
+            onChange={value => updateInput('planting_type', value, index)}
           />
           <DateInput
             value={detail.date_added as string}
-            onChange={value =>
-              updateInput('date_added', value, plant_id as UUID)
-            }
+            onChange={value => updateInput('date_added', value, index)}
           />
         </Flex>
       ))}
