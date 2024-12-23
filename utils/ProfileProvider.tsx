@@ -23,7 +23,6 @@ export interface ProfileContextType {
   plantsToAdd: Plant[];
   setProfile: (completeProfile: Profile) => Promise<void>; // Now expects full Profile
   loadProfile: () => Promise<void>;
-  setHasPlot: (plotValue: boolean | null) => void;
   setPlantsToAdd: (plants: Plant[]) => void;
 }
 
@@ -81,10 +80,6 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
     }
   }, []);
 
-  const updateHasPlot = useCallback((plotValue: boolean | null) => {
-    setHasPlot(plotValue); // Explicit setter for hasPlot
-  }, []);
-
   const providerValue = useMemo(
     () => ({
       profileData,
@@ -94,7 +89,6 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
       setPlantsToAdd,
       setProfile,
       loadProfile,
-      setHasPlot: updateHasPlot,
     }),
     [
       profileData,
@@ -104,8 +98,6 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
       setPlantsToAdd,
       setProfile,
       loadProfile,
-      setHasPlot,
-      updateHasPlot,
     ],
   );
 

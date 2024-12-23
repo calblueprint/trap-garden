@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { UUID } from 'crypto';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import PlantDetails from '@/components/PlantDetails';
+import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { H1, H3, H4, P1, P2 } from '@/styles/text';
@@ -59,11 +59,13 @@ export default function Home() {
   const { userId } = useAuth();
   const router = useRouter();
 
+  // TODO: address error: if you try to signout from this page
+  // it directs to /view-plants instead of login
   useEffect(() => {
     if (profileReady && !profileData) {
-      router.push('/view-plants');
+      router.push(CONFIG.viewPlants);
     }
-  }, [profileData, profileReady]);
+  }, [profileData, profileReady, router]);
 
   const [currentIndex, setCurrentIndex] = useState<number>(1);
   const [details, setDetails] = useState<Partial<UserPlant>[]>(

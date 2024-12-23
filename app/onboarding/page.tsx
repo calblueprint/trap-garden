@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
-import { BigButton, Button } from '@/components/Buttons';
+import { Button } from '@/components/Buttons';
 import CustomSelect from '@/components/CustomSelect';
 import ProgressBar from '@/components/ProgressBar';
 import RadioGroup from '@/components/RadioGroup';
@@ -50,6 +50,66 @@ interface ReviewPageProps {
   setSelectedGardenType: (selected: UserTypeEnum) => void;
   selectedPlot: boolean;
   setSelectedPlot: (selected: boolean) => void;
+  onBack: () => void;
+}
+
+function SelectionScreen<T>({
+  progress,
+  questionTitle,
+  questionNumber,
+  selectedValue,
+  setSelectedValue,
+  options,
+  onBack,
+  onNext,
+}: {
+  progress: number;
+  questionTitle: string;
+  questionNumber: number;
+  selectedValue: T;
+  setSelectedValue: (selected: T) => void;
+  options: DropdownOption<T>[];
+  onBack?: () => void;
+  onNext: () => void;
+}) {
+  return (
+    <OnboardingContainer>
+      <Flex $direction="column" $align="center">
+        <ProgressBar progress={progress} />
+        <P3
+          $color={COLORS.shrub}
+          style={{ marginTop: '36px', marginBottom: '8px' }}
+        >
+          QUESTION {questionNumber} OF 3
+        </P3>
+        <QuestionDiv>
+          <H3 $color={COLORS.shrub}>{questionTitle}</H3>
+        </QuestionDiv>
+        <RadioGroup
+          name="StateRadioGroup"
+          options={options}
+          onChange={setSelectedValue}
+        />
+      </Flex>
+      <ButtonDiv>
+        <Button
+          onClick={onBack}
+          $primaryColor="white"
+          $secondaryColor={COLORS.shrub}
+          $textColor={COLORS.shrub}
+        >
+          Back
+        </Button>
+        <Button
+          onClick={onNext}
+          disabled={!selectedValue}
+          $primaryColor={COLORS.shrub}
+        >
+          Next
+        </Button>
+      </ButtonDiv>
+    </OnboardingContainer>
+  );
 }
 
 // Step 1: Select State
@@ -193,8 +253,9 @@ const ReviewPage = ({
   setSelectedGardenType,
   selectedPlot,
   setSelectedPlot,
+  onBack,
 }: ReviewPageProps) => {
-  const { setProfile, setHasPlot } = useProfile();
+  const { setProfile } = useProfile();
   const router = useRouter();
 
   // assumes userId is not null, since the not-logged in case
@@ -234,29 +295,41 @@ const ReviewPage = ({
           <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
             Your Responses
           </P1>
-          <CustomSelect
-            label="State Location"
-            value={selectedState}
-            options={usStateOptions}
-            onChange={setSelectedState}
-          />
-          <CustomSelect
-            label="Garden Type"
-            value={selectedGardenType}
-            options={gardenTypeOptions}
-            onChange={setSelectedGardenType} // Directly pass the selected value
-          />
-          <CustomSelect
-            label="Plot Status"
-            value={selectedPlot}
-            options={plotOptions}
-            onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
-          />
+          <Flex $direction="column" $gap="24px">
+            <CustomSelect
+              label="State Location"
+              value={selectedState}
+              options={usStateOptions}
+              onChange={setSelectedState}
+            />
+            <CustomSelect
+              label="Garden Type"
+              value={selectedGardenType}
+              options={gardenTypeOptions}
+              onChange={setSelectedGardenType}
+            />
+            <CustomSelect
+              label="Plot Status"
+              value={selectedPlot}
+              options={plotOptions}
+              onChange={value => setSelectedPlot(value)}
+            />
+          </Flex>
         </ContentContainer>
       </div>
-      <BigButton color={COLORS.shrub} onClick={handleSubmit}>
-        Let&apos;s Start Growing!
-      </BigButton>
+      <ButtonDiv>
+        <Button
+          onClick={onBack}
+          $primaryColor="white"
+          $secondaryColor={COLORS.shrub}
+          $textColor={COLORS.shrub}
+        >
+          Back
+        </Button>
+        <Button onClick={handleSubmit} $primaryColor={COLORS.shrub}>
+          Let&apos;s Grow!
+        </Button>
+      </ButtonDiv>
     </OnboardingContainer>
   );
 };
@@ -330,6 +403,7 @@ export default function OnboardingFlow() {
           setSelectedGardenType={setSelectedGardenType}
           selectedPlot={selectedPlot!}
           setSelectedPlot={setSelectedPlot}
+          onBack={handleBack}
         />
       )}
     </Flex>

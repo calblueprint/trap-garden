@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
 
 export const OnboardingContainer = styled.div`
   min-height: calc(100vh - 60px); // 60px is the hardcoded height of Header
@@ -18,10 +19,11 @@ export const ContentContainer = styled.div`
   width: 100%;
   max-width: 500px;
   background-color: white;
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: 4px;
+  border: 1px solid ${COLORS.lightgray};
+  padding: 24px;
+  padding-top: 32px;
   justify-content: center;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 export const QuestionDiv = styled.div`
@@ -37,8 +39,8 @@ export const QuestionDiv = styled.div`
 export const ButtonDiv = styled.div`
   display: flex;
   width: 100%;
-  /* bottom: 103px; */
-  /* position: absolute; */
+  bottom: 100px;
+  position: absolute;
   justify-content: space-between;
   &:has(:only-child) {
     justify-content: flex-end;
