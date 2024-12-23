@@ -1,6 +1,12 @@
-import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
-import { plantingTypeLabels } from '@/utils/helpers';
+import {
+  DropdownOption,
+  PlantingTypeEnum,
+  SeasonEnum,
+  UserTypeEnum,
+} from '@/types/schema';
+import { plantingTypeLabels, userTypeLabels } from '@/utils/helpers';
 
+// Turn plantingTypeLabels into dropdown options
 export const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] =
   Object.entries(plantingTypeLabels).map(([key, label]) => ({
     value: key as PlantingTypeEnum,
@@ -18,3 +24,11 @@ export const usStateOptions: DropdownOption[] = [
   { label: 'Tennessee', value: 'TENNESSEE' },
   { label: 'Missouri', value: 'MISSOURI' },
 ];
+
+// Turn plantingTypeLabels into dropdown options
+export const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = Object.entries(
+  userTypeLabels,
+).map(([key, label]) => ({
+  value: key as UserTypeEnum,
+  label,
+}));

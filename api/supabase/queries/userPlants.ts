@@ -2,20 +2,9 @@ import { UUID } from 'crypto';
 import { UserPlant } from '@/types/schema';
 import supabase from '../createClient';
 
-export async function insertUserPlants(
-  userId: UUID,
-  formData: Partial<UserPlant>[],
-) {
-  formData.map(async curr => {
-    const { error } = await supabase.from('user_plants').insert({
-      user_id: userId,
-      plant_id: curr['plant_id'],
-      date_added: curr['date_added'],
-      date_removed: null,
-      planting_type: curr['planting_type'],
-    });
-    if (error) throw new Error(`Error inserting data: ${error.message}`);
-  });
+export async function insertUserPlants(userPlants: Partial<UserPlant>[]) {
+  const { error } = await supabase.from('user_plants').insert(userPlants);
+  if (error) throw new Error(`Error inserting user plants: ${error.message}`);
 }
 
 export async function getUserPlantById(userPlantId: UUID): Promise<UserPlant> {

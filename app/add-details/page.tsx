@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { UUID } from 'crypto';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import PlantDetails from '@/components/PlantDetails';
 import COLORS from '@/styles/colors';
@@ -58,12 +59,15 @@ export default function Home() {
   const { userId } = useAuth();
   const router = useRouter();
 
-  if (profileReady && !profileData) {
-    router.push('/view-plants');
-  }
+  useEffect(() => {
+    if (profileReady && !profileData) {
+      router.push('/view-plants');
+    }
+  }, [profileData, profileReady]);
+
   const [currentIndex, setCurrentIndex] = useState<number>(1);
   const [details, setDetails] = useState<Partial<UserPlant>[]>(
-    plantsToAdd.map(plant => ({ plant_id: plant.id, user_id: userId! })),
+    plantsToAdd.map(plant => ({ plant_id: plant.id })),
   );
 
   const getDefaultDate = () => new Date().toISOString().substring(0, 10);
@@ -105,8 +109,13 @@ export default function Home() {
   const handleSubmit = async () => {
     // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
     // instead of doing userId!
+    if (!userId) return;
     try {
-      await insertUserPlants(userId!, details);
+      const completedDetails: Partial<UserPlant>[] = details.map(detail => ({
+        ...detail,
+        userId: userId,
+      }));
+      await insertUserPlants(completedDetails);
       router.push('/view-plants');
     } catch (error) {
       console.error('Error inserting user plants:', error);
@@ -198,6 +207,7 @@ export default function Home() {
               </MoveButton>
               <MoveButton
                 type="button"
+                disabled={!userId}
                 onClick={handleSubmit}
                 $primaryColor={disableNext ? COLORS.midgray : COLORS.shrub}
                 $secondaryColor="white"

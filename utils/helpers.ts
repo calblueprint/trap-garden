@@ -322,16 +322,11 @@ export function fillCalendarGridArrayRowWithColor(
   return gridArray;
 }
 
-// return UserTypeEnum based on user type passed in
-export function formatUserType(userType: UserTypeEnum) {
-  const userTypes: Record<UserTypeEnum, string> = {
-    INDIV: 'Individual Garden',
-    SCHOOL: 'School Garden',
-    ORG: 'Community Garden',
-  };
-
-  return userTypes[userType];
-}
+export const userTypeLabels: Record<UserTypeEnum, string> = {
+  INDIV: 'Individual',
+  SCHOOL: 'School',
+  ORG: 'Community/Organization',
+};
 
 export const plantingTypeLabels: Record<PlantingTypeEnum, string> = {
   INDOORS: 'Start Seed from Indoors',

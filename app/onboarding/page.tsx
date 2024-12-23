@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { BigButton, Button } from '@/components/Buttons';
-import LabeledCustomSelect from '@/components/EditableInput';
+import CustomSelect from '@/components/CustomSelect';
 import ProgressBar from '@/components/ProgressBar';
 import RadioGroup from '@/components/RadioGroup';
 import COLORS from '@/styles/colors';
@@ -12,7 +12,7 @@ import { Flex } from '@/styles/containers';
 import { H3, P1, P3 } from '@/styles/text';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { usStateOptions } from '@/utils/dropdownOptions';
+import { gardenTypeOptions, usStateOptions } from '@/utils/dropdownOptions';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
@@ -22,13 +22,7 @@ import {
 } from './styles';
 
 // Define the possible options for each question
-// usStateOptions imported from elsewhere
-const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = [
-  { label: 'Individual', value: 'INDIV' },
-  { label: 'Community/Organization', value: 'ORG' },
-  { label: 'School', value: 'SCHOOL' },
-];
-
+// usStateOptions, gardenTypeOptions imported from elsewhere
 const plotOptions: DropdownOption<boolean>[] = [
   { label: 'Yes, I own a plot', value: true },
   { label: "No, I don't own a plot", value: false },
@@ -215,8 +209,7 @@ const ReviewPage = ({
 
     try {
       await setProfile(profile);
-      console.log('Profile submitted successfully:', profile);
-      setHasPlot(selectedPlot);
+      // console.log('Profile submitted successfully:', profile);
       router.push('/view-plants');
     } catch (error) {
       console.error('Error upserting profile:', error);
@@ -241,20 +234,19 @@ const ReviewPage = ({
           <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
             Your Responses
           </P1>
-          <LabeledCustomSelect
+          <CustomSelect
             label="State Location"
             value={selectedState}
             options={usStateOptions}
             onChange={setSelectedState}
           />
-
-          <LabeledCustomSelect
+          <CustomSelect
             label="Garden Type"
             value={selectedGardenType}
             options={gardenTypeOptions}
             onChange={setSelectedGardenType} // Directly pass the selected value
           />
-          <LabeledCustomSelect
+          <CustomSelect
             label="Plot Status"
             value={selectedPlot}
             options={plotOptions}
