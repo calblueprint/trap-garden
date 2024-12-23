@@ -6,7 +6,7 @@ import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import PlantDetails from '@/components/PlantDetails';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { H1, H4, P1, P2 } from '@/styles/text';
+import { H1, H3, H4, P1, P2 } from '@/styles/text';
 import { PlantingTypeEnum, UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { plantingTypeLabels } from '@/utils/helpers';
@@ -17,7 +17,6 @@ import {
   MoveButton,
   ReviewDetailsContainer,
   ReviewGrid,
-  ReviewHeader,
 } from './styles';
 
 function ReviewPlant({
@@ -176,7 +175,9 @@ export default function Home() {
             $h="max-content"
             $p="24px"
           >
-            <ReviewHeader>Review & Submit</ReviewHeader>
+            <H3 $color={COLORS.shrub} style={{ marginBottom: '40px' }}>
+              Review & Submit
+            </H3>
             <ReviewDetailsContainer>
               {details.map((detail, index) => (
                 <ReviewPlant

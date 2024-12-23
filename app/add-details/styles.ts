@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { SmallRoundedButton } from '@/components/Button';
 import COLORS from '@/styles/colors';
-import { H3 } from '../onboarding/styles';
 
 export const MoveButton = styled(SmallRoundedButton)`
   border: 1px solid;
@@ -33,12 +32,6 @@ export const ButtonDiv = styled.div`
   &:has(:only-child) {
     justify-content: flex-end;
   }
-`;
-
-export const ReviewHeader = styled(H3)`
-  text-align: center;
-  color: ${COLORS.shrub};
-  margin-bottom: 40px;
 `;
 
 export const ReviewDetailsContainer = styled.div`
