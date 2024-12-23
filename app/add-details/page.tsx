@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { UUID } from 'crypto';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import PlantDetails from '@/components/PlantDetails';
 import COLORS from '@/styles/colors';
@@ -67,11 +66,6 @@ export default function Home() {
   const [details, setDetails] = useState<Partial<UserPlant>[]>(
     plantsToAdd.map(plant => ({ plant_id: plant.id, user_id: userId! })),
   );
-
-  const plantDictionary: Record<UUID, string> = {};
-  for (const plant of plantsToAdd) {
-    plantDictionary[plant.id] = plant.plant_name;
-  }
 
   const getDefaultDate = () => new Date().toISOString().substring(0, 10);
 
