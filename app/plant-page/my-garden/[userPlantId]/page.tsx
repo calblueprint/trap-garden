@@ -115,6 +115,7 @@ export default function UserPlantPage() {
               indoorsEnd={currentPlant.indoors_end}
               outdoorsStart={currentPlant.outdoors_start}
               outdoorsEnd={currentPlant.outdoors_end}
+              singleDisplay
             />
           </Flex>
         </ComponentWrapper>
