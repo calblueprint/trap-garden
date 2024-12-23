@@ -67,14 +67,13 @@ export default function CustomSelect<T extends string | number | boolean>({
         </P2>
       )}
       <SelectContainer
-        id={componentId}
         ref={containerRef}
         onClick={isContainerClickable ? () => setIsOpen(!isOpen) : undefined}
       >
         <P2 $color={COLORS.midgray}>
           {options.find(option => option.value === value)?.label || placeholder}
         </P2>
-        <DropdownIcon onClick={() => setIsOpen(!isOpen)}>
+        <DropdownIcon id={componentId} onClick={() => setIsOpen(!isOpen)}>
           <Icon type={iconType} />
         </DropdownIcon>
         {isOpen && (
