@@ -10,7 +10,6 @@ const COLORS = {
   // grey
   black: '#222222',
   darkgray: '#555555',
-  gray: '#D9D9D9',
   midgray: '#888888',
   lightgray: '#DDDDDD',
   backgroundGrey: '#F7F6F3',
