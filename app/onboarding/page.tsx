@@ -89,12 +89,7 @@ function SelectionScreen<T = string>({
         </Flex>
         <ButtonDiv>
           {onBack && (
-            <Button
-              onClick={onBack}
-              $primaryColor="white"
-              $secondaryColor={COLORS.shrub}
-              $textColor={COLORS.shrub}
-            >
+            <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
               Back
             </Button>
           )}
@@ -184,12 +179,7 @@ const ReviewPage = ({
           </Flex>
         </ContentContainer>
         <ButtonDiv>
-          <Button
-            onClick={onBack}
-            $primaryColor="white"
-            $secondaryColor={COLORS.shrub}
-            $textColor={COLORS.shrub}
-          >
+          <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
             Back
           </Button>
           <Button onClick={handleSubmit} $primaryColor={COLORS.shrub}>

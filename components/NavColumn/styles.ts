@@ -119,21 +119,6 @@ export const NameAndStatus = styled.div`
   gap: 4px;
 `;
 
-export const SignOutButton = styled.button`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  border: 1px solid ${COLORS.errorRed};
-  background-color: ${COLORS.glimpse};
-  padding: 12px 0px;
-  color: ${COLORS.errorRed};
-  text-decoration: none;
-  cursor: pointer;
-  font-size: 0.875rem;
-`;
-
 export const ProfileIcon = styled(Icon)`
   min-height: 40px;
   min-width: 40px;

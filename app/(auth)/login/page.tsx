@@ -95,6 +95,7 @@ export default function Login() {
         <BigButton
           type="button"
           onClick={handleLogin}
+          $primaryColor={COLORS.shrub}
           disabled={!canSubmitForm}
         >
           Log In

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { SmallRoundedButton } from '@/components/Button';
 import COLORS from '@/styles/colors';
 
 export const FilterContainer = styled.div`
@@ -66,13 +65,13 @@ export const PlantGridContainer = styled.div`
   justify-content: center;
 `;
 
-export const SelectButton = styled(SmallRoundedButton)`
-  font-size: 0.75rem;
-  font-weight: 400;
-  min-width: 60px;
-  height: 25px;
-  padding: 0 4px;
-`;
+// export const SelectButton = styled(SmallRoundedButton)`
+//   font-size: 0.75rem;
+//   font-weight: 400;
+//   min-width: 60px;
+//   height: 25px;
+//   padding: 0 4px;
+// `;
 
 export const ViewSelection = styled.div`
   display: flex;

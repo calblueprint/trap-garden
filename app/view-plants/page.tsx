@@ -7,6 +7,7 @@ import {
   getMatchingPlantForUserPlant,
 } from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
+import { SmallButton } from '@/components/Buttons';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
@@ -37,7 +38,6 @@ import {
   NumberSelectedPlants,
   NumberSelectedPlantsContainer,
   PlantGridContainer,
-  SelectButton,
   SomethingWrongButton,
   TopRowContainer,
   ViewSelection,
@@ -239,20 +239,20 @@ export default function Page() {
           {/* Select/Cancel toggles Add Mode; appears in All plants only*/}
           {viewingOption === 'all' &&
             (inAddMode ? (
-              <SelectButton
+              <SmallButton
                 $secondaryColor={COLORS.errorRed}
                 onClick={handleCancelAddMode}
               >
                 Cancel
-              </SelectButton>
+              </SmallButton>
             ) : (
-              <SelectButton
+              <SmallButton
                 $primaryColor={COLORS.shrub}
                 $secondaryColor="white"
                 onClick={() => setInAddMode(true)}
               >
                 Select
-              </SelectButton>
+              </SmallButton>
             ))}
         </Flex>
 
@@ -402,9 +402,9 @@ export default function Page() {
             placeholder="Growing Season"
           />
 
-          <SelectButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
+          <SmallButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
             Clear Filters
-          </SelectButton>
+          </SmallButton>
         </FilterContainer>
       </TopRowContainer>
       <Box $h="24px">

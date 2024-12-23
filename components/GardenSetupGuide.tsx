@@ -35,7 +35,7 @@ export default function GardenSetupGuide({
       <P2>Learn More about Setting Up a Plot</P2>
       <P3
         $color={COLORS.blueLink}
-        as="a"
+        as="a" // used for external links
         href={gardenSetupGuideLinks[userType]}
       >
         {userTypeLabels[userType]} Garden Set-up Guide

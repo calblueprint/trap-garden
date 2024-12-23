@@ -120,7 +120,6 @@ export default function SignUp() {
             label="Password"
             error={isSubmitted && !isPasswordComplexityMet}
           />
-
           {/* Password complexity requirements */}
           <PasswordComplexity
             password={password} // Set default value if password is null
@@ -156,10 +155,11 @@ export default function SignUp() {
         <BigButton
           type="button"
           onClick={handleSignUp}
+          $primaryColor={COLORS.shrub}
           disabled={!canSubmitForm}
         >
           <P3 $color="white">Sign Up</P3>
-        </BigButton>{' '}
+        </BigButton>
       </div>
     </StyledForm>
   );
