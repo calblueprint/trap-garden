@@ -1,6 +1,5 @@
 import React, { memo, useMemo } from 'react';
 import COLORS from '@/styles/colors';
-import { Flex } from '@/styles/containers';
 import { fillCalendarGridArrayRowWithColor } from '@/utils/helpers';
 import MonthHeader from '../MonthHeader';
 import SeasonColorKey from '../SeasonColorKey';
@@ -81,9 +80,7 @@ const PlantCalendarRow = memo(function PlantCalendarRow({
     <>
       {singleDisplay && (
         <>
-          <Flex $justify="center">
-            <SeasonColorKey />
-          </Flex>
+          <SeasonColorKey />
           <MonthHeader />
         </>
       )}
