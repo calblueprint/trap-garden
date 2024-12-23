@@ -23,7 +23,7 @@ interface CustomSelectProps<T> {
   isContainerClickable?: boolean; // New boolean prop
 }
 
-export default function CustomSelect<T extends string | number | boolean>({
+export default function CustomSelect<T>({
   value,
   options,
   onChange,
