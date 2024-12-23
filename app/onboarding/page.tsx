@@ -133,7 +133,6 @@ const ReviewPage = ({
 
     try {
       await setProfile(profile);
-      // console.log('Profile submitted successfully:', profile);
       router.push(CONFIG.viewPlants);
     } catch (error) {
       console.error('Error upserting profile:', error);
@@ -235,7 +234,7 @@ export default function OnboardingFlow() {
     setStep(step - 1);
   };
 
-  return !userId ? (
+  return authLoading ? (
     // TODO: implement an actual loading screen (spinner?)
     <>Loading</>
   ) : (
@@ -277,7 +276,7 @@ export default function OnboardingFlow() {
       )}
       {step === 4 && (
         <ReviewPage
-          userId={userId}
+          userId={userId!}
           selectedState={selectedState!}
           setSelectedState={setSelectedState}
           selectedGardenType={selectedGardenType!}

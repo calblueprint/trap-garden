@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from 'react';
+import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
+import { P2 } from '@/styles/text';
+import { DropdownIcon, SelectContainer } from '../CustomSelect/styles';
 import Icon from '../Icon';
-import {
-  DateInputWrapper,
-  DropdownIcon,
-  HiddenDateInput,
-  SelectContainer,
-  SelectedValue,
-} from './styles';
+import { DateInputWrapper, HiddenDateInput } from './styles';
 
 interface DateInputProps {
+  label?: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -16,13 +15,14 @@ interface DateInputProps {
   max?: string;
 }
 
-const DateInput = ({
+export default function DateInput({
+  label,
   value,
   onChange,
   placeholder = '',
   min,
   max,
-}: DateInputProps) => {
+}: DateInputProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const hiddenInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -64,26 +64,32 @@ const DateInput = ({
   };
 
   return (
-    <DateInputWrapper onClick={handleDropdownClick}>
-      <SelectContainer ref={containerRef} style={{ position: 'relative' }}>
-        <SelectedValue>{formatDate(value)}</SelectedValue>
-        <DropdownIcon onClick={handleDropdownClick}>
-          <Icon type="calendar" />
-        </DropdownIcon>
+    <Flex $direction="column" $gap="4px">
+      {label && (
+        <P2 as="label" htmlFor="date">
+          {label}
+        </P2>
+      )}
+      <DateInputWrapper onClick={handleDropdownClick}>
+        <SelectContainer ref={containerRef}>
+          <P2 $color={COLORS.midgray}>{formatDate(value)}</P2>
+          <DropdownIcon onClick={handleDropdownClick}>
+            <Icon type="calendar" />
+          </DropdownIcon>
 
-        <HiddenDateInput
-          ref={hiddenInputRef}
-          type="date"
-          value={value}
-          onChange={e => {
-            onChange(e.target.value);
-          }}
-          min={min}
-          max={max}
-        />
-      </SelectContainer>
-    </DateInputWrapper>
+          <HiddenDateInput
+            ref={hiddenInputRef}
+            type="date"
+            id="date"
+            value={value}
+            onChange={e => {
+              onChange(e.target.value);
+            }}
+            min={min}
+            max={max}
+          />
+        </SelectContainer>
+      </DateInputWrapper>
+    </Flex>
   );
-};
-
-export default DateInput;
+}
