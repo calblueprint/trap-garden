@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
+import { Button } from '@/components/Buttons';
 import PlantDetails from '@/components/PlantDetails';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
@@ -15,7 +16,6 @@ import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
   FooterButton,
-  MoveButton,
   ReviewDetailsContainer,
   ReviewGrid,
 } from './styles';
@@ -150,24 +150,22 @@ export default function Home() {
           <FooterButton>
             <ButtonDiv>
               {currentIndex > 1 && (
-                <MoveButton
-                  type="button"
+                <Button
                   onClick={() => move(-1)}
+                  $primaryColor="white"
                   $secondaryColor={COLORS.shrub}
+                  $textColor={COLORS.shrub}
                 >
                   Back
-                </MoveButton>
+                </Button>
               )}
-
-              <MoveButton
-                type="button"
-                disabled={disableNext}
+              <Button
                 onClick={() => move(1)}
-                $primaryColor={disableNext ? COLORS.midgray : COLORS.shrub}
-                $secondaryColor="white"
+                disabled={disableNext}
+                $primaryColor={COLORS.shrub}
               >
                 Next
-              </MoveButton>
+              </Button>
             </ButtonDiv>
           </FooterButton>
         </Flex>
@@ -200,22 +198,21 @@ export default function Home() {
               ))}
             </ReviewDetailsContainer>
             <Flex $direction="row" $justify="between" $maxW="500px" $mt="24px">
-              <MoveButton
-                type="button"
+              <Button
                 onClick={() => move(-1)}
+                $primaryColor="white"
                 $secondaryColor={COLORS.shrub}
+                $textColor={COLORS.shrub}
               >
                 Back
-              </MoveButton>
-              <MoveButton
-                type="button"
-                disabled={!userId}
+              </Button>
+              <Button
                 onClick={handleSubmit}
-                $primaryColor={disableNext ? COLORS.midgray : COLORS.shrub}
-                $secondaryColor="white"
+                disabled={disableNext}
+                $primaryColor={COLORS.shrub}
               >
                 Submit
-              </MoveButton>
+              </Button>
             </Flex>
           </Flex>
         </Flex>
