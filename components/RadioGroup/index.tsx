@@ -25,7 +25,7 @@ export default function RadioGroup<T>({
   onChange,
 }: RadioGroupProps<T>) {
   const [selectedValue, setSelectedValue] = useState<T | null>(
-    defaultValue || null,
+    defaultValue ?? null,
   );
 
   const handleChange = (value: T) => {
@@ -35,26 +35,30 @@ export default function RadioGroup<T>({
 
   return (
     <ComponentContainer>
-      {options.map(option => (
-        <RadioButton
-          key={String(option.value)}
-          $isSelected={selectedValue === option.value}
-          onClick={() => handleChange(option.value)}
-        >
-          <RadioLabel
+      {options.map(option => {
+        const id = option.label + '-radio';
+        return (
+          <RadioButton
+            key={String(option.value)}
             $isSelected={selectedValue === option.value}
-            htmlFor={option.label + 'Radio'}
+            onClick={() => handleChange(option.value)}
           >
-            {option.label}
-          </RadioLabel>
-          <RadioInput
-            name={name}
-            value={String(option.value)}
-            checked={selectedValue === option.value}
-            id={option.label + 'Radio'}
-          />
-        </RadioButton>
-      ))}
+            <RadioLabel
+              $isSelected={selectedValue === option.value}
+              htmlFor={id}
+            >
+              {option.label}
+            </RadioLabel>
+            <RadioInput
+              name={name}
+              value={String(option.value)}
+              checked={selectedValue === option.value}
+              onChange={() => handleChange(option.value)}
+              id={id}
+            />
+          </RadioButton>
+        );
+      })}
     </ComponentContainer>
   );
 }

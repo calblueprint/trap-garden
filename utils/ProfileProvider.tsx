@@ -19,11 +19,9 @@ import { useAuth } from './AuthProvider';
 export interface ProfileContextType {
   profileData: Profile | null;
   profileReady: boolean;
-  hasPlot: boolean | null;
   plantsToAdd: Plant[];
   setProfile: (completeProfile: Profile) => Promise<void>; // Now expects full Profile
   loadProfile: () => Promise<void>;
-  setHasPlot: (plotValue: boolean | null) => void;
   setPlantsToAdd: (plants: Plant[]) => void;
 }
 
@@ -44,7 +42,6 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
   const { userId, loading: authLoading } = useAuth();
   const [profileData, setProfileData] = useState<Profile | null>(null);
   const [profileReady, setProfileReady] = useState<boolean>(false);
-  const [hasPlot, setHasPlot] = useState<boolean | null>(null);
   const [plantsToAdd, setPlantsToAdd] = useState<Plant[]>([]);
 
   const loadProfile = useCallback(async () => {
@@ -81,31 +78,22 @@ export default function ProfileProvider({ children }: ProfileProviderProps) {
     }
   }, []);
 
-  const updateHasPlot = useCallback((plotValue: boolean | null) => {
-    setHasPlot(plotValue); // Explicit setter for hasPlot
-  }, []);
-
   const providerValue = useMemo(
     () => ({
       profileData,
       profileReady,
-      hasPlot,
       plantsToAdd,
       setPlantsToAdd,
       setProfile,
       loadProfile,
-      setHasPlot: updateHasPlot,
     }),
     [
       profileData,
       profileReady,
-      hasPlot,
       plantsToAdd,
       setPlantsToAdd,
       setProfile,
       loadProfile,
-      setHasPlot,
-      updateHasPlot,
     ],
   );
 

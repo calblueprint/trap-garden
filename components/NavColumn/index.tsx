@@ -8,7 +8,7 @@ import { Flex } from '@/styles/containers';
 import { H4, P3 } from '@/styles/text';
 import { UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { formatUserType } from '@/utils/helpers';
+import { userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
@@ -58,8 +58,8 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
 
   const handleSignOut = async () => {
     await signOut();
-    onClose();
     router.push(CONFIG.login);
+    onClose();
   };
 
   const AuthOrProfileButtons = () => {
@@ -86,7 +86,8 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                   Your Account
                 </H4>
                 <P3 $color={COLORS.shrub} $fontWeight={300}>
-                  {formatUserType(profileData.user_type as UserTypeEnum)}
+                  {userTypeLabels[profileData.user_type as UserTypeEnum] +
+                    ' Garden'}
                 </P3>
               </NameAndStatus>
             </Profile>

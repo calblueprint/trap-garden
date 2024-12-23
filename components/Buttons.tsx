@@ -1,8 +1,15 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { P2 } from '@/styles/text';
 
-export const BigButton = styled.button<{ $color?: string }>`
+interface ButtonProps {
+  $primaryColor?: string;
+  $secondaryColor?: string;
+  $textColor?: string;
+}
+
+export const BigButton = styled.button<ButtonProps>`
   background-color: ${props => props.color || COLORS.shrub};
 
   color: white;
@@ -29,4 +36,19 @@ export const StyledLinkButton = styled(Link)`
   display: inline-block;
   cursor: pointer;
   text-decoration: underline;
+`;
+
+export const Button = styled(P2).attrs({ as: 'button' })<ButtonProps>`
+  width: 156px;
+  height: 44px;
+  border-radius: 25rem;
+  border: 0.5px solid;
+  font-family: inherit;
+  color: ${({ $textColor }) => $textColor || 'white'};
+  background: ${({ $primaryColor }) => $primaryColor || 'white'};
+  border-color: ${({ $secondaryColor, $primaryColor }) =>
+    $secondaryColor || $primaryColor || 'white'};
+  &:disabled {
+    background: ${({ $secondaryColor }) => $secondaryColor ?? COLORS.midgray};
+  }
 `;

@@ -65,11 +65,11 @@ const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
 
 export default function Page() {
   const router = useRouter();
-  const { hasPlot, profileData, profileReady, setPlantsToAdd } = useProfile();
+  const { profileData, profileReady, setPlantsToAdd } = useProfile();
   const { userId, loading: authLoading } = useAuth();
 
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
-    hasPlot ? 'myPlants' : 'all',
+    'myPlants',
   );
   const [inAddMode, setInAddMode] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -402,7 +402,9 @@ export default function Page() {
             placeholder="Growing Season"
           />
 
-          <button onClick={clearFilters}>Clear Filters</button>
+          <SelectButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
+            Clear Filters
+          </SelectButton>
         </FilterContainer>
       </TopRowContainer>
       <Box $h="24px">

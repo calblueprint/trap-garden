@@ -1,19 +1,6 @@
 import styled from 'styled-components';
-import { SmallRoundedButton } from '@/components/Button';
 import COLORS from '@/styles/colors';
-import { H3 } from '../onboarding/styles';
 
-export const MoveButton = styled(SmallRoundedButton)`
-  border: 1px solid;
-  font-family: inherit;
-  margin-bottom: 10px;
-  width: 170px;
-  height: 50px;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
 export const FooterButton = styled.div`
   display: flex;
   flex-direction: row;
@@ -33,12 +20,6 @@ export const ButtonDiv = styled.div`
   &:has(:only-child) {
     justify-content: flex-end;
   }
-`;
-
-export const ReviewHeader = styled(H3)`
-  text-align: center;
-  color: ${COLORS.shrub};
-  margin-bottom: 40px;
 `;
 
 export const ReviewDetailsContainer = styled.div`

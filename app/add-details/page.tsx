@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
+import { Button } from '@/components/Buttons';
 import PlantDetails from '@/components/PlantDetails';
+import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { H1, H4, P1, P2 } from '@/styles/text';
+import { H1, H3, H4, P1, P2 } from '@/styles/text';
 import { PlantingTypeEnum, UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { plantingTypeLabels } from '@/utils/helpers';
@@ -14,10 +16,8 @@ import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
   FooterButton,
-  MoveButton,
   ReviewDetailsContainer,
   ReviewGrid,
-  ReviewHeader,
 } from './styles';
 
 function ReviewPlant({
@@ -59,12 +59,17 @@ export default function Home() {
   const { userId } = useAuth();
   const router = useRouter();
 
-  if (profileReady && !profileData) {
-    router.push('/view-plants');
-  }
+  // TODO: address error: if you try to signout from this page
+  // it directs to /view-plants instead of login
+  useEffect(() => {
+    if (profileReady && !profileData) {
+      router.push(CONFIG.viewPlants);
+    }
+  }, [profileData, profileReady, router]);
+
   const [currentIndex, setCurrentIndex] = useState<number>(1);
   const [details, setDetails] = useState<Partial<UserPlant>[]>(
-    plantsToAdd.map(plant => ({ plant_id: plant.id, user_id: userId! })),
+    plantsToAdd.map(plant => ({ plant_id: plant.id })),
   );
 
   const getDefaultDate = () => new Date().toISOString().substring(0, 10);
@@ -106,8 +111,16 @@ export default function Home() {
   const handleSubmit = async () => {
     // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
     // instead of doing userId!
+    if (!userId) return;
     try {
-      await insertUserPlants(userId!, details);
+      const completedDetails: Omit<UserPlant, 'id' | 'date_removed'>[] =
+        details.map(detail => ({
+          user_id: userId,
+          plant_id: detail.plant_id!,
+          date_added: detail.date_added!,
+          planting_type: detail.planting_type!,
+        }));
+      await insertUserPlants(completedDetails);
       router.push('/view-plants');
     } catch (error) {
       console.error('Error inserting user plants:', error);
@@ -140,24 +153,22 @@ export default function Home() {
           <FooterButton>
             <ButtonDiv>
               {currentIndex > 1 && (
-                <MoveButton
-                  type="button"
+                <Button
                   onClick={() => move(-1)}
+                  $primaryColor="white"
                   $secondaryColor={COLORS.shrub}
+                  $textColor={COLORS.shrub}
                 >
                   Back
-                </MoveButton>
+                </Button>
               )}
-
-              <MoveButton
-                type="button"
-                disabled={disableNext}
+              <Button
                 onClick={() => move(1)}
-                $primaryColor={disableNext ? COLORS.midgray : COLORS.shrub}
-                $secondaryColor="white"
+                disabled={disableNext}
+                $primaryColor={COLORS.shrub}
               >
                 Next
-              </MoveButton>
+              </Button>
             </ButtonDiv>
           </FooterButton>
         </Flex>
@@ -176,7 +187,9 @@ export default function Home() {
             $h="max-content"
             $p="24px"
           >
-            <ReviewHeader>Review & Submit</ReviewHeader>
+            <H3 $color={COLORS.shrub} style={{ marginBottom: '40px' }}>
+              Review & Submit
+            </H3>
             <ReviewDetailsContainer>
               {details.map((detail, index) => (
                 <ReviewPlant
@@ -188,21 +201,21 @@ export default function Home() {
               ))}
             </ReviewDetailsContainer>
             <Flex $direction="row" $justify="between" $maxW="500px" $mt="24px">
-              <MoveButton
-                type="button"
+              <Button
                 onClick={() => move(-1)}
+                $primaryColor="white"
                 $secondaryColor={COLORS.shrub}
+                $textColor={COLORS.shrub}
               >
                 Back
-              </MoveButton>
-              <MoveButton
-                type="button"
+              </Button>
+              <Button
                 onClick={handleSubmit}
-                $primaryColor={disableNext ? COLORS.midgray : COLORS.shrub}
-                $secondaryColor="white"
+                disabled={disableNext}
+                $primaryColor={COLORS.shrub}
               >
                 Submit
-              </MoveButton>
+              </Button>
             </Flex>
           </Flex>
         </Flex>

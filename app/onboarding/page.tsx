@@ -3,42 +3,29 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
-import { BigButton } from '@/components/Buttons';
-import LabeledCustomSelect from '@/components/EditableInput';
+import { Button } from '@/components/Buttons';
+import CustomSelect from '@/components/CustomSelect';
+import ProgressBar from '@/components/ProgressBar';
+import RadioGroup from '@/components/RadioGroup';
+import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
+import { H3, P1, P3 } from '@/styles/text';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { usStateOptions } from '@/utils/dropdownOptions';
+import {
+  gardenTypeOptions,
+  plotOptions,
+  usStateOptions,
+} from '@/utils/dropdownOptions';
 import { useProfile } from '@/utils/ProfileProvider';
-import { H3, PageContainer, ReviewContainer } from './styles';
+import {
+  ButtonDiv,
+  ContentContainer,
+  OnboardingContainer,
+  QuestionDiv,
+} from './styles';
 
-// Define the possible options for each question
-// usStateOptions imported from elsewhere
-const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = [
-  { label: 'Individual', value: 'INDIV' },
-  { label: 'Community', value: 'ORG' },
-  { label: 'School', value: 'SCHOOL' },
-];
-
-const plotOptions: DropdownOption<boolean>[] = [
-  { label: 'Yes, I own a plot', value: true },
-  { label: "No, I don't own a plot", value: false },
-];
-
-interface StateSelectionProps {
-  selectedState: string | undefined; // undefined b/c <select> only accepts undefined
-  setSelectedState: (selected: string) => void;
-}
-
-interface GardenTypeSelectionProps {
-  selectedGardenType: UserTypeEnum | undefined;
-  setSelectedGardenType: (selected: UserTypeEnum) => void;
-}
-
-interface PlotSelectionProps {
-  selectedPlot: boolean | undefined;
-  setSelectedPlot: (selected: boolean) => void;
-}
 interface ReviewPageProps {
   userId: UUID;
   selectedState: string;
@@ -47,82 +34,78 @@ interface ReviewPageProps {
   setSelectedGardenType: (selected: UserTypeEnum) => void;
   selectedPlot: boolean;
   setSelectedPlot: (selected: boolean) => void;
+  onBack: () => void;
 }
 
-// Step 1: Select State
-const StateSelection = ({
-  selectedState,
-  setSelectedState,
-}: StateSelectionProps) => {
+function SelectionScreen<T = string>({
+  progress,
+  questionTitle,
+  questionNumber,
+  selectedValue,
+  setSelectedValue,
+  options,
+  onBack,
+  onNext,
+}: {
+  progress: number;
+  questionTitle: string;
+  questionNumber: number;
+  selectedValue: T | undefined;
+  setSelectedValue: (selected: T) => void;
+  options: DropdownOption<T>[];
+  onBack?: () => void;
+  onNext: () => void;
+}) {
+  // TODO: Maybe make total question number a prop
+  // rather than hard-code as 3
   return (
-    <div>
-      <h2>Which state do you live in?</h2>
-      <select
-        value={selectedState}
-        onChange={e => setSelectedState(e.target.value)}
-      >
-        <option value="" disabled>
-          Select a state
-        </option>
-        {usStateOptions.map(state => (
-          <option key={state.label} value={state.value}>
-            {state.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
-
-// Step 2: Select garden type
-const GardenTypeSelection = ({
-  selectedGardenType,
-  setSelectedGardenType,
-}: GardenTypeSelectionProps) => {
-  return (
-    <div>
-      <h2>What type of garden do you want to create?</h2>
-      {gardenTypeOptions.map(type => (
-        <label key={type.label}>
-          <input
-            type="radio"
-            name="gardenType"
-            value={type.value}
-            checked={selectedGardenType === type.value}
-            onChange={e =>
-              setSelectedGardenType(e.target.value as UserTypeEnum)
-            }
+    <>
+      <ProgressBar progress={progress} />
+      <OnboardingContainer>
+        <Flex $direction="column" $align="center">
+          <P3
+            $color={COLORS.shrub}
+            style={{
+              textAlign: 'center',
+              marginTop: '36px',
+              marginBottom: '8px',
+            }}
+          >
+            QUESTION {questionNumber} OF 3
+          </P3>
+          <QuestionDiv>
+            <H3 $color={COLORS.shrub}>{questionTitle}</H3>
+          </QuestionDiv>
+          <RadioGroup
+            name={`Onboarding-${questionNumber}-RadioGroup`}
+            options={options}
+            onChange={setSelectedValue}
+            defaultValue={selectedValue}
           />
-          {type.label}
-        </label>
-      ))}
-    </div>
+        </Flex>
+        <ButtonDiv>
+          {onBack && (
+            <Button
+              onClick={onBack}
+              $primaryColor="white"
+              $secondaryColor={COLORS.shrub}
+              $textColor={COLORS.shrub}
+            >
+              Back
+            </Button>
+          )}
+          <Button
+            onClick={onNext}
+            disabled={selectedValue === undefined}
+            $primaryColor={COLORS.shrub}
+          >
+            Next
+          </Button>
+        </ButtonDiv>
+      </OnboardingContainer>
+    </>
   );
-};
-
-// Step 3: Do you have a plot?
-const PlotSelection = ({
-  selectedPlot,
-  setSelectedPlot,
-}: PlotSelectionProps) => {
-  return (
-    <div>
-      <h2>Do you already have a plot?</h2>
-      {plotOptions.map(option => (
-        <label key={option.label}>
-          <input
-            type="radio"
-            name="plot"
-            value={String(option.value)}
-            checked={selectedPlot === option.value}
-            onChange={() => setSelectedPlot(option.value)}
-          />
-          {option.label}
-        </label>
-      ))}
-    </div>
-  );
-};
+}
 
 // TODO: Maybe just directly include this inside OnboardingFlow
 // to mitigate needing to redefine router.
@@ -134,8 +117,9 @@ const ReviewPage = ({
   setSelectedGardenType,
   selectedPlot,
   setSelectedPlot,
+  onBack,
 }: ReviewPageProps) => {
-  const { setProfile, setHasPlot } = useProfile();
+  const { setProfile } = useProfile();
   const router = useRouter();
 
   // assumes userId is not null, since the not-logged in case
@@ -150,43 +134,66 @@ const ReviewPage = ({
 
     try {
       await setProfile(profile);
-      console.log('Profile submitted successfully:', profile);
-      setHasPlot(selectedPlot);
-      router.push('/view-plants');
+      router.push(CONFIG.viewPlants);
     } catch (error) {
       console.error('Error upserting profile:', error);
     }
   };
 
   return (
-    <PageContainer>
-      <ReviewContainer>
-        <H3 style={{ textAlign: 'center' }}>Review Your Response</H3>
-        <LabeledCustomSelect
-          label="State Location"
-          value={selectedState}
-          options={usStateOptions}
-          onChange={setSelectedState}
-        />
-
-        <LabeledCustomSelect
-          label="Garden Type"
-          value={selectedGardenType}
-          options={gardenTypeOptions}
-          onChange={setSelectedGardenType} // Directly pass the selected value
-        />
-        <LabeledCustomSelect
-          label="Plot Status"
-          value={selectedPlot}
-          options={plotOptions}
-          onChange={value => setSelectedPlot(value === true)} // Convert the value as needed
-        />
-        <div style={{ height: '12.625rem' }} />
-        <BigButton color={COLORS.shrub} onClick={handleSubmit}>
-          Let&apos;s Start Growing !
-        </BigButton>
-      </ReviewContainer>
-    </PageContainer>
+    <>
+      <ProgressBar progress={100} />
+      <OnboardingContainer>
+        <H3
+          $color={COLORS.shrub}
+          style={{
+            textAlign: 'center',
+            marginTop: '40px',
+            marginBottom: '40px',
+          }}
+        >
+          Review & Submit
+        </H3>
+        <ContentContainer>
+          <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
+            Your Responses
+          </P1>
+          <Flex $direction="column" $gap="24px">
+            <CustomSelect
+              label="State Location"
+              value={selectedState}
+              options={usStateOptions}
+              onChange={setSelectedState}
+            />
+            <CustomSelect
+              label="Garden Type"
+              value={selectedGardenType}
+              options={gardenTypeOptions}
+              onChange={setSelectedGardenType}
+            />
+            <CustomSelect
+              label="Plot Status"
+              value={selectedPlot}
+              options={plotOptions}
+              onChange={value => setSelectedPlot(value)}
+            />
+          </Flex>
+        </ContentContainer>
+        <ButtonDiv>
+          <Button
+            onClick={onBack}
+            $primaryColor="white"
+            $secondaryColor={COLORS.shrub}
+            $textColor={COLORS.shrub}
+          >
+            Back
+          </Button>
+          <Button onClick={handleSubmit} $primaryColor={COLORS.shrub}>
+            Let&apos;s Grow!
+          </Button>
+        </ButtonDiv>
+      </OnboardingContainer>
+    </>
   );
 };
 
@@ -195,7 +202,9 @@ export default function OnboardingFlow() {
   const { userId, loading: authLoading } = useAuth();
   const { profileReady, profileData } = useProfile();
   const [step, setStep] = useState(1);
-  const [selectedState, setSelectedState] = useState<string>('');
+  const [selectedState, setSelectedState] = useState<string | undefined>(
+    undefined,
+  );
   const [selectedGardenType, setSelectedGardenType] = useState<
     UserTypeEnum | undefined
   >(undefined);
@@ -222,49 +231,58 @@ export default function OnboardingFlow() {
     setStep(step - 1);
   };
 
-  return !userId ? (
+  return authLoading ? (
     // TODO: implement an actual loading screen (spinner?)
     <>Loading</>
   ) : (
-    <div>
+    <>
       {step === 1 && (
-        <StateSelection
-          selectedState={selectedState}
-          setSelectedState={setSelectedState}
+        <SelectionScreen
+          progress={3}
+          questionNumber={1}
+          questionTitle="What state are you in?"
+          options={usStateOptions}
+          selectedValue={selectedState}
+          setSelectedValue={setSelectedState}
+          onNext={handleNext}
         />
       )}
       {step === 2 && (
-        <GardenTypeSelection
-          selectedGardenType={selectedGardenType}
-          setSelectedGardenType={setSelectedGardenType}
+        <SelectionScreen<UserTypeEnum>
+          progress={33}
+          questionNumber={2}
+          questionTitle="What type of garden are you starting?"
+          options={gardenTypeOptions}
+          selectedValue={selectedGardenType}
+          setSelectedValue={setSelectedGardenType}
+          onBack={handleBack}
+          onNext={handleNext}
         />
       )}
       {step === 3 && (
-        <PlotSelection
-          selectedPlot={selectedPlot}
-          setSelectedPlot={setSelectedPlot}
+        <SelectionScreen<boolean>
+          progress={66}
+          questionNumber={3}
+          questionTitle="Do you already have a plot?"
+          options={plotOptions}
+          selectedValue={selectedPlot}
+          setSelectedValue={setSelectedPlot}
+          onBack={handleBack}
+          onNext={handleNext}
         />
       )}
       {step === 4 && (
         <ReviewPage
-          userId={userId}
-          selectedState={selectedState}
+          userId={userId!}
+          selectedState={selectedState!}
           setSelectedState={setSelectedState}
           selectedGardenType={selectedGardenType!}
           setSelectedGardenType={setSelectedGardenType}
           selectedPlot={selectedPlot!}
           setSelectedPlot={setSelectedPlot}
+          onBack={handleBack}
         />
       )}
-
-      <div>
-        {step > 1 && <button onClick={handleBack}>Back</button>}
-        {step < 4 && (
-          <button onClick={handleNext} disabled={!selectedState && step === 1}>
-            Next
-          </button>
-        )}
-      </div>
-    </div>
+    </>
   );
 }

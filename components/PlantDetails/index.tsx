@@ -3,7 +3,7 @@ import BPLogo from '@/assets/images/bp-logo.png'; // TODO: remove this
 
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
-import { H3, P2 } from '@/styles/text';
+import { H3 } from '@/styles/text';
 import { Plant } from '@/types/schema';
 import { plantingTypeOptions } from '@/utils/dropdownOptions';
 import CustomSelect from '../CustomSelect';
@@ -45,31 +45,20 @@ export default function PlantDetails({
           {plant.plant_name}
         </H3>
         <Flex $direction="column" $gap="24px">
-          <Flex $direction="column" $gap="4px">
-            {/*TODO: Move label into DateInput component*/}
-            <P2 as="label" htmlFor="date">
-              Date Planted
-            </P2>
-            <DateInput
-              value={date}
-              onChange={onDateChange}
-              placeholder="Select planting date"
-            />
-          </Flex>
-
-          <Flex $direction="column" $gap="4px">
-            <P2 as="label" htmlFor="plantingType">
-              Planting Type
-            </P2>
-            <CustomSelect
-              value={plantingType}
-              options={plantingTypeOptions}
-              onChange={onPlantingTypeChange}
-              label="Choose Planting Type"
-              isContainerClickable={true}
-              // TODO: rename prop label to placeholder
-            />
-          </Flex>
+          <DateInput
+            label="Date Planted"
+            value={date}
+            onChange={onDateChange}
+            placeholder="Select planting date"
+          />
+          <CustomSelect
+            label="Planting Type"
+            placeholder="Choose Planting Type"
+            value={plantingType}
+            options={plantingTypeOptions}
+            onChange={onPlantingTypeChange}
+            isContainerClickable={true}
+          />
         </Flex>
       </Box>
     </>
