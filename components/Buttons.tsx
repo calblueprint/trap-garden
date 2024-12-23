@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { P2 } from '@/styles/text';
 
 interface ButtonProps {
   $primaryColor?: string;
@@ -37,12 +38,12 @@ export const StyledLinkButton = styled(Link)`
   text-decoration: underline;
 `;
 
-export const Button = styled.button<ButtonProps>`
-  width: 9.375rem;
-  height: 2.813rem;
+export const Button = styled(P2).attrs({ as: 'button' })<ButtonProps>`
+  width: 156px;
+  height: 44px;
   border-radius: 25rem;
-  font-size: 14px;
   border: 0.5px solid;
+  font-family: inherit;
   color: ${({ $textColor }) => $textColor || 'white'};
   background: ${({ $primaryColor }) => $primaryColor || 'white'};
   border-color: ${({ $secondaryColor, $primaryColor }) =>
