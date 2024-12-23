@@ -1,19 +1,19 @@
 'use client';
 
-import React from 'react';
+// import React from 'react';
 import styled from 'styled-components';
 
-export const Button = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ children, ...props }, ref) => {
-  return (
-    <button ref={ref} {...props}>
-      {children}
-    </button>
-  );
-});
-Button.displayName = 'Button';
+// export const Button = React.forwardRef<
+//   HTMLButtonElement,
+//   React.ButtonHTMLAttributes<HTMLButtonElement>
+// >(({ children, ...props }, ref) => {
+//   return (
+//     <button ref={ref} {...props}>
+//       {children}
+//     </button>
+//   );
+// });
+// Button.displayName = 'Button';
 
 interface SmallRoundedButtonProps {
   $primaryColor?: string;

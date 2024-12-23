@@ -65,14 +65,6 @@ export const PlantGridContainer = styled.div`
   justify-content: center;
 `;
 
-// export const SelectButton = styled(SmallRoundedButton)`
-//   font-size: 0.75rem;
-//   font-weight: 400;
-//   min-width: 60px;
-//   height: 25px;
-//   padding: 0 4px;
-// `;
-
 export const ViewSelection = styled.div`
   display: flex;
   flex-direction: row;
@@ -93,14 +85,4 @@ export const NumberSelectedPlants = styled.p`
   font-weight: 400;
   line-height: 16px;
   color: #fff;
-`;
-
-export const SomethingWrongButton = styled.button<{ $width: string }>`
-  width: ${({ $width }) => $width};
-  height: 45px;
-  border-radius: 50px;
-  background-color: ${COLORS.shrub};
-  color: white;
-  border: none;
-  font-family: inherit;
 `;

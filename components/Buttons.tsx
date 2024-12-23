@@ -6,6 +6,7 @@ import { P2, P3 } from '@/styles/text';
 interface ButtonProps {
   $primaryColor?: string;
   $secondaryColor?: string;
+  $width?: string;
 }
 
 /* shared ButtonStyles for all buttons
@@ -64,7 +65,7 @@ export const StyledLinkButton = styled(Link)`
 export const Button = styled(P2).attrs({ as: 'button' })<ButtonProps>`
   ${ButtonStyles}
 
-  width: 156px; // customizable
+  width: ${({ $width }) => $width || '156px'};
   height: 44px;
   border-radius: 44px;
 `;
@@ -75,7 +76,6 @@ export const BigButton = styled(Button)<ButtonProps>`
 
 export const SmallButton = styled(P3).attrs({ as: 'button' })<ButtonProps>`
   ${ButtonStyles}
-
   // Unique to Small Button 
   border-radius: 20px;
   min-width: 60px;

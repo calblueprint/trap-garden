@@ -7,7 +7,7 @@ import {
   getMatchingPlantForUserPlant,
 } from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
-import { SmallButton } from '@/components/Buttons';
+import { Button, SmallButton } from '@/components/Buttons';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
@@ -38,7 +38,6 @@ import {
   NumberSelectedPlants,
   NumberSelectedPlantsContainer,
   PlantGridContainer,
-  SomethingWrongButton,
   TopRowContainer,
   ViewSelection,
 } from './styles';
@@ -366,9 +365,13 @@ export default function Page() {
       >
         <Icon type="sprout"></Icon>
         <P1 $color={COLORS.midgray}>{message}</P1>
-        <SomethingWrongButton $width="170px" onClick={handleClick}>
+        <Button
+          $primaryColor={COLORS.shrub}
+          $width="170px"
+          onClick={handleClick}
+        >
           {buttonText}
-        </SomethingWrongButton>
+        </Button>
       </Flex>
     );
   }
