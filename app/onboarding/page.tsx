@@ -12,6 +12,7 @@ import { usStateOptions } from '@/utils/dropdownOptions';
 import { useProfile } from '@/utils/ProfileProvider';
 import { H3, PageContainer, ReviewContainer } from './styles';
 
+// Define the possible options for each question
 // usStateOptions imported from elsewhere
 const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = [
   { label: 'Individual', value: 'INDIV' },
