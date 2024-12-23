@@ -4,7 +4,7 @@ import { SmallRoundedButton } from '../Button';
 
 export const Container = styled.div`
   padding: 16px;
-  background-color: ${COLORS.backgroundGrey};
+  background-color: ${COLORS.glimpse};
   border-radius: 5px;
 `;
 

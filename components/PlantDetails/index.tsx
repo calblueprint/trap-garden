@@ -26,7 +26,7 @@ export default function PlantDetails({
     <>
       <Flex
         $h="186px"
-        $background={COLORS.backgroundGrey}
+        $background={COLORS.glimpse}
         $justify="center"
         $align="center"
       >

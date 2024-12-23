@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 
 export const Container = styled.div`
-  background-color: ${COLORS.backgroundGrey};
+  background-color: ${COLORS.glimpse};
   padding: 16px;
   border-radius: 8px;
   display: flex;

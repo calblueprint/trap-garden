@@ -5,7 +5,7 @@ import { H3 } from '@/styles/text';
 // Image Header
 export const ImgHeader = styled.div`
   display: flex;
-  background-color: ${COLORS.backgroundGrey};
+  background-color: ${COLORS.glimpse};
   padding-bottom: 24px;
   position: relative;
   height: 220px;
