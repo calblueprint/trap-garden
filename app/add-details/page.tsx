@@ -5,20 +5,58 @@ import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import PlantDetails from '@/components/PlantDetails';
-import ReviewAddDetails from '@/components/ReviewAddDetails';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { H1, P1 } from '@/styles/text';
-import { UserPlant } from '@/types/schema';
+import { H1, H4, P1, P2 } from '@/styles/text';
+import { PlantingTypeEnum, UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
+import { plantingTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
   FooterButton,
   MoveButton,
-  PageContainer,
+  ReviewDetailsContainer,
   ReviewHeader,
 } from './styles';
+
+function ReviewPlant({
+  plantName,
+  dateAdded,
+  plantingType,
+}: {
+  plantName: string;
+  dateAdded: string;
+  plantingType: PlantingTypeEnum;
+}) {
+  return (
+    <Flex $direction="column" $gap="8px" $mb="16px">
+      <H4 $fontWeight={500} $color={COLORS.shrub}>
+        {plantName}
+      </H4>
+      <Flex>
+        <Flex $direction="column">
+          <P2 $fontWeight={500}>Date Planted</P2>
+          <P2>{dateAdded}</P2>
+        </Flex>
+        <Flex $direction="column">
+          <P2 $fontWeight={500}>Planting Type</P2>
+          <P2>{plantingTypeLabels[plantingType]}</P2>
+        </Flex>
+      </Flex>
+      {/* <CustomSelect
+        label="Planting Type"
+        value={detail.planting_type}
+        options={plantingTypeOptions}
+        onChange={value => updateInput('planting_type', value, index)}
+      />
+      <DateInput
+        value={detail.date_added}
+        onChange={value => updateInput('date_added', value, index)}
+      /> */}
+    </Flex>
+  );
+}
 
 export default function Home() {
   const { profileData, profileReady, plantsToAdd } = useProfile();
@@ -134,32 +172,49 @@ export default function Home() {
         </Flex>
       )}
       {currentIndex === plantsToAdd.length + 1 && (
-        <PageContainer>
-          <ReviewHeader>Review & Submit</ReviewHeader>
-
-          <ReviewAddDetails
-            details={details}
-            updateInput={updateInput}
-            plantDictionary={plantDictionary}
-          ></ReviewAddDetails>
-          <Flex $direction="row" $justify="between" $w="500px" $mt="24px">
-            <MoveButton
-              type="button"
-              onClick={() => move(-1)}
-              $secondaryColor={COLORS.shrub}
-            >
-              Back
-            </MoveButton>
-            <MoveButton
-              type="button"
-              onClick={handleSubmit}
-              $primaryColor={disableNext ? COLORS.midgray : COLORS.shrub}
-              $secondaryColor="white"
-            >
-              Submit
-            </MoveButton>
+        <Flex
+          $minH="full-screen"
+          $direction="column"
+          $align="center"
+          $justify="center"
+        >
+          <Flex
+            $direction="column"
+            $maxW="500px"
+            $align="center"
+            $h="max-content"
+            $p="24px"
+          >
+            <ReviewHeader>Review & Submit</ReviewHeader>
+            <ReviewDetailsContainer>
+              {details.map((detail, index) => (
+                <ReviewPlant
+                  key={plantsToAdd[index].id}
+                  plantName={plantsToAdd[index].plant_name}
+                  plantingType={detail.planting_type!}
+                  dateAdded={detail.date_added!}
+                />
+              ))}
+            </ReviewDetailsContainer>
+            <Flex $direction="row" $justify="between" $maxW="500px" $mt="24px">
+              <MoveButton
+                type="button"
+                onClick={() => move(-1)}
+                $secondaryColor={COLORS.shrub}
+              >
+                Back
+              </MoveButton>
+              <MoveButton
+                type="button"
+                onClick={handleSubmit}
+                $primaryColor={disableNext ? COLORS.midgray : COLORS.shrub}
+                $secondaryColor="white"
+              >
+                Submit
+              </MoveButton>
+            </Flex>
           </Flex>
-        </PageContainer>
+        </Flex>
       )}
     </>
   );

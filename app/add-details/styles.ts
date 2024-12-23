@@ -35,19 +35,16 @@ export const ButtonDiv = styled.div`
   }
 `;
 
-export const PageContainer = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  background-color: ${COLORS.seed};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-`;
-
 export const ReviewHeader = styled(H3)`
   text-align: center;
   color: ${COLORS.shrub};
   margin-bottom: 40px;
+`;
+
+export const ReviewDetailsContainer = styled.div`
+  padding: 24px;
+  padding-top: 32px;
+  border-radius: 5px;
+  border: 1px solid ${COLORS.lightgray};
+  width: 100%;
 `;
