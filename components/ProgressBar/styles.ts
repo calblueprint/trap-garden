@@ -8,8 +8,8 @@ export const BackgroundDiv = styled.div`
   position: relative;
 `;
 
-export const ProgressDiv = styled.div<{ width: number }>`
-  width: ${props => props.width}%;
+export const ProgressDiv = styled.div<{ $width: number }>`
+  width: ${({ $width }) => $width}%;
   height: 0.375rem;
   border-radius: 3px;
   background-color: ${COLORS.shrub};

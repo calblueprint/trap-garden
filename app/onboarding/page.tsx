@@ -147,7 +147,7 @@ const ReviewPage = ({
             $color={COLORS.shrub}
             style={{
               textAlign: 'center',
-              marginTop: '90px',
+              marginTop: '40px',
               marginBottom: '40px',
             }}
           >
