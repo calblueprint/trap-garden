@@ -3,14 +3,14 @@ import COLORS from '@/styles/colors';
 
 export const BackgroundDiv = styled.div`
   width: 100%;
-  height: 0.375rem;
+  height: 6px;
   background-color: ${COLORS.lightgray};
   position: relative;
 `;
 
 export const ProgressDiv = styled.div<{ $width: number }>`
   width: ${({ $width }) => $width}%;
-  height: 0.375rem;
+  height: 100%;
   border-radius: 3px;
   background-color: ${COLORS.shrub};
   top: 0;
