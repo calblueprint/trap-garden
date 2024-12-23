@@ -8,15 +8,12 @@ import LabeledCustomSelect from '@/components/EditableInput';
 import COLORS from '@/styles/colors';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
+import { usStateOptions } from '@/utils/dropdownOptions';
 import { useProfile } from '@/utils/ProfileProvider';
 import { H3, PageContainer, ReviewContainer } from './styles';
 
 // Define the possible options for each question
-const stateOptions: DropdownOption<string>[] = [
-  { label: 'Tennessee', value: 'TENNESSEE' },
-  { label: 'Missouri', value: 'MISSOURI' },
-];
-
+// usStateOptions imported from elsewhere
 const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = [
   { label: 'Individual', value: 'INDIV' },
   { label: 'Community', value: 'ORG' },
@@ -67,7 +64,7 @@ const StateSelection = ({
         <option value="" disabled>
           Select a state
         </option>
-        {stateOptions.map(state => (
+        {usStateOptions.map(state => (
           <option key={state.label} value={state.value}>
             {state.label}
           </option>
@@ -168,7 +165,7 @@ const ReviewPage = ({
         <LabeledCustomSelect
           label="State Location"
           value={selectedState}
-          options={stateOptions}
+          options={usStateOptions}
           onChange={setSelectedState}
         />
 

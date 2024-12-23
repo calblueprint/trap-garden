@@ -8,8 +8,10 @@ import {
 } from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
+import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
 import SearchBar from '@/components/SearchBar';
+import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, P1 } from '@/styles/text';
@@ -36,6 +38,7 @@ import {
   NumberSelectedPlantsContainer,
   PlantGridContainer,
   SelectButton,
+  SomethingWrongButton,
   TopRowContainer,
   ViewSelection,
 } from './styles';
@@ -104,7 +107,7 @@ export default function Page() {
   useEffect(() => {
     // Only fetch user plants if we have a valid userId
     if (!authLoading && userId) {
-      const fetchUserPlants = async () => {
+      (async () => {
         const fetchedUserPlants = await getCurrentUserPlantsByUserId(userId);
 
         const ownedPlants: OwnedPlant[] = await Promise.all(
@@ -117,8 +120,7 @@ export default function Page() {
           }),
         );
         setOwnedPlants(ownedPlants);
-      };
-      fetchUserPlants();
+      })();
     }
   }, [userId, authLoading]);
 
@@ -160,6 +162,7 @@ export default function Page() {
     searchTerm,
   ]);
 
+  // Handle Button Clicks
   function handleUserPlantCardClick(ownedPlant: OwnedPlant) {
     router.push(`/plant-page/my-garden/${ownedPlant.userPlantId}`);
   }
@@ -186,27 +189,32 @@ export default function Page() {
     setInAddMode(false);
   }
 
+  // Helper Components
   function MainBody() {
     // assume auth and profile are both ready
     // Not logged in
     if (!userId) {
       return (
-        <Flex $direction="column" $textAlign="center" $justify="center">
-          <P1 $color={COLORS.midgray}>Login to view all plants</P1>
-          <button onClick={() => router.push('/login')}>Log In</button>
-        </Flex>
+        <ErrorScreen
+          message="Log in to view all plants"
+          handleClick={() => {
+            router.push(CONFIG.login);
+          }}
+          buttonText="Log In"
+        />
       );
     }
 
     // Not onboarded
     if (!profileData) {
       return (
-        <Flex $direction="column" $textAlign="center" $justify="center">
-          <P1 $color={COLORS.midgray}>Complete your profile view all plants</P1>
-          <button onClick={() => router.push('/onboarding')}>
-            Go To Onboarding
-          </button>
-        </Flex>
+        <ErrorScreen
+          message="Complete your profile to view all plants"
+          handleClick={() => {
+            router.push(CONFIG.onboarding);
+          }}
+          buttonText="Go To Onboarding"
+        />
       );
     }
 
@@ -261,9 +269,22 @@ export default function Page() {
     return (
       <div>
         {ownedPlants.length === 0 ? (
-          <>Add Plants To Your Garden</>
+          <ErrorScreen
+            message="Your plant list is empty"
+            handleClick={() => {
+              setViewingOption('all');
+            }}
+            buttonText="Add Plants"
+          />
         ) : filteredUserPlantList.length === 0 ? (
-          <p>No plants match your current filters.</p>
+          <ErrorScreen
+            message="No Matching Plants"
+            handleClick={() => {
+              clearFilters();
+              setSearchTerm('');
+            }}
+            buttonText="Clear Filters & Search"
+          />
         ) : (
           <PlantGridContainer>
             {filteredUserPlantList.map(ownedPlant => (
@@ -285,9 +306,14 @@ export default function Page() {
     return (
       <>
         {filteredPlantList.length === 0 ? (
-          <div>
-            <p>No plants match your current filters.</p>
-          </div>
+          <ErrorScreen
+            message="No Matching Plants"
+            handleClick={() => {
+              clearFilters();
+              setSearchTerm('');
+            }}
+            buttonText="Clear Filters & Search"
+          />
         ) : (
           <PlantGridContainer>
             {filteredPlantList.map(plant => (
@@ -314,6 +340,36 @@ export default function Page() {
           </AddButton>
         )}
       </>
+    );
+  }
+
+  function ErrorScreen({
+    message,
+    handleClick,
+    buttonText,
+  }: {
+    message: string;
+    handleClick: () => void;
+    buttonText: string;
+  }) {
+    return (
+      <Flex
+        $direction="column"
+        $textAlign="center"
+        $justify="center"
+        $w="240px"
+        $align="center"
+        $m="auto"
+        $p="20px"
+        $gap="8px"
+        $h="60vh"
+      >
+        <Icon type="sprout"></Icon>
+        <P1 $color={COLORS.midgray}>{message}</P1>
+        <SomethingWrongButton $width="170px" onClick={handleClick}>
+          {buttonText}
+        </SomethingWrongButton>
+      </Flex>
     );
   }
 
@@ -346,7 +402,7 @@ export default function Page() {
             placeholder="Growing Season"
           />
 
-          <button onClick={clearFilters}>Clear filters</button>
+          <button onClick={clearFilters}>Clear Filters</button>
         </FilterContainer>
       </TopRowContainer>
       <Box $h="24px">

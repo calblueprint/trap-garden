@@ -4,15 +4,10 @@ import BPLogo from '@/assets/images/bp-logo.png'; // TODO: remove this
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H3, P2 } from '@/styles/text';
-import { DropdownOption, Plant, PlantingTypeEnum } from '@/types/schema';
+import { Plant } from '@/types/schema';
+import { plantingTypeOptions } from '@/utils/dropdownOptions';
 import CustomSelect from '../CustomSelect';
 import DateInput from '../DateInput';
-
-const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
-  { value: 'TRANSPLANT', label: 'Transplant' },
-  { value: 'INDOORS', label: 'Indoors' },
-  { value: 'OUTDOORS', label: 'Outdoors' },
-];
 
 export default function PlantDetails({
   plant,
@@ -49,12 +44,6 @@ export default function PlantDetails({
         >
           {plant.plant_name}
         </H3>
-        {/* <input
-          id="date"
-          type="date"
-          value={date}
-          onChange={e => onDateChange(e.target.value)}
-        /> */}
         <Flex $direction="column" $gap="24px">
           <Flex $direction="column" $gap="4px">
             {/*TODO: Move label into DateInput component*/}

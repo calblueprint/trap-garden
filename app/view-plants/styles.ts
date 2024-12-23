@@ -96,3 +96,13 @@ export const NumberSelectedPlants = styled.p`
   line-height: 16px;
   color: #fff;
 `;
+
+export const SomethingWrongButton = styled.button<{ $width: string }>`
+  width: ${({ $width }) => $width};
+  height: 45px;
+  border-radius: 50px;
+  background-color: ${COLORS.shrub};
+  color: white;
+  border: none;
+  font-family: inherit;
+`;
