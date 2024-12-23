@@ -25,7 +25,7 @@ export default function RadioGroup<T>({
   onChange,
 }: RadioGroupProps<T>) {
   const [selectedValue, setSelectedValue] = useState<T | null>(
-    defaultValue || null,
+    defaultValue ?? null,
   );
 
   const handleChange = (value: T) => {

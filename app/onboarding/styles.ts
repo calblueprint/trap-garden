@@ -34,9 +34,11 @@ export const QuestionDiv = styled.div`
   justify-content: end;
   align-content: center;
   margin-bottom: 40px;
+  text-align: center;
 `;
 
 export const ButtonDiv = styled.div`
+  padding: 0 24px;
   display: flex;
   width: 100%;
   bottom: 100px;
