@@ -9,6 +9,11 @@ import COLORS from '@/styles/colors';
 import { Box } from '@/styles/containers';
 import { H1, H3 } from '@/styles/text';
 import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
+import {
+  plantingTypeOptions,
+  seasonOptions,
+  usStateOptions,
+} from '@/utils/dropdownOptions';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
@@ -18,32 +23,9 @@ import {
   StateOptionsContainer,
 } from './styles';
 
-// Declaring (static) filter options outside so they're not re-rendered
-// TODO: Maybe export shared filter options from a centralized file
-const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
-  { label: 'Spring', value: 'SPRING' },
-  { label: 'Summer', value: 'SUMMER' },
-  { label: 'Fall', value: 'FALL' },
-  { label: 'Winter', value: 'WINTER' },
-];
-const harvestSeasonOptions: DropdownOption<SeasonEnum>[] = [
-  { label: 'Spring', value: 'SPRING' },
-  { label: 'Summer', value: 'SUMMER' },
-  { label: 'Fall', value: 'FALL' },
-  { label: 'Winter', value: 'WINTER' },
-];
-const plantingTypeOptions: DropdownOption<PlantingTypeEnum>[] = [
-  { label: 'Start Seeds Indoors', value: 'INDOORS' },
-  { label: 'Start Seeds Outdoors', value: 'OUTDOORS' },
-  {
-    label: 'Plant Seedlings/Transplant Outdoors',
-    value: 'TRANSPLANT',
-  },
-];
-const usStateOptions: DropdownOption[] = [
-  { label: 'Tennessee', value: 'TENNESSEE' },
-  { label: 'Missouri', value: 'MISSOURI' },
-];
+// (static) filter options imported from utils/dropdownOptions
+const growingSeasonOptions = seasonOptions;
+const harvestSeasonOptions = seasonOptions;
 
 export default function SeasonalPlantingGuide() {
   const { profileData, profileReady } = useProfile();
