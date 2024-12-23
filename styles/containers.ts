@@ -31,6 +31,9 @@ interface BoxProps {
   $position?: string;
 }
 
+const processHeight = (value: string | undefined) =>
+  value === 'full-screen' ? 'calc(100vh - 60px)' : value;
+
 const BoxStyles = css<BoxProps>`
   position: ${({ $position }) => $position ?? 'static'};
   text-align: ${({ $textAlign }) => $textAlign};
@@ -44,9 +47,9 @@ const BoxStyles = css<BoxProps>`
   width: ${({ $w }) => $w ?? '100%'};
   min-width: ${({ $minW }) => $minW};
   max-width: ${({ $maxW }) => $maxW};
-  height: ${({ $h }) => $h ?? '100%'};
-  min-height: ${({ $minH }) => $minH};
-  max-height: ${({ $maxH }) => $maxH};
+  height: ${({ $h }) => processHeight($h) ?? '100%'};
+  min-height: ${({ $minH }) => processHeight($minH)};
+  max-height: ${({ $maxH }) => processHeight($maxH)};
 
   padding: ${({ $p }) => $p};
   ${({ $py, $pt }) => ($pt || $py ? `padding-top: ${$pt || $py}` : null)};
