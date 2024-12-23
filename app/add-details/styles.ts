@@ -48,3 +48,10 @@ export const ReviewDetailsContainer = styled.div`
   border: 1px solid ${COLORS.lightgray};
   width: 100%;
 `;
+
+export const ReviewGrid = styled.div`
+  display: grid;
+  column-gap: 8px;
+  row-gap: 4px;
+  grid-template-columns: auto 1fr;
+`;

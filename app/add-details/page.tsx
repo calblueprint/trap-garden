@@ -17,6 +17,7 @@ import {
   FooterButton,
   MoveButton,
   ReviewDetailsContainer,
+  ReviewGrid,
   ReviewHeader,
 } from './styles';
 
@@ -34,16 +35,12 @@ function ReviewPlant({
       <H4 $fontWeight={500} $color={COLORS.shrub}>
         {plantName}
       </H4>
-      <Flex>
-        <Flex $direction="column">
-          <P2 $fontWeight={500}>Date Planted</P2>
-          <P2>{dateAdded}</P2>
-        </Flex>
-        <Flex $direction="column">
-          <P2 $fontWeight={500}>Planting Type</P2>
-          <P2>{plantingTypeLabels[plantingType]}</P2>
-        </Flex>
-      </Flex>
+      <ReviewGrid>
+        <P2 $fontWeight={500}>Date Planted</P2>
+        <P2>{dateAdded}</P2>
+        <P2 $fontWeight={500}>Planting Type</P2>
+        <P2>{plantingTypeLabels[plantingType]}</P2>
+      </ReviewGrid>
       {/* <CustomSelect
         label="Planting Type"
         value={detail.planting_type}
