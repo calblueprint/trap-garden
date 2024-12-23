@@ -275,7 +275,7 @@ export default function OnboardingFlow() {
           onNext={handleNext}
           // GardenSetupGuide should only appear when user selects an option for plotstatus
           childComponent={
-            selectedPlot === undefined ? undefined : (
+            selectedPlot !== undefined && (
               <GardenSetupGuide userType={selectedGardenType!} />
             )
           }
