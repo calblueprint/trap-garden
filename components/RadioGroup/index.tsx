@@ -43,7 +43,7 @@ export default function RadioGroup<T>({
         >
           <RadioLabel
             $isSelected={selectedValue === option.value}
-            htmlFor={option.label + 'Radio'}
+            htmlFor={option.label + '-radio'}
           >
             {option.label}
           </RadioLabel>
@@ -51,7 +51,8 @@ export default function RadioGroup<T>({
             name={name}
             value={String(option.value)}
             checked={selectedValue === option.value}
-            id={option.label + 'Radio'}
+            onChange={() => handleChange(option.value)}
+            id={option.label + '-radio'}
           />
         </RadioButton>
       ))}
