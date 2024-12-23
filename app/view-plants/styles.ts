@@ -7,6 +7,7 @@ export const FilterContainer = styled.div`
   flex-direction: row;
   gap: 8px;
   margin-bottom: 20px;
+  align-items: center;
 `;
 
 export const TopRowContainer = styled.div`
@@ -67,12 +68,10 @@ export const PlantGridContainer = styled.div`
 
 export const SelectButton = styled(SmallRoundedButton)`
   font-size: 0.75rem;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
-  width: 60px;
+  min-width: 60px;
   height: 25px;
-  padding: 0;
+  padding: 0 4px;
 `;
 
 export const ViewSelection = styled.div`

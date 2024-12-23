@@ -21,6 +21,7 @@ interface SmallRoundedButtonProps {
 }
 
 export const SmallRoundedButton = styled.button<SmallRoundedButtonProps>`
+  font-family: inherit;
   padding: 10px 20px;
   border-radius: 15px;
   box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.05);

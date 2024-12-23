@@ -402,7 +402,9 @@ export default function Page() {
             placeholder="Growing Season"
           />
 
-          <button onClick={clearFilters}>Clear Filters</button>
+          <SelectButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
+            Clear Filters
+          </SelectButton>
         </FilterContainer>
       </TopRowContainer>
       <Box $h="24px">
