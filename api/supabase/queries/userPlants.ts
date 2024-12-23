@@ -2,7 +2,9 @@ import { UUID } from 'crypto';
 import { UserPlant } from '@/types/schema';
 import supabase from '../createClient';
 
-export async function insertUserPlants(userPlants: Partial<UserPlant>[]) {
+export async function insertUserPlants(
+  userPlants: Omit<UserPlant, 'id' | 'date_removed'>[],
+) {
   const { error } = await supabase.from('user_plants').insert(userPlants);
   if (error) throw new Error(`Error inserting user plants: ${error.message}`);
 }
