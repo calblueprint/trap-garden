@@ -1,3 +1,4 @@
+import { RenderToPipeableStreamOptions } from 'react-dom/server';
 import {
   DropdownOption,
   Plant,
@@ -321,6 +322,7 @@ export function fillCalendarGridArrayRowWithColor(
 
   return gridArray;
 }
+
 // return UserTypeEnum based on user type passed in
 export function formatUserType(userType: UserTypeEnum) {
   const userTypes: Record<UserTypeEnum, string> = {
@@ -331,3 +333,9 @@ export function formatUserType(userType: UserTypeEnum) {
 
   return userTypes[userType];
 }
+
+export const plantingTypeLabels: Record<PlantingTypeEnum, string> = {
+  INDOORS: 'Start Seed from Indoors',
+  OUTDOORS: 'Start Seed from Outdoors',
+  TRANSPLANT: 'Start from Seedling / Transplant',
+};
