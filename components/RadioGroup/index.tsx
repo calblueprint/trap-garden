@@ -35,27 +35,30 @@ export default function RadioGroup<T>({
 
   return (
     <ComponentContainer>
-      {options.map(option => (
-        <RadioButton
-          key={String(option.value)}
-          $isSelected={selectedValue === option.value}
-          onClick={() => handleChange(option.value)}
-        >
-          <RadioLabel
+      {options.map(option => {
+        const id = option.label + '-radio';
+        return (
+          <RadioButton
+            key={String(option.value)}
             $isSelected={selectedValue === option.value}
-            htmlFor={option.label + '-radio'}
+            onClick={() => handleChange(option.value)}
           >
-            {option.label}
-          </RadioLabel>
-          <RadioInput
-            name={name}
-            value={String(option.value)}
-            checked={selectedValue === option.value}
-            onChange={() => handleChange(option.value)}
-            id={option.label + '-radio'}
-          />
-        </RadioButton>
-      ))}
+            <RadioLabel
+              $isSelected={selectedValue === option.value}
+              htmlFor={id}
+            >
+              {option.label}
+            </RadioLabel>
+            <RadioInput
+              name={name}
+              value={String(option.value)}
+              checked={selectedValue === option.value}
+              onChange={() => handleChange(option.value)}
+              id={id}
+            />
+          </RadioButton>
+        );
+      })}
     </ComponentContainer>
   );
 }
