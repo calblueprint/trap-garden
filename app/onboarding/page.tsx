@@ -56,6 +56,8 @@ function SelectionScreen<T = string>({
   onBack?: () => void;
   onNext: () => void;
 }) {
+  // TODO: Maybe make total question number a prop
+  // rather than hard-code as 3
   return (
     <>
       <ProgressBar progress={progress} />
@@ -82,14 +84,16 @@ function SelectionScreen<T = string>({
           />
         </Flex>
         <ButtonDiv>
-          <Button
-            onClick={onBack}
-            $primaryColor="white"
-            $secondaryColor={COLORS.shrub}
-            $textColor={COLORS.shrub}
-          >
-            Back
-          </Button>
+          {onBack && (
+            <Button
+              onClick={onBack}
+              $primaryColor="white"
+              $secondaryColor={COLORS.shrub}
+              $textColor={COLORS.shrub}
+            >
+              Back
+            </Button>
+          )}
           <Button
             onClick={onNext}
             disabled={selectedValue === undefined}
@@ -140,45 +144,41 @@ const ReviewPage = ({
     <>
       <ProgressBar progress={100} />
       <OnboardingContainer>
-        <div
-          style={{ width: '100%', display: 'flex', flexDirection: 'column' }}
+        <H3
+          $color={COLORS.shrub}
+          style={{
+            textAlign: 'center',
+            marginTop: '40px',
+            marginBottom: '40px',
+          }}
         >
-          <H3
-            $color={COLORS.shrub}
-            style={{
-              textAlign: 'center',
-              marginTop: '40px',
-              marginBottom: '40px',
-            }}
-          >
-            Review & Submit
-          </H3>
-          <ContentContainer>
-            <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
-              Your Responses
-            </P1>
-            <Flex $direction="column" $gap="24px">
-              <CustomSelect
-                label="State Location"
-                value={selectedState}
-                options={usStateOptions}
-                onChange={setSelectedState}
-              />
-              <CustomSelect
-                label="Garden Type"
-                value={selectedGardenType}
-                options={gardenTypeOptions}
-                onChange={setSelectedGardenType}
-              />
-              <CustomSelect
-                label="Plot Status"
-                value={selectedPlot}
-                options={plotOptions}
-                onChange={value => setSelectedPlot(value)}
-              />
-            </Flex>
-          </ContentContainer>
-        </div>
+          Review & Submit
+        </H3>
+        <ContentContainer>
+          <P1 style={{ color: COLORS.shrub, marginBottom: '16px' }}>
+            Your Responses
+          </P1>
+          <Flex $direction="column" $gap="24px">
+            <CustomSelect
+              label="State Location"
+              value={selectedState}
+              options={usStateOptions}
+              onChange={setSelectedState}
+            />
+            <CustomSelect
+              label="Garden Type"
+              value={selectedGardenType}
+              options={gardenTypeOptions}
+              onChange={setSelectedGardenType}
+            />
+            <CustomSelect
+              label="Plot Status"
+              value={selectedPlot}
+              options={plotOptions}
+              onChange={value => setSelectedPlot(value)}
+            />
+          </Flex>
+        </ContentContainer>
         <ButtonDiv>
           <Button
             onClick={onBack}
@@ -238,7 +238,7 @@ export default function OnboardingFlow() {
     <>
       {step === 1 && (
         <SelectionScreen
-          progress={2.6}
+          progress={3}
           questionNumber={1}
           questionTitle="What state are you in?"
           options={usStateOptions}

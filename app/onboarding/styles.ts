@@ -4,7 +4,6 @@ import COLORS from '@/styles/colors';
 export const OnboardingContainer = styled.div`
   min-height: calc(100vh - 60px); // 60px is the hardcoded height of Header
   width: min(392px, 100vw);
-  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,8 +11,7 @@ export const OnboardingContainer = styled.div`
   padding-top: 0px;
   padding-bottom: 100px;
   position: relative;
-  justify-content: space-between;
-  margin: auto; // center horizontally and vertically
+  margin: auto;
 `;
 export const ContentContainer = styled.div`
   width: 100%;
@@ -28,11 +26,10 @@ export const ContentContainer = styled.div`
 
 export const QuestionDiv = styled.div`
   display: flex;
-  flex-direction: column;
-  height: max(60px, max-content);
+  flex-direction: row;
+  min-height: 60px;
   align-items: center;
-  justify-content: end;
-  align-content: center;
+  /* align-items: flex-end; */ // this would match designs
   margin-bottom: 40px;
   text-align: center;
 `;
