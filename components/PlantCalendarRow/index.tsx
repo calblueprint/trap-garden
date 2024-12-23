@@ -15,6 +15,8 @@ interface PlantCalendarRowProps {
   outdoorsStart: string;
   outdoorsEnd: string;
   singleDisplay?: boolean;
+  // singleDisplay will include the ColorKey + MonthHeader
+  // only used for PlantPages
 }
 
 const PlantCalendarRow = memo(function PlantCalendarRow({
