@@ -25,10 +25,16 @@ export const usStateOptions: DropdownOption[] = [
   { label: 'Missouri', value: 'MISSOURI' },
 ];
 
-// Turn plantingTypeLabels into dropdown options
+// ONBOARDING QUESTIONS
+// Turn userTypeLabels into dropdown options
 export const gardenTypeOptions: DropdownOption<UserTypeEnum>[] = Object.entries(
   userTypeLabels,
 ).map(([key, label]) => ({
   value: key as UserTypeEnum,
   label,
 }));
+
+export const plotOptions: DropdownOption<boolean>[] = [
+  { label: 'Yes, I own a plot', value: true },
+  { label: "No, I don't own a plot", value: false },
+];

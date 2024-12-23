@@ -13,7 +13,11 @@ import { Flex } from '@/styles/containers';
 import { H3, P1, P3 } from '@/styles/text';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { gardenTypeOptions, usStateOptions } from '@/utils/dropdownOptions';
+import {
+  gardenTypeOptions,
+  plotOptions,
+  usStateOptions,
+} from '@/utils/dropdownOptions';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
@@ -21,13 +25,6 @@ import {
   OnboardingContainer,
   QuestionDiv,
 } from './styles';
-
-// Define the possible options for each question
-// usStateOptions, gardenTypeOptions imported from elsewhere
-const plotOptions: DropdownOption<boolean>[] = [
-  { label: 'Yes, I own a plot', value: true },
-  { label: "No, I don't own a plot", value: false },
-];
 
 interface ReviewPageProps {
   userId: UUID;
