@@ -36,24 +36,12 @@ export const HeaderButton = styled.button<{
     $isCurrentMode ? ` underline ` : `none`};
 `;
 
-export const AddButton = styled.button<{ $backgroundColor: string }>`
+export const AddButtonContainer = styled.div`
   position: fixed;
-
-  bottom: 0;
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
-  color: white;
-  border-radius: 20px;
-  border: none;
-  font-family: inherit;
-  margin-bottom: 10px;
-  width: 170px;
-  height: 50px;
   left: 50%;
+  bottom: 0;
   transform: translateX(-50%);
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  margin-bottom: 10px;
 `;
 
 export const PlantGridContainer = styled.div`

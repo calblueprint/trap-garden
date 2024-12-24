@@ -32,7 +32,7 @@ import {
 } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
-  AddButton,
+  AddButtonContainer,
   FilterContainer,
   HeaderButton,
   NumberSelectedPlants,
@@ -179,7 +179,6 @@ export default function Page() {
   }
   function handleAddPlants() {
     setPlantsToAdd(selectedPlants);
-
     router.push('/add-details');
   }
 
@@ -328,15 +327,16 @@ export default function Page() {
           </PlantGridContainer>
         )}
         {inAddMode && (
-          <AddButton
-            $backgroundColor={
-              selectedPlants.length ? COLORS.shrub : COLORS.midgray
-            }
-            onClick={handleAddPlants}
-            disabled={!selectedPlants.length}
-          >
-            {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
-          </AddButton>
+          <AddButtonContainer>
+            <Button
+              $primaryColor={COLORS.shrub}
+              $width="170px"
+              onClick={handleAddPlants}
+              disabled={!selectedPlants.length}
+            >
+              {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
+            </Button>
+          </AddButtonContainer>
         )}
       </>
     );
