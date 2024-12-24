@@ -8,13 +8,15 @@ import {
   getUserPlantById,
   upsertUserPlant,
 } from '@/api/supabase/queries/userPlants';
+import { SmallButton } from '@/components/Buttons';
 import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
 import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
 import YourPlantDetails from '@/components/YourPlantDetails';
+import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { H4 } from '@/styles/text';
+import { H4, P3 } from '@/styles/text';
 import { Plant, UserPlant } from '@/types/schema';
 import { getCurrentTimestamp } from '@/utils/helpers';
 import {
@@ -27,7 +29,6 @@ import {
   PlantImage,
   PlantName,
 } from '../../style';
-import { RemoveButton, Subtitle } from './style';
 
 export default function UserPlantPage() {
   const router = useRouter();
@@ -69,7 +70,9 @@ export default function UserPlantPage() {
           >
             ←
           </BackButton>
-          <RemoveButton onClick={removePlant}>X Remove</RemoveButton>
+          <SmallButton $primaryColor={COLORS.errorRed} onClick={removePlant}>
+            X Remove
+          </SmallButton>
         </ButtonWrapper>
         <PlantImage src={currentPlant.img} alt={currentPlant.plant_name} />
       </ImgHeader>
@@ -82,7 +85,13 @@ export default function UserPlantPage() {
               difficultyLevel={currentPlant.difficulty_level}
             />
           </NameWrapper>
-          <Subtitle>You have this plant in your garden!</Subtitle>
+          <P3
+            $fontWeight={400}
+            $color={COLORS.shrub}
+            style={{ fontStyle: 'italic' }}
+          >
+            You have this plant in your garden!
+          </P3>
         </Flex>
         <ComponentWrapper>
           <YourPlantDetails

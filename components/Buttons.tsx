@@ -80,5 +80,5 @@ export const SmallButton = styled(P3).attrs({ as: 'button' })<ButtonProps>`
   border-radius: 20px;
   min-width: 60px;
   height: 24px;
-  padding: 4px 4px;
+  padding: 4px 10px;
 `;
