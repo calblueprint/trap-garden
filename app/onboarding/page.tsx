@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { Button } from '@/components/Buttons';
 import CustomSelect from '@/components/CustomSelect';
+import GardenSetupGuide from '@/components/GardenSetupGuide';
 import ProgressBar from '@/components/ProgressBar';
 import RadioGroup from '@/components/RadioGroup';
 import CONFIG from '@/lib/configs';
@@ -44,6 +45,7 @@ function SelectionScreen<T = string>({
   selectedValue,
   setSelectedValue,
   options,
+  childComponent,
   onBack,
   onNext,
 }: {
@@ -53,6 +55,7 @@ function SelectionScreen<T = string>({
   selectedValue: T | undefined;
   setSelectedValue: (selected: T) => void;
   options: DropdownOption<T>[];
+  childComponent?: React.ReactNode;
   onBack?: () => void;
   onNext: () => void;
 }) {
@@ -82,15 +85,11 @@ function SelectionScreen<T = string>({
             onChange={setSelectedValue}
             defaultValue={selectedValue}
           />
+          <Flex $pt="16px">{childComponent}</Flex>
         </Flex>
         <ButtonDiv>
           {onBack && (
-            <Button
-              onClick={onBack}
-              $primaryColor="white"
-              $secondaryColor={COLORS.shrub}
-              $textColor={COLORS.shrub}
-            >
+            <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
               Back
             </Button>
           )}
@@ -180,12 +179,7 @@ const ReviewPage = ({
           </Flex>
         </ContentContainer>
         <ButtonDiv>
-          <Button
-            onClick={onBack}
-            $primaryColor="white"
-            $secondaryColor={COLORS.shrub}
-            $textColor={COLORS.shrub}
-          >
+          <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
             Back
           </Button>
           <Button onClick={handleSubmit} $primaryColor={COLORS.shrub}>
@@ -269,6 +263,12 @@ export default function OnboardingFlow() {
           setSelectedValue={setSelectedPlot}
           onBack={handleBack}
           onNext={handleNext}
+          // GardenSetupGuide should only appear when user selects an option for plotstatus
+          childComponent={
+            selectedPlot !== undefined && (
+              <GardenSetupGuide userType={selectedGardenType!} />
+            )
+          }
         />
       )}
       {step === 4 && (

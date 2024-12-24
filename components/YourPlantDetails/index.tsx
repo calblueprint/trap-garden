@@ -7,11 +7,9 @@ import { P1, P3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
 import { formatTimestamp, useTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
-import {
-  Container,
-  Header,
-  // EditButton,
-} from './style';
+import { Container, Header } from './style';
+
+// import { SmallButton } from '../Buttons';
 
 function DetailRow(iconType: IconType, text: string) {
   return (
@@ -37,7 +35,7 @@ export default function YourPlantDetails({
         <P1 $fontWeight={500} $color={COLORS.shrub}>
           Your Plant Details
         </P1>
-        {/* <EditButton $secondaryColor={COLORS.shrub}>Edit</EditButton> */}
+        {/* <SmallButton $secondaryColor={COLORS.shrub}>Edit</SmallButton> */}
       </Header>
       <Flex $direction="column" $gap="8px">
         {DetailRow('calendar', `Date Planted: ${formatTimestamp(datePlanted)}`)}

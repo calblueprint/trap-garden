@@ -12,12 +12,12 @@ const COLORS = {
   darkgray: '#555555',
   midgray: '#888888',
   lightgray: '#DDDDDD',
-  backgroundGrey: '#F7F6F3',
   glimpse: '#F7F6F3',
 
-  // error
+  // accent colors
   errorRed: '#D94E4E',
   successGreen: '#0D8817',
+  blueLink: '#0769BF',
 
   //seasonality chart colors
   indoors: '#F5B868',

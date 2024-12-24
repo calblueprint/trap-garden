@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { SmallRoundedButton } from '@/components/Button';
 import COLORS from '@/styles/colors';
 
 export const FilterContainer = styled.div`
@@ -37,24 +36,12 @@ export const HeaderButton = styled.button<{
     $isCurrentMode ? ` underline ` : `none`};
 `;
 
-export const AddButton = styled.button<{ $backgroundColor: string }>`
+export const AddButtonContainer = styled.div`
   position: fixed;
-
-  bottom: 0;
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
-  color: white;
-  border-radius: 20px;
-  border: none;
-  font-family: inherit;
-  margin-bottom: 10px;
-  width: 170px;
-  height: 50px;
   left: 50%;
+  bottom: 0;
   transform: translateX(-50%);
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  margin-bottom: 10px;
 `;
 
 export const PlantGridContainer = styled.div`
@@ -64,14 +51,6 @@ export const PlantGridContainer = styled.div`
   gap: 8px;
   max-width: 100%;
   justify-content: center;
-`;
-
-export const SelectButton = styled(SmallRoundedButton)`
-  font-size: 0.75rem;
-  font-weight: 400;
-  min-width: 60px;
-  height: 25px;
-  padding: 0 4px;
 `;
 
 export const ViewSelection = styled.div`
@@ -94,14 +73,4 @@ export const NumberSelectedPlants = styled.p`
   font-weight: 400;
   line-height: 16px;
   color: #fff;
-`;
-
-export const SomethingWrongButton = styled.button<{ $width: string }>`
-  width: ${({ $width }) => $width};
-  height: 45px;
-  border-radius: 50px;
-  background-color: ${COLORS.shrub};
-  color: white;
-  border: none;
-  font-family: inherit;
 `;

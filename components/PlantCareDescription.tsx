@@ -6,7 +6,13 @@ import { H4, P3 } from '@/styles/text';
 import { displaySunlightEnumFromHours } from '@/utils/helpers';
 import Icon from './Icon';
 
-function IconRow(iconType: IconType, boldText: string, text: string) {
+type IconRowProps = {
+  iconType: IconType;
+  boldText: string;
+  text: string;
+};
+
+function IconRow({ iconType, boldText, text }: IconRowProps) {
   return (
     <Flex $align="center" $gap="8px">
       <Icon type={iconType} />
@@ -36,9 +42,21 @@ export default function PlantCareDescription({
     <Flex $direction="column" $gap="12px" $pl="8px">
       <H4>Plant Care Description</H4>
       <Flex $direction="column" $gap="8px">
-        {IconRow('wateringCan', 'Watering Frequency:', waterFreq)}
-        {IconRow('wateringCan', 'Weeding Frequency:', weedingFreq)}
-        {IconRow('sun', 'Sunlight Requirement:', sunlightText)}
+        <IconRow
+          iconType="wateringCan"
+          boldText="Watering Frequency:"
+          text={waterFreq}
+        />
+        <IconRow
+          iconType="wateringCan"
+          boldText="Weeding Frequency:"
+          text={weedingFreq}
+        />
+        <IconRow
+          iconType="sun"
+          boldText="Sunlight Requirement:"
+          text={sunlightText}
+        />
       </Flex>
     </Flex>
   );

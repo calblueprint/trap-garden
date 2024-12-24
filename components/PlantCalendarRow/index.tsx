@@ -1,6 +1,8 @@
 import React, { memo, useMemo } from 'react';
 import COLORS from '@/styles/colors';
 import { fillCalendarGridArrayRowWithColor } from '@/utils/helpers';
+import MonthHeader from '../MonthHeader';
+import SeasonColorKey from '../SeasonColorKey';
 import { CalendarCell, CalendarGrid } from './styles';
 
 interface PlantCalendarRowProps {
@@ -12,6 +14,9 @@ interface PlantCalendarRowProps {
   indoorsEnd: string;
   outdoorsStart: string;
   outdoorsEnd: string;
+  singleDisplay?: boolean;
+  // singleDisplay will include the ColorKey + MonthHeader
+  // only used for PlantPages
 }
 
 const PlantCalendarRow = memo(function PlantCalendarRow({
@@ -23,6 +28,7 @@ const PlantCalendarRow = memo(function PlantCalendarRow({
   indoorsEnd,
   outdoorsStart,
   outdoorsEnd,
+  singleDisplay = false,
 }: PlantCalendarRowProps) {
   // translate all the starts and ends to corresponding colours in an array
   const CalendarGridArray: string[] = useMemo(() => {
@@ -73,11 +79,19 @@ const PlantCalendarRow = memo(function PlantCalendarRow({
   ]);
 
   return (
-    <CalendarGrid>
-      {CalendarGridArray.map((color, index) => (
-        <CalendarCell key={index} $color={color} />
-      ))}
-    </CalendarGrid>
+    <>
+      {singleDisplay && (
+        <>
+          <SeasonColorKey />
+          <MonthHeader />
+        </>
+      )}
+      <CalendarGrid>
+        {CalendarGridArray.map((color, index) => (
+          <CalendarCell key={index} $color={color} />
+        ))}
+      </CalendarGrid>
+    </>
   );
 });
 

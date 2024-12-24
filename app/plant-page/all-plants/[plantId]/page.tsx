@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { getPlantById } from '@/api/supabase/queries/plants';
+import { SmallButton } from '@/components/Buttons';
 import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
 import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
+import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { H4 } from '@/styles/text';
 import { Plant } from '@/types/schema';
@@ -22,7 +24,6 @@ import {
   PlantImage,
   PlantName,
 } from '../../style';
-import { AddPlant } from './style';
 
 export default function GeneralPlantPage() {
   const router = useRouter();
@@ -71,7 +72,9 @@ export default function GeneralPlantPage() {
           </NameWrapper>
           {/*Add button only appears if user is logged in and onboarded*/}
           {profileReady && profileData && (
-            <AddPlant onClick={handleAdd}>Add +</AddPlant>
+            <SmallButton $primaryColor={COLORS.shrub} onClick={handleAdd}>
+              Add +
+            </SmallButton>
           )}
         </Flex>
         <ComponentWrapper>
@@ -98,6 +101,7 @@ export default function GeneralPlantPage() {
               indoorsEnd={currentPlant.indoors_end}
               outdoorsStart={currentPlant.outdoors_start}
               outdoorsEnd={currentPlant.outdoors_end}
+              singleDisplay
             />
           </Flex>
         </ComponentWrapper>

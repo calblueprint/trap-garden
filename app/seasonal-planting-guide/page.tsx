@@ -5,6 +5,7 @@ import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantCalendarList } from '@/components/PlantCalendarList';
 import SearchBar from '@/components/SearchBar';
+import SeasonColorKey from '@/components/SeasonColorKey';
 import COLORS from '@/styles/colors';
 import { Box } from '@/styles/containers';
 import { H1, H3 } from '@/styles/text';
@@ -113,6 +114,7 @@ export default function SeasonalPlantingGuide() {
         </StateOptionsContainer>
       ) : (
         <Box $pl="16px" $pt="12px">
+          <SeasonColorKey />
           <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}
             harvestSeasonFilterValue={selectedHarvestSeason}

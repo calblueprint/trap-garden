@@ -10,6 +10,7 @@ import { UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
+import { BigButton } from '../Buttons';
 import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
 import {
@@ -26,7 +27,6 @@ import {
   Profile,
   ProfileDisplayContainer,
   ProfileIcon,
-  SignOutButton,
   SignUpButton,
 } from './styles';
 
@@ -92,7 +92,9 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
               </NameAndStatus>
             </Profile>
           )}
-          <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
+          <BigButton $secondaryColor={COLORS.errorRed} onClick={handleSignOut}>
+            Sign Out
+          </BigButton>
         </ProfileDisplayContainer>
       );
     }

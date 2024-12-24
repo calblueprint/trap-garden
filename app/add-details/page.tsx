@@ -153,12 +153,7 @@ export default function Home() {
           <FooterButton>
             <ButtonDiv>
               {currentIndex > 1 && (
-                <Button
-                  onClick={() => move(-1)}
-                  $primaryColor="white"
-                  $secondaryColor={COLORS.shrub}
-                  $textColor={COLORS.shrub}
-                >
+                <Button onClick={() => move(-1)} $secondaryColor={COLORS.shrub}>
                   Back
                 </Button>
               )}
@@ -166,6 +161,7 @@ export default function Home() {
                 onClick={() => move(1)}
                 disabled={disableNext}
                 $primaryColor={COLORS.shrub}
+                $secondaryColor="white"
               >
                 Next
               </Button>
@@ -201,18 +197,14 @@ export default function Home() {
               ))}
             </ReviewDetailsContainer>
             <Flex $direction="row" $justify="between" $maxW="500px" $mt="24px">
-              <Button
-                onClick={() => move(-1)}
-                $primaryColor="white"
-                $secondaryColor={COLORS.shrub}
-                $textColor={COLORS.shrub}
-              >
+              <Button onClick={() => move(-1)} $secondaryColor={COLORS.shrub}>
                 Back
               </Button>
               <Button
                 onClick={handleSubmit}
                 disabled={disableNext}
                 $primaryColor={COLORS.shrub}
+                $secondaryColor="white"
               >
                 Submit
               </Button>

@@ -7,6 +7,7 @@ import {
   getMatchingPlantForUserPlant,
 } from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
+import { Button, SmallButton } from '@/components/Buttons';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
@@ -31,14 +32,12 @@ import {
 } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
-  AddButton,
+  AddButtonContainer,
   FilterContainer,
   HeaderButton,
   NumberSelectedPlants,
   NumberSelectedPlantsContainer,
   PlantGridContainer,
-  SelectButton,
-  SomethingWrongButton,
   TopRowContainer,
   ViewSelection,
 } from './styles';
@@ -180,7 +179,6 @@ export default function Page() {
   }
   function handleAddPlants() {
     setPlantsToAdd(selectedPlants);
-
     router.push('/add-details');
   }
 
@@ -239,20 +237,20 @@ export default function Page() {
           {/* Select/Cancel toggles Add Mode; appears in All plants only*/}
           {viewingOption === 'all' &&
             (inAddMode ? (
-              <SelectButton
+              <SmallButton
                 $secondaryColor={COLORS.errorRed}
                 onClick={handleCancelAddMode}
               >
                 Cancel
-              </SelectButton>
+              </SmallButton>
             ) : (
-              <SelectButton
+              <SmallButton
                 $primaryColor={COLORS.shrub}
                 $secondaryColor="white"
                 onClick={() => setInAddMode(true)}
               >
                 Select
-              </SelectButton>
+              </SmallButton>
             ))}
         </Flex>
 
@@ -329,15 +327,16 @@ export default function Page() {
           </PlantGridContainer>
         )}
         {inAddMode && (
-          <AddButton
-            $backgroundColor={
-              selectedPlants.length ? COLORS.shrub : COLORS.midgray
-            }
-            onClick={handleAddPlants}
-            disabled={!selectedPlants.length}
-          >
-            {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
-          </AddButton>
+          <AddButtonContainer>
+            <Button
+              $primaryColor={COLORS.shrub}
+              $width="170px"
+              onClick={handleAddPlants}
+              disabled={!selectedPlants.length}
+            >
+              {selectedPlants.length ? 'Add to My Garden' : 'Select Plants'}
+            </Button>
+          </AddButtonContainer>
         )}
       </>
     );
@@ -366,9 +365,13 @@ export default function Page() {
       >
         <Icon type="sprout"></Icon>
         <P1 $color={COLORS.midgray}>{message}</P1>
-        <SomethingWrongButton $width="170px" onClick={handleClick}>
+        <Button
+          $primaryColor={COLORS.shrub}
+          $width="170px"
+          onClick={handleClick}
+        >
           {buttonText}
-        </SomethingWrongButton>
+        </Button>
       </Flex>
     );
   }
@@ -402,9 +405,9 @@ export default function Page() {
             placeholder="Growing Season"
           />
 
-          <SelectButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
+          <SmallButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
             Clear Filters
-          </SelectButton>
+          </SmallButton>
         </FilterContainer>
       </TopRowContainer>
       <Box $h="24px">
