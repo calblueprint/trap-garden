@@ -11,7 +11,7 @@ export const PageContainer = styled.div`
 export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2px 24px 20px 24px;
+  padding: 2px 24px 0 24px;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   position: relative;
@@ -22,8 +22,12 @@ export const HeaderContainer = styled.div`
 export const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
+  white-space: nowrap; // Prevent line break
   gap: 8px;
   margin-top: 12px;
+  margin-bottom: 20px;
+  padding-top: 1px;
+  padding-bottom: 1px; // ensure filter border isn't cut off
   position: relative;
   overflow-x: auto;
   align-items: center;
