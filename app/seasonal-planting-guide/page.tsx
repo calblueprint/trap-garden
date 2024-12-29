@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { SmallButton } from '@/components/Buttons';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantCalendarList } from '@/components/PlantCalendarList';
@@ -15,7 +16,7 @@ import {
   seasonOptions,
   usStateOptions,
 } from '@/utils/dropdownOptions';
-import { useTitleCase } from '@/utils/helpers'; // is this necessary?
+import { toTitleCase } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
@@ -54,9 +55,7 @@ export default function SeasonalPlantingGuide() {
   useEffect(() => {
     if (profileReady && profileData) {
       setSelectedUsState({
-        label:
-          profileData.us_state.charAt(0) +
-          profileData.us_state.slice(1).toLowerCase(), // can't use useTitleCase here, lint error
+        label: toTitleCase(profileData.us_state),
         value: profileData.us_state,
       });
     }
@@ -107,8 +106,9 @@ export default function SeasonalPlantingGuide() {
             placeholder="Planting Type"
             disabled={!selectedUsState}
           />
-
-          <button onClick={clearFilters}>Clear filters</button>
+          <SmallButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
+            Clear Filters
+          </SmallButton>
         </FilterContainer>
       </HeaderContainer>
       {!selectedUsState ? (

@@ -40,7 +40,7 @@ const months = [
   'Dec',
 ];
 
-const MonthHeader = () => {
+export const MonthHeader = () => {
   return (
     <Styles.MonthsContainer>
       {months.map((month, index) => (

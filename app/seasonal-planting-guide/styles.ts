@@ -18,6 +18,7 @@ export const HeaderContainer = styled.div`
   z-index: 2;
 `;
 
+//TODO: consolidate styling for Filters in view plants and seasonal planting guide
 export const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -25,8 +26,7 @@ export const FilterContainer = styled.div`
   margin-top: 12px;
   position: relative;
   overflow-x: auto;
-  padding-top: 1px;
-  padding-bottom: 1px;
+  align-items: center;
 `;
 
 export const StateOptionsContainer = styled.div`

@@ -5,7 +5,7 @@ import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P1, P3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
-import { formatTimestamp, useTitleCase } from '@/utils/helpers';
+import { formatTimestamp, toTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
 import { Container, Header } from './style';
 
@@ -39,7 +39,7 @@ export default function YourPlantDetails({
       </Header>
       <Flex $direction="column" $gap="8px">
         {DetailRow('calendar', `Date Planted: ${formatTimestamp(datePlanted)}`)}
-        {DetailRow('plantHand', `Planting Type: ${useTitleCase(plantingType)}`)}
+        {DetailRow('plantHand', `Planting Type: ${toTitleCase(plantingType)}`)}
         {recentHarvestDate &&
           DetailRow(
             'plant',

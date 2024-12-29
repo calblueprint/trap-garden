@@ -226,7 +226,7 @@ export function checkUsState(
   return plant.us_state === selectedState;
 }
 
-export function useTitleCase(text: string) {
+export function toTitleCase(text: string) {
   return text.charAt(0) + text.slice(1).toLowerCase();
 }
 

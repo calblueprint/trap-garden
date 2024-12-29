@@ -4,7 +4,7 @@ import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import { DifficultyLevelEnum } from '@/types/schema';
-import { useTitleCase } from '@/utils/helpers';
+import { toTitleCase } from '@/utils/helpers';
 import DifficultyLevelBar from '../DifficultyLevelBar';
 import Icon from '../Icon';
 import {
@@ -25,7 +25,7 @@ const DifficultyBarAndLabel = ({
       <DifficultyLevelBar
         difficultyLevel={difficultyLevel as DifficultyLevelEnum}
       />
-      <P3>{useTitleCase(difficultyLevel)}</P3>
+      <P3>{toTitleCase(difficultyLevel)}</P3>
     </Flex>
   );
 };
