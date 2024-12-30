@@ -4,7 +4,7 @@ import COLORS from '@/styles/colors';
 export const PlantCardKeyContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
   background-color: white;
   border: none;
@@ -16,6 +16,7 @@ export const PlantCardKeyContainer = styled.div`
   z-index: 1000;
   min-width: 168px;
   min-height: 200px;
+  width: max-content;
 
   // creates triangle pointer above plant card key
   &::before {
@@ -37,28 +38,28 @@ export const Title = styled.div`
   justify-content: center;
   align-items: center;
   background-color: ${COLORS.shrub};
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 12px 12px 0px 0px;
   color: white;
-  padding: 8px 0px 8px 0px;
+  padding: 8px 0px;
   border: none;
 `;
 
 export const DifficultyLevelsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 8px;
   gap: 20px;
+  justify-content: space-between;
 `;
 
 export const HorizontalLine = styled.div`
+  margin-top: 4px;
   width: 100%;
   height: 1px;
-  background-color: #e4e4e4;
+  background-color: ${COLORS.lightgray};
 `;
 
 export const IconKeyContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 8px 12px 12px 16px;
   gap: 4px;
 `;
