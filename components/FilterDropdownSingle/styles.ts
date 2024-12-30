@@ -24,7 +24,8 @@ export const customSelectStyles = <T>(
   // container
   control: (baseStyles, state) => ({
     ...baseStyles,
-    borderRadius: '57px',
+    borderRadius: '56px',
+    height: '30px',
     border: `0.5px solid ${state.hasValue ? COLORS.shrub : COLORS.midgray}`,
     backgroundColor: state.isDisabled
       ? COLORS.lightgray
@@ -32,17 +33,17 @@ export const customSelectStyles = <T>(
         ? COLORS.shrub
         : '#fff',
     padding: '8px 14px',
-    color: COLORS.midgray,
     minWidth: $isSmall ? '93px' : '150px',
   }),
   // placeholder text
   placeholder: baseStyles => ({
     ...baseStyles,
+    padding: '0px',
+    margin: 'auto',
+    // style as a P3 with fontWeight 400
     color: COLORS.midgray,
     fontSize: '0.75rem',
-    padding: '0px',
-    margin: '0px',
-    justifySelf: 'center',
+    fontWeight: 400,
   }),
   // hide vertical bar between arrow and text
   indicatorSeparator: baseStyles => ({
@@ -67,8 +68,16 @@ export const customSelectStyles = <T>(
     border: '0px',
     padding: '0px',
     margin: '0px',
-    fontSize: '0.75rem',
-    color: state.hasValue ? `#fff` : `${COLORS.black} !important`,
     paddingLeft: '0px',
+    // style as a P3 with fontWeight 400
+    color: state.hasValue ? `#fff` : `${COLORS.black}`, // replace with `#fff`?
+    fontSize: '0.75rem',
+    fontWeight: 400,
+  }),
+  option: baseStyles => ({
+    ...baseStyles,
+    // style as a P3 with fontWeight 400
+    fontSize: '0.75rem',
+    fontWeight: 400,
   }),
 });

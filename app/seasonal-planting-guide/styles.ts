@@ -52,7 +52,7 @@ export const PageTitle = styled.div`
 `;
 
 export const VerticalSeparator = styled.div`
-  height: inherit;
+  height: 30px;
   width: 1px;
   background-color: ${COLORS.lightgray};
 `;

@@ -8,7 +8,7 @@ import Select, {
 } from 'react-select';
 import { P3 } from '@/styles/text';
 import { DropdownOption } from '@/types/schema';
-import { customSelectStyles, StyledOption } from './styles';
+import { customSelectStyles } from './styles';
 
 interface FilterDropdownProps<T> {
   value: DropdownOption<T>[];
@@ -31,27 +31,23 @@ export default function FilterDropdownMultiple<T>({
 
   // overrides the default MultiValue to display custom text
   // displays first selected value followed by + n if more than 1 selected
-  // StyledMultiValue appears for each selected option, so if more than 1 is selected,
+  // CustomMultiValue appears for each selected option, so if more than 1 is selected,
   // the rest of the selected options are not shown, instead the + n is shown as part of the first option
-  const StyledMultiValue = ({
+  const CustomMultiValue = ({
     ...props
   }: MultiValueProps<
     DropdownOption<T>,
     true,
     GroupBase<DropdownOption<T>>
   >) => {
-    const { selectProps, data } = props;
+    const { selectProps, data, index } = props;
     if (Array.isArray(selectProps.value)) {
-      // find index of the selected option and check if its the first
-      const index = selectProps.value.findIndex(
-        (option: DropdownOption<T>) => option.value === data.value,
-      );
       const isFirst = index === 0;
       // find number of remaining selected options
       const additionalCount = selectProps.value.length - 1;
 
       return (
-        <P3>
+        <P3 $fontWeight={400}>
           {/* display label of first selected option */}
           {isFirst ? (
             <>
@@ -75,15 +71,13 @@ export default function FilterDropdownMultiple<T>({
   ) => {
     return (
       <components.Option {...props}>
-        <StyledOption>
-          <input
-            type="checkbox"
-            checked={props.isSelected}
-            onChange={() => null} //no-op
-            style={{ marginRight: 8 }} // spacing between checkbox and text
-          />
-          {props.label}
-        </StyledOption>
+        <input
+          type="checkbox"
+          checked={props.isSelected}
+          onChange={() => null} //no-op
+          style={{ marginRight: 8 }} // spacing between checkbox and text
+        />
+        {props.label}
       </components.Option>
     );
   };
@@ -101,7 +95,7 @@ export default function FilterDropdownMultiple<T>({
       isSearchable={false}
       hideSelectedOptions={false}
       // use custom styled components instead of default components
-      components={{ MultiValue: StyledMultiValue, Option: CustomOption }}
+      components={{ MultiValue: CustomMultiValue, Option: CustomOption }}
       menuPosition="fixed"
       instanceId="dropdown-multiple"
     />

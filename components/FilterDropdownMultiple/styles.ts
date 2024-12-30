@@ -1,12 +1,6 @@
 import { StylesConfig } from 'react-select';
-import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 import { DropdownOption } from '@/types/schema';
-
-export const StyledOption = styled.div`
-  display: flex;
-  align-items: center;
-`;
 
 // custom styles for react-select component
 // Option type is DropdownOption<T> and isMulti is true
@@ -17,20 +11,23 @@ export const customSelectStyles = <T>(): StylesConfig<
   // container
   control: (baseStyles, state) => ({
     ...baseStyles,
-    borderRadius: '57px',
+    borderRadius: '56px',
+    height: '30px',
     border: `0.5px solid ${COLORS.midgray}`,
     backgroundColor: state.isDisabled ? COLORS.lightgray : '#fff',
     padding: '8px 14px',
     color: COLORS.midgray,
     minWidth: '138px',
+    width: 'max-content', // prevent collapse on scroll
   }),
   // placeholder text
   placeholder: baseStyles => ({
     ...baseStyles,
     color: COLORS.midgray,
     fontSize: '0.75rem',
+    fontWeight: 400,
     padding: '0px',
-    margin: '0px',
+    margin: 'auto',
   }),
   // hide vertical bar between arrow and text
   indicatorSeparator: baseStyles => ({
@@ -49,6 +46,10 @@ export const customSelectStyles = <T>(): StylesConfig<
     marginLeft: '-4px', // move the dropdown indicator to the left, cant override text styles
     color: COLORS.midgray,
   }),
+  menu: baseStyles => ({
+    ...baseStyles,
+    minWidth: 'max-content',
+  }),
   // container for selected multi option
   multiValue: baseStyles => ({
     ...baseStyles,
@@ -57,17 +58,23 @@ export const customSelectStyles = <T>(): StylesConfig<
     padding: '0px',
     margin: '0px',
   }),
+  // The following styles aren't used (see CustomMultiValue)
   // multi option display text
-  multiValueLabel: baseStyles => ({
+  // multiValueLabel: baseStyles => ({
+  //   ...baseStyles,
+  //   fontSize: '0.75rem',
+  //   color: `${COLORS.black}`,
+  //   padding: '0px',
+  // }),
+  // // hide 'x' next to each multi option
+  // multiValueRemove: baseStyles => ({
+  //   ...baseStyles,
+  //   display: 'none',
+  // }),
+  option: baseStyles => ({
     ...baseStyles,
+    // style as a P3 with fontWeight 400
     fontSize: '0.75rem',
-    color: `${COLORS.black} !important`,
-    padding: '0px',
-    paddingLeft: '0px',
-  }),
-  // hide 'x' next to each multi option
-  multiValueRemove: baseStyles => ({
-    ...baseStyles,
-    display: 'none',
+    fontWeight: 400,
   }),
 });
