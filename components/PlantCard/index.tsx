@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { P1 } from '@/styles/text';
 import { Plant } from '@/types/schema';
-import { mapMonthToSeason, useTitleCase } from '@/utils/helpers';
+import { mapMonthToSeason, toTitleCase } from '@/utils/helpers';
 import DifficultyLevelBar from '../DifficultyLevelBar';
 import Icon from '../Icon';
 import {
@@ -48,15 +48,13 @@ const PlantCard = memo(function PlantCard({
           <Attribute>
             <Icon type="outdoorsSeason"></Icon>
             <AttributeContent>
-              {useTitleCase(
-                mapMonthToSeason(plant.outdoors_start) || 'Unknown',
-              )}
+              {toTitleCase(mapMonthToSeason(plant.outdoors_start) || 'Unknown')}
             </AttributeContent>
           </Attribute>
           <Attribute>
             <Icon type="harvestSeason"></Icon>
             <AttributeContent>
-              {useTitleCase(plant.harvest_season)}
+              {toTitleCase(plant.harvest_season)}
             </AttributeContent>
           </Attribute>
           <Attribute>

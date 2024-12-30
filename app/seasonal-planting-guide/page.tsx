@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { SmallButton } from '@/components/Buttons';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
 import { PlantCalendarList } from '@/components/PlantCalendarList';
@@ -15,6 +16,7 @@ import {
   seasonOptions,
   usStateOptions,
 } from '@/utils/dropdownOptions';
+import { toTitleCase } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   FilterContainer,
@@ -22,6 +24,7 @@ import {
   PageContainer,
   PageTitle,
   StateOptionsContainer,
+  VerticalSeparator,
 } from './styles';
 
 // (static) filter options imported from utils/dropdownOptions
@@ -39,7 +42,8 @@ export default function SeasonalPlantingGuide() {
   const [selectedPlantingType, setSelectedPlantingType] = useState<
     DropdownOption<PlantingTypeEnum>[]
   >([]);
-  const [selectedUsState, setSelectedUsState] = useState<string>('');
+  const [selectedUsState, setSelectedUsState] =
+    useState<DropdownOption<string> | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const clearFilters = () => {
@@ -50,7 +54,10 @@ export default function SeasonalPlantingGuide() {
 
   useEffect(() => {
     if (profileReady && profileData) {
-      setSelectedUsState(profileData.us_state);
+      setSelectedUsState({
+        label: toTitleCase(profileData.us_state),
+        value: profileData.us_state,
+      });
     }
   }, [profileData, profileReady]);
 
@@ -65,13 +72,16 @@ export default function SeasonalPlantingGuide() {
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <FilterContainer>
           <FilterDropdownSingle
-            id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}
             placeholder="State"
             options={usStateOptions}
             disabled={!selectedUsState}
+            small={true}
           />
+
+          {/* vertical bar to separate state and other filters */}
+          <VerticalSeparator />
 
           <FilterDropdownMultiple
             value={selectedGrowingSeason}
@@ -96,16 +106,15 @@ export default function SeasonalPlantingGuide() {
             placeholder="Planting Type"
             disabled={!selectedUsState}
           />
-
-          <button onClick={clearFilters}>Clear filters</button>
+          <SmallButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
+            Clear Filters
+          </SmallButton>
         </FilterContainer>
       </HeaderContainer>
       {!selectedUsState ? (
         <StateOptionsContainer>
           <H3 $color={COLORS.shrub}>Choose Your State</H3>
           <FilterDropdownSingle
-            name="usState"
-            id="usState"
             value={selectedUsState}
             setStateAction={setSelectedUsState}
             placeholder="State"
@@ -113,7 +122,7 @@ export default function SeasonalPlantingGuide() {
           />
         </StateOptionsContainer>
       ) : (
-        <Box $pl="16px" $pt="12px">
+        <Box $p="20px">
           <SeasonColorKey />
           <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}

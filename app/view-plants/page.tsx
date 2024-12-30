@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   getAllPlants,
@@ -11,6 +11,7 @@ import { Button, SmallButton } from '@/components/Buttons';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
+import PlantCardKey from '@/components/PlantCardKey';
 import SearchBar from '@/components/SearchBar';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
@@ -35,6 +36,7 @@ import {
   AddButtonContainer,
   FilterContainer,
   HeaderButton,
+  InfoButton,
   NumberSelectedPlants,
   NumberSelectedPlantsContainer,
   PlantGridContainer,
@@ -84,6 +86,9 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
   const [ownedPlants, setOwnedPlants] = useState<OwnedPlant[]>([]);
+  const [isCardKeyOpen, setIsCardKeyOpen] = useState<boolean>(false);
+  const cardKeyRef = useRef<HTMLDivElement>(null);
+  const infoButtonRef = useRef<HTMLButtonElement>(null);
   const userState = profileData?.us_state ?? null;
 
   const profileAndAuthReady = profileReady && !authLoading;
@@ -378,12 +383,52 @@ export default function Page() {
 
   const plantPluralityString = selectedPlants.length > 1 ? 'Plants' : 'Plant';
 
+  // close plant card key when clicking outside, even on info button
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      cardKeyRef.current &&
+      !cardKeyRef.current.contains(event.target as Node) &&
+      infoButtonRef.current &&
+      !infoButtonRef.current.contains(event.target as Node)
+    ) {
+      setIsCardKeyOpen(false);
+    }
+  };
+
+  // handle clicking outside PlantCardKey to close it if open
+  useEffect(() => {
+    if (isCardKeyOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCardKeyOpen]);
+
   return (
     <div id="plantContent">
       <TopRowContainer>
-        <H1 $color={COLORS.shrub} $fontWeight={500}>
-          View Plants
-        </H1>
+        <Flex $direction="row" $gap="10px" $align="center">
+          <H1 $color={COLORS.shrub} $fontWeight={500}>
+            View Plants
+          </H1>
+          <div style={{ position: 'relative' }}>
+            <InfoButton
+              onClick={() => setIsCardKeyOpen(!isCardKeyOpen)}
+              ref={infoButtonRef}
+            >
+              <Icon type="info" />
+            </InfoButton>
+            {isCardKeyOpen && (
+              <div ref={cardKeyRef}>
+                <PlantCardKey />
+              </div>
+            )}
+          </div>
+        </Flex>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <FilterContainer>
           <FilterDropdownMultiple

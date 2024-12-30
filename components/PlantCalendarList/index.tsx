@@ -14,7 +14,6 @@ import {
   checkSearchTerm,
   checkUsState,
 } from '@/utils/helpers';
-import MonthHeader from '../MonthHeader';
 import PlantCalendarRow from '../PlantCalendarRow';
 import * as Styles from './styles';
 
@@ -22,9 +21,34 @@ interface PlantListProps {
   harvestSeasonFilterValue: DropdownOption<SeasonEnum>[];
   plantingTypeFilterValue: DropdownOption<PlantingTypeEnum>[];
   growingSeasonFilterValue: DropdownOption<SeasonEnum>[];
-  usStateFilterValue: string;
+  usStateFilterValue: DropdownOption<string> | null;
   searchTerm: string;
 }
+
+const months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+export const MonthHeader = () => {
+  return (
+    <Styles.MonthsContainer>
+      {months.map((month, index) => (
+        <P3 key={index}>{month}</P3>
+      ))}
+    </Styles.MonthsContainer>
+  );
+};
 
 export const PlantCalendarList = ({
   harvestSeasonFilterValue,
@@ -64,36 +88,43 @@ export const PlantCalendarList = ({
   ]);
 
   return (
-    <Styles.StyledTable>
-      <thead>
-        <tr>
-          <Styles.StickyTd></Styles.StickyTd>
-          <Styles.ScrollableTd>
-            <MonthHeader />
-          </Styles.ScrollableTd>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredPlantList.map(plant => (
-          <tr key={plant.id}>
-            <Styles.StickyTd>
-              <P3>{plant.plant_name}</P3>
-            </Styles.StickyTd>
+    <Styles.TableContainer>
+      <Styles.StyledTable>
+        {/* set widths of each columns*/}
+        <colgroup>
+          <col style={{ width: '72px' }} />
+          <col style={{ minWidth: '400px' }} />
+        </colgroup>
+        <thead>
+          <tr>
+            <Styles.StickyTd></Styles.StickyTd>
             <Styles.ScrollableTd>
-              <PlantCalendarRow
-                harvestStart={plant.harvest_start}
-                harvestEnd={plant.harvest_end}
-                transplantStart={plant.transplant_start}
-                transplantEnd={plant.transplant_end}
-                indoorsStart={plant.indoors_start}
-                indoorsEnd={plant.indoors_end}
-                outdoorsStart={plant.outdoors_start}
-                outdoorsEnd={plant.outdoors_end}
-              />
+              <MonthHeader />
             </Styles.ScrollableTd>
           </tr>
-        ))}
-      </tbody>
-    </Styles.StyledTable>
+        </thead>
+        <tbody>
+          {filteredPlantList.map(plant => (
+            <tr key={plant.id}>
+              <Styles.StickyTd>
+                <P3>{plant.plant_name}</P3>
+              </Styles.StickyTd>
+              <Styles.ScrollableTd>
+                <PlantCalendarRow
+                  harvestStart={plant.harvest_start}
+                  harvestEnd={plant.harvest_end}
+                  transplantStart={plant.transplant_start}
+                  transplantEnd={plant.transplant_end}
+                  indoorsStart={plant.indoors_start}
+                  indoorsEnd={plant.indoors_end}
+                  outdoorsStart={plant.outdoors_start}
+                  outdoorsEnd={plant.outdoors_end}
+                />
+              </Styles.ScrollableTd>
+            </tr>
+          ))}
+        </tbody>
+      </Styles.StyledTable>
+    </Styles.TableContainer>
   );
 };

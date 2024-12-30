@@ -79,6 +79,6 @@ export const SmallButton = styled(P3).attrs({ as: 'button' })<ButtonProps>`
   // Unique to Small Button 
   border-radius: 20px;
   min-width: 60px;
-  height: 24px;
+  min-height: 24px; // to prevent Clear Filters text overflow
   padding: 4px 10px;
 `;
