@@ -103,6 +103,7 @@ export default function FilterDropdownMultiple<T>({
       // use custom styled components instead of default components
       components={{ MultiValue: StyledMultiValue, Option: CustomOption }}
       menuPosition="fixed"
+      instanceId="dropdown-multiple"
     />
   );
 }

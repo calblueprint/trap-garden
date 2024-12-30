@@ -46,6 +46,7 @@ export default function FilterDropdownSingle<T>({
       isSearchable={false}
       hideSelectedOptions={false}
       menuPosition="fixed"
+      instanceId="dropdown-single"
     />
   );
 }
