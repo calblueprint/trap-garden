@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Lexend } from 'next/font/google';
 import NavSystem from '@/components/NavSystem';
 import StyledComponentsRegistry from '@/lib/registry';
 import ProfileProvider from '@/utils/ProfileProvider';
@@ -7,7 +7,7 @@ import { AuthProvider } from '../utils/AuthProvider';
 import './globals.css';
 
 // font definitions
-const sans = Inter({
+const sans = Lexend({
   variable: '--font-sans',
   subsets: ['latin'],
 });
@@ -26,7 +26,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={sans.className}>
-        {/* <div style={{ height:"100vh", width:"100vw"}} > */}
         <AuthProvider>
           <ProfileProvider>
             <StyledComponentsRegistry>
@@ -35,7 +34,6 @@ export default function RootLayout({
             </StyledComponentsRegistry>
           </ProfileProvider>
         </AuthProvider>
-        {/* </div> */}
       </body>
     </html>
   );
