@@ -83,21 +83,23 @@ export default function FilterDropdownMultiple<T>({
   };
 
   return (
-    <Select
-      options={options}
-      isMulti
-      value={value}
-      isDisabled={disabled}
-      placeholder={placeholder}
-      onChange={handleChange}
-      closeMenuOnSelect={false}
-      styles={customSelectStyles<T>()}
-      isSearchable={false}
-      hideSelectedOptions={false}
-      // use custom styled components instead of default components
-      components={{ MultiValue: CustomMultiValue, Option: CustomOption }}
-      menuPosition="fixed"
-      instanceId="dropdown-multiple"
-    />
+    <div style={{ padding: '1px' }}>
+      <Select
+        options={options}
+        isMulti
+        value={value}
+        isDisabled={disabled}
+        placeholder={placeholder}
+        onChange={handleChange}
+        closeMenuOnSelect={false}
+        styles={customSelectStyles<T>()}
+        isSearchable={false}
+        hideSelectedOptions={false}
+        // use custom styled components instead of default components
+        components={{ MultiValue: CustomMultiValue, Option: CustomOption }}
+        menuPosition="fixed"
+        instanceId="dropdown-multiple"
+      />
+    </div>
   );
 }

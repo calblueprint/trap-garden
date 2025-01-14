@@ -35,18 +35,20 @@ export default function FilterDropdownSingle<T>({
   };
 
   return (
-    <Select
-      options={options}
-      value={value}
-      isDisabled={disabled}
-      placeholder={placeholder}
-      onChange={handleChange}
-      closeMenuOnSelect={false}
-      styles={customSelectStyles<T>(small)}
-      isSearchable={false}
-      hideSelectedOptions={false}
-      menuPosition="fixed"
-      instanceId="dropdown-single"
-    />
+    <div style={{ padding: '1px' }}>
+      <Select
+        options={options}
+        value={value}
+        isDisabled={disabled}
+        placeholder={placeholder}
+        onChange={handleChange}
+        closeMenuOnSelect={false}
+        styles={customSelectStyles<T>(small)}
+        isSearchable={false}
+        hideSelectedOptions={false}
+        menuPosition="fixed"
+        instanceId="dropdown-single"
+      />
+    </div>
   );
 }

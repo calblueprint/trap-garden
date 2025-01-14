@@ -34,6 +34,7 @@ export const customSelectStyles = <T>(
         : '#fff',
     padding: '8px 14px',
     minWidth: $isSmall ? '93px' : '150px',
+    width: 'max-content',
   }),
   // placeholder text
   placeholder: baseStyles => ({

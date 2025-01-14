@@ -22,12 +22,9 @@ export const HeaderContainer = styled.div`
 export const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
-  white-space: nowrap; // Prevent line break
   gap: 8px;
   margin-top: 12px;
   margin-bottom: 20px;
-  padding-top: 1px;
-  padding-bottom: 1px; // ensure filter border isn't cut off
   position: relative;
   overflow-x: auto;
   align-items: center;
@@ -55,4 +52,5 @@ export const VerticalSeparator = styled.div`
   height: 30px;
   width: 1px;
   background-color: ${COLORS.lightgray};
+  flex-shrink: 0;
 `;
