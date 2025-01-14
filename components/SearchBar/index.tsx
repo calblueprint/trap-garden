@@ -17,8 +17,6 @@ export default function SearchBar({
         <Icon type="search" />
       </IconWrapper>
       <SearchBarInput
-        as="input"
-        type="search"
         placeholder="Search Plant"
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
