@@ -409,7 +409,7 @@ export default function Page() {
   }, [isCardKeyOpen]);
 
   return (
-    <div id="plantContent">
+    <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
       <TopRowContainer>
         <Flex $direction="row" $gap="10px" $align="center">
           <H1 $color={COLORS.shrub} $fontWeight={500}>
