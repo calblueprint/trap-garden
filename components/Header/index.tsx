@@ -1,7 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import CONFIG from '@/lib/configs';
+import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
+import { P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
 import Icon from '../Icon';
@@ -32,14 +34,22 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
       }
 
       // Not onboarded
-      return <Link href={CONFIG.onboarding}>Complete Onboarding</Link>;
+      return (
+        <Link href={CONFIG.onboarding}>
+          <P3 $color={COLORS.blueLink}>Complete Onboarding</P3>
+        </Link>
+      );
     }
 
     // Not logged-in user
     return (
       <Flex $direction="row" $gap="8px" $w="max-content">
-        <Link href={CONFIG.login}>Login</Link>
-        <Link href={CONFIG.signup}>Sign Up</Link>
+        <Link href={CONFIG.login}>
+          <P3 $color={COLORS.blueLink}>Login</P3>
+        </Link>
+        <Link href={CONFIG.signup}>
+          <P3 $color={COLORS.blueLink}>Sign Up</P3>
+        </Link>
       </Flex>
     );
   };

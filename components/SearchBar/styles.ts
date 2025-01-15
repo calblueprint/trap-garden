@@ -19,11 +19,12 @@ export const IconWrapper = styled.div`
   pointer-events: none; /* Prevent the icon from blocking input clicks */
 `;
 
-export const SearchBarInput = styled(P3)`
+export const SearchBarInput = styled(P3).attrs({ as: 'input', type: 'search' })`
   padding: 8px 8px 8px 32px;
   border: none;
   border-radius: 16px;
   background-color: #f7f7f7;
   width: 100%;
   color: ${COLORS.midgray};
+  font-family: inherit;
 `;

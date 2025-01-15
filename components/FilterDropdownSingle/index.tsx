@@ -1,57 +1,54 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Select, { MultiValue, SingleValue } from 'react-select';
 import { DropdownOption } from '@/types/schema';
-import { FilterDropdownInput } from './styles';
+import { customSelectStyles } from './styles';
 
-interface FilterDropdownProps {
-  name?: string;
-  id?: string;
-  value: string;
-  setStateAction: React.Dispatch<React.SetStateAction<string>>;
-  options: DropdownOption[];
+interface FilterDropdownProps<T> {
+  value: DropdownOption<T> | null;
+  setStateAction: React.Dispatch<
+    React.SetStateAction<DropdownOption<T> | null>
+  >;
+  options: DropdownOption<T>[];
   placeholder: string;
   disabled?: boolean;
+  // for custom styling since initial dropdown to select user's state
+  // is a different size to a normal single dropdown
+  small?: boolean;
 }
 
-export default function FilterDropdownSingle({
-  name,
-  id,
+export default function FilterDropdownSingle<T>({
   value,
   setStateAction,
   options,
   placeholder,
   disabled,
-}: FilterDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setStateAction(event.target.value);
-    setIsOpen(false);
-  };
-
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
+  small = false,
+}: FilterDropdownProps<T>) {
+  const handleChange = (
+    selectedOptions:
+      | SingleValue<DropdownOption<T>>
+      | MultiValue<DropdownOption<T>>,
+  ) => {
+    if (!Array.isArray(selectedOptions)) {
+      setStateAction(selectedOptions as DropdownOption<T>);
+    }
   };
 
   return (
-    <FilterDropdownInput
-      name={name}
-      id={id}
-      onChange={handleChange}
-      onClick={handleToggle}
-      onBlur={() => setIsOpen(false)}
-      value={value}
-      $hasValue={value !== ''}
-      disabled={disabled}
-    >
-      {/*Default placeholder text*/}
-      <option value="" disabled hidden>
-        {placeholder}
-      </option>
-      {options.map((option, index) => (
-        <option key={index} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </FilterDropdownInput>
+    <div style={{ padding: '1px' }}>
+      <Select
+        options={options}
+        value={value}
+        isDisabled={disabled}
+        placeholder={placeholder}
+        onChange={handleChange}
+        closeMenuOnSelect={false}
+        styles={customSelectStyles<T>(small)}
+        isSearchable={false}
+        hideSelectedOptions={false}
+        menuPosition="fixed"
+        instanceId="dropdown-single"
+      />
+    </div>
   );
 }

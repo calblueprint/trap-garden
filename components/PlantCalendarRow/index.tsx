@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import COLORS from '@/styles/colors';
 import { fillCalendarGridArrayRowWithColor } from '@/utils/helpers';
-import MonthHeader from '../MonthHeader';
+import { MonthHeader } from '../PlantCalendarList';
 import SeasonColorKey from '../SeasonColorKey';
 import { CalendarCell, CalendarGrid } from './styles';
 
