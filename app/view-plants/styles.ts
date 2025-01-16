@@ -47,11 +47,15 @@ export const AddButtonContainer = styled.div`
 
 export const PlantGridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
-  /* grid-template-columns: repeat(auto-fill, 168px); */
+  grid-template-columns: repeat(auto-fill, 168px);
   gap: 8px;
-  max-width: 100%;
-  justify-content: center;
+  width: 100%;
+  justify-content: space-around;
+
+  // Mobile view: Two columns, equally spaced
+  @media (max-width: 392px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 export const ViewSelection = styled.div`

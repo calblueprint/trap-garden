@@ -3,7 +3,8 @@ import COLORS from '@/styles/colors';
 
 export const CardContainer = styled.div<{ $isSelected?: boolean }>`
   position: relative;
-  width: 168px;
+  width: 100%; // let PlantGridContainer handle sizing
+  // max-width: 168px; // if PlantCard were used independently
   height: 200px;
   display: flex;
   flex-direction: column;
