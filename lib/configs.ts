@@ -5,8 +5,8 @@ const CONFIG = {
   onboarding: '/onboarding',
   myAccount: '/my-account',
   viewPlants: '/view-plants',
-  userPlant: '/plant-page/all-plants',
-  generalPlant: '/plant-page/my-garden',
+  userPlant: '/all-plants',
+  generalPlant: '/my-garden',
   plantingTimeline: '/seasonal-planting-guide',
   resources: '/resources',
 };
