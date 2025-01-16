@@ -5,9 +5,9 @@ const CONFIG = {
   onboarding: '/onboarding',
   myAccount: '/my-account',
   viewPlants: '/view-plants',
-  userPlant: '/plant-page/all-plants',
-  generalPlant: '/plant-page/my-garden',
-  plantingTimeline: '/seasonal-planting-guide',
+  userPlant: '/all-plants',
+  generalPlant: '/my-garden',
+  plantingTimeline: '/planting-timeline',
 };
 
 export default CONFIG;
