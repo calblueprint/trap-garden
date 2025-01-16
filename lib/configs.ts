@@ -7,7 +7,7 @@ const CONFIG = {
   viewPlants: '/view-plants',
   userPlant: '/all-plants',
   generalPlant: '/my-garden',
-  plantingTimeline: '/seasonal-planting-guide',
+  plantingTimeline: '/planting-timeline',
   resources: '/resources',
 };
 
