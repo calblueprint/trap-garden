@@ -113,7 +113,7 @@ export default function SeasonalPlantingGuide() {
       </HeaderContainer>
       {!selectedUsState ? (
         <StateOptionsContainer>
-          <H3 $color={COLORS.shrub}>Choose Your State</H3>
+          <H3 $color={COLORS.shrub}>Choose Your</H3>
           <FilterDropdownSingle
             value={selectedUsState}
             setStateAction={setSelectedUsState}
