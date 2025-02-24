@@ -25,6 +25,8 @@ interface PlantListProps {
   growingSeasonFilterValue: DropdownOption<SeasonEnum>[];
   usStateFilterValue: DropdownOption<string> | null;
   searchTerm: string;
+  isSelected?: boolean;
+  onClick?: () => void;
 }
 
 const months = [
@@ -58,6 +60,7 @@ export const PlantCalendarList = ({
   growingSeasonFilterValue,
   usStateFilterValue,
   searchTerm,
+  isSelected,
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
   const router = useRouter();
