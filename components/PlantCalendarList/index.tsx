@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { getAllPlants } from '@/api/supabase/queries/plants';
 import { P3 } from '@/styles/text';
 import {
@@ -15,6 +16,7 @@ import {
   checkUsState,
 } from '@/utils/helpers';
 import PlantCalendarRow from '../PlantCalendarRow';
+import { PlantCalendarRowContainer } from '../PlantCalendarRow/styles';
 import * as Styles from './styles';
 
 interface PlantListProps {
@@ -23,6 +25,8 @@ interface PlantListProps {
   growingSeasonFilterValue: DropdownOption<SeasonEnum>[];
   usStateFilterValue: DropdownOption<string> | null;
   searchTerm: string;
+  isSelected?: boolean;
+  onClick?: () => void;
 }
 
 const months = [
@@ -56,9 +60,10 @@ export const PlantCalendarList = ({
   growingSeasonFilterValue,
   usStateFilterValue,
   searchTerm,
+  isSelected,
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
-
+  const router = useRouter();
   useEffect(() => {
     (async () => {
       const plantList = await getAllPlants();
@@ -87,6 +92,10 @@ export const PlantCalendarList = ({
     usStateFilterValue,
   ]);
 
+  function handlePlantCalendarRowClick(plant: Plant) {
+    router.push(`/plant-page/all-plants/${plant.id}`);
+  }
+
   return (
     <Styles.TableContainer>
       <Styles.StyledTable>
@@ -105,7 +114,11 @@ export const PlantCalendarList = ({
         </thead>
         <tbody>
           {filteredPlantList.map(plant => (
-            <tr key={plant.id}>
+            <PlantCalendarRowContainer
+              key={plant.id}
+              $isSelected={isSelected}
+              onClick={() => handlePlantCalendarRowClick(plant)}
+            >
               <Styles.StickyTd>
                 <P3>{plant.plant_name}</P3>
               </Styles.StickyTd>
@@ -121,7 +134,7 @@ export const PlantCalendarList = ({
                   outdoorsEnd={plant.outdoors_end}
                 />
               </Styles.ScrollableTd>
-            </tr>
+            </PlantCalendarRowContainer>
           ))}
         </tbody>
       </Styles.StyledTable>
