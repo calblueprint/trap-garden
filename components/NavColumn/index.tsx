@@ -58,6 +58,8 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const { signOut, userId, loading: authLoading } = useAuth();
   const { profileData, profileReady } = useProfile();
 
+
+
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
 
@@ -147,7 +149,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       );
     }
 
-    // If not logged in
+    // Not logged in → Go to Auth Pages
     return (
       <LoginButtonsContainer>
         <LoginButton href={CONFIG.login} onClick={safeOnClose}>
@@ -168,7 +170,9 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
           <NavColumnContainer>
             <div>
               <NavColumnHeader>
-                <div>{/* Empty for spacing */}</div>
+                <div>
+                  {/* Empty whitespace for positioning logo and hamburger */}
+                </div>
                 <Link onClick={safeOnClose} href={CONFIG.home}>
                   <Icon type="logo" />
                 </Link>
@@ -184,6 +188,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                     path={link.path}
                     isSelected={currentPath === link.path}
                     icon={link.iconName}
+                    // Use the safeOnClose function here to warn if on /add-details.
                     onClose={safeOnClose}
                   />
                 ))}

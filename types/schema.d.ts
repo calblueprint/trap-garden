@@ -59,6 +59,11 @@ export interface OwnedPlant {
   plant: Plant;
 }
 
+export interface NavigationPromptProps {
+  when: boolean;
+  message: string;
+}
+
 export interface ConfirmAlertProps {
   message: string;
   onConfirm: () => void;

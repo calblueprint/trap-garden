@@ -48,8 +48,42 @@ export default function Home() {
   const { profileData, profileReady, plantsToAdd } = useProfile();
   const { userId } = useAuth();
   const router = useRouter();
-  // TODO: address error: if you try to signout from this page
-  // it directs to /view-plants instead of login
+
+  const unsavedChanges = true;
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (unsavedChanges) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [unsavedChanges]);
+
+  useEffect(() => {
+    if (unsavedChanges) {
+      window.history.pushState(null, document.title, window.location.href);
+    }
+
+    const handlePopState = () => {
+      if (unsavedChanges) {
+        const leavePage = window.confirm(
+          'You have unsaved changes. Are you sure you want to leave?',
+        );
+        if (!leavePage) {
+          window.history.pushState(null, document.title, window.location.href);
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [unsavedChanges]);
+
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -89,7 +123,6 @@ export default function Home() {
 
   const getDefaultDate = () => new Date().toISOString().substring(0, 10);
 
-  // Navigate between plants and save input data
   function move(steps: number) {
     if (currentIndex <= plantsToAdd.length) {
       const currentDetail = details[currentIndex - 1];
@@ -120,9 +153,8 @@ export default function Home() {
     setDetails(updatedDetails);
   }
 
+
   const handleSubmit = async () => {
-    // TODO: elegantly handle not logged in case (e.g. when someone clicks "Back")
-    // instead of doing userId!
     if (!userId) return;
     try {
       const completedDetails: Omit<UserPlant, 'id' | 'date_removed'>[] =
