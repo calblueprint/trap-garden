@@ -56,6 +56,23 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const router = useRouter();
   const { profileData, profileReady } = useProfile();
 
+  // Define a safe navigation function that warns the user if they're on add-details.
+  const safeOnClose = (
+    e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  ) => {
+    // Check if the current page is the add-details page.
+    if (currentPath === '/add-details') {
+      const confirmed = window.confirm(
+        'You have unsaved changes. Are you sure you want to leave this page?',
+      );
+      if (!confirmed) {
+        e.preventDefault();
+        return;
+      }
+    }
+    onClose();
+  };
+
   const handleSignOut = async () => {
     await signOut();
     router.push(CONFIG.login);
@@ -70,12 +87,10 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
 
     // Logged in Users
     if (userId) {
-      // Logged in, not onboarded -> Go To Onboarding button
-      // Logged in, Onboarded -> Show My Account Info
       return (
         <ProfileDisplayContainer>
           {!profileData ? (
-            <OnboardingButton href={CONFIG.onboarding} onClick={onClose}>
+            <OnboardingButton href={CONFIG.onboarding} onClick={safeOnClose}>
               Go to Onboarding
             </OnboardingButton>
           ) : (
@@ -99,13 +114,13 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       );
     }
 
-    // Not logged -> Go to Auth Pages
+    // Not logged in → Go to Auth Pages
     return (
       <LoginButtonsContainer>
-        <LoginButton href={CONFIG.login} onClick={onClose}>
+        <LoginButton href={CONFIG.login} onClick={safeOnClose}>
           Log In
         </LoginButton>
-        <SignUpButton href={CONFIG.signup} onClick={onClose}>
+        <SignUpButton href={CONFIG.signup} onClick={safeOnClose}>
           Sign Up
         </SignUpButton>
       </LoginButtonsContainer>
@@ -121,9 +136,9 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
             <div>
               <NavColumnHeader>
                 <div>
-                  {/* empty whitespace for positioning logo and hamburger */}
+                  {/* Empty whitespace for positioning logo and hamburger */}
                 </div>
-                <Link onClick={onClose} href={CONFIG.home}>
+                <Link onClick={safeOnClose} href={CONFIG.home}>
                   <Icon type="logo" />
                 </Link>
                 <HamburgerButton onClick={onClose}>
@@ -138,7 +153,8 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                     path={link.path}
                     isSelected={currentPath === link.path}
                     icon={link.iconName}
-                    onClose={onClose}
+                    // Use the safeOnClose function here to warn if on /add-details.
+                    onClose={safeOnClose}
                   />
                 ))}
               </NavLinksContainer>

@@ -40,16 +40,6 @@ function ReviewPlant({
         <P2 $fontWeight={500}>Planting Type</P2>
         <P2>{plantingTypeLabels[plantingType]}</P2>
       </ReviewGrid>
-      {/* <CustomSelect
-        label="Planting Type"
-        value={detail.planting_type}
-        options={plantingTypeOptions}
-        onChange={value => updateInput('planting_type', value, index)}
-      />
-      <DateInput
-        value={detail.date_added}
-        onChange={value => updateInput('date_added', value, index)}
-      /> */}
     </Flex>
   );
 }
@@ -59,8 +49,41 @@ export default function Home() {
   const { userId } = useAuth();
   const router = useRouter();
 
-  // TODO: address error: if you try to signout from this page
-  // it directs to /view-plants instead of login
+  const unsavedChanges = true;
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (unsavedChanges) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [unsavedChanges]);
+
+  useEffect(() => {
+    if (unsavedChanges) {
+      window.history.pushState(null, document.title, window.location.href);
+    }
+
+    const handlePopState = () => {
+      if (unsavedChanges) {
+        const leavePage = window.confirm(
+          'You have unsaved changes. Are you sure you want to leave?',
+        );
+        if (!leavePage) {
+          window.history.pushState(null, document.title, window.location.href);
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [unsavedChanges]);
+
   useEffect(() => {
     if (profileReady && !profileData) {
       router.push(CONFIG.viewPlants);
@@ -74,10 +97,7 @@ export default function Home() {
 
   const getDefaultDate = () => new Date().toISOString().substring(0, 10);
 
-  // Navigate between plants and save input data
   function move(steps: number) {
-    // Set curr date in details to default date if not on submission page
-
     if (currentIndex <= plantsToAdd.length) {
       const currentDetail = details[currentIndex - 1];
       if (!currentDetail || !currentDetail.date_added) {
@@ -85,7 +105,6 @@ export default function Home() {
       }
     }
 
-    // For valid moves, move to next page
     if (
       steps !== 0 &&
       currentIndex + steps > 0 &&
@@ -95,7 +114,6 @@ export default function Home() {
     }
   }
 
-  // disable next if planting type not selected (undefined)
   const disableNext =
     currentIndex <= plantsToAdd.length &&
     !details[currentIndex - 1].planting_type;
@@ -108,9 +126,8 @@ export default function Home() {
     };
     setDetails(updatedDetails);
   }
+
   const handleSubmit = async () => {
-    // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
-    // instead of doing userId!
     if (!userId) return;
     try {
       const completedDetails: Omit<UserPlant, 'id' | 'date_removed'>[] =
