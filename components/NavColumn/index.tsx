@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import CONFIG from '@/lib/configs';
@@ -11,6 +11,7 @@ import { useAuth } from '@/utils/AuthProvider';
 import { userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import { BigButton } from '../Buttons';
+import ConfirmationModal from '../ConfirmationModal';
 import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
 import {
@@ -52,30 +53,51 @@ const navLinks: NavLink[] = [
 
 export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const currentPath = usePathname();
-  const { signOut, userId, loading: authLoading } = useAuth();
   const router = useRouter();
+
+  const { signOut, userId, loading: authLoading } = useAuth();
   const { profileData, profileReady } = useProfile();
 
-  // Define a safe navigation function that warns the user if they're on add-details.
-  const safeOnClose = (
-    e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
-  ) => {
-    // Check if the current page is the add-details page.
-    if (currentPath === '/add-details') {
-      const confirmed = window.confirm(
-        'You have unsaved changes. Are you sure you want to leave this page?',
-      );
-      if (!confirmed) {
-        e.preventDefault();
-        return;
-      }
-    }
-    onClose();
-  };
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
 
   const handleSignOut = async () => {
     await signOut();
     router.push(CONFIG.login);
+    onClose();
+  };
+
+  const safeOnClose = (
+    e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  ) => {
+    if (currentPath === '/add-details') {
+      e?.preventDefault();
+
+      const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
+        'href',
+      );
+      if (href) setPendingHref(href);
+
+      setShowConfirmModal(true);
+    } else {
+      // If not on /add-details, just close or navigate as normal
+      onClose();
+    }
+  };
+
+  const handleCancel = () => {
+    setShowConfirmModal(false);
+    setPendingHref(null);
+  };
+
+  const handleConfirm = () => {
+    if (pendingHref) {
+      // Actually navigate
+      router.push(pendingHref);
+    }
+    setShowConfirmModal(false);
+    setPendingHref(null);
+
     onClose();
   };
 
@@ -85,7 +107,6 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       return <div>Loading...</div>;
     }
 
-    // Logged in Users
     if (userId) {
       return (
         <ProfileDisplayContainer>
@@ -114,7 +135,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       );
     }
 
-    // Not logged in → Go to Auth Pages
+    // If not logged in
     return (
       <LoginButtonsContainer>
         <LoginButton href={CONFIG.login} onClick={safeOnClose}>
@@ -135,9 +156,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
           <NavColumnContainer>
             <div>
               <NavColumnHeader>
-                <div>
-                  {/* Empty whitespace for positioning logo and hamburger */}
-                </div>
+                <div>{/* Empty for spacing */}</div>
                 <Link onClick={safeOnClose} href={CONFIG.home}>
                   <Icon type="logo" />
                 </Link>
@@ -153,7 +172,6 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                     path={link.path}
                     isSelected={currentPath === link.path}
                     icon={link.iconName}
-                    // Use the safeOnClose function here to warn if on /add-details.
                     onClose={safeOnClose}
                   />
                 ))}
@@ -171,6 +189,14 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
           </NavColumnContainer>
         </>
       )}
+
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        title="Exit Add Plant Details?"
+        message="You will lose all information entered for your plants."
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      />
     </>
   );
 }

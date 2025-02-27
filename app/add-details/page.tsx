@@ -49,32 +49,24 @@ export default function Home() {
   const { userId } = useAuth();
   const router = useRouter();
 
-  const unsavedChanges = true;
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (unsavedChanges) {
-        event.preventDefault();
-        event.returnValue = '';
-      }
+      event.preventDefault();
+      event.returnValue = '';
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [unsavedChanges]);
+  });
 
   useEffect(() => {
-    if (unsavedChanges) {
-      window.history.pushState(null, document.title, window.location.href);
-    }
+    window.history.pushState(null, document.title, window.location.href);
 
     const handlePopState = () => {
-      if (unsavedChanges) {
-        const leavePage = window.confirm(
-          'You have unsaved changes. Are you sure you want to leave?',
-        );
-        if (!leavePage) {
-          window.history.pushState(null, document.title, window.location.href);
-        }
+      const leavePage = window.confirm(
+        'You have unsaved changes. Are you sure you want to leave?',
+      );
+      if (!leavePage) {
       }
     };
 
@@ -82,7 +74,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [unsavedChanges]);
+  });
 
   useEffect(() => {
     if (profileReady && !profileData) {
