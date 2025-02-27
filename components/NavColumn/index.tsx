@@ -149,7 +149,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       );
     }
 
-    // Not logged in → Go to Auth Pages
+    // If not logged in
     return (
       <LoginButtonsContainer>
         <LoginButton href={CONFIG.login} onClick={safeOnClose}>
@@ -170,9 +170,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
           <NavColumnContainer>
             <div>
               <NavColumnHeader>
-                <div>
-                  {/* Empty whitespace for positioning logo and hamburger */}
-                </div>
+                <div>{/* Empty for spacing */}</div>
                 <Link onClick={safeOnClose} href={CONFIG.home}>
                   <Icon type="logo" />
                 </Link>
@@ -188,7 +186,6 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                     path={link.path}
                     isSelected={currentPath === link.path}
                     icon={link.iconName}
-                    // Use the safeOnClose function here to warn if on /add-details.
                     onClose={safeOnClose}
                   />
                 ))}
