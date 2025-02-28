@@ -61,7 +61,6 @@ export const PlantCalendarList = ({
   growingSeasonFilterValue,
   usStateFilterValue,
   searchTerm,
-  isSelected,
 }: PlantListProps) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
