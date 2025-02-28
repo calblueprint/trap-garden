@@ -1,8 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
+import supabase from '@/api/supabase/createClient';
 import { Button } from '@/components/Buttons';
 import CustomSelect from '@/components/CustomSelect';
 import GardenSetupGuide from '@/components/GardenSetupGuide';
@@ -27,6 +31,20 @@ import {
   QuestionDiv,
 } from './styles';
 
+// ✅ Fix: Use a CDN to load the worker(idk why this works)
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+const getPDFUrl = (userType: UserTypeEnum) => {
+  const pdfFiles: Record<UserTypeEnum, string> = {
+    ORG: 'CommunityGardenGuide.pdf',
+    INDIV: 'HomeGardenGuide.pdf',
+    SCHOOL: 'SchoolGardenGuide.pdf',
+  };
+
+  return supabase.storage.from('pdfs').getPublicUrl(pdfFiles[userType]).data
+    .publicUrl;
+};
+
 interface ReviewPageProps {
   userId: UUID;
   selectedState: string;
@@ -37,7 +55,102 @@ interface ReviewPageProps {
   setSelectedPlot: (selected: boolean) => void;
   onBack: () => void;
 }
+function PdfScreen({
+  progress,
+  selectedGardenType,
+  onBack,
+  onNext,
+}: {
+  progress: number;
+  selectedGardenType: UserTypeEnum;
+  onBack?: () => void;
+  onNext: () => void;
+}) {
+  const pdfUrl = getPDFUrl(selectedGardenType);
+  const [numPages, setNumPages] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [containerWidth, setContainerWidth] = useState(600);
 
+  useEffect(() => {
+    const updateSize = () => {
+      setContainerWidth(window.innerWidth * 0.2); // 90% of screen width
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return (
+    <>
+      <ProgressBar progress={progress} />
+      <OnboardingContainer>
+        <Flex $direction="column" $align="center" $maxH="100">
+          <P3
+            $color={COLORS.shrub}
+            style={{
+              textAlign: 'center',
+              marginTop: '36px',
+              marginBottom: '8px',
+            }}
+          >
+            Garden Set Up Guide
+          </P3>
+          <Document
+            file={pdfUrl}
+            onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+          >
+            <Page
+              pageNumber={currentPage}
+              width={containerWidth}
+              renderTextLayer={true}
+            />
+          </Document>
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '10px', // Moves buttons up
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex',
+              gap: '10px',
+              background: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
+              padding: '8px 16px',
+              borderRadius: '8px',
+            }}
+          >
+            <Button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <P3>
+              Page {currentPage} of {numPages || '?'}
+            </P3>
+            <Button
+              onClick={() =>
+                setCurrentPage(prev => Math.min(prev + 1, numPages || 1))
+              }
+              disabled={currentPage === numPages}
+            >
+              Next
+            </Button>
+          </div>
+        </Flex>
+        <ButtonDiv>
+          {onBack && (
+            <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
+              Back
+            </Button>
+          )}
+          <Button onClick={onNext} $primaryColor={COLORS.shrub}>
+            Next
+          </Button>
+        </ButtonDiv>
+      </OnboardingContainer>
+    </>
+  );
+}
 function SelectionScreen<T = string>({
   progress,
   questionTitle,
@@ -218,10 +331,28 @@ export default function OnboardingFlow() {
   }, [profileReady, profileData, push]);
 
   const handleNext = () => {
+    if (step === 3) {
+      // If user selects "No" for plot, show extra step
+      if (selectedPlot === false) {
+        setStep(3.5); // Go to extra step
+        return;
+      }
+    }
+    if (step === 3.5) {
+      // If user selects "No" for plot, show extra step
+      if (selectedPlot === false) {
+        setStep(4); // Go to extra step
+        return;
+      }
+    }
     setStep(step + 1);
   };
 
   const handleBack = () => {
+    if (step == 3.5) {
+      setStep(step - 0.5);
+      return;
+    }
     setStep(step - 1);
   };
 
@@ -269,6 +400,14 @@ export default function OnboardingFlow() {
               <GardenSetupGuide userType={selectedGardenType!} />
             )
           }
+        />
+      )}
+      {step === 3.5 && (
+        <PdfScreen
+          progress={66}
+          onBack={handleBack}
+          onNext={handleNext}
+          selectedGardenType={selectedGardenType!}
         />
       )}
       {step === 4 && (
