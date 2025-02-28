@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import supabase from '@/api/supabase/createClient';
 import { BackButton } from '@/app/plant-page/style';
 import { BigButton } from '@/components/Buttons';
+import Icon from '@/components/Icon';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
@@ -54,7 +55,7 @@ export default function ForgotPassword() {
           router.push('/login');
         }}
       >
-        ←
+        <Icon type={'backArrow'} />
       </BackButton>
 
       <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
