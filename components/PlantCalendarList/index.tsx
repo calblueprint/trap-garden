@@ -60,7 +60,6 @@ export const PlantCalendarList = ({
   growingSeasonFilterValue,
   usStateFilterValue,
   searchTerm,
-  isSelected,
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
   const router = useRouter();
@@ -116,7 +115,6 @@ export const PlantCalendarList = ({
           {filteredPlantList.map(plant => (
             <PlantCalendarRowContainer
               key={plant.id}
-              $isSelected={isSelected}
               onClick={() => handlePlantCalendarRowClick(plant)}
             >
               <Styles.StickyTd>

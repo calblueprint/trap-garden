@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PlantCalendarRowContainer = styled.tr<{ $isSelected?: boolean }>`
+export const PlantCalendarRowContainer = styled.tr`
   &:hover {
     cursor: pointer;
   }
