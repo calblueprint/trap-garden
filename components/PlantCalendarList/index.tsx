@@ -60,7 +60,6 @@ export const PlantCalendarList = ({
   growingSeasonFilterValue,
   usStateFilterValue,
   searchTerm,
-  isSelected,
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
   const router = useRouter();
