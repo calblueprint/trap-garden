@@ -54,7 +54,7 @@ export default function GeneralPlantPage() {
         <ButtonWrapper>
           <BackButton
             onClick={() => {
-              router.push(`/view-plants`);
+              router.back();
             }}
           >
             ←
