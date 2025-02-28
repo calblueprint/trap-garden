@@ -25,7 +25,6 @@ interface PlantListProps {
   growingSeasonFilterValue: DropdownOption<SeasonEnum>[];
   usStateFilterValue: DropdownOption<string> | null;
   searchTerm: string;
-  onClick?: () => void;
 }
 
 const months = [
