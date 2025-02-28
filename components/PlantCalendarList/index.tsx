@@ -26,7 +26,6 @@ interface PlantListProps {
   growingSeasonFilterValue: DropdownOption<SeasonEnum>[];
   usStateFilterValue: DropdownOption<string> | null;
   searchTerm: string;
-  isSelected?: boolean;
   onClick?: () => void;
 }
 
