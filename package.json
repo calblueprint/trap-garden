@@ -36,5 +36,11 @@
     "prettier": "^3.3.3",
     "typescript": "5.4",
     "yarnhook": "^0.6.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "supabase"
+    ]
   }
 }
