@@ -23,8 +23,6 @@ export interface ProfileContextType {
   setProfile: (completeProfile: Profile) => Promise<void>; // Now expects full Profile
   loadProfile: () => Promise<void>;
   setPlantsToAdd: (plants: Plant[]) => void;
-  us_state: string;
-  user_type: string;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);

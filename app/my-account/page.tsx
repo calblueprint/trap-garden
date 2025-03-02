@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 import { BigButton } from '@/components/Buttons';
 import { ProfileIcon } from '@/components/NavColumn/styles';
 import CONFIG from '@/lib/configs';
@@ -9,6 +9,7 @@ import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { H4, P2 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
+import { plotOptions } from '@/utils/dropdownOptions';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   GardenInformationContainer,
@@ -17,19 +18,17 @@ import {
   ProfilePictureContainer,
 } from './styles';
 
-interface MyAccountProps {
-  onClose: () => void;
-}
-
-export default function MyAccount({ onClose }: MyAccountProps) {
+export default function MyAccount() {
   const { userEmail, signOut } = useAuth();
-  const { us_state, user_type, profileData } = useProfile();
+  const { profileData } = useProfile();
 
+  const router = useRouter();
   const handleSignOut = async () => {
     await signOut();
     router.push(CONFIG.login);
-    onClose();
   };
+
+  console.log('hiiiii', profileData?.has_plot);
 
   return (
     <Flex $direction="column">
@@ -110,7 +109,7 @@ export default function MyAccount({ onClose }: MyAccountProps) {
             $fontWeight={300}
             $color={COLORS.darkgray}
           >
-            {us_state}
+            {profileData?.us_state}
           </P2>
         </InfoField>
 
@@ -125,7 +124,7 @@ export default function MyAccount({ onClose }: MyAccountProps) {
             $fontWeight={300}
             $color={COLORS.darkgray}
           >
-            {user_type}
+            {profileData?.user_type}
           </P2>
         </InfoField>
 
@@ -140,7 +139,10 @@ export default function MyAccount({ onClose }: MyAccountProps) {
             $fontWeight={300}
             $color={COLORS.darkgray}
           >
-            {profileData?.has_plot}
+            {
+              plotOptions.find(option => option.value === profileData?.has_plot)
+                ?.label
+            }
           </P2>
         </InfoField>
       </GardenInformationContainer>
