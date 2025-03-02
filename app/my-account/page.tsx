@@ -28,8 +28,6 @@ export default function MyAccount() {
     router.push(CONFIG.login);
   };
 
-  console.log('hiiiii', profileData?.has_plot);
-
   return (
     <Flex $direction="column">
       {/* User profile image and name */}
