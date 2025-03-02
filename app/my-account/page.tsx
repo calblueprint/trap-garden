@@ -17,10 +17,13 @@ import {
   ProfilePictureContainer,
 } from './styles';
 
-export default function MyAccount() {
-  const { userEmail } = useAuth();
+interface MyAccountProps {
+  onClose: () => void;
+}
+
+export default function MyAccount({ onClose }: MyAccountProps) {
+  const { userEmail, signOut } = useAuth();
   const { us_state, user_type, profileData } = useProfile();
-  console.log('usertype', user_type);
 
   const handleSignOut = async () => {
     await signOut();
@@ -150,7 +153,4 @@ export default function MyAccount() {
       </div>
     </Flex>
   );
-}
-function signOut() {
-  throw new Error('Function not implemented.');
 }
