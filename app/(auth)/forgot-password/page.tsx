@@ -11,6 +11,11 @@ import { Flex } from '@/styles/containers';
 import { isValidEmail } from '@/utils/helpers';
 import { BackButton, GrayP3, GreenH2, RedP3, StyledForm } from '../styles';
 
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [invalidEmailError, setInvalidEmailError] = useState<string>('');
@@ -20,6 +25,11 @@ export default function ForgotPassword() {
 
   const handleEmailChange = async (newEmail: string) => {
     setEmail(newEmail);
+    setInvalidEmailError('');
+    setCheckValidEmailError(
+      !isValidEmail(newEmail) ? 'Please enter a valid email address' : '',
+    );
+  };
   };
 
   const handleForgotPassword = async (email: string) => {
