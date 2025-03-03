@@ -108,7 +108,7 @@ export const PlantHeader = styled.div`
 `;
 
 export const PlantImage = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 75px;
+  height: 75px;
   font-size: 10px;
 `;
