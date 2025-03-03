@@ -6,8 +6,8 @@ export const ViewSelection = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  gap: 3rem;
-  padding-bottom: 1rem;
+  gap: 2rem;
+  padding-bottom: 1rem; 
 `;
 
 export const HeaderButton = styled.button<{
@@ -18,11 +18,13 @@ export const HeaderButton = styled.button<{
   color: ${COLORS.shrub};
   font-family: inherit;
   cursor: pointer;
-  font-size: 16px;
+  font-size: .875rem;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 300;
   line-height: normal;
-  padding: 1rem;
+  padding: .5rem;
+  padding-top: 0rem;
+  margin: .5rem;
   color: ${({ $isCurrentMode }) =>
     $isCurrentMode ? ` ${COLORS.shrub}` : `${COLORS.midgray}`};
   border-bottom: ${({ $isCurrentMode }) =>

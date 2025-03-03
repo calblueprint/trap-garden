@@ -10,6 +10,18 @@ export default function Resources() {
     'FAQs' | 'Tips' | 'Guides'
   >('FAQs');
 
+  function FAQDisplay() {
+    return (<H1>FAQs</H1>)
+  }
+
+  function TipDisplay() {
+    return (<H1>Tips</H1>)
+  }
+
+  function GuideDisplay() {
+    return (<H1>Guides</H1>)
+  }
+
   function MainBody() {
     return (
       <>
@@ -37,11 +49,11 @@ export default function Resources() {
         </Flex>
 
         {viewingOption === 'FAQs' ? (
-          <H1>FAQs</H1>
+          < FAQDisplay />
         ) : viewingOption === 'Tips' ? (
-          <H1>Tips</H1>
+          < TipDisplay />
         ) : (
-          <H1>Guides</H1>
+          < GuideDisplay />
         )}
       </>
     );
