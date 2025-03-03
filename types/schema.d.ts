@@ -73,17 +73,3 @@ export interface ConfirmAlertProps {
 export interface InputProps {
   initialValue?: string;
 }
-
-export interface PlantTip {
-  id: UUID;
-  category: Category;
-  body_text: string;
-}
-
-export type Category =
-  | 'Helpful Flowers for Your Garden'
-  | 'Water Management'
-  | 'Mulching'
-  | 'Harvesting'
-  | 'Planting'
-  | 'Weeding';
