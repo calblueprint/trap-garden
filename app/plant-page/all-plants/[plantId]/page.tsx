@@ -24,6 +24,7 @@ import {
   PlantImage,
   PlantName,
 } from '../../style';
+import Icon from '@/components/Icon';
 
 export default function GeneralPlantPage() {
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function GeneralPlantPage() {
               router.back();
             }}
           >
-            ←
+            <Icon type="backArrow"></Icon>
           </BackButton>
         </ButtonWrapper>
         <PlantImage src={currentPlant.img} alt={currentPlant.plant_name} />
