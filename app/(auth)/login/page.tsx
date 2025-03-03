@@ -101,6 +101,12 @@ export default function Login() {
           Log In
         </BigButton>
         {/* Sign in button */}
+        <P3 as="span" $color={COLORS.midgray} style={{ textAlign: 'center' }}>
+          Forgot Password?
+          <StyledLinkButton href="/forgot-password" style={{ padding: '4px' }}>
+            Reset Here
+          </StyledLinkButton>
+        </P3>
       </div>
     </StyledForm>
   );
