@@ -562,9 +562,20 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
-  backArrow: (<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6.52498 9.16667L9.50831 6.175L8.33331 5L3.33331 10L8.33331 15L9.50831 13.825L6.52498 10.8333H16.6666V9.16667H6.52498Z" fill="#888888" />
-  </svg>),
+  backArrow: (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6.52498 9.16667L9.50831 6.175L8.33331 5L3.33331 10L8.33331 15L9.50831 13.825L6.52498 10.8333H16.6666V9.16667H6.52498Z"
+        fill="#888888"
+      />
+    </svg>
+  ),
 };
 
 export type IconType = keyof typeof IconSvgs;

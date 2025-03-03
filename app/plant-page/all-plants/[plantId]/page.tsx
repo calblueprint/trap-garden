@@ -7,6 +7,7 @@ import { getPlantById } from '@/api/supabase/queries/plants';
 import { SmallButton } from '@/components/Buttons';
 import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
+import Icon from '@/components/Icon';
 import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
 import COLORS from '@/styles/colors';
@@ -24,7 +25,6 @@ import {
   PlantImage,
   PlantName,
 } from '../../style';
-import Icon from '@/components/Icon';
 
 export default function GeneralPlantPage() {
   const router = useRouter();
