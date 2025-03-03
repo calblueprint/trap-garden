@@ -7,6 +7,7 @@ import { getPlantById } from '@/api/supabase/queries/plants';
 import { SmallButton } from '@/components/Buttons';
 import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
+import Icon from '@/components/Icon';
 import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
 import COLORS from '@/styles/colors';
@@ -57,7 +58,7 @@ export default function GeneralPlantPage() {
               router.back();
             }}
           >
-            ←
+            <Icon type="backArrow"></Icon>
           </BackButton>
         </ButtonWrapper>
         <PlantImage src={currentPlant.img} alt={currentPlant.plant_name} />
