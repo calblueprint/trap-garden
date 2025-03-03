@@ -1,4 +1,3 @@
-import { UUID } from 'crypto';
 import { PlantTip } from '@/types/schema';
 import supabase from '../createClient';
 
@@ -14,7 +13,7 @@ import supabase from '../createClient';
 
 // Function to create a seeded shuffle (Fisher-Yates with a consistent seed)
 const seededShuffle = (array: PlantTip[], seed: number): PlantTip[] => {
-  let shuffled = [...array];
+  const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = (seed * (i + 1)) % shuffled.length; // Deterministic shuffle
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
