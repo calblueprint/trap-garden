@@ -58,3 +58,18 @@ export interface OwnedPlant {
   userPlantId: UUID;
   plant: Plant;
 }
+
+export interface NavigationPromptProps {
+  when: boolean;
+  message: string;
+}
+
+export interface ConfirmAlertProps {
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+export interface InputProps {
+  initialValue?: string;
+}
