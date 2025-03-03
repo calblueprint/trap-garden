@@ -8,6 +8,7 @@ const CONFIG = {
   userPlant: '/plant-page/all-plants',
   generalPlant: '/plant-page/my-garden',
   plantingTimeline: '/seasonal-planting-guide',
+  resources: '/resources',
 };
 
 export default CONFIG;
