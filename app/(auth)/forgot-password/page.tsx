@@ -16,6 +16,15 @@ import {
   RedP3,
   StyledForm,
 } from '../styles';
+import { isValidEmail } from '@/utils/helpers';
+import {
+  BackButton,
+  ColumnFlexContainer,
+  GrayP3,
+  GreenH2,
+  RedP3,
+  StyledForm,
+} from '../styles';
 
 const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
