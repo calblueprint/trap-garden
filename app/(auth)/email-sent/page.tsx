@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { BackButton } from '@/app/plant-page/style';
+import { BackButton } from '@/app/(auth)/styles';
 import Icon from '@/components/Icon';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';

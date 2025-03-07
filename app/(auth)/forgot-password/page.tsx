@@ -1,35 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import supabase from '@/api/supabase/createClient';
-import { BackButton } from '@/app/plant-page/style';
 import { BigButton } from '@/components/Buttons';
 import Icon from '@/components/Icon';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
-import { H2, P3 } from '@/styles/text';
-import { StyledForm } from '../styles';
-
-const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+import { isValidEmail } from '@/utils/helpers';
+import {
+  BackButton,
+  ColumnFlexContainer,
+  GrayP3,
+  GreenH2,
+  RedP3,
+  StyledForm,
+} from '../styles';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [invalidEmailError, setInvalidEmailError] = useState('');
-  const [checkValidEmailError, setCheckValidEmailError] = useState('');
-  const canSubmitForm = email && !checkValidEmailError;
+  const canSubmitForm = email && !invalidEmailError;
 
   const router = useRouter();
 
   const handleEmailChange = async (newEmail: string) => {
     setEmail(newEmail);
-    setInvalidEmailError('');
-    setCheckValidEmailError(
-      !isValidEmail(newEmail) ? 'Please enter a valid email address' : '',
-    );
   };
 
   const handleForgotPassword = async (email: string) => {
@@ -46,6 +42,16 @@ export default function ForgotPassword() {
     router.push('/email-sent'); // Navigate on success
   };
 
+  useEffect(() => {
+    if (!email) {
+      setInvalidEmailError(''); // Clear error when empty
+    } else if (!isValidEmail(email)) {
+      setInvalidEmailError('Please enter a valid email address');
+    } else {
+      setInvalidEmailError('');
+    }
+  }, [email]); // Runs whenever email changes
+
   return (
     <StyledForm>
       <BackButton
@@ -58,13 +64,9 @@ export default function ForgotPassword() {
         <Icon type={'backArrow'} />
       </BackButton>
 
-      <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
-        Reset your password
-      </H2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <P3 as="span" $color={COLORS.midgray}>
-          Enter your email for recovery link
-        </P3>
+      <GreenH2>Reset your password</GreenH2>
+      <ColumnFlexContainer>
+        <GrayP3 as="span">Enter your email for recovery link</GrayP3>
 
         <div>
           <TextInput
@@ -76,7 +78,7 @@ export default function ForgotPassword() {
             error={!!invalidEmailError}
           />
           {/* Email input*/}
-          <P3 $color={COLORS.errorRed}>{invalidEmailError}</P3>
+          <RedP3>{invalidEmailError}</RedP3>
         </div>
 
         <BigButton
@@ -87,7 +89,7 @@ export default function ForgotPassword() {
         >
           Send
         </BigButton>
-      </div>
+      </ColumnFlexContainer>
     </StyledForm>
   );
 }
