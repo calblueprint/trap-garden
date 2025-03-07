@@ -9,12 +9,14 @@ import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { isValidEmail } from '@/utils/helpers';
-import { BackButton, GrayP3, GreenH2, RedP3, StyledForm } from '../styles';
-
-const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+import {
+  BackButton,
+  ColumnFlexContainer,
+  GrayP3,
+  GreenH2,
+  RedP3,
+  StyledForm,
+} from '../styles';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
