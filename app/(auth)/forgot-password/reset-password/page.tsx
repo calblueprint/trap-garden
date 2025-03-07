@@ -4,18 +4,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import supabase from '@/api/supabase/createClient';
 import { BigButton } from '@/components/Buttons';
-import Icon from '@/components/Icon';
 import PasswordComplexity, {
   Requirement,
 } from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
-import {
-  BackButton,
-  ColumnFlexContainer,
-  GreenH2,
-  StyledForm,
-} from '../../styles';
+import { ColumnFlexContainer, GreenH2, StyledForm } from '../../styles';
 
 export default function ResetPassword() {
   const [password, setPassword] = useState<string>('');
@@ -70,16 +64,6 @@ export default function ResetPassword() {
 
   return (
     <StyledForm>
-      <BackButton
-        type="button"
-        onClick={e => {
-          e.preventDefault(); // prevents accidental form submission
-          router.push('/login'); //ASK WHERE THIS SHOULD ROUTE
-        }}
-      >
-        <Icon type={'backArrow'} />
-      </BackButton>
-
       <GreenH2>Set new password</GreenH2>
       <ColumnFlexContainer>
         <div>
