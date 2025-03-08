@@ -1,4 +1,3 @@
-import supabase from '@/api/supabase/createClient';
 import {
   DropdownOption,
   Plant,
