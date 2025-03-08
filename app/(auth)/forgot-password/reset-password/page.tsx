@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation';
 import supabase from '@/api/supabase/createClient';
 import { BigButton } from '@/components/Buttons';
 import PasswordComplexity, {
+  OnlyXRequirement,
   Requirement,
 } from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
-import { ColumnFlexContainer, GreenH2, StyledForm } from '../../styles';
+import { ColumnFlexContainer, GreenH2, RedP3, StyledForm } from '../../styles';
 
 export default function ResetPassword() {
   const [password, setPassword] = useState<string>('');
@@ -20,12 +21,34 @@ export default function ResetPassword() {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [verifyNewPasswordError, setVerifyNewPasswordError] =
+    useState<string>('');
   const router = useRouter();
   const passwordsMatch = password === confirmPassword;
   const canSubmitForm = password && passwordsMatch && isPasswordComplexityMet;
 
   const handleNewPassword = async () => {
-    setIsSubmitted(true);
+    const { data: user } = await supabase.auth.getUser();
+    if (!user) {
+      setVerifyNewPasswordError('User not authenticated.');
+      return;
+    }
+
+    const { data, error } = await supabase.rpc('verify_user_password', {
+      password,
+    });
+
+    if (error) {
+      console.error('Supabase RPC Error:', error.message);
+      setVerifyNewPasswordError('Error verifying password.');
+      return;
+    }
+
+    if (data) {
+      setVerifyNewPasswordError('Password has been used before');
+      setIsSubmitted(true);
+      return;
+    }
 
     try {
       // Update the user's password
@@ -55,10 +78,12 @@ export default function ResetPassword() {
   };
 
   const handlePasswordChange = (password: string) => {
+    setVerifyNewPasswordError('');
     setPassword(password);
   };
 
   const handleConfirmPasswordChange = (confirmPassword: string) => {
+    setVerifyNewPasswordError('');
     setConfirmPassword(confirmPassword);
   };
 
@@ -76,7 +101,7 @@ export default function ResetPassword() {
             isVisible={showPassword}
             toggleVisibility={() => setShowPassword(!showPassword)}
             label="New Password"
-            error={isSubmitted && !isPasswordComplexityMet}
+            error={isSubmitted && !!verifyNewPasswordError}
           />
           {/* Password complexity requirements */}
           <PasswordComplexity
@@ -98,7 +123,7 @@ export default function ResetPassword() {
                   setShowConfirmPassword(!showConfirmPassword)
                 }
                 label="Confirm New Password"
-                error={isSubmitted && !passwordsMatch}
+                error={isSubmitted && !!verifyNewPasswordError}
               />
               {confirmPassword && (
                 <Requirement
@@ -109,6 +134,12 @@ export default function ResetPassword() {
             </>
           )}
         </div>
+        {isSubmitted && confirmPassword && verifyNewPasswordError && (
+          <OnlyXRequirement
+            met={!verifyNewPasswordError}
+            text={verifyNewPasswordError}
+          />
+        )}
         {/* Sign up button */}
         <BigButton
           type="button"
