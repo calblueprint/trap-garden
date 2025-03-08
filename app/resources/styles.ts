@@ -7,7 +7,7 @@ export const ViewSelection = styled.div`
   align-items: center;
   flex-direction: row;
   gap: 2rem;
-  padding-bottom: 1rem; 
+  padding-bottom: 1rem;
 `;
 
 export const HeaderButton = styled.button<{
@@ -18,13 +18,13 @@ export const HeaderButton = styled.button<{
   color: ${COLORS.shrub};
   font-family: inherit;
   cursor: pointer;
-  font-size: .875rem;
+  font-size: 0.875rem;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  padding: .5rem;
+  padding: 0.5rem;
   padding-top: 0rem;
-  margin: .5rem;
+  margin: 0.5rem;
   color: ${({ $isCurrentMode }) =>
     $isCurrentMode ? ` ${COLORS.shrub}` : `${COLORS.midgray}`};
   border-bottom: ${({ $isCurrentMode }) =>
