@@ -64,3 +64,20 @@ export function Requirement({ met, text }: { met: boolean; text: string }) {
     </P3>
   );
 }
+
+export function OnlyXRequirement({
+  met,
+  text,
+}: {
+  met: boolean;
+  text: string;
+}) {
+  return (
+    <P3 as="span" $color={met ? COLORS.successGreen : COLORS.errorRed}>
+      <Flex $align="center" $gap="8px">
+        {!met && <Icon type="x" />}
+        {text}
+      </Flex>
+    </P3>
+  );
+}
