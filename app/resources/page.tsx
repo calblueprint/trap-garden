@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { FAQDropdown } from '@/components/FAQDropdown';
+import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
-import { H1 } from '@/styles/text';
+import { H1, H4 } from '@/styles/text';
 import { HeaderButton, ViewSelection } from './styles';
 
 export default function Resources() {
@@ -10,16 +12,38 @@ export default function Resources() {
     'FAQs' | 'Tips' | 'Guides'
   >('FAQs');
 
+  //placeholder query, replace
+  const dummy = [
+    { question: 'What are the blah blah blah', answer: 'Beep boop beep boop' },
+    { question: 'Why does beep boop bop', answer: 'Vroommmmm' },
+  ];
+
   function FAQDisplay() {
-    return (<H1>FAQs</H1>)
+    return (
+      <div>
+        <Box $ml="1.5rem" $mb="-1rem">
+          <H4 $fontWeight={500} $color="#1F5A2A">
+            FAQs
+          </H4>
+        </Box>
+
+        {dummy.map((item, index) => (
+          <FAQDropdown
+            key={index}
+            question={item.question}
+            answer={item.answer}
+          />
+        ))}
+      </div>
+    );
   }
 
   function TipDisplay() {
-    return (<H1>Tips</H1>)
+    return <H1>Tips</H1>;
   }
 
   function GuideDisplay() {
-    return (<H1>Guides</H1>)
+    return <H1>Guides</H1>;
   }
 
   function MainBody() {
@@ -49,11 +73,11 @@ export default function Resources() {
         </Flex>
 
         {viewingOption === 'FAQs' ? (
-          < FAQDisplay />
+          <FAQDisplay />
         ) : viewingOption === 'Tips' ? (
-          < TipDisplay />
+          <TipDisplay />
         ) : (
-          < GuideDisplay />
+          <GuideDisplay />
         )}
       </>
     );
@@ -61,7 +85,12 @@ export default function Resources() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
-      <Flex $justify="center" $align="center" $background="#1F5A2A" $h="15rem">
+      <Flex
+        $justify="center"
+        $align="center"
+        $background={COLORS.shrub}
+        $h="15rem"
+      >
         <H1 $color="white" $fontWeight={500}>
           Resource Page
         </H1>
