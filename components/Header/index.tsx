@@ -9,7 +9,7 @@ import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
 import ConfirmationModal from '../ConfirmationModal';
 import Icon from '../Icon';
-import { Container, HamburgerButton } from './styles';
+import { Container, HamburgerButton, ProfileIconWrapper } from './styles';
 
 interface HeaderProps {
   toggleNavColumn: () => void;
@@ -66,7 +66,11 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
       // Logged in AND onboarded
       // TODO: this should route to /my-account in the future
       if (profileData) {
-        return <Icon type="profile" onClick={safeOnClose} />;
+        return (
+          <ProfileIconWrapper onClick={safeOnClose}>
+            <Icon type="profile" />
+          </ProfileIconWrapper>
+        );
       }
 
       // Not onboarded

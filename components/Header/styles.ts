@@ -16,3 +16,9 @@ export const HamburgerButton = styled.button`
   border: none;
   cursor: pointer;
 `;
+
+export const ProfileIconWrapper = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
