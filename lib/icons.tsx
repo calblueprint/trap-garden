@@ -562,7 +562,6 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
-
   backArrow: (
     <svg
       width="20"

@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+export const PlantCalendarRowContainer = styled.tr`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 export const CalendarGrid = styled.div`
   display: grid;
   min-width: 272px;
