@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { BackButton } from '@/app/(auth)/styles';
 import Icon from '@/components/Icon';
 import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
 import { H2, P3 } from '@/styles/text';
 import { StyledForm } from '../styles';
 
@@ -25,11 +26,11 @@ export default function EmailSent() {
       <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
         Email Sent!
       </H2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <Flex $direction="column" $gap="1.5rem">
         <P3 as="span" $color={COLORS.midgray}>
           Check your email for password recovery
         </P3>
-      </div>
+      </Flex>
     </StyledForm>
   );
 }
