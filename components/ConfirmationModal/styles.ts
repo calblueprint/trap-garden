@@ -54,7 +54,10 @@ export const ButtonRow = styled.div`
 
 export const BaseButton = styled.button`
   flex: 1;
-  padding: 4px 16px;
+  width: 76px;
+  padding: 5px 25px;
+  justify-content: center;
+  align-items: center;
   border: none;
   border-radius: 5px;
   font-size: 14px;
