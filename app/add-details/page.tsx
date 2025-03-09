@@ -40,16 +40,6 @@ function ReviewPlant({
         <P2 $fontWeight={500}>Planting Type</P2>
         <P2>{plantingTypeLabels[plantingType]}</P2>
       </ReviewGrid>
-      {/* <CustomSelect
-        label="Planting Type"
-        value={detail.planting_type}
-        options={plantingTypeOptions}
-        onChange={value => updateInput('planting_type', value, index)}
-      />
-      <DateInput
-        value={detail.date_added}
-        onChange={value => updateInput('date_added', value, index)}
-      /> */}
     </Flex>
   );
 }
@@ -58,9 +48,34 @@ export default function Home() {
   const { profileData, profileReady, plantsToAdd } = useProfile();
   const { userId } = useAuth();
   const router = useRouter();
-
   // TODO: address error: if you try to signout from this page
   // it directs to /view-plants instead of login
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  });
+
+  useEffect(() => {
+    window.history.pushState(null, document.title, window.location.href);
+
+    const handlePopState = () => {
+      window.confirm(
+        'You have unsaved changes. Are you sure you want to leave?',
+      );
+    };
+
+    //activated when user moves between browser history (as in, moves back a page for example)
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  });
+
   useEffect(() => {
     if (profileReady && !profileData) {
       router.push(CONFIG.viewPlants);
@@ -76,8 +91,6 @@ export default function Home() {
 
   // Navigate between plants and save input data
   function move(steps: number) {
-    // Set curr date in details to default date if not on submission page
-
     if (currentIndex <= plantsToAdd.length) {
       const currentDetail = details[currentIndex - 1];
       if (!currentDetail || !currentDetail.date_added) {
@@ -85,7 +98,6 @@ export default function Home() {
       }
     }
 
-    // For valid moves, move to next page
     if (
       steps !== 0 &&
       currentIndex + steps > 0 &&
@@ -95,7 +107,6 @@ export default function Home() {
     }
   }
 
-  // disable next if planting type not selected (undefined)
   const disableNext =
     currentIndex <= plantsToAdd.length &&
     !details[currentIndex - 1].planting_type;
@@ -108,8 +119,9 @@ export default function Home() {
     };
     setDetails(updatedDetails);
   }
+
   const handleSubmit = async () => {
-    // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
+    // TODO: elegantly handle not logged in case (e.g. when someone clicks "Back")
     // instead of doing userId!
     if (!userId) return;
     try {
