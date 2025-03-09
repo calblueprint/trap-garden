@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import BPLogo from '@/assets/images/bp-logo.png'; // TODO: remove this
 
 import COLORS from '@/styles/colors';
@@ -8,6 +7,7 @@ import { Plant } from '@/types/schema';
 import { plantingTypeOptions } from '@/utils/dropdownOptions';
 import CustomSelect from '../CustomSelect';
 import DateInput from '../DateInput';
+import { PlantImage } from './styles';
 
 export default function PlantDetails({
   plant,
@@ -30,10 +30,9 @@ export default function PlantDetails({
         $justify="center"
         $align="center"
       >
-        <Image
+        <PlantImage
           src={plant.img ?? BPLogo} // TODO: change the default image
           alt={`Plant Image for ${plant.plant_name}`}
-          style={{ height: '120px', width: 'max-content' }}
         />
       </Flex>
       <Box $p="24px" $pb="0">

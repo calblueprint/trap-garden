@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import CONFIG from '@/lib/configs';
@@ -11,6 +11,7 @@ import { useAuth } from '@/utils/AuthProvider';
 import { userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import { BigButton } from '../Buttons';
+import ConfirmationModal from '../ConfirmationModal';
 import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
 import {
@@ -52,13 +53,51 @@ const navLinks: NavLink[] = [
 
 export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const currentPath = usePathname();
-  const { signOut, userId, loading: authLoading } = useAuth();
   const router = useRouter();
+
+  const { signOut, userId, loading: authLoading } = useAuth();
   const { profileData, profileReady } = useProfile();
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
 
   const handleSignOut = async () => {
     await signOut();
     router.push(CONFIG.login);
+    onClose();
+  };
+
+  const safeOnClose = (
+    e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  ) => {
+    if (currentPath === '/add-details') {
+      e?.preventDefault();
+
+      const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
+        'href',
+      );
+      if (href) setPendingHref(href);
+
+      setShowConfirmModal(true);
+    } else {
+      // If not on /add-details, just close or navigate as normal
+      onClose();
+    }
+  };
+
+  const handleCancel = () => {
+    setShowConfirmModal(false);
+    setPendingHref(null);
+  };
+
+  const handleConfirm = () => {
+    if (pendingHref) {
+      // Actually navigate
+      router.push(pendingHref);
+    }
+    setShowConfirmModal(false);
+    setPendingHref(null);
+
     onClose();
   };
 
@@ -68,14 +107,11 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       return <div>Loading...</div>;
     }
 
-    // Logged in Users
     if (userId) {
-      // Logged in, not onboarded -> Go To Onboarding button
-      // Logged in, Onboarded -> Show My Account Info
       return (
         <ProfileDisplayContainer>
           {!profileData ? (
-            <OnboardingButton href={CONFIG.onboarding} onClick={onClose}>
+            <OnboardingButton href={CONFIG.onboarding} onClick={safeOnClose}>
               Go to Onboarding
             </OnboardingButton>
           ) : (
@@ -99,13 +135,13 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       );
     }
 
-    // Not logged -> Go to Auth Pages
+    // If not logged in
     return (
       <LoginButtonsContainer>
-        <LoginButton href={CONFIG.login} onClick={onClose}>
+        <LoginButton href={CONFIG.login} onClick={safeOnClose}>
           Log In
         </LoginButton>
-        <SignUpButton href={CONFIG.signup} onClick={onClose}>
+        <SignUpButton href={CONFIG.signup} onClick={safeOnClose}>
           Sign Up
         </SignUpButton>
       </LoginButtonsContainer>
@@ -120,10 +156,8 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
           <NavColumnContainer>
             <div>
               <NavColumnHeader>
-                <div>
-                  {/* empty whitespace for positioning logo and hamburger */}
-                </div>
-                <Link onClick={onClose} href={CONFIG.home}>
+                <div>{/* Empty for spacing */}</div>
+                <Link onClick={safeOnClose} href={CONFIG.home}>
                   <Icon type="logo" />
                 </Link>
                 <HamburgerButton onClick={onClose}>
@@ -138,7 +172,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                     path={link.path}
                     isSelected={currentPath === link.path}
                     icon={link.iconName}
-                    onClose={onClose}
+                    onClose={safeOnClose}
                   />
                 ))}
               </NavLinksContainer>
@@ -155,6 +189,14 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
           </NavColumnContainer>
         </>
       )}
+
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        title="Exit Add Plant Details?"
+        message="You will lose all information entered for your plants."
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      />
     </>
   );
 }
