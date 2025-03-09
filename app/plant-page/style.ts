@@ -29,12 +29,20 @@ export const BackButton = styled.button`
   padding: 0;
 `;
 
-export const PlantImage = styled.img`
+export const PlantImage = styled.img<{ $isHarvesting?: boolean }>`
   align-self: center;
   max-width: 150px;
   height: auto;
   margin: 9px auto 0;
   display: block;
+  transition:
+    filter 1s ease-in-out,
+    opacity 1s ease-in-out;
+  filter: ${({ $isHarvesting }) =>
+    $isHarvesting
+      ? 'brightness(0.7) saturate(1.3) hue-rotate(50deg) contrast(1.3)'
+      : 'brightness(1) saturate(1)'};
+  opacity: ${({ $isHarvesting }) => ($isHarvesting ? '0.5' : '1')};
 `;
 
 // Content
