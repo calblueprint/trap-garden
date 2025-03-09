@@ -69,36 +69,44 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
 
   const safeOnClose = (
     e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+    action: 'signOut' | 'navigate' = 'navigate',
   ) => {
     if (currentPath === '/add-details') {
       e?.preventDefault();
-
-      const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
-        'href',
-      );
-      if (href) setPendingHref(href);
-
+      if (action === 'navigate') {
+        const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
+          'href',
+        );
+        if (href) setPendingHref(href);
+      }
+      // For both navigation and sign out on /add-details, show confirmation.
       setShowConfirmModal(true);
     } else {
-      // If not on /add-details, just close or navigate as normal
-      onClose();
+      // If not on /add-details, perform the action immediately.
+      if (action === 'signOut') {
+        handleSignOut();
+      } else {
+        onClose();
+      }
     }
+  };
+
+  // Confirm handler for the modal:
+  const handleConfirm = () => {
+    if (pendingHref) {
+      router.push(pendingHref);
+    } else {
+      // If there's no pendingHref, assume it's a sign out.
+      handleSignOut();
+    }
+    setShowConfirmModal(false);
+    setPendingHref(null);
+    onClose();
   };
 
   const handleCancel = () => {
     setShowConfirmModal(false);
     setPendingHref(null);
-  };
-
-  const handleConfirm = () => {
-    if (pendingHref) {
-      // Actually navigate
-      router.push(pendingHref);
-    }
-    setShowConfirmModal(false);
-    setPendingHref(null);
-
-    onClose();
   };
 
   const AuthOrProfileButtons = () => {
@@ -128,7 +136,11 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
               </NameAndStatus>
             </Profile>
           )}
-          <BigButton $secondaryColor={COLORS.errorRed} onClick={handleSignOut}>
+          {/* For Sign Out, pass "signOut" as the action */}
+          <BigButton
+            $secondaryColor={COLORS.errorRed}
+            onClick={e => safeOnClose(e, 'signOut')}
+          >
             Sign Out
           </BigButton>
         </ProfileDisplayContainer>
@@ -193,7 +205,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       <ConfirmationModal
         isOpen={showConfirmModal}
         title="Exit Add Plant Details?"
-        message="You will lose all information entered for your plants."
+        message="You will lose all information entered for your plants"
         onCancel={handleCancel}
         onConfirm={handleConfirm}
       />

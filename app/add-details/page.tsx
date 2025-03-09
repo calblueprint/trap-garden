@@ -48,7 +48,8 @@ export default function Home() {
   const { profileData, profileReady, plantsToAdd } = useProfile();
   const { userId } = useAuth();
   const router = useRouter();
-
+  // TODO: address error: if you try to signout from this page
+  // it directs to /view-plants instead of login
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -63,13 +64,12 @@ export default function Home() {
     window.history.pushState(null, document.title, window.location.href);
 
     const handlePopState = () => {
-      const leavePage = window.confirm(
+      window.confirm(
         'You have unsaved changes. Are you sure you want to leave?',
       );
-      if (!leavePage) {
-      }
     };
 
+    //activated when user moves between browser history (as in, moves back a page for example)
     window.addEventListener('popstate', handlePopState);
     return () => {
       window.removeEventListener('popstate', handlePopState);
@@ -89,6 +89,7 @@ export default function Home() {
 
   const getDefaultDate = () => new Date().toISOString().substring(0, 10);
 
+  // Navigate between plants and save input data
   function move(steps: number) {
     if (currentIndex <= plantsToAdd.length) {
       const currentDetail = details[currentIndex - 1];
@@ -120,6 +121,8 @@ export default function Home() {
   }
 
   const handleSubmit = async () => {
+    // TODO: elegantly handle not logged in case (e.g. when someone clicks "Back")
+    // instead of doing userId!
     if (!userId) return;
     try {
       const completedDetails: Omit<UserPlant, 'id' | 'date_removed'>[] =
