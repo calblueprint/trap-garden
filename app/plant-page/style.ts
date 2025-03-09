@@ -1,6 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import COLORS from '@/styles/colors';
 import { H3 } from '@/styles/text';
+import { popOffAnimation } from './animations';
 
 // Image Header
 export const ImgHeader = styled.div`
@@ -29,12 +30,19 @@ export const BackButton = styled.button`
   padding: 0;
 `;
 
-export const PlantImage = styled.img`
+export const PlantImage = styled.img<{ $isHarvesting?: boolean }>`
   align-self: center;
   max-width: 150px;
   height: auto;
   margin: 9px auto 0;
   display: block;
+  transition: opacity 1s ease-in-out;
+  ${props =>
+    props.$isHarvesting &&
+    css`
+      animation: ${popOffAnimation} 1s ease-out forwards;
+      opacity: 0; /* Optional: fade out the image during animation */
+    `};
 `;
 
 // Content
