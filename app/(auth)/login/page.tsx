@@ -71,6 +71,23 @@ export default function Login() {
     };
   }, [email, password, handleLogin]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (canSubmitForm) {
+        if (key === 'Enter') {
+          handleLogin();
+        }
+      }
+    };
+
+    //add listener for keydown events
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
   return (
     <StyledForm onSubmit={handleLogin}>
       <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
