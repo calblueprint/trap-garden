@@ -161,6 +161,21 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
     );
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Escape') {
+        onClose();
+      }
+    };
+
+    //add listener for keydown events
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
   return (
     <>
       {isOpen && (
