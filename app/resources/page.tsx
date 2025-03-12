@@ -5,7 +5,7 @@ import { FAQDropdown } from '@/components/FAQDropdown';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, H4 } from '@/styles/text';
-import { HeaderButton, ViewSelection } from './styles';
+import { HeaderButton, PageContainer, ViewSelection } from './styles';
 
 export default function Resources() {
   const [viewingOption, setViewingOption] = useState<
@@ -21,8 +21,8 @@ export default function Resources() {
   function FAQDisplay() {
     return (
       <div>
-        <Box $ml="1.5rem" $mb="-1rem">
-          <H4 $fontWeight={500} $color="#1F5A2A">
+        <Box $pl="1.5rem" $mb="-1rem">
+          <H4 $fontWeight={500} $color={COLORS.shrub}>
             FAQs
           </H4>
         </Box>
@@ -84,7 +84,7 @@ export default function Resources() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
+    <PageContainer>
       <Flex
         $justify="center"
         $align="center"
@@ -98,6 +98,6 @@ export default function Resources() {
       <Box>
         <MainBody />
       </Box>
-    </div>
+    </PageContainer>
   );
 }

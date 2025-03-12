@@ -18,7 +18,7 @@ export const HeaderButton = styled.button<{
   color: ${COLORS.shrub};
   font-family: inherit;
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
@@ -29,4 +29,9 @@ export const HeaderButton = styled.button<{
     $isCurrentMode ? ` ${COLORS.shrub}` : `${COLORS.midgray}`};
   border-bottom: ${({ $isCurrentMode }) =>
     $isCurrentMode ? `solid ${COLORS.shrub}` : undefined};
+`;
+
+export const PageContainer = styled.div`
+  minheight: '100vh';
+  backgroundcolor: 'white';
 `;

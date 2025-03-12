@@ -20,9 +20,14 @@ export function FAQDropdown({ question, answer }: DropdownProps) {
       $mt="1.5rem"
     >
       <HorizontalLine />
-      <Flex $direction="row" $justify="between" $align="center">
+      <Flex
+        $direction="row"
+        $justify="between"
+        $align="center"
+        onClick={() => setExpanded(!expanded)}
+      >
         <Question>{question}</Question>
-        <P1 onClick={() => setExpanded(!expanded)}>
+        <P1>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="11"
