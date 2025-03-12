@@ -7,13 +7,13 @@ export const ProfilePictureContainer = styled.section`
   justify-content: center;
   background-color: #f7f6f3;
   width: 100%;
-  height: 190px;
+  height: 11.875rem;
 `;
 
 export const PersonalInformationContainer = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 0px 24px;
+  padding: 0 1.5rem;
   align-items: flex-start;
 `;
 
@@ -21,11 +21,11 @@ export const GardenInformationContainer = styled.section`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0 24px;
+  padding: 0 1.5rem;
 `;
 
 export const InfoField = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.25rem;
 `;

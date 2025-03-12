@@ -1,21 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
+import ConfirmationModal from '../ConfirmationModal';
 import Icon from '../Icon';
-import { Container, HamburgerButton } from './styles';
+import { Container, HamburgerButton, ProfileIconWrapper } from './styles';
 
 interface HeaderProps {
   toggleNavColumn: () => void;
 }
 
 export default function Header({ toggleNavColumn }: HeaderProps) {
+  const currentPath = usePathname();
+  const router = useRouter();
+
   const { profileReady, profileData } = useProfile();
   const { userId, loading: authLoading } = useAuth();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
+
+  const safeOnClose = (
+    e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  ) => {
+    if (currentPath === '/add-details') {
+      e?.preventDefault();
+      const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
+        'href',
+      );
+      if (href) setPendingHref(href);
+      setShowConfirmModal(true);
+    } else {
+      if (pendingHref) router.push(pendingHref);
+    }
+  };
+
+  // Confirm handler for the modal:
+  const handleConfirm = () => {
+    if (pendingHref) {
+      router.push(pendingHref);
+    }
+    setShowConfirmModal(false);
+    setPendingHref(null);
+  };
+
+  const handleCancel = () => {
+    setShowConfirmModal(false);
+    setPendingHref(null);
+  };
 
   const onNavColumnClick = () => {
     toggleNavColumn();
@@ -30,7 +66,11 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
       // Logged in AND onboarded
       // TODO: this should route to /my-account in the future
       if (profileData) {
-        return <Icon type="profile" />;
+        return (
+          <ProfileIconWrapper onClick={safeOnClose}>
+            <Icon type="profile" />
+          </ProfileIconWrapper>
+        );
       }
 
       // Not onboarded
@@ -59,10 +99,17 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
       <HamburgerButton onClick={onNavColumnClick}>
         <Icon type="hamburger" />
       </HamburgerButton>
-      <Link href={CONFIG.home}>
+      <Link onClick={safeOnClose} href={CONFIG.home}>
         <Icon type="logo" />
       </Link>
       <AuthOrProfileButtons />
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        title="Exit Add Plant Details?"
+        message="You will lose all information entered for your plants"
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      />
     </Container>
   );
 }
