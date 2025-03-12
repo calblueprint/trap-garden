@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import PasswordComplexity, {
@@ -80,6 +80,22 @@ export default function SignUp() {
       alert('There was an error during sign up. Please try again.');
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Enter') {
+        handleSignUp();
+      }
+      //handle what happens if key == 'Enter'
+    };
+
+    //add listener for keydown events
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
 
   return (
     <StyledForm onSubmit={handleSignUp}>

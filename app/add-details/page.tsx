@@ -108,6 +108,21 @@ export default function Home() {
     };
     setDetails(updatedDetails);
   }
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Enter') {
+        handleSubmit();
+      }
+    };
+
+    //add listener for keydown events
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
   const handleSubmit = async () => {
     // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
     // instead of doing userId!
