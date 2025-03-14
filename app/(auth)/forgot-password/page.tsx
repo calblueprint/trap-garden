@@ -27,11 +27,6 @@ export default function ForgotPassword() {
 
   const handleEmailChange = async (newEmail: string) => {
     setEmail(newEmail);
-    setInvalidEmailError('');
-    setCheckValidEmailError(
-      !isValidEmail(newEmail) ? 'Please enter a valid email address' : '',
-    );
-  };
   };
 
   const handleForgotPassword = async (email: string) => {
@@ -41,7 +36,7 @@ export default function ForgotPassword() {
     });
 
     if (error) {
-      setInvalidEmailError('Something went wrong. Please try again later.');
+      ('Something went wrong. Please try again later.');
       return;
     }
 
