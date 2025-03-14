@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { UUID } from 'crypto';
 import {
   increaseHarvestedByOne,
@@ -14,8 +15,6 @@ import { formatTimestamp, toTitleCase } from '@/utils/helpers';
 import Icon from '../Icon';
 import { Container, HarvestButton, Header } from './style';
 
-// import { SmallButton } from '../Buttons';
-
 function DetailRow(iconType: IconType, text: string) {
   return (
     <Flex $align="center" $gap="8px">
@@ -24,6 +23,7 @@ function DetailRow(iconType: IconType, text: string) {
     </Flex>
   );
 }
+
 export default function YourPlantDetails({
   datePlanted,
   plantingType,
@@ -37,28 +37,34 @@ export default function YourPlantDetails({
   id: UUID;
   onHarvest: () => void;
 }) {
-  async function harvestPlant() {
-    increaseHarvestedByOne(id);
+  // Local state to track the most recent harvest date.
+  const [localRecentHarvestDate, setLocalRecentHarvestDate] = useState<
+    string | null
+  >(recentHarvestDate);
 
-    const currentDate = () => new Date().toISOString();
-    await setRecentHarvestDate(currentDate(), id);
+  async function harvestPlant() {
+    await increaseHarvestedByOne(id);
+    const currentDate = new Date().toISOString();
+    await setRecentHarvestDate(currentDate, id);
+
+    setLocalRecentHarvestDate(currentDate);
     onHarvest();
   }
+
   return (
     <Container>
       <Header>
         <P1 $fontWeight={500} $color={COLORS.shrub}>
           Your Plant Details
         </P1>
-        {/* <SmallButton $secondaryColor={COLORS.shrub}>Edit</SmallButton> */}
       </Header>
       <Flex $direction="column" $gap="8px" $align="center">
         {DetailRow('calendar', `Date Planted: ${formatTimestamp(datePlanted)}`)}
         {DetailRow('plantHand', `Planting Type: ${toTitleCase(plantingType)}`)}
-        {recentHarvestDate
+        {localRecentHarvestDate
           ? DetailRow(
               'plant',
-              `Most Recent Harvest Date: ${formatTimestamp(recentHarvestDate)}`,
+              `Most Recent Harvest Date: ${formatTimestamp(localRecentHarvestDate)}`,
             )
           : DetailRow(
               'plant',

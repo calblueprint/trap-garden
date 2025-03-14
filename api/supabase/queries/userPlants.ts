@@ -70,7 +70,9 @@ export async function removeUserPlantById(id: UUID) {
 }
 
 export async function increaseHarvestedByOne(id: UUID) {
-  const { error } = await supabase.rpc('increment', { row_id: id });
+  const { error } = await supabase.rpc('increment_num_harvested', {
+    row_id: id,
+  });
 
   if (error) {
     throw new Error('Error incrementing:', error);

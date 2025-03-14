@@ -22,10 +22,7 @@ export const HarvestButton = styled.button`
   border: none;
   color: #fff;
   text-align: center;
-  font-family: Lexend;
-  font-size: 0.75rem;
-  font-style: normal;
+  font-family: inherit;
+  font-size: 12px;
   font-weight: 300;
-  //ok i know the font weight isnt technically matched with the figma dev tools but it looks more matched with the mismatched value
-  line-height: normal;
 `;
