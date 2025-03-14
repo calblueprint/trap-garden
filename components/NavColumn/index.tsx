@@ -58,8 +58,6 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const { signOut, userId, loading: authLoading } = useAuth();
   const { profileData, profileReady } = useProfile();
 
-
-
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
 

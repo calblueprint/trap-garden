@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { H1, H2, P2 } from '@/styles/text';
 
 export const Container = styled.div`
   padding: 2rem;
@@ -14,13 +15,10 @@ export const Header = styled.div`
   margin-bottom: 4px;
 `;
 
-export const Title = styled.h1`
+export const Title = styled(H1)`
   color: ${COLORS.shrub};
-  font-family: Lexend;
-  font-size: 16px;
-  font-style: normal;
+  font-size: 1;
   font-weight: 300;
-  line-height: normal;
   margin: 0;
 `;
 
@@ -64,24 +62,18 @@ export const Circle = styled.div`
   margin-right: 10px;
 `;
 
-export const Greeting = styled.h2`
+export const Greeting = styled(H2)`
   color: ${COLORS.shrub};
 
-  font-family: Lexend;
   font-size: 28px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
   margin-bottom: 16px;
 `;
 
-export const DashboardTitle = styled.p`
+export const DashboardTitle = styled(P2)`
   color: ${COLORS.shrub};
-  font-family: Lexend;
   font-size: 14px;
-  font-style: normal;
   font-weight: 300;
-  line-height: normal;
   margin-bottom: 8px;
 `;
 

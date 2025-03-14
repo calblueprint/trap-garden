@@ -80,7 +80,7 @@ export interface PlantTip {
   body_text: string;
 }
 
-export type Category =
+export type TipCategory =
   | 'Helpful Flowers for Your Garden'
   | 'Water Management'
   | 'Mulching'

@@ -145,7 +145,6 @@ export default function Home() {
     setDetails(updatedDetails);
   }
 
-
   const handleSubmit = async () => {
     if (!userId) return;
     try {
