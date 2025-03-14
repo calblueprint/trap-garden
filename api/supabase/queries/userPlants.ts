@@ -70,8 +70,8 @@ export async function updateUserPlantDetails(
   id: UUID,
   date_added: string,
   planting_type: PlantingTypeEnum,
-): Promise<any> {
-  const { data, error } = await supabase
+) {
+  const { error } = await supabase
     .from('user_plants')
     .update({
       date_added,
@@ -82,6 +82,4 @@ export async function updateUserPlantDetails(
   if (error) {
     throw new Error(`Error updating user plant details: ${error.message}`);
   }
-
-  return data;
 }
