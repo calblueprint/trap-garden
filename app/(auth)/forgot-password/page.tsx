@@ -35,7 +35,7 @@ export default function ForgotPassword() {
     });
 
     if (error) {
-      ('Something went wrong. Please try again later.');
+      setInvalidEmailError('Something went wrong. Please try again later.');
       return;
     }
 
