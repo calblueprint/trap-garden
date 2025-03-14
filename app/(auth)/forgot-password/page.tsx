@@ -9,14 +9,7 @@ import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { isValidEmail } from '@/utils/helpers';
-import {
-  BackButton,
-  ColumnFlexContainer,
-  GrayP3,
-  GreenH2,
-  RedP3,
-  StyledForm,
-} from '../styles';
+import { BackButton, GrayP3, GreenH2, RedP3, StyledForm } from '../styles';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
