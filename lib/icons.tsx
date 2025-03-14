@@ -576,20 +576,5 @@ export const IconSvgs = {
       />
     </svg>
   ),
-
-  backArrow: (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6.52504 9.16667L9.50837 6.175L8.33337 5L3.33337 10L8.33337 15L9.50837 13.825L6.52504 10.8333H16.6667V9.16667H6.52504Z"
-        fill="#888888"
-      />
-    </svg>
-  ),
 };
 export type IconType = keyof typeof IconSvgs;
