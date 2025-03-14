@@ -98,6 +98,7 @@ export default function UserPlantPage() {
             datePlanted={currentUserPlant.date_added}
             plantingType={currentUserPlant.planting_type}
             recentHarvestDate={null} // eventually currentUserPlant.recent_date_harvested
+            id={currentUserPlant.id}
           />
 
           <GardeningTips
