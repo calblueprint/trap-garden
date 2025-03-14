@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import supabase from '@/api/supabase/createClient';
 import { BigButton } from '@/components/Buttons';
 import PasswordComplexity, {
-  OnlyXRequirement,
+  NewPasswordRequirement,
   Requirement,
 } from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
-import { ColumnFlexContainer, GreenH2, StyledForm } from '../../styles';
+import { Flex } from '@/styles/containers';
+import { GreenH2, StyledForm } from '../(auth)/styles';
 
 export default function ResetPassword() {
   const [password, setPassword] = useState<string>('');
@@ -55,7 +56,7 @@ export default function ResetPassword() {
       const { error } = await supabase.auth.updateUser({ password });
 
       if (error) {
-        window.alert('Something went wrong. Please try again later.');
+        console.error('Something went wrong. Please try again later.');
         return;
       }
 
@@ -71,7 +72,7 @@ export default function ResetPassword() {
       // Redirect to confirm reset page
       router.push('/login');
     } catch (err) {
-      window.alert(
+      console.error(
         err instanceof Error ? err.message : 'Unexpected error occurred.',
       );
     }
@@ -90,7 +91,7 @@ export default function ResetPassword() {
   return (
     <StyledForm>
       <GreenH2>Set new password</GreenH2>
-      <ColumnFlexContainer>
+      <Flex $direction="column" $gap="1.5rem">
         <div>
           {/* Password input*/}
           <TextInput
@@ -135,7 +136,7 @@ export default function ResetPassword() {
           )}
         </div>
         {isSubmitted && confirmPassword && verifyNewPasswordError && (
-          <OnlyXRequirement
+          <NewPasswordRequirement
             met={!verifyNewPasswordError}
             text={verifyNewPasswordError}
           />
@@ -149,7 +150,7 @@ export default function ResetPassword() {
         >
           Reset Password
         </BigButton>
-      </ColumnFlexContainer>
+      </Flex>
     </StyledForm>
   );
 }

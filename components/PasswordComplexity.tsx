@@ -65,7 +65,7 @@ export function Requirement({ met, text }: { met: boolean; text: string }) {
   );
 }
 
-export function OnlyXRequirement({
+export function NewPasswordRequirement({
   met,
   text,
 }: {

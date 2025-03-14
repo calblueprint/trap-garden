@@ -7,15 +7,9 @@ import { BigButton } from '@/components/Buttons';
 import Icon from '@/components/Icon';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
 import { isValidEmail } from '@/utils/helpers';
-import {
-  BackButton,
-  ColumnFlexContainer,
-  GrayP3,
-  GreenH2,
-  RedP3,
-  StyledForm,
-} from '../styles';
+import { BackButton, GrayP3, GreenH2, RedP3, StyledForm } from '../styles';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -65,7 +59,7 @@ export default function ForgotPassword() {
       </BackButton>
 
       <GreenH2>Reset your password</GreenH2>
-      <ColumnFlexContainer>
+      <Flex $direction="column" $gap="1.5rem">
         <GrayP3 as="span">Enter your email for recovery link</GrayP3>
 
         <div>
@@ -89,7 +83,7 @@ export default function ForgotPassword() {
         >
           Send
         </BigButton>
-      </ColumnFlexContainer>
+      </Flex>
     </StyledForm>
   );
 }
