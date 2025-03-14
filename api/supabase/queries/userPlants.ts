@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { UserPlant } from '@/types/schema';
+import { PlantingTypeEnum, UserPlant } from '@/types/schema';
 import supabase from '../createClient';
 
 export async function insertUserPlants(
@@ -91,4 +91,24 @@ export async function setRecentHarvestDate(
   if (error) {
     throw new Error('Failed to update: ', error);
   }
+}
+
+export async function updateUserPlantDetails(
+  id: UUID,
+  date_added: string,
+  planting_type: PlantingTypeEnum,
+): Promise<any> {
+  const { data, error } = await supabase
+    .from('user_plants')
+    .update({
+      date_added,
+      planting_type,
+    })
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(`Error updating user plant details: ${error.message}`);
+  }
+
+  return data;
 }
