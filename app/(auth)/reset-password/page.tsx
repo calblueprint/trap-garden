@@ -11,7 +11,7 @@ import PasswordComplexity, {
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { GreenH2, StyledForm } from '../(auth)/styles';
+import { GreenH2, StyledForm } from '../styles';
 
 export default function ResetPassword() {
   const [password, setPassword] = useState<string>('');

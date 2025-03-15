@@ -24,7 +24,7 @@ export default function ForgotPassword() {
 
   const handleForgotPassword = async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://trap-garden-dev2.vercel.app/forgot-password',
+      redirectTo: 'https://trap-garden.vercel.app/reset-password',
       // this page doesn't actually exist right now, but will be added in the future
     });
 
