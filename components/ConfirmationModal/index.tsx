@@ -39,5 +39,3 @@ export default function ConfirmationModal({
     </Overlay>
   );
 }
-
-/* ----- Styled Components ----- */

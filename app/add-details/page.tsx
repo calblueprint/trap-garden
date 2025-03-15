@@ -89,7 +89,6 @@ export default function Home() {
 
   const getDefaultDate = () => new Date().toISOString().substring(0, 10);
 
-  // Navigate between plants and save input data
   function move(steps: number) {
     if (currentIndex <= plantsToAdd.length) {
       const currentDetail = details[currentIndex - 1];
