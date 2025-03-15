@@ -59,11 +59,6 @@ export interface OwnedPlant {
   plant: Plant;
 }
 
-export interface NavigationPromptProps {
-  when: boolean;
-  message: string;
-}
-
 export interface ConfirmAlertProps {
   message: string;
   onConfirm: () => void;
@@ -80,7 +75,7 @@ export interface PlantTip {
   body_text: string;
 }
 
-export type Category =
+export type TipCategory =
   | 'Helpful Flowers for Your Garden'
   | 'Water Management'
   | 'Mulching'

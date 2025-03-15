@@ -7,7 +7,7 @@ import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
-import { StyledForm } from '../styles';
+import { ResetLinkButton, StyledForm } from '../styles';
 
 export default function Login() {
   const { signIn } = useAuth(); // Use `signIn` function from AuthProvider
@@ -101,6 +101,10 @@ export default function Login() {
           Log In
         </BigButton>
         {/* Sign in button */}
+        <P3 as="span" $color={COLORS.midgray} style={{ textAlign: 'center' }}>
+          Forgot Password?
+          <ResetLinkButton href="/forgot-password">Reset Here</ResetLinkButton>
+        </P3>
       </div>
     </StyledForm>
   );

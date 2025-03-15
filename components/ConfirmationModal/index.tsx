@@ -19,8 +19,8 @@ interface ConfirmationModalProps {
 
 export default function ConfirmationModal({
   isOpen,
-  title = 'Exit Add Plant Details?',
-  message = 'You will lose all information entered for your plants.',
+  title,
+  message,
   onCancel,
   onConfirm,
 }: ConfirmationModalProps) {
@@ -39,5 +39,3 @@ export default function ConfirmationModal({
     </Overlay>
   );
 }
-
-/* ----- Styled Components ----- */
