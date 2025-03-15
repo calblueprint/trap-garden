@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import CONFIG from '@/lib/configs';
@@ -49,6 +49,7 @@ const navLinks: NavLink[] = [
     path: CONFIG.plantingTimeline,
     iconName: 'calendar',
   },
+  { name: 'Resources', path: CONFIG.resources, iconName: 'plant' },
 ];
 
 export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
@@ -159,6 +160,21 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       </LoginButtonsContainer>
     );
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Escape') {
+        onClose();
+      }
+    };
+
+    //add listener for keydown events
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
 
   return (
     <>
