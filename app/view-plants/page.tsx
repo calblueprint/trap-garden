@@ -304,7 +304,6 @@ export default function Page() {
                 plant={ownedPlant.plant}
                 canSelect={false}
                 onClick={() => handleUserPlantCardClick(ownedPlant)}
-              // aspectRatio="168 / 200"
               />
             ))}
           </PlantGridContainer>
@@ -334,7 +333,7 @@ export default function Page() {
                 canSelect={inAddMode}
                 isSelected={selectedPlants.includes(plant)}
                 onClick={() => handlePlantCardClick(plant)}
-              // aspectRatio="168 / 200"
+                // aspectRatio="168 / 200"
               />
             ))}
           </PlantGridContainer>
