@@ -80,14 +80,20 @@ export default function SignUp() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key;
-      if (key === 'Enter') {
-        handleSignUp();
+      if (
+        email.length > 0 &&
+        password.length > 0 &&
+        passwordsMatch &&
+        isPasswordComplexityMet
+      ) {
+        if (key === 'Enter') {
+          handleSignUp();
+        }
       }
-      //handle what happens if key == 'Enter'
     };
 
     //add listener for keydown events
-    window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };

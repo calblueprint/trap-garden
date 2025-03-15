@@ -57,7 +57,7 @@ export default function Login() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key;
-      if (canSubmitForm) {
+      if (email.length > 0 && password.length > 0) {
         if (key === 'Enter') {
           handleLogin();
         }
@@ -65,11 +65,11 @@ export default function Login() {
     };
 
     //add listener for keydown events
-    window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  });
+  }, [email, password]);
 
   return (
     <StyledForm onSubmit={handleLogin}>

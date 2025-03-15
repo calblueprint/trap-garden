@@ -127,7 +127,7 @@ export default function Home() {
     };
 
     //add listener for keydown events
-    window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
