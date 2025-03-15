@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { UserPlant } from '@/types/schema';
+import { PlantingTypeEnum, UserPlant } from '@/types/schema';
 import supabase from '../createClient';
 
 export async function insertUserPlants(
@@ -64,4 +64,22 @@ export async function removeUserPlantById(id: UUID) {
     throw new Error(`Error deleting plant ${id}:' ${error}`);
   }
   return data;
+}
+
+export async function updateUserPlantDetails(
+  id: UUID,
+  date_added: string,
+  planting_type: PlantingTypeEnum,
+) {
+  const { error } = await supabase
+    .from('user_plants')
+    .update({
+      date_added,
+      planting_type,
+    })
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(`Error updating user plant details: ${error.message}`);
+  }
 }
