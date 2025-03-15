@@ -23,7 +23,7 @@ export function TipDropdown({ name, tips, icon }: TipDropdownProps) {
       $border="1px solid var(--light-grey, #F0F0F0)"
       $radius="5px 5px 0px 0px"
       $align="start"
-      $w="21rem"
+      $w="auto"
     >
       <Flex
         $direction="row"
