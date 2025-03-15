@@ -1,27 +1,49 @@
 import React, { useState } from 'react';
+import { IconType } from '@/lib/icons';
+import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { P1 } from '@/styles/text';
-import { Answer, HorizontalLine, Question } from './styles';
+import { P1, P3 } from '@/styles/text';
+import { PlantTip } from '@/types/schema';
+import { CategoryName, OrderedTipList, StyledIcon } from './styles';
 
-interface DropdownProps {
-  question: string;
-  answer: string;
+interface TipDropdownProps {
+  name: string;
+  tips: PlantTip[];
+  icon: IconType;
 }
 
-export function FAQDropdown({ question, answer }: DropdownProps) {
+export function TipDropdown({ name, tips, icon }: TipDropdownProps) {
   const [expanded, setExpanded] = useState(false);
   return (
     <Flex
       $direction="column"
-      $gap="1.5rem"
       $justify="center"
-      $pl="1.5rem"
-      $pr="1.5rem"
-      $mt="1.5rem"
+      $m="1.5rem"
+      $mb="-.5rem"
+      $border="1px solid var(--light-grey, #F0F0F0)"
+      $radius="5px 5px 0px 0px"
+      $align="start"
+      $w="21rem"
     >
-      <HorizontalLine />
-      <Flex $direction="row" $justify="between" $align="center">
-        <Question>{question}</Question>
+      <Flex
+        $direction="row"
+        $justify="between"
+        $align="center"
+        $p="1rem"
+        $gap="-.5rem"
+        $background={
+          expanded ? 'var(--white-grey, #F0F0F0)' : 'var(--white, #FFFFFF)'
+        }
+      >
+        <Flex $gap="1rem" $direction="row" $align="center">
+          <StyledIcon type={icon} />
+          <Flex $direction="column" $gap=".25rem">
+            <CategoryName $colorString={expanded ? COLORS.shrub : 'black'}>
+              {name}
+            </CategoryName>
+            <P3 $color="var(--medium-grey, #888)">{tips.length} Tips</P3>
+          </Flex>
+        </Flex>
         <P1 onClick={() => setExpanded(!expanded)}>
           {!expanded ? (
             <svg
@@ -53,7 +75,13 @@ export function FAQDropdown({ question, answer }: DropdownProps) {
           )}
         </P1>
       </Flex>
-      {expanded ? <Answer>{answer}</Answer> : null}
+      {expanded ? (
+        <OrderedTipList>
+          {tips.map(tip => (
+            <li key={tip.id}>{tip.body_text}</li>
+          ))}
+        </OrderedTipList>
+      ) : null}
     </Flex>
   );
 }
