@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAllPlants } from '@/api/supabase/queries/plants';
-import { P3 } from '@/styles/text';
+import { Flex } from '@/styles/containers';
+import { H2, P3 } from '@/styles/text';
 import {
   DropdownOption,
   Plant,
@@ -61,6 +62,7 @@ export const PlantCalendarList = ({
 }: PlantListProps) => {
   const [plants, setPlants] = useState<Plant[]>([]);
   const router = useRouter();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
       const plantList = await getAllPlants();
@@ -68,6 +70,7 @@ export const PlantCalendarList = ({
         a.plant_name.localeCompare(b.plant_name),
       );
       setPlants(alphabeticalPlantList);
+      setIsLoaded(true);
     })();
   }, []);
 
@@ -94,46 +97,54 @@ export const PlantCalendarList = ({
   }
 
   return (
-    <Styles.TableContainer>
-      <Styles.StyledTable>
-        {/* set widths of each columns*/}
-        <colgroup>
-          <col style={{ width: '72px' }} />
-          <col style={{ minWidth: '400px' }} />
-        </colgroup>
-        <thead>
-          <tr>
-            <Styles.StickyTd></Styles.StickyTd>
-            <Styles.ScrollableTd>
-              <MonthHeader />
-            </Styles.ScrollableTd>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredPlantList.map(plant => (
-            <PlantCalendarRowContainer
-              key={plant.id}
-              onClick={() => handlePlantCalendarRowClick(plant)}
-            >
-              <Styles.StickyTd>
-                <P3>{plant.plant_name}</P3>
-              </Styles.StickyTd>
-              <Styles.ScrollableTd>
-                <PlantCalendarRow
-                  harvestStart={plant.harvest_start}
-                  harvestEnd={plant.harvest_end}
-                  transplantStart={plant.transplant_start}
-                  transplantEnd={plant.transplant_end}
-                  indoorsStart={plant.indoors_start}
-                  indoorsEnd={plant.indoors_end}
-                  outdoorsStart={plant.outdoors_start}
-                  outdoorsEnd={plant.outdoors_end}
-                />
-              </Styles.ScrollableTd>
-            </PlantCalendarRowContainer>
-          ))}
-        </tbody>
-      </Styles.StyledTable>
-    </Styles.TableContainer>
+    <>
+      {isLoaded ? (
+        <Styles.TableContainer>
+          <Styles.StyledTable>
+            {/* set widths of each columns*/}
+            <colgroup>
+              <col style={{ width: '72px' }} />
+              <col style={{ minWidth: '400px' }} />
+            </colgroup>
+            <thead>
+              <tr>
+                <Styles.StickyTd></Styles.StickyTd>
+                <Styles.ScrollableTd>
+                  <MonthHeader />
+                </Styles.ScrollableTd>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPlantList.map(plant => (
+                <PlantCalendarRowContainer
+                  key={plant.id}
+                  onClick={() => handlePlantCalendarRowClick(plant)}
+                >
+                  <Styles.StickyTd>
+                    <P3>{plant.plant_name}</P3>
+                  </Styles.StickyTd>
+                  <Styles.ScrollableTd>
+                    <PlantCalendarRow
+                      harvestStart={plant.harvest_start}
+                      harvestEnd={plant.harvest_end}
+                      transplantStart={plant.transplant_start}
+                      transplantEnd={plant.transplant_end}
+                      indoorsStart={plant.indoors_start}
+                      indoorsEnd={plant.indoors_end}
+                      outdoorsStart={plant.outdoors_start}
+                      outdoorsEnd={plant.outdoors_end}
+                    />
+                  </Styles.ScrollableTd>
+                </PlantCalendarRowContainer>
+              ))}
+            </tbody>
+          </Styles.StyledTable>
+        </Styles.TableContainer>
+      ) : (
+        <Flex $justify="center" $align="center" $h="30rem">
+          <H2>Loading...</H2>
+        </Flex>
+      )}
+    </>
   );
 };
