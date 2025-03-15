@@ -7,19 +7,13 @@ import { BigButton } from '@/components/Buttons';
 import Icon from '@/components/Icon';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
 import { isValidEmail } from '@/utils/helpers';
-import {
-  BackButton,
-  ColumnFlexContainer,
-  GrayP3,
-  GreenH2,
-  RedP3,
-  StyledForm,
-} from '../styles';
+import { BackButton, GrayP3, GreenH2, RedP3, StyledForm } from '../styles';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [invalidEmailError, setInvalidEmailError] = useState('');
+  const [invalidEmailError, setInvalidEmailError] = useState<string>('');
   const canSubmitForm = email && !invalidEmailError;
 
   const router = useRouter();
@@ -30,7 +24,7 @@ export default function ForgotPassword() {
 
   const handleForgotPassword = async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://trap-garden-dev2.vercel.app/forgot-password',
+      redirectTo: 'https://trap-garden.vercel.app/reset-password',
       // this page doesn't actually exist right now, but will be added in the future
     });
 
@@ -65,7 +59,7 @@ export default function ForgotPassword() {
       </BackButton>
 
       <GreenH2>Reset your password</GreenH2>
-      <ColumnFlexContainer>
+      <Flex $direction="column" $gap="1.5rem">
         <GrayP3 as="span">Enter your email for recovery link</GrayP3>
 
         <div>
@@ -89,7 +83,7 @@ export default function ForgotPassword() {
         >
           Send
         </BigButton>
-      </ColumnFlexContainer>
+      </Flex>
     </StyledForm>
   );
 }
