@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton } from '@/components/Buttons';
+import CustomSelect from '@/components/CustomSelect';
 import Icon from '@/components/Icon';
 import { ProfileIcon } from '@/components/NavColumn/styles';
 import CONFIG from '@/lib/configs';
@@ -11,7 +12,11 @@ import { Flex } from '@/styles/containers';
 import { H4, P1, P2, P3 } from '@/styles/text';
 import { UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { plotOptions } from '@/utils/dropdownOptions';
+import {
+  gardenTypeOptions,
+  plotOptions,
+  usStateOptions,
+} from '@/utils/dropdownOptions';
 import { toTitleCase, userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import { BackButton } from '../(plant-page)/style';
@@ -25,7 +30,27 @@ import {
 export default function MyAccount() {
   const { userEmail, signOut, userId, loading } = useAuth();
 
-  const { profileData, profileReady } = useProfile();
+  const { profileData, profileReady, setProfile } = useProfile();
+
+  const [inEditMode, setInEditMode] = useState(false);
+  const [name, setName] = useState(profileData?.name || '');
+  // const [selectedLocation, setSelectedLocation] = useState(
+  //   profileData?.us_state || '',
+  // );
+  // const [selectedGardenType, setSelectedGardenType] = useState(
+  //   profileData?.user_type || '',
+  // );
+  // const [selectedPlot, setSelectedPlot] = useState(profileData?.has_plot || '');
+
+  const [selectedLocation, setSelectedLocation] = useState<string | undefined>(
+    undefined,
+  );
+  const [selectedGardenType, setSelectedGardenType] = useState<
+    UserTypeEnum | undefined
+  >(undefined);
+  const [selectedPlot, setSelectedPlot] = useState<boolean | undefined>(
+    undefined,
+  );
 
   const router = useRouter();
 
@@ -39,6 +64,27 @@ export default function MyAccount() {
       router.push(CONFIG.login);
     }
   }, [userEmail, loading, router]);
+
+  const handleEditMode = () => {
+    setInEditMode(!inEditMode);
+  };
+
+  const handleSavingEdits = async () => {
+    const editedProfileInfo = {
+      user_id: userId,
+      us_state: selectedLocation,
+      user_type: selectedGardenType,
+      has_plot: selectedPlot,
+      //TODO: add name here to edit name????
+    };
+    try {
+      await setProfile(editedProfileInfo);
+      setInEditMode(false);
+      //router.push?tc
+    } catch (error) {
+      console.error('Error saving profile edits:', error);
+    }
+  };
 
   return (
     <Flex $direction="column" $minH="calc(100vh - 60px)" $justify="between">
@@ -56,6 +102,11 @@ export default function MyAccount() {
               <Icon type="backArrow" />
             </BackButton>
           </Flex>
+
+          {/* TODO: make this into text, add the pen incon, align to the right (put in flexbox with the arrow) */}
+          <button onClick={handleEditMode} style={{}}>
+            {!inEditMode ? 'Edit' : 'Cancel'}
+          </button>
 
           <ProfileIcon type="profile" />
           <H4
@@ -84,6 +135,7 @@ export default function MyAccount() {
             <P2 $fontWeight={400} $color={COLORS.darkgray}>
               Name
             </P2>
+            {/* TODO: make name editable */}
             <P2
               style={{
                 marginBottom: '1.5rem',
@@ -153,44 +205,78 @@ export default function MyAccount() {
                 <P2 $fontWeight={400} $color={COLORS.darkgray}>
                   Location
                 </P2>
-                <P2
-                  style={{
-                    marginBottom: '1.5rem',
-                  }}
-                  $fontWeight={300}
-                  $color={COLORS.darkgray}
-                >
-                  {userId && profileReady && toTitleCase(profileData!.us_state)}
-                </P2>
+                {/* TODO: fix this to have the drop down arrow and the line  */}
+                {inEditMode ? (
+                  <CustomSelect
+                    label="State Location"
+                    value={selectedLocation}
+                    options={usStateOptions}
+                    onChange={setSelectedLocation}
+                  />
+                ) : (
+                  <P2
+                    style={{
+                      marginBottom: '1.5rem',
+                    }}
+                    $fontWeight={300}
+                    $color={COLORS.darkgray}
+                  >
+                    {userId &&
+                      profileReady &&
+                      toTitleCase(profileData!.us_state)}
+                  </P2>
+                )}
               </InfoField>
 
               <InfoField>
                 <P2 $fontWeight={400} $color={COLORS.darkgray}>
                   Garden Type
                 </P2>
-                <P2
-                  style={{
-                    marginBottom: '1.5rem',
-                  }}
-                  $fontWeight={300}
-                  $color={COLORS.darkgray}
-                >
-                  {profileReady &&
-                    userTypeLabels[profileData?.user_type as UserTypeEnum]}
-                </P2>
+
+                {/* TODO: fix this to have the drop down arrow and the line  */}
+                {inEditMode ? (
+                  <CustomSelect
+                    label="Garden Type"
+                    value={selectedGardenType}
+                    options={gardenTypeOptions}
+                    onChange={setSelectedGardenType}
+                  />
+                ) : (
+                  <P2
+                    style={{
+                      marginBottom: '1.5rem',
+                    }}
+                    $fontWeight={300}
+                    $color={COLORS.darkgray}
+                  >
+                    {profileReady &&
+                      userTypeLabels[profileData?.user_type as UserTypeEnum]}
+                  </P2>
+                )}
               </InfoField>
 
               <InfoField>
                 <P2 $fontWeight={400} $color={COLORS.darkgray}>
                   Plot Status
                 </P2>
-                <P2 $fontWeight={300} $color={COLORS.darkgray}>
-                  {
-                    plotOptions.find(
-                      option => option.value === profileData?.has_plot,
-                    )?.label
-                  }
-                </P2>
+
+                {/* TODO: fix this to have the drop down arrow and the line  */}
+                {inEditMode ? (
+                  <CustomSelect
+                    label="Plot Status"
+                    value={selectedPlot}
+                    options={plotOptions}
+                    onChange={value => setSelectedPlot(value)}
+                  />
+                ) : (
+                  <P2 $fontWeight={300} $color={COLORS.darkgray}>
+                    {
+                      plotOptions.find(
+                        option => option.value === profileData?.has_plot,
+                      )?.label
+                    }
+                  </P2>
+                )}
               </InfoField>
             </>
           )}
