@@ -7,43 +7,47 @@ export const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999; /* ensure it's above other elements */
+  z-index: 9999;
 `;
 
 export const ModalContainer = styled.div`
   width: 80%;
   max-width: 340px;
   background-color: #ffffff;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 24px;
+  padding: 28px 32px 20px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 export const ModalTitle = styled.h2`
-  margin: 0 0 12px 0;
-  font-size: 18px;
-  font-weight: 600;
+  margin: 0 0 6px 0;
+  font-size: 1.125rem;
+  font-weight: 400;
   text-align: center;
+  font-style: normal;
+  font-family: Lexend;
 `;
 
 export const ModalMessage = styled.p`
-  margin: 0 0 24px 0;
-  font-size: 14px;
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
   text-align: center;
-  color: #444;
-  line-height: 1.4;
+  color: ${COLORS.midgray};
+  line-height: normal;
+  font-weight: 300;
+  font-style: ormal;
 `;
 
 export const ButtonRow = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 40px;
   width: 100%;
   justify-content: center;
 `;
