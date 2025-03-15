@@ -60,9 +60,9 @@ export const PlantCalendarList = ({
   usStateFilterValue,
   searchTerm,
 }: PlantListProps) => {
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
   const router = useRouter();
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
       const plantList = await getAllPlants();

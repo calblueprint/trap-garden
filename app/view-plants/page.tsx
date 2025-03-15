@@ -83,11 +83,11 @@ export default function Page() {
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
     DropdownOption<SeasonEnum>[]
   >([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedPlants, setSelectedPlants] = useState<Plant[]>([]);
   const [ownedPlants, setOwnedPlants] = useState<OwnedPlant[]>([]);
   const [isCardKeyOpen, setIsCardKeyOpen] = useState<boolean>(false);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const cardKeyRef = useRef<HTMLDivElement>(null);
   const infoButtonRef = useRef<HTMLButtonElement>(null);
   const userState = profileData?.us_state ?? null;
@@ -304,7 +304,7 @@ export default function Page() {
                 plant={ownedPlant.plant}
                 canSelect={false}
                 onClick={() => handleUserPlantCardClick(ownedPlant)}
-                // aspectRatio="168 / 200"
+              // aspectRatio="168 / 200"
               />
             ))}
           </PlantGridContainer>
@@ -334,7 +334,7 @@ export default function Page() {
                 canSelect={inAddMode}
                 isSelected={selectedPlants.includes(plant)}
                 onClick={() => handlePlantCardClick(plant)}
-                // aspectRatio="168 / 200"
+              // aspectRatio="168 / 200"
               />
             ))}
           </PlantGridContainer>
