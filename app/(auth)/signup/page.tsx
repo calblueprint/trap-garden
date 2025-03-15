@@ -10,6 +10,7 @@ import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
+import { isValidEmail } from '@/utils/helpers';
 import { StyledForm } from '../styles';
 
 export default function SignUp() {
@@ -29,11 +30,6 @@ export default function SignUp() {
   const passwordsMatch = password === confirmPassword;
   const canSubmitForm =
     email && password && passwordsMatch && isPasswordComplexityMet;
-
-  const isValidEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   const handleEmailChange = async (newEmail: string) => {
     setEmail(newEmail);

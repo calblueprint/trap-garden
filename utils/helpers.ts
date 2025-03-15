@@ -330,3 +330,9 @@ export const plantingTypeLabels: Record<PlantingTypeEnum, string> = {
   OUTDOORS: 'Start Seed from Outdoors',
   TRANSPLANT: 'Start from Seedling / Transplant',
 };
+
+// helper function to determine whether email input follows structure of valid email
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
