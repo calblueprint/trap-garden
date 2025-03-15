@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton } from '@/components/Buttons';
+import Icon from '@/components/Icon';
 import { ProfileIcon } from '@/components/NavColumn/styles';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
@@ -44,21 +45,17 @@ export default function MyAccount() {
       <div>
         {/* User profile image and name */}
         <ProfilePictureContainer>
-          <div
-            style={{
-              display: 'flex',
-              paddingLeft: '1.5rem',
-              width: '100%',
-            }}
+          <Flex
+            $pb="1.5rem"
+            $pl="1.5rem"
+            $maxH="0%"
+            $align="center"
+            $minW="100%"
           >
-            <BackButton
-              onClick={() => {
-                router.back();
-              }}
-            >
-              ←
+            <BackButton onClick={() => router.back()}>
+              <Icon type="backArrow" />
             </BackButton>
-          </div>
+          </Flex>
 
           <ProfileIcon type="profile" />
           <H4
@@ -127,19 +124,10 @@ export default function MyAccount() {
 
           {/* Displays onboarding button if user profile is not ready */}
           {profileReady && !profileData ? (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                height: '100%',
-              }}
-            >
+            <Flex $direction="column" $align="center" $justify="center">
               <BigButton
                 $primaryColor={COLORS.shrub}
-                onClick={() => router.push('/onboarding')}
+                onClick={() => router.push(CONFIG.onboarding)}
                 style={{
                   width: '100%',
                 }}
@@ -157,7 +145,7 @@ export default function MyAccount() {
               >
                 Profile Information Incomplete
               </P3>
-            </div>
+            </Flex>
           ) : (
             <>
               {/* Displays garden information if user profile is ready */}
