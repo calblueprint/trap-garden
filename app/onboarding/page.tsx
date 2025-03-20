@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { Button } from '@/components/Buttons';
@@ -122,23 +122,10 @@ const ReviewPage = ({
 }: ReviewPageProps) => {
   const { setProfile } = useProfile();
   const router = useRouter();
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const key = e.key;
-      if (key === 'Enter' && currStep === 4) {
-        handleSubmit();
-      }
-    };
 
-    //add listener for keydown events
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  });
   // assumes userId is not null, since the not-logged in case
   // would have been handled by rerouting from the page
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     const profile: Profile = {
       user_id: userId,
       us_state: selectedState,
@@ -152,7 +139,29 @@ const ReviewPage = ({
     } catch (error) {
       console.error('Error upserting profile:', error);
     }
-  };
+  }, [
+    router,
+    selectedGardenType,
+    selectedPlot,
+    selectedState,
+    setProfile,
+    userId,
+  ]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Enter' && currStep === 4) {
+        handleSubmit();
+      }
+    };
+
+    //add listener for keydown events
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currStep, handleSubmit]);
 
   return (
     <>

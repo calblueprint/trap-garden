@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import TextInput from '@/components/TextInput';
@@ -31,7 +31,7 @@ export default function Login() {
     setPassword(newPassword);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = useCallback(async () => {
     try {
       const { error } = await signIn(email, password);
 
@@ -52,7 +52,7 @@ export default function Login() {
       console.error('Login Error:', err);
       setInvalidEmailError('An unexpected error occurred. Please try again.');
     }
-  };
+  }, [email, password, router, signIn]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -69,7 +69,7 @@ export default function Login() {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [email, password]);
+  }, [email, password, handleLogin]);
 
   return (
     <StyledForm onSubmit={handleLogin}>
