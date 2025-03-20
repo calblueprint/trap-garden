@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import PasswordComplexity, {
@@ -54,7 +54,7 @@ export default function SignUp() {
     setConfirmPassword(newConfirmPassword);
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = useCallback(async () => {
     setIsSubmitted(true);
 
     if (!isValidEmail(email)) {
@@ -75,7 +75,7 @@ export default function SignUp() {
       console.error('Sign up failed:', error);
       alert('There was an error during sign up. Please try again.');
     }
-  };
+  }, [email, password, router, signUp]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -97,7 +97,7 @@ export default function SignUp() {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  });
+  }, [email, password, passwordsMatch, isPasswordComplexityMet, handleSignUp]);
 
   return (
     <StyledForm onSubmit={handleSignUp}>
