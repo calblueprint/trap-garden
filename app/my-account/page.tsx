@@ -25,15 +25,16 @@ import {
   InfoField,
   PersonalInformationContainer,
   ProfilePictureContainer,
+  StyledEditCancelContainer,
 } from './styles';
 
 export default function MyAccount() {
   const { userEmail, signOut, userId, loading } = useAuth();
 
-  const { profileData, profileReady, setProfile } = useProfile();
+  const { profileData, profileReady } = useProfile();
 
   const [inEditMode, setInEditMode] = useState(false);
-  const [name, setName] = useState(profileData?.name || '');
+  // const [name, setName] = useState(profileData?.name || '');
   // const [selectedLocation, setSelectedLocation] = useState(
   //   profileData?.us_state || '',
   // );
@@ -69,29 +70,30 @@ export default function MyAccount() {
     setInEditMode(!inEditMode);
   };
 
-  const handleSavingEdits = async () => {
-    const editedProfileInfo = {
-      user_id: userId,
-      us_state: selectedLocation,
-      user_type: selectedGardenType,
-      has_plot: selectedPlot,
-      //TODO: add name here to edit name????
-    };
-    try {
-      await setProfile(editedProfileInfo);
-      setInEditMode(false);
-      //router.push?tc
-    } catch (error) {
-      console.error('Error saving profile edits:', error);
-    }
-  };
+  //TODO: fix this "or null" sitution
+  // const handleSavingEdits = async () => {
+  //   const editedProfileInfo = {
+  //     user_id: userId,
+  //     us_state: selectedLocation,
+  //     user_type: selectedGardenType,
+  //     has_plot: selectedPlot,
+  //     //TODO: add name here to edit name????
+  //   };
+  //   try {
+  //     await setProfile(editedProfileInfo);
+  //     setInEditMode(false);
+  //     router.push(CONFIG.myAccount);
+  //   } catch (error) {
+  //     console.error('Error saving profile edits:', error);
+  //   }
+  // };
 
   return (
     <Flex $direction="column" $minH="calc(100vh - 60px)" $justify="between">
       <div>
         {/* User profile image and name */}
         <ProfilePictureContainer>
-          <Flex
+          {/* <Flex
             $pb="1.5rem"
             $pl="1.5rem"
             $maxH="0%"
@@ -101,12 +103,42 @@ export default function MyAccount() {
             <BackButton onClick={() => router.back()}>
               <Icon type="backArrow" />
             </BackButton>
-          </Flex>
+          </Flex> */}
 
           {/* TODO: make this into text, add the pen incon, align to the right (put in flexbox with the arrow) */}
-          <button onClick={handleEditMode} style={{}}>
+          {/* <button onClick={handleEditMode} style={{}}>
             {!inEditMode ? 'Edit' : 'Cancel'}
-          </button>
+          </button> */}
+          <Flex
+            $pb="1.5rem"
+            $pl="1.5rem"
+            $maxH="0%"
+            $align="center"
+            $minW="100%"
+            $justify="between"
+          >
+            {/* Left-aligned Back Button */}
+            <BackButton onClick={() => router.back()}>
+              <Icon type="backArrow" />
+            </BackButton>
+
+            {/* Right-aligned Edit/Cancel */}
+            <StyledEditCancelContainer
+              isEdit={!inEditMode}
+              onClick={handleEditMode}
+            >
+              {/* Display "Edit" when not in edit mode, styled as blue text with underline */}
+              {!inEditMode ? (
+                <>
+                  <span>Edit</span>
+                  <Icon type="pencil" />
+                </>
+              ) : (
+                // Display "Cancel" when in edit mode, styled as red text
+                <span>Cancel</span>
+              )}
+            </StyledEditCancelContainer>
+          </Flex>
 
           <ProfileIcon type="profile" />
           <H4
@@ -207,12 +239,21 @@ export default function MyAccount() {
                 </P2>
                 {/* TODO: fix this to have the drop down arrow and the line  */}
                 {inEditMode ? (
-                  <CustomSelect
-                    label="State Location"
-                    value={selectedLocation}
-                    options={usStateOptions}
-                    onChange={setSelectedLocation}
-                  />
+                  <Flex
+                    style={{
+                      marginBottom: '1.5rem',
+                      //TODO: fix this to span the width kjdsfhsdhfjhsd
+                      width: '100vw',
+                      paddingRight: '1.5rem',
+                    }}
+                  >
+                    <CustomSelect
+                      value={selectedLocation}
+                      options={usStateOptions}
+                      onChange={setSelectedLocation}
+                      styleType="no-border"
+                    />
+                  </Flex>
                 ) : (
                   <P2
                     style={{
@@ -235,12 +276,18 @@ export default function MyAccount() {
 
                 {/* TODO: fix this to have the drop down arrow and the line  */}
                 {inEditMode ? (
-                  <CustomSelect
-                    label="Garden Type"
-                    value={selectedGardenType}
-                    options={gardenTypeOptions}
-                    onChange={setSelectedGardenType}
-                  />
+                  <Flex
+                    style={{
+                      marginBottom: '1.5rem',
+                    }}
+                  >
+                    <CustomSelect
+                      value={selectedGardenType}
+                      options={gardenTypeOptions}
+                      onChange={setSelectedGardenType}
+                      styleType="no-border"
+                    />
+                  </Flex>
                 ) : (
                   <P2
                     style={{
@@ -262,12 +309,18 @@ export default function MyAccount() {
 
                 {/* TODO: fix this to have the drop down arrow and the line  */}
                 {inEditMode ? (
-                  <CustomSelect
-                    label="Plot Status"
-                    value={selectedPlot}
-                    options={plotOptions}
-                    onChange={value => setSelectedPlot(value)}
-                  />
+                  <Flex
+                    style={{
+                      marginBottom: '1.5rem',
+                    }}
+                  >
+                    <CustomSelect
+                      value={selectedPlot}
+                      options={plotOptions}
+                      onChange={value => setSelectedPlot(value)}
+                      styleType="no-border"
+                    />
+                  </Flex>
                 ) : (
                   <P2 $fontWeight={300} $color={COLORS.darkgray}>
                     {

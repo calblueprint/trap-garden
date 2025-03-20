@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import COLORS from '@/styles/colors';
 
 export const ProfilePictureContainer = styled.section`
   display: flex;
@@ -28,4 +29,23 @@ export const InfoField = styled.section`
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+`;
+interface StyledEditCancelContainerProps {
+  isEdit: boolean;
+}
+
+export const StyledEditCancelContainer = styled.div<StyledEditCancelContainerProps>`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  span {
+    color: ${({ isEdit }) => (isEdit ? COLORS.blueLink : COLORS.errorRed)};
+    text-decoration: ${({ isEdit }) => (isEdit ? 'underline' : 'none')};
+    padding-right: ${({ isEdit }) => (isEdit ? '0' : '1.5rem')};
+  }
+
+  svg {
+    margin-left: 0.5rem;
+  }
 `;
