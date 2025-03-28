@@ -48,6 +48,8 @@ export interface UserPlant {
   date_removed: string;
   // recent_date_harvest: string;
   planting_type: PlantingTypeEnum;
+  user_notes;
+  string;
 }
 
 export interface DropdownOption<T = string> {
