@@ -5,7 +5,7 @@ import supabase from '../createClient';
 export async function insertUserPlants(
   userPlants: Omit<
     UserPlant,
-    'id' | 'date_removed' | 'recent_harvest' | 'num_harvested'
+    'id' | 'date_removed' | 'user_notes' | 'recent_harvest' | 'num_harvested'
   >[],
 ) {
   const { error } = await supabase.from('user_plants').insert(userPlants);
@@ -109,4 +109,23 @@ export async function updateUserPlantDetails(
   if (error) {
     throw new Error(`Error updating user plant details: ${error.message}`);
   }
+}
+
+export async function updateUserNote(
+  user_id: UUID,
+  plant_id: UUID,
+  user_notes: string | undefined,
+) {
+  const { data, error } = await supabase
+    .from('user_plants')
+    .update({ user_notes: user_notes })
+    .eq('user_id', user_id)
+    .eq('plant_id', plant_id);
+
+  if (error) {
+    throw new Error(
+      `Error updating user note with id ${user_id}: ${error.message}`,
+    );
+  }
+  return data;
 }

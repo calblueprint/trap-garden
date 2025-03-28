@@ -49,6 +49,8 @@ export interface UserPlant {
   recent_harvest: string;
   num_harvested: number;
   planting_type: PlantingTypeEnum;
+  user_notes;
+  string;
 }
 
 export interface DropdownOption<T = string> {
