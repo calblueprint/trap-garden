@@ -29,6 +29,30 @@ export const StyledInput = styled(P2).attrs({ as: 'input' })<{
   }
 `;
 
+export const StyledNotesInput = styled(P2).attrs({ as: 'textarea' })<{
+  $error?: boolean;
+}>`
+  padding: 0.75rem;
+  border: 1px solid ${({ $error }) => ($error ? COLORS.errorRed : '#ccc')};
+  border-radius: 0.3125rem;
+  font-family: inherit;
+  margin-bottom: 0.25rem;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+
+  &:focus {
+    border-color: ${({ $error }) => ($error ? COLORS.errorRed : COLORS.shrub)};
+    outline: none;
+  }
+`;
+
 export const IconWrapper = styled.span`
   position: absolute;
   right: 1rem;
