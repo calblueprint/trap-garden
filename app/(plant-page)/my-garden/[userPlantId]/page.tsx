@@ -155,14 +155,15 @@ export default function UserPlantPage() {
             onChange={handleUserNotesChange}
           ></TextInput>
 
-          <BigButton
-            type="button"
-            onClick={handleSaveNotes}
-            $primaryColor={COLORS.shrub}
-            disabled={!canSubmitForm}
-          >
-            Save
-          </BigButton>
+          {canSubmitForm && (
+            <BigButton
+              type="button"
+              onClick={handleSaveNotes}
+              $primaryColor={COLORS.shrub}
+            >
+              Save
+            </BigButton>
+          )}
 
           <GardeningTips
             plantName={currentPlant.plant_name}

@@ -5,7 +5,7 @@ import supabase from '../createClient';
 export async function insertUserPlants(
   userPlants: Omit<
     UserPlant,
-    'id' | 'date_removed' | 'user_notes' | 'recent_harvest' | 'num_harvested'
+    'id' | 'date_removed' | 'recent_harvest' | 'num_harvested' | 'user_notes'
   >[],
 ) {
   const { error } = await supabase.from('user_plants').insert(userPlants);
