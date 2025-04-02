@@ -25,23 +25,17 @@ import {
   InfoField,
   PersonalInformationContainer,
   ProfilePictureContainer,
+  StyledCancelButton,
   StyledEditCancelContainer,
+  StyledSaveButton,
 } from './styles';
 
 export default function MyAccount() {
   const { userEmail, signOut, userId, loading } = useAuth();
 
-  const { profileData, profileReady } = useProfile();
+  const { profileData, profileReady, setProfile } = useProfile();
 
   const [inEditMode, setInEditMode] = useState(false);
-  // const [name, setName] = useState(profileData?.name || '');
-  // const [selectedLocation, setSelectedLocation] = useState(
-  //   profileData?.us_state || '',
-  // );
-  // const [selectedGardenType, setSelectedGardenType] = useState(
-  //   profileData?.user_type || '',
-  // );
-  // const [selectedPlot, setSelectedPlot] = useState(profileData?.has_plot || '');
 
   const [selectedLocation, setSelectedLocation] = useState<string | undefined>(
     undefined,
@@ -65,28 +59,38 @@ export default function MyAccount() {
       router.push(CONFIG.login);
     }
   }, [userEmail, loading, router]);
-
   const handleEditMode = () => {
+    if (!inEditMode) {
+      setSelectedLocation(profileData?.us_state || '');
+      setSelectedGardenType(
+        (profileData?.user_type as UserTypeEnum) || undefined,
+      );
+      setSelectedPlot(
+        profileData?.has_plot !== undefined ? profileData?.has_plot : false,
+      );
+    }
     setInEditMode(!inEditMode);
   };
 
-  //TODO: fix this "or null" sitution
-  // const handleSavingEdits = async () => {
-  //   const editedProfileInfo = {
-  //     user_id: userId,
-  //     us_state: selectedLocation,
-  //     user_type: selectedGardenType,
-  //     has_plot: selectedPlot,
-  //     //TODO: add name here to edit name????
-  //   };
-  //   try {
-  //     await setProfile(editedProfileInfo);
-  //     setInEditMode(false);
-  //     router.push(CONFIG.myAccount);
-  //   } catch (error) {
-  //     console.error('Error saving profile edits:', error);
-  //   }
-  // };
+  const handleSave = async () => {
+    const editedProfileInfo = {
+      user_id: userId!,
+      us_state: selectedLocation!,
+      user_type: selectedGardenType!,
+      has_plot: selectedPlot!,
+      //TODO: add name here to edit name????
+    };
+    try {
+      await setProfile(editedProfileInfo);
+      setInEditMode(false);
+      router.push(CONFIG.myAccount);
+    } catch (error) {
+      console.error('Error saving profile edits:', error);
+    }
+  };
+  const handleCancel = () => {
+    setInEditMode(!inEditMode);
+  };
 
   return (
     <Flex $direction="column" $minH="calc(100vh - 60px)" $justify="between">
@@ -115,29 +119,60 @@ export default function MyAccount() {
             $maxH="0%"
             $align="center"
             $minW="100%"
-            $justify="between"
           >
             {/* Left-aligned Back Button */}
             <BackButton onClick={() => router.back()}>
               <Icon type="backArrow" />
             </BackButton>
 
-            {/* Right-aligned Edit/Cancel */}
-            <StyledEditCancelContainer
-              isEdit={!inEditMode}
-              onClick={handleEditMode}
-            >
-              {/* Display "Edit" when not in edit mode, styled as blue text with underline */}
+            {/* Right-aligned Edit/Save & Cancel Buttons */}
+            <Flex $align="center" $gap="8px" $justify="end" $pr="1.5rem">
               {!inEditMode ? (
-                <>
-                  <span>Edit</span>
+                // Show Edit + Pencil when NOT in edit mode
+                <StyledEditCancelContainer onClick={handleEditMode}>
+                  <P2
+                    $fontWeight={300}
+                    $color={COLORS.blueLink}
+                    style={{
+                      textAlign: 'center',
+                      textDecoration: 'underline',
+                      textDecorationColor: COLORS.blueLink,
+                      paddingRight: '0.2rem',
+                    }}
+                  >
+                    Edit
+                  </P2>
+                  {/* TODO: make the pencil icon blue */}
                   <Icon type="pencil" />
-                </>
+                </StyledEditCancelContainer>
               ) : (
-                // Display "Cancel" when in edit mode, styled as red text
-                <span>Cancel</span>
+                // Show Save + Cancel when in edit mode
+                <>
+                  <StyledSaveButton onClick={handleSave}>
+                    <P2
+                      $fontWeight={300}
+                      $color={COLORS.shrub}
+                      style={{
+                        textAlign: 'center',
+                      }}
+                    >
+                      Save
+                    </P2>
+                  </StyledSaveButton>
+                  <StyledCancelButton onClick={handleCancel}>
+                    <P2
+                      $fontWeight={300}
+                      $color={COLORS.errorRed}
+                      style={{
+                        textAlign: 'center',
+                      }}
+                    >
+                      Cancel
+                    </P2>
+                  </StyledCancelButton>
+                </>
               )}
-            </StyledEditCancelContainer>
+            </Flex>
           </Flex>
 
           <ProfileIcon type="profile" />
@@ -168,7 +203,7 @@ export default function MyAccount() {
               Name
             </P2>
             {/* TODO: make name editable */}
-            <P2
+            {/* <P2
               style={{
                 marginBottom: '1.5rem',
               }}
@@ -176,7 +211,38 @@ export default function MyAccount() {
               $color={COLORS.darkgray}
             >
               Kyrene Tam
-            </P2>
+            </P2> */}
+            {inEditMode ? (
+              <input
+                type="text"
+                placeholder="Enter name"
+                defaultValue="Kyrene Tam"
+                style={{
+                  fontSize: '0.8rem', // Match the font size to the non-edit mode text
+                  padding: '0.5rem', // Adjust padding if needed
+                  borderRadius: '5px',
+                  border: `1px solid ${COLORS.darkgray}`,
+                  width: 'auto', // Let it adjust to the content size
+                  minWidth: '120px', // Minimum width to prevent it from getting too small
+                  maxWidth: '130px', // Set a max width based on expected name length
+                  fontFamily: 'Lexand, sans-serif', // Match the font family
+                  color: COLORS.darkgray, // Match the text color
+                  textAlign: 'left',
+                  fontWeight: 400, // Align text to the left like the non-edit mode text
+                  marginBottom: '1rem', // Add margin to push the next section down
+                }}
+              />
+            ) : (
+              <P2
+                style={{
+                  marginBottom: '1.5rem',
+                }}
+                $fontWeight={300}
+                $color={COLORS.darkgray}
+              >
+                Kyrene Tam
+              </P2>
+            )}
           </InfoField>
 
           <InfoField>
@@ -242,13 +308,13 @@ export default function MyAccount() {
                   <Flex
                     style={{
                       marginBottom: '1.5rem',
-                      //TODO: fix this to span the width kjdsfhsdhfjhsd
-                      width: '100vw',
-                      paddingRight: '1.5rem',
                     }}
                   >
                     <CustomSelect
-                      value={selectedLocation}
+                      value={
+                        selectedLocation ||
+                        (profileData ? profileData.us_state : '')
+                      }
                       options={usStateOptions}
                       onChange={setSelectedLocation}
                       styleType="no-border"
@@ -282,7 +348,12 @@ export default function MyAccount() {
                     }}
                   >
                     <CustomSelect
-                      value={selectedGardenType}
+                      value={
+                        selectedGardenType ||
+                        (profileData
+                          ? (profileData.user_type as UserTypeEnum)
+                          : undefined)
+                      }
                       options={gardenTypeOptions}
                       onChange={setSelectedGardenType}
                       styleType="no-border"
@@ -315,9 +386,11 @@ export default function MyAccount() {
                     }}
                   >
                     <CustomSelect
-                      value={selectedPlot}
+                      value={selectedPlot ?? profileData?.has_plot ?? false}
                       options={plotOptions}
-                      onChange={value => setSelectedPlot(value)}
+                      onChange={value => {
+                        setSelectedPlot(value);
+                      }}
                       styleType="no-border"
                     />
                   </Flex>
@@ -349,3 +422,6 @@ export default function MyAccount() {
     </Flex>
   );
 }
+//TODO: when in edit mode,the plot option for false is not showing up,
+//change pencil color, change dropdown icon size to smaller,
+//make name editable text input when in edit mode

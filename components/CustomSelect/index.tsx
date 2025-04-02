@@ -200,7 +200,7 @@ export default function CustomSelect<T>({
                 : placeholder}
             </P2>
             <DropdownIcon id={componentId}>
-              <Icon type={iconType} />
+              <Icon type="dropdown" />
             </DropdownIcon>
           </NoBorderContent>
           <HorizontalLine />
