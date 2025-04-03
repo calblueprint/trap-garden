@@ -20,18 +20,15 @@ export function FAQDropdown({ question, answer }: DropdownProps) {
       $mt="1.5rem"
     >
       <HorizontalLine />
-      <Flex
-        $direction="row"
-        $justify="between"
-        $align="center"
-        onClick={() => setExpanded(!expanded)}
-      >
+      <Flex $direction="row" $justify="between" $align="center">
         <Question>{question}</Question>
-        {!expanded ? (
-          <Icon type="dropdownArrowDown"></Icon>
-        ) : (
-          <Icon type="dropdownArrowUp"></Icon>
-        )}
+        <div onClick={() => setExpanded(!expanded)}>
+          {!expanded ? (
+            <Icon type="dropdownArrowDown"></Icon>
+          ) : (
+            <Icon type="dropdownArrowUp"></Icon>
+          )}
+        </div>
       </Flex>
       {expanded ? <Answer>{answer}</Answer> : null}
     </Flex>
