@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -28,21 +28,32 @@ import {
   ButtonDiv,
   ContentContainer,
   OnboardingContainer,
+  PDFButtonsContainer,
+  PDFPageWrapper,
   QuestionDiv,
 } from './styles';
 
 // ✅ Fix: Use a CDN to load the worker(idk why this works)
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-const getPDFUrl = (userType: UserTypeEnum) => {
-  const pdfFiles: Record<UserTypeEnum, string> = {
-    ORG: 'CommunityGardenGuide.pdf',
-    INDIV: 'HomeGardenGuide.pdf',
-    SCHOOL: 'SchoolGardenGuide.pdf',
-  };
+const pdfFiles: Record<UserTypeEnum, { filename: string; label: string }> = {
+  ORG: {
+    filename: 'CommunityGardenGuide.pdf',
+    label: 'Community',
+  },
+  INDIV: {
+    filename: 'HomeGardenGuide.pdf',
+    label: 'Individual',
+  },
+  SCHOOL: {
+    filename: 'SchoolGardenGuide.pdf',
+    label: 'School',
+  },
+};
 
-  return supabase.storage.from('pdfs').getPublicUrl(pdfFiles[userType]).data
-    .publicUrl;
+const getPDFUrl = (userType: UserTypeEnum) => {
+  const pdfData = pdfFiles[userType].filename;
+  return supabase.storage.from('pdfs').getPublicUrl(pdfData).data.publicUrl;
 };
 
 interface ReviewPageProps {
@@ -67,13 +78,16 @@ function PdfScreen({
   onNext: () => void;
 }) {
   const pdfUrl = getPDFUrl(selectedGardenType);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [numPages, setNumPages] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [containerWidth, setContainerWidth] = useState(600);
 
   useEffect(() => {
     const updateSize = () => {
-      setContainerWidth(window.innerWidth * 0.2); // 90% of screen width
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
     };
 
     updateSize();
@@ -83,9 +97,9 @@ function PdfScreen({
   return (
     <>
       <ProgressBar progress={progress} />
-      <OnboardingContainer>
+      <OnboardingContainer ref={containerRef}>
         <Flex $direction="column" $align="center" $maxH="100">
-          <P3
+          <H3
             $color={COLORS.shrub}
             style={{
               textAlign: 'center',
@@ -93,56 +107,70 @@ function PdfScreen({
               marginBottom: '8px',
             }}
           >
-            Garden Set Up Guide
-          </P3>
+            Learn how to setup a {pdfFiles[selectedGardenType].label} Garden
+          </H3>
           <Document
             file={pdfUrl}
             onLoadSuccess={({ numPages }) => setNumPages(numPages)}
           >
-            <Page
-              pageNumber={currentPage}
-              width={containerWidth}
-              renderTextLayer={true}
-            />
-          </Document>
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '10px', // Moves buttons up
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              gap: '10px',
-              background: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
-              padding: '8px 16px',
-              borderRadius: '8px',
-            }}
-          >
-            <Button
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </Button>
-            <P3>
+            <PDFPageWrapper>
+              <Page
+                pageNumber={currentPage}
+                width={containerWidth}
+                renderTextLayer={true}
+              />
+              <PDFButtonsContainer style={{ width: containerWidth }}>
+                <Button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  style={
+                    currentPage === 1
+                      ? {
+                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
+                          color: 'white',
+                          borderColor: 'rgba(120, 120, 120, 0.5)',
+                        }
+                      : {
+                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
+                          color: 'white',
+                          borderColor: 'rgba(200, 200, 200, 0.6)',
+                        }
+                  }
+                >
+                  Previous
+                </Button>
+                {/* <P3>
               Page {currentPage} of {numPages || '?'}
-            </P3>
-            <Button
-              onClick={() =>
-                setCurrentPage(prev => Math.min(prev + 1, numPages || 1))
-              }
-              disabled={currentPage === numPages}
-            >
-              Next
-            </Button>
-          </div>
+            </P3> */}
+                <Button
+                  onClick={() =>
+                    setCurrentPage(prev => Math.min(prev + 1, numPages || 1))
+                  }
+                  disabled={currentPage === numPages}
+                  style={
+                    currentPage === numPages
+                      ? {
+                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
+                          color: 'white',
+                          borderColor: 'rgba(120, 120, 120, 0.5)',
+                        }
+                      : {
+                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
+                          color: 'white',
+                          borderColor: 'rgba(200, 200, 200, 0.6)',
+                        }
+                  }
+                >
+                  Next
+                </Button>
+              </PDFButtonsContainer>
+            </PDFPageWrapper>
+          </Document>
         </Flex>
-        <ButtonDiv>
-          {onBack && (
-            <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
-              Back
-            </Button>
-          )}
+        <ButtonDiv style={{ bottom: '80px' }}>
+          <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
+            Back
+          </Button>
           <Button onClick={onNext} $primaryColor={COLORS.shrub}>
             Next
           </Button>
@@ -331,20 +359,16 @@ export default function OnboardingFlow() {
   }, [profileReady, profileData, push]);
 
   const handleNext = () => {
-    if (step === 3) {
-      // If user selects "No" for plot, show extra step
-      if (selectedPlot === false) {
-        setStep(3.5); // Go to extra step
+    if (selectedPlot === false) {
+      if (step === 3) {
+        setStep(3.5);
+        return;
+      } else if (step === 3.5) {
+        setStep(4);
         return;
       }
     }
-    if (step === 3.5) {
-      // If user selects "No" for plot, show extra step
-      if (selectedPlot === false) {
-        setStep(4); // Go to extra step
-        return;
-      }
-    }
+
     setStep(step + 1);
   };
 
@@ -354,6 +378,7 @@ export default function OnboardingFlow() {
       return;
     }
     setStep(step - 1);
+    return;
   };
 
   return authLoading ? (

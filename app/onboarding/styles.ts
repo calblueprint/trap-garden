@@ -45,3 +45,39 @@ export const ButtonDiv = styled.div`
     justify-content: flex-end;
   }
 `;
+
+export const PDFPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+`;
+
+export const PDFButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  gap: 4px;
+  background: transparent;
+  z-index: 10;
+  padding: 2px 6px;
+  border-radius: 4px;
+  bottom: 0;
+  margin-top: 8px;
+  width: 100%; /* ✅ restrict to width of PDF wrapper */
+
+  button {
+    font-size: clamp(8px, 2.5vw, 11px);
+    padding: clamp(2px, 0.4vw, 4px) clamp(6px, 1.5vw, 10px);
+    line-height: 1;
+  }
+
+  p {
+    font-size: clamp(8px, 2.5vw, 11px);
+    margin: 0 2px;
+    line-height: 1;
+  }
+`;
