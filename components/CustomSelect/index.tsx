@@ -98,9 +98,10 @@ import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P2 } from '@/styles/text';
 import { DropdownOption } from '@/types/schema';
+import { DropdownIcon } from '../DateInput/styles';
 import Icon from '../Icon';
 import {
-  DropdownIcon,
+  DropdownIconWrapper,
   HorizontalLine,
   NoBorderContainer,
   NoBorderContent,
@@ -195,13 +196,14 @@ export default function CustomSelect<T>({
         <NoBorderContainer ref={containerRef}>
           <NoBorderContent onClick={() => setIsOpen(!isOpen)}>
             <P2 $color={COLORS.midgray}>
-              {value
+              {value != null
                 ? options.find(option => option.value === value)?.label
                 : placeholder}
             </P2>
-            <DropdownIcon id={componentId}>
+
+            <DropdownIconWrapper>
               <Icon type="dropdown" />
-            </DropdownIcon>
+            </DropdownIconWrapper>
           </NoBorderContent>
           <HorizontalLine />
           {isOpen && (

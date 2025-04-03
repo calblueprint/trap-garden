@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Icon from '@/components/Icon';
 
 // import Icon from '@/components/Icon';
 // import COLORS from '@/styles/colors';
@@ -69,17 +70,7 @@ export const StyledSaveButton = styled.div`
 export const StyledCancelButton = styled.div`
   cursor: pointer;
 `;
-
-// export const BluePencil = styled(Icon)`
-//   &::after {
-//     content: '';
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     width: 100%;
-//     height: 100%;
-//     background-color: ${COLORS.blueLink}; /* Apply blue tint */
-//     mix-blend-mode: multiply; /* Blend with the image */
-//     opacity: 0.7; /* Adjust intensity */
-//   }
-// `;
+export const BluePencilIcon = styled(Icon)`
+  filter: brightness(0) saturate(100%) invert(17%) sepia(87%) saturate(1478%)
+    hue-rotate(192deg) brightness(92%) contrast(91%);
+`;
