@@ -21,6 +21,7 @@ import { toTitleCase, userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import { BackButton } from '../(plant-page)/style';
 import {
+  BluePencilIcon,
   GardenInformationContainer,
   InfoField,
   PersonalInformationContainer,
@@ -142,8 +143,7 @@ export default function MyAccount() {
                   >
                     Edit
                   </P2>
-                  {/* TODO: make the pencil icon blue */}
-                  <Icon type="pencil" />
+                  <BluePencilIcon type="pencil" />
                 </StyledEditCancelContainer>
               ) : (
                 // Show Save + Cancel when in edit mode
