@@ -3,12 +3,12 @@ import { Flex } from '@/styles/containers';
 import Icon from '../Icon';
 import { Answer, Dropdown, HorizontalLine, Question } from './styles';
 
-interface DropdownProps {
+interface FAQDropdownProps {
   question: string;
   answer: string;
 }
 
-export function FAQDropdown({ question, answer }: DropdownProps) {
+export function FAQDropdown({ question, answer }: FAQDropdownProps) {
   const [expanded, setExpanded] = useState(false);
   return (
     <Flex
