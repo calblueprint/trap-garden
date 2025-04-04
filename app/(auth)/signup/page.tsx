@@ -8,9 +8,10 @@ import PasswordComplexity, {
 } from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
-import { H2, P3 } from '@/styles/text';
+import { P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
-import { StyledForm } from '../styles';
+import { isValidEmail } from '@/utils/helpers';
+import { GreenH2, StyledForm } from '../styles';
 
 export default function SignUp() {
   const { signUp } = useAuth();
@@ -29,11 +30,6 @@ export default function SignUp() {
   const passwordsMatch = password === confirmPassword;
   const canSubmitForm =
     email && password && passwordsMatch && isPasswordComplexityMet;
-
-  const isValidEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   const handleEmailChange = async (newEmail: string) => {
     setEmail(newEmail);
@@ -83,9 +79,7 @@ export default function SignUp() {
 
   return (
     <StyledForm onSubmit={handleSignUp}>
-      <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
-        Sign Up
-      </H2>
+      <GreenH2>Sign Up</GreenH2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         <P3 as="span" $color={COLORS.midgray}>
