@@ -17,3 +17,9 @@ export const HorizontalLine = styled.div`
   height: 0.5px;
   background-color: ${COLORS.lightgray};
 `;
+
+export const Dropdown = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;
