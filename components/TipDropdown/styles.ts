@@ -5,9 +5,10 @@ export const OrderedTipList = styled.ol`
   font-size: 12px;
   font-weight: 300;
   padding: 1.5rem;
-  margin: 1rem;
-  margin-top: -0.5rem;
-  margin-bottom: -0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 1rem;
+  marginp-right: 1rem;
 `;
 
 export const StyledIcon = styled(Icon)`
@@ -22,4 +23,10 @@ export const CategoryName = styled.h1<{ $colorString: string }>`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+`;
+
+export const Dropdown = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
 `;
