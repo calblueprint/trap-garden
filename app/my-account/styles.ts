@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Icon from '@/components/Icon';
 
 export const ProfilePictureContainer = styled.section`
   display: flex;
@@ -28,4 +29,26 @@ export const InfoField = styled.section`
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  width: 100%;
+`;
+
+export const StyledEditCancelContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: blue;
+  cursor: pointer;
+`;
+
+export const StyledSaveButton = styled.div`
+  cursor: pointer;
+  padding: 0 0.5rem;
+`;
+
+export const StyledCancelButton = styled.div`
+  cursor: pointer;
+`;
+export const BluePencilIcon = styled(Icon)`
+  filter: brightness(0) saturate(100%) invert(17%) sepia(87%) saturate(1478%)
+    hue-rotate(192deg) brightness(92%) contrast(91%);
 `;
