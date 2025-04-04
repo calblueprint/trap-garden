@@ -71,7 +71,7 @@ export interface InputProps {
 
 export interface PlantTip {
   id: UUID;
-  category: Category;
+  category: TipCategory;
   body_text: string;
 }
 

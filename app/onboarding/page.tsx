@@ -65,6 +65,7 @@ interface ReviewPageProps {
   selectedPlot: boolean;
   setSelectedPlot: (selected: boolean) => void;
   onBack: () => void;
+  currStep: number;
 }
 function PdfScreen({
   progress,
@@ -255,10 +256,24 @@ const ReviewPage = ({
   selectedPlot,
   setSelectedPlot,
   onBack,
+  currStep,
 }: ReviewPageProps) => {
   const { setProfile } = useProfile();
   const router = useRouter();
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Enter' && currStep === 4) {
+        handleSubmit();
+      }
+    };
 
+    //add listener for keydown events
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
   // assumes userId is not null, since the not-logged in case
   // would have been handled by rerouting from the page
   const handleSubmit = async () => {
@@ -428,6 +443,7 @@ export default function OnboardingFlow() {
           selectedPlot={selectedPlot!}
           setSelectedPlot={setSelectedPlot}
           onBack={handleBack}
+          currStep={step}
         />
       )}
     </>
