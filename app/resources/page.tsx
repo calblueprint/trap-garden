@@ -4,12 +4,16 @@ import React, { useEffect, useState } from 'react';
 import { getAllPlantTips } from '@/api/supabase/queries/resources';
 import { FAQDropdown } from '@/components/FAQDropdown';
 import { TipDropdown } from '@/components/TipDropdown';
-import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, H4 } from '@/styles/text';
-import { HeaderButton, PageContainer, ViewSelection } from './styles';
 import { PlantTip } from '@/types/schema';
+import {
+  tipCategories,
+  tipCategoryHeaders,
+  tipCategoryIcons,
+} from '@/utils/helpers';
+import { HeaderButton, PageContainer, ViewSelection } from './styles';
 
 export default function Resources() {
   const [viewingOption, setViewingOption] = useState<
@@ -31,53 +35,26 @@ export default function Resources() {
   ];
 
   function TipDisplay() {
-    const categories = [
-      'Water Management',
-      'Helpful Flowers for Your Garden',
-      'Mulching',
-      'Harvesting',
-      'Planting',
-      'Weeding',
-    ];
-    // Map category values to headers
-    const categoryHeaders: Record<string, string> = {
-      'Helpful Flowers for Your Garden': 'Helpful Flowers',
-      'Water Management': 'Water Management',
-      Mulching: 'Mulching',
-      Harvesting: 'Harvesting',
-      Planting: 'Planting',
-      Weeding: 'Weeding',
-    };
-
-    //Map category values to icon name
-    const categoryIcons: Record<string, IconType> = {
-      'Helpful Flowers for Your Garden': 'flower',
-      'Water Management': 'wateringCan',
-      Mulching: 'lawnCare',
-      Harvesting: 'harvestingBasket',
-      Planting: 'plantHand',
-      Weeding: 'spade',
-    };
-    const [fullList, setFullList] = useState<PlantTip[]>([]);
+    const [fullTipList, setFullTipList] = useState<PlantTip[]>([]);
     useEffect(() => {
       (async () => {
         const tipList = await getAllPlantTips();
-        setFullList(tipList);
+        setFullTipList(tipList);
       })();
-    });
+    }, []);
     return (
       <>
-        <Box $ml="1.5rem" $mb=".5rem">
-          <H4 $fontWeight={500} $color="#1F5A2A">
+        <Box $pl="1.5rem" $mb=".5rem">
+          <H4 $fontWeight={500} $color={COLORS.shrub}>
             Gardening Tips
           </H4>
         </Box>
         <Box $mb="2rem">
-          {categories.map(cat => (
+          {tipCategories.map(cat => (
             <TipDropdown
-              name={categoryHeaders[cat]}
-              tips={fullList.filter(tip => tip.category === cat)}
-              icon={categoryIcons[cat]}
+              name={tipCategoryHeaders[cat]}
+              tips={fullTipList.filter(tip => tip.category === cat)}
+              icon={tipCategoryIcons[cat]}
               key={cat}
             />
           ))}
