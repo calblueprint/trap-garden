@@ -139,9 +139,6 @@ function PdfScreen({
                 >
                   Previous
                 </Button>
-                {/* <P3>
-              Page {currentPage} of {numPages || '?'}
-            </P3> */}
                 <Button
                   onClick={() =>
                     setCurrentPage(prev => Math.min(prev + 1, numPages || 1))
@@ -359,24 +356,10 @@ export default function OnboardingFlow() {
   }, [profileReady, profileData, push]);
 
   const handleNext = () => {
-    if (selectedPlot === false) {
-      if (step === 3) {
-        setStep(3.5);
-        return;
-      } else if (step === 3.5) {
-        setStep(4);
-        return;
-      }
-    }
-
     setStep(step + 1);
   };
 
   const handleBack = () => {
-    if (step == 3.5) {
-      setStep(step - 0.5);
-      return;
-    }
     setStep(step - 1);
     return;
   };
@@ -427,7 +410,7 @@ export default function OnboardingFlow() {
           }
         />
       )}
-      {step === 3.5 && (
+      {step === 4 && (
         <PdfScreen
           progress={66}
           onBack={handleBack}
@@ -435,7 +418,7 @@ export default function OnboardingFlow() {
           selectedGardenType={selectedGardenType!}
         />
       )}
-      {step === 4 && (
+      {step === 5 && (
         <ReviewPage
           userId={userId!}
           selectedState={selectedState!}
