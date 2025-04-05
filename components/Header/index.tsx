@@ -67,8 +67,10 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
       // TODO: this should route to /my-account in the future
       if (profileData) {
         return (
-          <ProfileIconWrapper onClick={safeOnClose}>
-            <Icon type="profile" />
+          <ProfileIconWrapper>
+            <Link onClick={safeOnClose} href={CONFIG.myAccount}>
+              <Icon type="profile" />
+            </Link>
           </ProfileIconWrapper>
         );
       }
