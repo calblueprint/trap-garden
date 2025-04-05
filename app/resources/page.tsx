@@ -14,8 +14,16 @@ export default function Resources() {
 
   //placeholder query, replace
   const dummy = [
-    { question: 'What are the blah blah blah', answer: 'Beep boop beep boop' },
-    { question: 'Why does beep boop bop', answer: 'Vroommmmm' },
+    {
+      question: 'How do I choose which plant to plant?',
+      answer:
+        'Choose a plant based on your climate, sunlight, soil type, water needs, purpose, space, and maintenance level.',
+    },
+    {
+      question: 'How do I evaluate my soil quality?',
+      answer:
+        'You can evaluate your soil quality by observing its texture, color, and drainage, and by conducting a soil test to measure nutrient levels and pH.',
+    },
   ];
 
   function FAQDisplay() {
