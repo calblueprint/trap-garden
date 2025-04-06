@@ -25,4 +25,8 @@ export const HarvestButton = styled.button`
   font-family: inherit;
   font-size: 12px;
   font-weight: 300;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
