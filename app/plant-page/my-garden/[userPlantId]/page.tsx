@@ -36,6 +36,12 @@ export default function UserPlantPage() {
   const userPlantId: UUID = params.userPlantId as UUID;
   const [currentPlant, setCurrentPlant] = useState<Plant>();
   const [currentUserPlant, setCurrentUserPlant] = useState<UserPlant>();
+  const [isHarvesting, setIsHarvesting] = useState(false);
+
+  function handleHarvestAnimation() {
+    setIsHarvesting(true);
+    setTimeout(() => setIsHarvesting(false), 1000);
+  }
 
   useEffect(() => {
     const getPlant = async () => {
@@ -74,7 +80,11 @@ export default function UserPlantPage() {
             X Remove
           </SmallButton>
         </ButtonWrapper>
-        <PlantImage src={currentPlant.img} alt={currentPlant.plant_name} />
+        <PlantImage
+          src={currentPlant.img}
+          alt={currentPlant.plant_name}
+          $isHarvesting={isHarvesting}
+        />
       </ImgHeader>
 
       <Content>
@@ -97,7 +107,9 @@ export default function UserPlantPage() {
           <YourPlantDetails
             datePlanted={currentUserPlant.date_added}
             plantingType={currentUserPlant.planting_type}
-            recentHarvestDate={null} // eventually currentUserPlant.recent_date_harvested
+            recentHarvestDate={currentUserPlant.recent_harvest}
+            id={currentUserPlant.id}
+            onHarvest={handleHarvestAnimation}
           />
 
           <GardeningTips
