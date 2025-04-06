@@ -66,10 +66,7 @@ export default function YourPlantDetails({
               'plant',
               `Most Recent Harvest Date: ${formatTimestamp(localRecentHarvestDate)}`,
             )
-          : DetailRow(
-              'plant',
-              `Most Recent Harvest Date: Not harvested! Get crackin`,
-            )}
+          : DetailRow('plant', `Most Recent Harvest Date: Not harvested yet`)}
         <HarvestButton onClick={harvestPlant}>Harvest</HarvestButton>
       </Flex>
     </Container>
