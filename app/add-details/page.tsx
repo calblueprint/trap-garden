@@ -126,7 +126,11 @@ export default function Home() {
     try {
       const completedDetails: Omit<
         UserPlant,
-        'id' | 'date_removed' | 'recent_harvest' | 'num_harvested'
+        | 'id'
+        | 'date_removed'
+        | 'recent_harvest'
+        | 'num_harvested'
+        | 'user_notes'
       >[] = details.map(detail => ({
         user_id: userId,
         plant_id: detail.plant_id!,
