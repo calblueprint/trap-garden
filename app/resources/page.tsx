@@ -7,13 +7,19 @@ import { TipDropdown } from '@/components/TipDropdown';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, H4 } from '@/styles/text';
-import { PlantTip } from '@/types/schema';
+import { PlantTip, UserTypeEnum } from '@/types/schema';
 import {
   tipCategories,
   tipCategoryHeaders,
   tipCategoryIcons,
 } from '@/utils/helpers';
-import { HeaderButton, PageContainer, ViewSelection } from './styles';
+import PDFSmallPreview from '@/components/PDFSmallPreview';
+import {
+  GuidesGrid,
+  HeaderButton,
+  PageContainer,
+  ViewSelection,
+} from './styles';
 
 export default function Resources() {
   const [viewingOption, setViewingOption] = useState<
@@ -83,7 +89,21 @@ export default function Resources() {
   }
 
   function GuideDisplay() {
-    return <H1>Guides</H1>;
+    const userTypes: UserTypeEnum[] = ['SCHOOL', 'INDIV', 'ORG'];
+    return (
+      <>
+        <Box $pl="1.5rem">
+          <H4 $fontWeight={500} $color={COLORS.shrub}>
+            Planting Guides
+          </H4>
+        </Box>
+        <GuidesGrid>
+          {userTypes.map(type => (
+            <div key={type}>{PDFSmallPreview(type)}</div>
+          ))}
+        </GuidesGrid>
+      </>
+    );
   }
 
   function MainBody() {

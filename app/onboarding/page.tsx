@@ -23,6 +23,7 @@ import {
   plotOptions,
   usStateOptions,
 } from '@/utils/dropdownOptions';
+import { userTypes } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
@@ -38,27 +39,6 @@ import {
 
 // Use a CDN to load the worker
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-const userTypes: Record<
-  UserTypeEnum,
-  { filename: string; label: string; question: string }
-> = {
-  ORG: {
-    filename: 'CommunityGardenGuide.pdf',
-    label: 'Community',
-    question: "What is your organization's name?",
-  },
-  INDIV: {
-    filename: 'HomeGardenGuide.pdf',
-    label: 'Individual',
-    question: 'What is your name?',
-  },
-  SCHOOL: {
-    filename: 'SchoolGardenGuide.pdf',
-    label: 'School',
-    question: "What is your school's name?",
-  },
-};
 
 const getPDFUrl = (userType: UserTypeEnum) => {
   const pdfData = userTypes[userType].filename;
