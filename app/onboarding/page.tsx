@@ -23,6 +23,7 @@ import {
   plotOptions,
   usStateOptions,
 } from '@/utils/dropdownOptions';
+import { pdfFiles } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
@@ -35,21 +36,6 @@ import {
 
 // ✅ Fix: Use a CDN to load the worker(idk why this works)
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-const pdfFiles: Record<UserTypeEnum, { filename: string; label: string }> = {
-  ORG: {
-    filename: 'CommunityGardenGuide.pdf',
-    label: 'Community',
-  },
-  INDIV: {
-    filename: 'HomeGardenGuide.pdf',
-    label: 'Individual',
-  },
-  SCHOOL: {
-    filename: 'SchoolGardenGuide.pdf',
-    label: 'School',
-  },
-};
 
 const getPDFUrl = (userType: UserTypeEnum) => {
   const pdfData = pdfFiles[userType].filename;

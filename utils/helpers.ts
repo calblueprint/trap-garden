@@ -336,3 +336,21 @@ export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
+
+export const pdfFiles: Record<
+  UserTypeEnum,
+  { filename: string; label: string }
+> = {
+  ORG: {
+    filename: 'CommunityGardenGuide.pdf',
+    label: 'Community',
+  },
+  INDIV: {
+    filename: 'HomeGardenGuide.pdf',
+    label: 'Home',
+  },
+  SCHOOL: {
+    filename: 'SchoolGardenGuide.pdf',
+    label: 'School',
+  },
+};

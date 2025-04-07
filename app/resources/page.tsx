@@ -2,10 +2,17 @@
 
 import React, { useState } from 'react';
 import { FAQDropdown } from '@/components/FAQDropdown';
+import PDFSmallPreview from '@/components/PDFSmallPreview';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, H4 } from '@/styles/text';
-import { HeaderButton, PageContainer, ViewSelection } from './styles';
+import { UserTypeEnum } from '@/types/schema';
+import {
+  GuidesGrid,
+  HeaderButton,
+  PageContainer,
+  ViewSelection,
+} from './styles';
 
 export default function Resources() {
   const [viewingOption, setViewingOption] = useState<
@@ -51,7 +58,21 @@ export default function Resources() {
   }
 
   function GuideDisplay() {
-    return <H1>Guides</H1>;
+    const userTypes: UserTypeEnum[] = ['SCHOOL', 'INDIV', 'ORG'];
+    return (
+      <>
+        <Box $pl="1.5rem">
+          <H4 $fontWeight={500} $color={COLORS.shrub}>
+            Planting Guides
+          </H4>
+        </Box>
+        <GuidesGrid>
+          {userTypes.map(type => (
+            <div key={type}>{PDFSmallPreview(type)}</div>
+          ))}
+        </GuidesGrid>
+      </>
+    );
   }
 
   function MainBody() {
