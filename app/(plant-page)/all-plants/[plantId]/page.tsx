@@ -10,7 +10,6 @@ import GardeningTips from '@/components/GardeningTips';
 import Icon from '@/components/Icon';
 import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
-import SeasonColorKey from '@/components/SeasonColorKey';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { H4 } from '@/styles/text';

@@ -13,7 +13,6 @@ import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
 import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
-import SeasonColorKey from '@/components/SeasonColorKey';
 import YourPlantDetails from '@/components/YourPlantDetails';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
