@@ -93,7 +93,6 @@ export default function GeneralPlantPage() {
           />
           <Flex $direction="column" $gap="8px">
             <H4>Planting Timeline</H4>
-            <SeasonColorKey />
             <PlantCalendarRow
               harvestStart={currentPlant.harvest_start}
               harvestEnd={currentPlant.harvest_end}
