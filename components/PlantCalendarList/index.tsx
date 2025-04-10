@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { UUID } from 'crypto';
 import { getAllPlants } from '@/api/supabase/queries/plants';
 import { Flex } from '@/styles/containers';
 import { H2, P3 } from '@/styles/text';
 import {
   DropdownOption,
+  OwnedPlant,
   Plant,
   PlantingTypeEnum,
   SeasonEnum,
@@ -26,6 +28,8 @@ interface PlantListProps {
   growingSeasonFilterValue: DropdownOption<SeasonEnum>[];
   usStateFilterValue: DropdownOption<string> | null;
   searchTerm: string;
+  showMyPlants?: boolean;
+  myPlantIds?: OwnedPlant[];
 }
 
 const months = [
@@ -59,6 +63,8 @@ export const PlantCalendarList = ({
   growingSeasonFilterValue,
   usStateFilterValue,
   searchTerm,
+  showMyPlants,
+  myPlantIds,
 }: PlantListProps) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -75,7 +81,7 @@ export const PlantCalendarList = ({
   }, []);
 
   const filteredPlantList = useMemo(() => {
-    return plants.filter(
+    let filtered = plants.filter(
       plant =>
         checkGrowingSeason(growingSeasonFilterValue, plant) &&
         checkHarvestSeason(harvestSeasonFilterValue, plant) &&
@@ -83,6 +89,19 @@ export const PlantCalendarList = ({
         checkSearchTerm(searchTerm, plant) &&
         checkUsState(usStateFilterValue, plant),
     );
+
+    if (showMyPlants && myPlantIds && myPlantIds.length > 0) {
+      const myPlantIdSet = new Set(myPlantIds.map(owned => owned.plant.id));
+
+      filtered = filtered.filter(plant => myPlantIdSet.has(plant.id as UUID));
+
+      console.log(
+        'Filtered Plants:',
+        filtered.map(plant => plant.id),
+      );
+    }
+
+    return filtered;
   }, [
     plants,
     growingSeasonFilterValue,
@@ -90,6 +109,8 @@ export const PlantCalendarList = ({
     plantingTypeFilterValue,
     searchTerm,
     usStateFilterValue,
+    showMyPlants,
+    myPlantIds,
   ]);
 
   function handlePlantCalendarRowClick(plant: Plant) {
