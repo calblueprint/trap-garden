@@ -14,7 +14,7 @@ import { useAuth } from '@/utils/AuthProvider';
 import { plotOptions } from '@/utils/dropdownOptions';
 import { toTitleCase, userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
-import { BackButton } from '../plant-page/style';
+import { BackButton } from '../(plant-page)/style';
 import {
   GardenInformationContainer,
   InfoField,
