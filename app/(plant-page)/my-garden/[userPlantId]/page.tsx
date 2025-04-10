@@ -13,6 +13,7 @@ import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
 import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
+import SeasonColorKey from '@/components/SeasonColorKey';
 import YourPlantDetails from '@/components/YourPlantDetails';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
@@ -126,6 +127,7 @@ export default function UserPlantPage() {
 
           <Flex $direction="column" $gap="8px">
             <H4>Planting Timeline</H4>
+            <SeasonColorKey />
             <PlantCalendarRow
               harvestStart={currentPlant.harvest_start}
               harvestEnd={currentPlant.harvest_end}
