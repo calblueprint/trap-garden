@@ -99,22 +99,6 @@ export default function SignUp() {
     };
   }, [email, password, passwordsMatch, isPasswordComplexityMet, handleSignUp]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const key = e.key;
-      if (key === 'Enter') {
-        handleSignUp();
-      }
-      //handle what happens if key == 'Enter'
-    };
-
-    //add listener for keydown events
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  });
-
   return (
     <StyledForm onSubmit={handleSignUp}>
       <GreenH2>Sign Up</GreenH2>
