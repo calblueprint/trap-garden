@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useCallback, useEffect, useRef, useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
+import supabase from '@/api/supabase/createClient';
 import { Button } from '@/components/Buttons';
 import CustomSelect from '@/components/CustomSelect';
 import GardenSetupGuide from '@/components/GardenSetupGuide';
@@ -24,8 +28,33 @@ import {
   ButtonDiv,
   ContentContainer,
   OnboardingContainer,
+  PDFButtonsContainer,
+  PDFPageWrapper,
   QuestionDiv,
 } from './styles';
+
+// ✅ Fix: Use a CDN to load the worker(idk why this works)
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+const pdfFiles: Record<UserTypeEnum, { filename: string; label: string }> = {
+  ORG: {
+    filename: 'CommunityGardenGuide.pdf',
+    label: 'Community',
+  },
+  INDIV: {
+    filename: 'HomeGardenGuide.pdf',
+    label: 'Individual',
+  },
+  SCHOOL: {
+    filename: 'SchoolGardenGuide.pdf',
+    label: 'School',
+  },
+};
+
+const getPDFUrl = (userType: UserTypeEnum) => {
+  const pdfData = pdfFiles[userType].filename;
+  return supabase.storage.from('pdfs').getPublicUrl(pdfData).data.publicUrl;
+};
 
 interface ReviewPageProps {
   userId: UUID;
@@ -38,7 +67,116 @@ interface ReviewPageProps {
   onBack: () => void;
   currStep: number;
 }
+function PdfScreen({
+  progress,
+  selectedGardenType,
+  onBack,
+  onNext,
+}: {
+  progress: number;
+  selectedGardenType: UserTypeEnum;
+  onBack?: () => void;
+  onNext: () => void;
+}) {
+  const pdfUrl = getPDFUrl(selectedGardenType);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [numPages, setNumPages] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [containerWidth, setContainerWidth] = useState(600);
 
+  useEffect(() => {
+    const updateSize = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return (
+    <>
+      <ProgressBar progress={progress} />
+      <OnboardingContainer ref={containerRef}>
+        <Flex $direction="column" $align="center" $maxH="100">
+          <H3
+            $color={COLORS.shrub}
+            style={{
+              textAlign: 'center',
+              marginTop: '36px',
+              marginBottom: '8px',
+            }}
+          >
+            Learn how to setup a {pdfFiles[selectedGardenType].label} Garden
+          </H3>
+          <Document
+            file={pdfUrl}
+            onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+          >
+            <PDFPageWrapper>
+              <Page
+                pageNumber={currentPage}
+                width={containerWidth}
+                renderTextLayer={true}
+              />
+              <PDFButtonsContainer style={{ width: containerWidth }}>
+                <Button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  style={
+                    currentPage === 1
+                      ? {
+                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
+                          color: 'white',
+                          borderColor: 'rgba(120, 120, 120, 0.5)',
+                        }
+                      : {
+                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
+                          color: 'white',
+                          borderColor: 'rgba(200, 200, 200, 0.6)',
+                        }
+                  }
+                >
+                  Previous
+                </Button>
+                <Button
+                  onClick={() =>
+                    setCurrentPage(prev => Math.min(prev + 1, numPages || 1))
+                  }
+                  disabled={currentPage === numPages}
+                  style={
+                    currentPage === numPages
+                      ? {
+                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
+                          color: 'white',
+                          borderColor: 'rgba(120, 120, 120, 0.5)',
+                        }
+                      : {
+                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
+                          color: 'white',
+                          borderColor: 'rgba(200, 200, 200, 0.6)',
+                        }
+                  }
+                >
+                  Next
+                </Button>
+              </PDFButtonsContainer>
+            </PDFPageWrapper>
+          </Document>
+        </Flex>
+        <ButtonDiv style={{ bottom: '80px' }}>
+          <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
+            Back
+          </Button>
+          <Button onClick={onNext} $primaryColor={COLORS.shrub}>
+            Next
+          </Button>
+        </ButtonDiv>
+      </OnboardingContainer>
+    </>
+  );
+}
 function SelectionScreen<T = string>({
   progress,
   questionTitle,
@@ -247,6 +385,7 @@ export default function OnboardingFlow() {
 
   const handleBack = () => {
     setStep(step - 1);
+    return;
   };
 
   return authLoading ? (
@@ -296,6 +435,14 @@ export default function OnboardingFlow() {
         />
       )}
       {step === 4 && (
+        <PdfScreen
+          progress={66}
+          onBack={handleBack}
+          onNext={handleNext}
+          selectedGardenType={selectedGardenType!}
+        />
+      )}
+      {step === 5 && (
         <ReviewPage
           userId={userId!}
           selectedState={selectedState!}

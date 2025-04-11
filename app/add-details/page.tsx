@@ -124,13 +124,15 @@ export default function Home() {
     // instead of doing userId!
     if (!userId) return;
     try {
-      const completedDetails: Omit<UserPlant, 'id' | 'date_removed'>[] =
-        details.map(detail => ({
-          user_id: userId,
-          plant_id: detail.plant_id!,
-          date_added: detail.date_added!,
-          planting_type: detail.planting_type!,
-        }));
+      const completedDetails: Omit<
+        UserPlant,
+        'id' | 'date_removed' | 'recent_harvest' | 'num_harvested'
+      >[] = details.map(detail => ({
+        user_id: userId,
+        plant_id: detail.plant_id!,
+        date_added: detail.date_added!,
+        planting_type: detail.planting_type!,
+      }));
       await insertUserPlants(completedDetails);
       router.push('/view-plants');
     } catch (error) {

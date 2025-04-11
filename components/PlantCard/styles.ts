@@ -25,6 +25,11 @@ export const CardContainer = styled.div<{ $isSelected?: boolean }>`
   border: ${({ $isSelected }) =>
     $isSelected ? `1px solid ${COLORS.sprout}` : '1px solid transparent'};
   backdrop-filter: blur(40px);
+
+  &:hover {
+    cursor: pointer;
+    //TODO: add hover effect to show highlighted card
+  }
 `;
 
 export const CardPic = styled.div`

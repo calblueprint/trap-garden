@@ -3,7 +3,10 @@ import { UserPlant } from '@/types/schema';
 import supabase from '../createClient';
 
 export async function insertUserPlants(
-  userPlants: Omit<UserPlant, 'id' | 'date_removed'>[],
+  userPlants: Omit<
+    UserPlant,
+    'id' | 'date_removed' | 'recent_harvest' | 'num_harvested'
+  >[],
 ) {
   const { error } = await supabase.from('user_plants').insert(userPlants);
   if (error) throw new Error(`Error inserting user plants: ${error.message}`);
@@ -64,4 +67,28 @@ export async function removeUserPlantById(id: UUID) {
     throw new Error(`Error deleting plant ${id}:' ${error}`);
   }
   return data;
+}
+
+export async function increaseHarvestedByOne(id: UUID) {
+  const { error } = await supabase.rpc('increment_num_harvested', {
+    row_id: id,
+  });
+
+  if (error) {
+    throw new Error('Error incrementing:', error);
+  }
+}
+
+export async function setRecentHarvestDate(
+  date: string,
+  id: UUID,
+): Promise<void> {
+  const { error } = await supabase
+    .from('user_plants')
+    .update({ recent_harvest: date })
+    .eq('id', id);
+
+  if (error) {
+    throw new Error('Failed to update: ', error);
+  }
 }
