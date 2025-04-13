@@ -359,9 +359,9 @@ export const tipCategoryHeaders: Record<string, string> = {
 //Map category values to icon name
 export const tipCategoryIcons: Record<string, IconType> = {
   'Helpful Flowers for Your Garden': 'flower',
-  'Water Management': 'wateringCan',
+  'Water Management': 'grayWateringCan',
   Mulching: 'lawnCare',
   Harvesting: 'harvestingBasket',
-  Planting: 'plantHand',
+  Planting: 'grayPlantHand',
   Weeding: 'spade',
 };
