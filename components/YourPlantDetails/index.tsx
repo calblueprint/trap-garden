@@ -18,7 +18,7 @@ import { SmallButton } from '../Buttons';
 import CustomSelect from '../CustomSelect';
 import DateInput from '../DateInput';
 import Icon from '../Icon';
-import { Container, HarvestButton, Header, PlantDetailsText } from './style';
+import { Container, EditPlantLabel, HarvestButton, Header, PlantDetailsText } from './style';
 
 function DetailRow(iconType: IconType, text: string) {
   return (
@@ -58,18 +58,21 @@ export default function YourPlantDetails({
 
   // Initialize state with the passed-in props
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [plantedDate, setPlantedDate] = useState<string>(datePlanted);
-  const [typeOfPlanting, setTypeOfPlanting] =
+  const [localDatePlanted, setLocalDatePlanted] = useState<string>(datePlanted);
+  const [localPlantingType, setLocalPlantingType] =
+    useState<string>(plantingType);
+  const [yourPlantedDate, setYourPlantedDate] = useState<string>(datePlanted);
+  const [yourPlantingType, setYourPlantingType] =
     useState<PlantingTypeEnum>(plantingType);
 
   function EditDateRow(iconType: IconType, currentDate: string) {
     return (
       <Flex $align="center" $gap="8px">
         <Icon type={iconType} />
-        <P3 $fontWeight={400}>Date Planted: </P3>
+        <EditPlantLabel>Date Planted: </EditPlantLabel>
         <DateInput
           value={currentDate}
-          onChange={date => setPlantedDate(date)}
+          onChange={date => setYourPlantedDate(date)}
           placeholder="Select planting date"
         />
       </Flex>
@@ -80,23 +83,28 @@ export default function YourPlantDetails({
     return (
       <Flex $align="center" $gap="8px">
         <Icon type={iconType} />
-        <P3 $fontWeight={400}>Planting Type: </P3>
+        <EditPlantLabel>Planting Type: </EditPlantLabel>
         <CustomSelect
           placeholder="Choose Planting Type"
           value={currentType}
           options={plantingTypeOptions}
-          onChange={newType => setTypeOfPlanting(newType as PlantingTypeEnum)}
+          onChange={newType => setYourPlantingType(newType as PlantingTypeEnum)}
           isContainerClickable={true}
         />
       </Flex>
     );
   }
+  function handleCancel() {
+    setIsEditing(false);
+  }
 
   async function handleUpdateUserPlantDetails() {
     try {
-      await updateUserPlantDetails(id, plantedDate, typeOfPlanting);
+      await updateUserPlantDetails(id, yourPlantedDate, yourPlantingType);
       // After saving, exit edit mode.
       setIsEditing(false);
+      setLocalDatePlanted(yourPlantedDate);
+      setLocalPlantingType(yourPlantingType);
     } catch (error) {
       console.error('Error updating plant details', error);
     }
@@ -110,7 +118,7 @@ export default function YourPlantDetails({
             <PlantDetailsText>Your Plant Details</PlantDetailsText>
             <Flex $gap="4px" $justify="end">
               <SmallButton
-                onClick={() => setIsEditing(false)}
+                onClick={handleCancel}
                 $secondaryColor={COLORS.errorRed}
               >
                 Cancel
@@ -124,8 +132,8 @@ export default function YourPlantDetails({
             </Flex>
           </Header>
           <Flex $direction="column" $gap="8px">
-            {EditDateRow('calendar', plantedDate)}
-            {EditPlantTypeRow('plantHand', typeOfPlanting)}
+            {EditDateRow('calendar', yourPlantedDate)}
+            {EditPlantTypeRow('plantHand', yourPlantingType)}
             {recentHarvestDate &&
               DetailRow(
                 'plant',
@@ -147,11 +155,11 @@ export default function YourPlantDetails({
           <Flex $direction="column" $gap="8px" $align="center">
             {DetailRow(
               'calendar',
-              `Date Planted: ${formatTimestamp(datePlanted)}`,
+              `Date Planted: ${formatTimestamp(localDatePlanted)}`,
             )}
             {DetailRow(
               'plantHand',
-              `Planting Type: ${toTitleCase(plantingType)}`,
+              `Planting Type: ${toTitleCase(localPlantingType)}`,
             )}
             {localRecentHarvestDate
               ? DetailRow(
