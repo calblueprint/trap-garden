@@ -107,7 +107,7 @@ export default function CustomSelect<T>({
             </P2>
 
             <DropdownIconWrapper>
-              <Icon type="dropdown" />
+              <Icon type="dropdownArrowDown" />
             </DropdownIconWrapper>
           </NoBorderContent>
           <HorizontalLine />
