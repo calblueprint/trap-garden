@@ -28,6 +28,8 @@ import {
   ProfilePictureContainer,
   StyledCancelButton,
   StyledEditCancelContainer,
+  StyledInput,
+  StyledP2,
   StyledSaveButton,
 } from './styles';
 
@@ -83,7 +85,6 @@ export default function MyAccount() {
     try {
       await setProfile(editedProfileInfo);
       setInEditMode(false);
-      router.push(CONFIG.myAccount);
     } catch (error) {
       console.error('Error saving profile edits:', error);
     }
@@ -114,31 +115,17 @@ export default function MyAccount() {
               {!inEditMode ? (
                 // Show Edit + Pencil when NOT in edit mode
                 <StyledEditCancelContainer onClick={handleEditMode}>
-                  <P2
-                    $fontWeight={300}
-                    $color={COLORS.blueLink}
-                    style={{
-                      textAlign: 'center',
-                      textDecoration: 'underline',
-                      textDecorationColor: COLORS.blueLink,
-                      paddingRight: '0.2rem',
-                    }}
-                  >
+                  <StyledP2 $fontWeight={300} $color={COLORS.blueLink}>
                     Edit
-                  </P2>
+                  </StyledP2>
+
                   <BluePencilIcon type="pencil" />
                 </StyledEditCancelContainer>
               ) : (
                 // Show Save + Cancel when in edit mode
                 <>
                   <StyledSaveButton onClick={handleSave}>
-                    <P2
-                      $fontWeight={300}
-                      $color={COLORS.shrub}
-                      style={{
-                        textAlign: 'center',
-                      }}
-                    >
+                    <P2 $fontWeight={300} $color={COLORS.shrub} $align="center">
                       Save
                     </P2>
                   </StyledSaveButton>
@@ -146,9 +133,7 @@ export default function MyAccount() {
                     <P2
                       $fontWeight={300}
                       $color={COLORS.errorRed}
-                      style={{
-                        textAlign: 'center',
-                      }}
+                      $align="center"
                     >
                       Cancel
                     </P2>
@@ -187,24 +172,10 @@ export default function MyAccount() {
             </P2>
 
             {inEditMode ? (
-              <input
+              <StyledInput
                 type="text"
                 placeholder="Enter name"
                 defaultValue="Kyrene Tam"
-                style={{
-                  fontSize: '0.8rem',
-                  padding: '0.5rem',
-                  borderRadius: '5px',
-                  border: `1px solid ${COLORS.darkgray}`,
-                  width: 'auto',
-                  minWidth: '120px',
-                  maxWidth: '130px',
-                  fontFamily: 'Lexand, sans-serif',
-                  color: COLORS.darkgray,
-                  textAlign: 'left',
-                  fontWeight: 400,
-                  marginBottom: '1rem',
-                }}
               />
             ) : (
               <P2
@@ -277,7 +248,6 @@ export default function MyAccount() {
                 <P2 $fontWeight={400} $color={COLORS.darkgray}>
                   Location
                 </P2>
-                {/* TODO: fix this to have the drop down arrow and the line  */}
                 {inEditMode ? (
                   <Flex
                     style={{
@@ -286,12 +256,12 @@ export default function MyAccount() {
                   >
                     <CustomSelect
                       value={
-                        selectedLocation ||
+                        selectedLocation ??
                         (profileData ? profileData.us_state : '')
                       }
                       options={usStateOptions}
                       onChange={setSelectedLocation}
-                      styleType="no-border"
+                      border={false}
                     />
                   </Flex>
                 ) : (
@@ -323,14 +293,14 @@ export default function MyAccount() {
                   >
                     <CustomSelect
                       value={
-                        selectedGardenType ||
+                        selectedGardenType ??
                         (profileData
                           ? (profileData.user_type as UserTypeEnum)
                           : undefined)
                       }
                       options={gardenTypeOptions}
                       onChange={setSelectedGardenType}
-                      styleType="no-border"
+                      border={false}
                     />
                   </Flex>
                 ) : (
@@ -365,7 +335,7 @@ export default function MyAccount() {
                       onChange={value => {
                         setSelectedPlot(value);
                       }}
-                      styleType="no-border"
+                      border={false}
                     />
                   </Flex>
                 ) : (

@@ -25,7 +25,7 @@ interface CustomSelectProps<T> {
   id?: string;
   iconType?: IconType;
   isContainerClickable?: boolean;
-  styleType?: 'container' | 'no-border'; // New prop for styling
+  border?: boolean;
 }
 
 export default function CustomSelect<T>({
@@ -37,7 +37,7 @@ export default function CustomSelect<T>({
   id,
   iconType = 'pencil',
   isContainerClickable = false,
-  styleType = 'container', // Default to 'container'
+  border = true,
 }: CustomSelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -71,7 +71,7 @@ export default function CustomSelect<T>({
           {label}
         </P2>
       )}
-      {styleType === 'container' ? (
+      {border ? (
         // Default Container Style
         <SelectContainer
           ref={containerRef}
@@ -102,9 +102,8 @@ export default function CustomSelect<T>({
         <NoBorderContainer ref={containerRef}>
           <NoBorderContent onClick={() => setIsOpen(!isOpen)}>
             <P2 $color={COLORS.midgray}>
-              {value != null
-                ? options.find(option => option.value === value)?.label
-                : placeholder}
+              {options.find(option => option.value === value)?.label ||
+                placeholder}
             </P2>
 
             <DropdownIconWrapper>
