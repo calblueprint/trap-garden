@@ -39,7 +39,10 @@ import {
 // ✅ Fix: Use a CDN to load the worker(idk why this works)
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-const userTypes: Record<UserTypeEnum, { filename: string; label: string; question: string }> = {
+const userTypes: Record<
+  UserTypeEnum,
+  { filename: string; label: string; question: string }
+> = {
   ORG: {
     filename: 'CommunityGardenGuide.pdf',
     label: 'Community',
