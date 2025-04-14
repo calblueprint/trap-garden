@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { P1, P3 } from '@/styles/text';
 
 export const Container = styled.div`
   padding: 16px;
@@ -29,4 +30,15 @@ export const HarvestButton = styled.button`
   &:hover {
     cursor: pointer;
   }
+`;
+
+export const PlantDetailsText = styled(P1)`
+  font-weight: 500;
+  width: 100%;
+  color: ${COLORS.shrub};
+`;
+
+export const EditPlantLabel = styled(P3)`
+  font-weight: 400;
+  width: 71px;
 `;
