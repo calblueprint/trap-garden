@@ -27,11 +27,11 @@ import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
   ContentContainer,
+  InputWrapper,
   OnboardingContainer,
   PDFButtonsContainer,
   PDFPageWrapper,
   QuestionDiv,
-  InputWrapper,
   StyledInput,
   StyledLabel,
 } from './styles';
@@ -357,7 +357,7 @@ const ReviewPage = ({
               </StyledLabel>
               <StyledInput
                 type="text"
-                value={selectedName} 
+                value={selectedName}
                 onChange={e => setSelectedName(e.target.value)}
                 placeholder={selectedName}
                 style={{ color: COLORS.midgray }}
@@ -468,7 +468,11 @@ export default function OnboardingFlow() {
         <SelectionScreen<string>
           progress={60}
           questionNumber={3}
-          questionTitle={selectedGardenType ? userTypes[selectedGardenType].question : 'What is your name?'}
+          questionTitle={
+            selectedGardenType
+              ? userTypes[selectedGardenType].question
+              : 'What is your name?'
+          }
           textInput={true}
           options={[]}
           selectedValue={selectedName}

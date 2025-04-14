@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 import { P2 } from '@/styles/text';
 
-
 export const OnboardingContainer = styled.div`
   min-height: calc(100vh - 60px); // 60px is the hardcoded height of Header
   width: min(392px, 100vw);
