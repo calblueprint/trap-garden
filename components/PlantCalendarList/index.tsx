@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { getAllPlants } from '@/api/supabase/queries/plants';
+import CONFIG from '@/lib/configs';
 import { Flex } from '@/styles/containers';
 import { H2, P3 } from '@/styles/text';
 import {
@@ -108,7 +109,7 @@ export const PlantCalendarList = ({
   ]);
 
   function handlePlantCalendarRowClick(plant: Plant) {
-    router.push(`/plant-page/all-plants/${plant.id}`);
+    router.push(`${CONFIG.generalPlant}/${plant.id}`);
   }
 
   return (
