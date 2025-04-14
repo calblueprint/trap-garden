@@ -140,11 +140,15 @@ export default function YourPlantDetails({
           <Flex $direction="column" $gap="8px">
             {EditDateRow('calendar', yourPlantedDate)}
             {EditPlantTypeRow('plantHand', yourPlantingType)}
-            {recentHarvestDate &&
-              DetailRow(
-                'plant',
-                `Most Recent Harvest Date: ${formatTimestamp(recentHarvestDate)}`,
-              )}
+            {localRecentHarvestDate
+              ? DetailRow(
+                  'plant',
+                  `Most Recent Harvest Date: ${formatTimestamp(localRecentHarvestDate)}`,
+                )
+              : DetailRow(
+                  'plant',
+                  `Most Recent Harvest Date: Not harvested yet`,
+                )}
           </Flex>
         </>
       ) : (
