@@ -89,7 +89,6 @@ export const LoginFormImage = styled.img`
     display: block !important;
     width: 159px;
     height: 68px;
-    margin: 0 auto 24px auto;
     margin-bottom: 90px;
   }
 `;
