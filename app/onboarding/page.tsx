@@ -315,6 +315,8 @@ const ReviewPage = ({
     selectedPlot,
     selectedState,
     setProfile,
+    selectedName,
+    updateUser,
     userId,
   ]);
 
