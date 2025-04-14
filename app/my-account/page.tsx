@@ -34,7 +34,8 @@ import {
 } from './styles';
 
 export default function MyAccount() {
-  const { userEmail, signOut, userId, loading } = useAuth();
+  const { userEmail, signOut, userId, loading, userName, updateUser } =
+    useAuth();
 
   const { profileData, profileReady, setProfile } = useProfile();
 
@@ -49,6 +50,7 @@ export default function MyAccount() {
   const [selectedPlot, setSelectedPlot] = useState<boolean | undefined>(
     undefined,
   );
+  const [newUserName, setNewUserName] = useState<string | undefined>(undefined);
 
   const router = useRouter();
 
@@ -84,6 +86,7 @@ export default function MyAccount() {
     };
     try {
       await setProfile(editedProfileInfo);
+      await updateUser(newUserName!);
       setInEditMode(false);
     } catch (error) {
       console.error('Error saving profile edits:', error);
@@ -151,7 +154,7 @@ export default function MyAccount() {
               marginTop: '1.5rem',
             }}
           >
-            My Account
+            {userName ?? 'My Account'}
           </H4>
         </ProfilePictureContainer>
 
@@ -174,8 +177,9 @@ export default function MyAccount() {
             {inEditMode ? (
               <StyledInput
                 type="text"
+                value={newUserName ?? userName ?? 'Your Account'}
+                onChange={e => setNewUserName(e.target.value)}
                 placeholder="Enter name"
-                defaultValue="Kyrene Tam"
               />
             ) : (
               <P2
@@ -185,7 +189,7 @@ export default function MyAccount() {
                 $fontWeight={300}
                 $color={COLORS.darkgray}
               >
-                Kyrene Tam
+                {userName}
               </P2>
             )}
           </InfoField>
