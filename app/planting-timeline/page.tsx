@@ -62,7 +62,7 @@ export default function SeasonalPlantingGuide() {
   const [showMyPlants, setShowMyPlants] = useState(false);
 
   const toggleShowMyPlants = () => {
-    setShowMyPlants(prev => !prev);
+    setShowMyPlants(!showMyPlants);
   };
 
   const [myPlantIds, setMyPlantIds] = useState<OwnedPlant[]>([]);

@@ -63,8 +63,8 @@ export const PlantCalendarList = ({
   growingSeasonFilterValue,
   usStateFilterValue,
   searchTerm,
-  showMyPlants,
-  myPlantIds,
+  showMyPlants = false,
+  myPlantIds = [],
 }: PlantListProps) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -92,13 +92,7 @@ export const PlantCalendarList = ({
 
     if (showMyPlants && myPlantIds && myPlantIds.length > 0) {
       const myPlantIdSet = new Set(myPlantIds.map(owned => owned.plant.id));
-
       filtered = filtered.filter(plant => myPlantIdSet.has(plant.id as UUID));
-
-      console.log(
-        'Filtered Plants:',
-        filtered.map(plant => plant.id),
-      );
     }
 
     return filtered;
