@@ -189,7 +189,7 @@ export default function MyAccount() {
                 $fontWeight={300}
                 $color={COLORS.darkgray}
               >
-                {userName}
+                {userName ?? 'Your Account'}
               </P2>
             )}
           </InfoField>
