@@ -10,7 +10,7 @@ import {
 import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { P1, P3 } from '@/styles/text';
+import { P3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
 import { plantingTypeOptions } from '@/utils/dropdownOptions';
 import { formatTimestamp, toTitleCase } from '@/utils/helpers';
@@ -18,7 +18,13 @@ import { SmallButton } from '../Buttons';
 import CustomSelect from '../CustomSelect';
 import DateInput from '../DateInput';
 import Icon from '../Icon';
-import { Container, EditPlantLabel, HarvestButton, Header, PlantDetailsText } from './style';
+import {
+  Container,
+  EditPlantLabel,
+  HarvestButton,
+  Header,
+  PlantDetailsText,
+} from './style';
 
 function DetailRow(iconType: IconType, text: string) {
   return (
