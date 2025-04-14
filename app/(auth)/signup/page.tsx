@@ -8,6 +8,7 @@ import PasswordComplexity, {
 } from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
 import { isValidEmail } from '@/utils/helpers';
@@ -111,10 +112,12 @@ export default function SignUp() {
       <LoginImage src="/images/login.png" />
       <LoginFormWrapper>
         <StyledForm onSubmit={handleSignUp}>
-          <LoginFormImage
-            src="/images/growtogether.png"
-            alt="trap garden logo"
-          />
+          <Flex $align="center" $justify="center">
+            <LoginFormImage
+              src="/images/growtogether.png"
+              alt="trap garden logo"
+            />
+          </Flex>
           <GreenH2>Sign Up</GreenH2>
 
           <div

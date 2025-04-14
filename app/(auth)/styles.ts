@@ -60,7 +60,7 @@ export const LoginImage = styled.img`
 
   @media ${device.lg} {
     display: block;
-    max-width: 60vw;
+    min-width: 60vw;
     height: 100vh;
     object-fit: cover;
     padding: 0;
@@ -76,6 +76,9 @@ export const LoginFormWrapper = styled.div`
   @media ${device.lg} {
     flex-grow: 1; // take up remaining space
     max-width: none;
+    padding-left: 110px;
+    padding-right: 85px;
+    box-sizing: border-box; //padding included in total width
   }
 `;
 
@@ -86,7 +89,6 @@ export const LoginFormImage = styled.img`
     display: block !important;
     width: 159px;
     height: 68px;
-    margin: 0 auto 24px auto;
     margin-bottom: 90px;
   }
 `;

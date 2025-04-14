@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
 import { H2, P3 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
 import {
@@ -83,10 +84,12 @@ export default function Login() {
       <LoginImage src="/images/login.png" alt="trap garden logo" />
       <LoginFormWrapper>
         <StyledForm onSubmit={handleLogin}>
-          <LoginFormImage
-            src="/images/growtogether.png"
-            alt="trap garden logo"
-          />
+          <Flex $align="center" $justify="center">
+            <LoginFormImage
+              src="/images/growtogether.png"
+              alt="trap garden logo"
+            />
+          </Flex>
           <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
             Log In
           </H2>
