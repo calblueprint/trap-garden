@@ -36,7 +36,7 @@ import {
   StyledLabel,
 } from './styles';
 
-// ✅ Fix: Use a CDN to load the worker(idk why this works)
+// Use a CDN to load the worker
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const userTypes: Record<
@@ -46,7 +46,7 @@ const userTypes: Record<
   ORG: {
     filename: 'CommunityGardenGuide.pdf',
     label: 'Community',
-    question: 'What is your organization"s name?',
+    question: "What is your organization's name?",
   },
   INDIV: {
     filename: 'HomeGardenGuide.pdf',
@@ -56,7 +56,7 @@ const userTypes: Record<
   SCHOOL: {
     filename: 'SchoolGardenGuide.pdf',
     label: 'School',
-    question: 'What is your school"s name?',
+    question: "What is your school's name?",
   },
 };
 
@@ -507,7 +507,7 @@ export default function OnboardingFlow() {
       )}
       {step === 5 && (
         <PdfScreen
-          progress={66}
+          progress={80}
           onBack={handleBack}
           onNext={handleNext}
           selectedGardenType={selectedGardenType!}
