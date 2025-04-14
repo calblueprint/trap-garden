@@ -1,3 +1,4 @@
+import NextImage from 'next/image';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -21,4 +22,9 @@ export const ProfileIconWrapper = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+`;
+
+export const Image = styled.img`
+  width: 69px;
+  height: 23px;
 `;

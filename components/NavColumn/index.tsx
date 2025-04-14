@@ -19,6 +19,7 @@ import {
   HamburgerIcon,
   LoginButton,
   LoginButtonsContainer,
+  LogoImage,
   NameAndStatus,
   NavColumnContainer,
   NavColumnHeader,
@@ -186,7 +187,10 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
               <NavColumnHeader>
                 <div>{/* Empty for spacing */}</div>
                 <Link onClick={safeOnClose} href={CONFIG.home}>
-                  <Icon type="logo" />
+                  <LogoImage
+                    src="/images/grow-together-logo.png"
+                    alt="Grow Together Logo"
+                  />
                 </Link>
                 <HamburgerButton onClick={onClose}>
                   <HamburgerIcon type="hamburger" />

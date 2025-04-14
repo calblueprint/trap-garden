@@ -123,3 +123,8 @@ export const ProfileIcon = styled(Icon)`
   min-height: 40px;
   min-width: 40px;
 `;
+
+export const LogoImage = styled.img`
+  width: 69px;
+  height: 23px;
+`;

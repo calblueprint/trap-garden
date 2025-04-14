@@ -9,7 +9,12 @@ import { useAuth } from '@/utils/AuthProvider';
 import { useProfile } from '@/utils/ProfileProvider';
 import ConfirmationModal from '../ConfirmationModal';
 import Icon from '../Icon';
-import { Container, HamburgerButton, ProfileIconWrapper } from './styles';
+import {
+  Container,
+  HamburgerButton,
+  Image,
+  ProfileIconWrapper,
+} from './styles';
 
 interface HeaderProps {
   toggleNavColumn: () => void;
@@ -102,7 +107,7 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
         <Icon type="hamburger" />
       </HamburgerButton>
       <Link onClick={safeOnClose} href={CONFIG.home}>
-        <Icon type="logo" />
+        <Image src="/images/grow-together-logo.png" alt="Grow Together Logo" />
       </Link>
       <AuthOrProfileButtons />
       <ConfirmationModal
