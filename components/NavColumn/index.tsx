@@ -49,7 +49,8 @@ const navLinks: NavLink[] = [
     path: CONFIG.plantingTimeline,
     iconName: 'calendar',
   },
-  { name: 'Resources', path: CONFIG.resources, iconName: 'plant' },
+  { name: 'Resources', path: CONFIG.resources, iconName: 'plant' }, //temporary icon
+  { name: 'Dashboard', path: CONFIG.dashboard, iconName: 'calendar' }, //temporary icon
 ];
 
 export default function NavColumn({ isOpen, onClose }: NavColumnProps) {

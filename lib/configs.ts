@@ -9,6 +9,7 @@ const CONFIG = {
   generalPlant: '/all-plants',
   plantingTimeline: '/planting-timeline',
   resources: '/resources',
+  dashboard: '/dashboard',
 };
 
 export default CONFIG;
