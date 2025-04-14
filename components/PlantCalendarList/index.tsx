@@ -98,7 +98,7 @@ export const PlantCalendarList = ({
       <Styles.StyledTable>
         {/* set widths of each columns*/}
         <colgroup>
-          <col style={{ width: '72px' }} />
+          <col style={{ maxWidth: 'min-content' }} />
           <col style={{ minWidth: '400px' }} />
         </colgroup>
         <thead>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
@@ -119,8 +119,8 @@ export default function Home() {
     setDetails(updatedDetails);
   }
 
-  const handleSubmit = async () => {
-    // TODO: elegantly handle not logged in case (e.g. when someone clicks "Back")
+  const handleSubmit = useCallback(async () => {
+    // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
     // instead of doing userId!
     if (!userId) return;
     try {
@@ -138,7 +138,22 @@ export default function Home() {
     } catch (error) {
       console.error('Error inserting user plants:', error);
     }
-  };
+  }, [details, router, userId]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Enter') {
+        handleSubmit();
+      }
+    };
+
+    //add listener for keydown events
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleSubmit]);
 
   return (
     <>

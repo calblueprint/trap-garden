@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -65,6 +65,7 @@ interface ReviewPageProps {
   selectedPlot: boolean;
   setSelectedPlot: (selected: boolean) => void;
   onBack: () => void;
+  currStep: number;
 }
 function PdfScreen({
   progress,
@@ -255,13 +256,14 @@ const ReviewPage = ({
   selectedPlot,
   setSelectedPlot,
   onBack,
+  currStep,
 }: ReviewPageProps) => {
   const { setProfile } = useProfile();
   const router = useRouter();
 
   // assumes userId is not null, since the not-logged in case
   // would have been handled by rerouting from the page
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     const profile: Profile = {
       user_id: userId,
       us_state: selectedState,
@@ -275,7 +277,29 @@ const ReviewPage = ({
     } catch (error) {
       console.error('Error upserting profile:', error);
     }
-  };
+  }, [
+    router,
+    selectedGardenType,
+    selectedPlot,
+    selectedState,
+    setProfile,
+    userId,
+  ]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Enter' && currStep === 4) {
+        handleSubmit();
+      }
+    };
+
+    //add listener for keydown events
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currStep, handleSubmit]);
 
   return (
     <>
@@ -428,6 +452,7 @@ export default function OnboardingFlow() {
           selectedPlot={selectedPlot!}
           setSelectedPlot={setSelectedPlot}
           onBack={handleBack}
+          currStep={step}
         />
       )}
     </>
