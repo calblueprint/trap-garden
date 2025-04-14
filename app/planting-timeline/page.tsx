@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { getMatchingPlantForUserPlant } from '@/api/supabase/queries/plants';
+import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
 import { SmallButton } from '@/components/Buttons';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
@@ -10,7 +12,12 @@ import SeasonColorKey from '@/components/SeasonColorKey';
 import COLORS from '@/styles/colors';
 import { Box } from '@/styles/containers';
 import { H1, H3 } from '@/styles/text';
-import { DropdownOption, PlantingTypeEnum, SeasonEnum } from '@/types/schema';
+import {
+  DropdownOption,
+  OwnedPlant,
+  PlantingTypeEnum,
+  SeasonEnum,
+} from '@/types/schema';
 import {
   plantingTypeOptions,
   seasonOptions,
@@ -51,6 +58,35 @@ export default function SeasonalPlantingGuide() {
     setSelectedHarvestSeason([]);
     setSelectedPlantingType([]);
   };
+
+  const [showMyPlants, setShowMyPlants] = useState(false);
+
+  const toggleShowMyPlants = () => {
+    setShowMyPlants(!showMyPlants);
+  };
+
+  const [myPlantIds, setMyPlantIds] = useState<OwnedPlant[]>([]);
+
+  useEffect(() => {
+    if (profileReady && profileData?.user_id) {
+      (async () => {
+        const fetchedUserPlants = await getCurrentUserPlantsByUserId(
+          profileData.user_id,
+        );
+
+        const ownedPlants: OwnedPlant[] = await Promise.all(
+          fetchedUserPlants.map(async userPlant => {
+            const plant = await getMatchingPlantForUserPlant(userPlant);
+            return {
+              userPlantId: userPlant.id,
+              plant,
+            };
+          }),
+        );
+        setMyPlantIds(ownedPlants);
+      })();
+    }
+  }, [profileData, profileReady]);
 
   useEffect(() => {
     if (profileReady && profileData) {
@@ -106,6 +142,15 @@ export default function SeasonalPlantingGuide() {
             placeholder="Planting Type"
             disabled={!selectedUsState}
           />
+
+          <SmallButton
+            onClick={toggleShowMyPlants}
+            $primaryColor={showMyPlants ? COLORS.shrub : undefined}
+            $secondaryColor={!showMyPlants ? COLORS.shrub : undefined}
+          >
+            Show My Plants
+          </SmallButton>
+
           <SmallButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
             Clear Filters
           </SmallButton>
@@ -130,6 +175,8 @@ export default function SeasonalPlantingGuide() {
             plantingTypeFilterValue={selectedPlantingType}
             usStateFilterValue={selectedUsState}
             searchTerm={searchTerm}
+            showMyPlants={showMyPlants}
+            myPlantIds={myPlantIds}
           />
         </Box>
       )}
