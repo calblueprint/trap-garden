@@ -120,24 +120,30 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
     if (userId) {
       return (
         <ProfileDisplayContainer>
-          {!profileData ? (
-            <OnboardingButton href={CONFIG.onboarding} onClick={safeOnClose}>
-              Go to Onboarding
-            </OnboardingButton>
-          ) : (
-            <Profile>
-              <ProfileIcon type="profile" />
-              <NameAndStatus>
-                <H4 $color={COLORS.shrub} $fontWeight={300}>
-                  {userName ?? 'Your Account'}
-                </H4>
-                <P3 $color={COLORS.shrub} $fontWeight={300}>
-                  {userTypeLabels[profileData.user_type as UserTypeEnum] +
-                    ' Garden'}
-                </P3>
-              </NameAndStatus>
-            </Profile>
-          )}
+          <Link
+            href={CONFIG.myAccount}
+            onClick={safeOnClose}
+            style={{ textDecoration: 'none' }}
+          >
+            {!profileData ? (
+              <OnboardingButton href={CONFIG.onboarding} onClick={safeOnClose}>
+                Go to Onboarding
+              </OnboardingButton>
+            ) : (
+              <Profile>
+                <ProfileIcon type="profile" />
+                <NameAndStatus>
+                  <H4 $color={COLORS.shrub} $fontWeight={300}>
+                    {userName ?? 'Your Account'}
+                  </H4>
+                  <P3 $color={COLORS.shrub} $fontWeight={300}>
+                    {userTypeLabels[profileData.user_type as UserTypeEnum] +
+                      ' Garden'}
+                  </P3>
+                </NameAndStatus>
+              </Profile>
+            )}
+          </Link>
           {/* For Sign Out, pass "signOut" as the action */}
           <BigButton
             $secondaryColor={COLORS.errorRed}
