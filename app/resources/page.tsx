@@ -44,7 +44,7 @@ export default function Resources() {
     }, []);
     return (
       <>
-        <Box $pl="1.5rem" $mb=".5rem">
+        <Box $pl="1.5rem" $mb="1rem">
           <H4 $fontWeight={500} $color={COLORS.shrub}>
             Gardening Tips
           </H4>

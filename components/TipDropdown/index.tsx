@@ -20,8 +20,9 @@ export function TipDropdown({ name, tips, icon }: TipDropdownProps) {
       $direction="column"
       $justify="center"
       $m="1.5rem"
-      $mb="-.5rem"
-      $border="1px solid var(--light-grey, #F0F0F0)"
+      $mt="0.75rem"
+      $mb="0px"
+      $border={`1px solid ${COLORS.lightgray}`}
       $radius="5px 5px 0px 0px"
       $align="start"
       $w="auto"
@@ -31,10 +32,7 @@ export function TipDropdown({ name, tips, icon }: TipDropdownProps) {
         $justify="between"
         $align="center"
         $p="1rem"
-        $gap="-.5rem"
-        $background={
-          expanded ? 'var(--white-grey, #F0F0F0)' : 'var(--white, #FFFFFF)'
-        }
+        $background={expanded ? '#F0F0F0' : '#FFFFFF'}
       >
         <Flex $gap="1rem" $direction="row" $align="center">
           <StyledIcon type={icon} />
