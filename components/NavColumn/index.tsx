@@ -12,7 +12,6 @@ import { userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import { BigButton } from '../Buttons';
 import ConfirmationModal from '../ConfirmationModal';
-import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
 import {
   HamburgerButton,
