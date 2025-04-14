@@ -12,11 +12,6 @@ import CustomSelect from '@/components/CustomSelect';
 import GardenSetupGuide from '@/components/GardenSetupGuide';
 import ProgressBar from '@/components/ProgressBar';
 import RadioGroup from '@/components/RadioGroup';
-import {
-  InputWrapper,
-  StyledInput,
-  StyledLabel,
-} from '@/components/TextInput/styles';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
@@ -36,28 +31,34 @@ import {
   PDFButtonsContainer,
   PDFPageWrapper,
   QuestionDiv,
+  InputWrapper,
+  StyledInput,
+  StyledLabel,
 } from './styles';
 
 // ✅ Fix: Use a CDN to load the worker(idk why this works)
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-const pdfFiles: Record<UserTypeEnum, { filename: string; label: string }> = {
+const userTypes: Record<UserTypeEnum, { filename: string; label: string; question: string }> = {
   ORG: {
     filename: 'CommunityGardenGuide.pdf',
     label: 'Community',
+    question: 'What is your organization"s name?',
   },
   INDIV: {
     filename: 'HomeGardenGuide.pdf',
     label: 'Individual',
+    question: 'What is your name?',
   },
   SCHOOL: {
     filename: 'SchoolGardenGuide.pdf',
     label: 'School',
+    question: 'What is your school"s name?',
   },
 };
 
 const getPDFUrl = (userType: UserTypeEnum) => {
-  const pdfData = pdfFiles[userType].filename;
+  const pdfData = userTypes[userType].filename;
   return supabase.storage.from('pdfs').getPublicUrl(pdfData).data.publicUrl;
 };
 
@@ -115,7 +116,7 @@ function PdfScreen({
               marginBottom: '8px',
             }}
           >
-            Learn how to setup a {pdfFiles[selectedGardenType].label} Garden
+            Learn how to setup a {userTypes[selectedGardenType].label} Garden
           </H3>
           <Document
             file={pdfUrl}
@@ -284,7 +285,6 @@ const ReviewPage = ({
   onBack,
   currStep,
 }: ReviewPageProps) => {
-  console.log(selectedName);
   const { setProfile } = useProfile();
   const { updateUser } = useAuth();
   const router = useRouter();
@@ -357,8 +357,8 @@ const ReviewPage = ({
               </StyledLabel>
               <StyledInput
                 type="text"
-                value={selectedName} // ✅ Pre-filled with existing name
-                onChange={e => setSelectedName(e.target.value)} // ✅ Allows editing
+                value={selectedName} 
+                onChange={e => setSelectedName(e.target.value)}
                 placeholder={selectedName}
                 style={{ color: COLORS.midgray }}
               />
@@ -468,7 +468,7 @@ export default function OnboardingFlow() {
         <SelectionScreen<string>
           progress={60}
           questionNumber={3}
-          questionTitle="What is your organizations name?"
+          questionTitle={selectedGardenType ? userTypes[selectedGardenType].question : 'What is your name?'}
           textInput={true}
           options={[]}
           selectedValue={selectedName}

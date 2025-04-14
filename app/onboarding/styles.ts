@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { P2 } from '@/styles/text';
+
 
 export const OnboardingContainer = styled.div`
   min-height: calc(100vh - 60px); // 60px is the hardcoded height of Header
@@ -79,5 +81,31 @@ export const PDFButtonsContainer = styled.div`
     font-size: clamp(8px, 2.5vw, 11px);
     margin: 0 2px;
     line-height: 1;
+  }
+`;
+export const InputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const StyledLabel = styled(P2).attrs({ as: 'label' })`
+  margin-bottom: 0.25rem;
+`;
+
+export const StyledInput = styled(P2).attrs({ as: 'input' })<{
+  $error?: boolean;
+}>`
+  padding: 0.75rem;
+  border: 0.0625rem solid #ccc;
+  border: 1px solid ${({ $error }) => ($error ? COLORS.errorRed : '#ccc')};
+  border-radius: 0.3125rem;
+  font-family: inherit; /* Inherit font-family from P2 */
+  margin-bottom: 0.25rem;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: ${({ $error }) => ($error ? COLORS.errorRed : COLORS.shrub)};
+    outline: none;
   }
 `;
