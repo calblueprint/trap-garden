@@ -17,10 +17,12 @@ import supabase from '../api/supabase/createClient';
 interface AuthContextType {
   userId: UUID | null;
   userEmail: string | null;
+  userName: string | null;
   session: Session | null;
   signUp: (email: string, password: string) => Promise<AuthResponse>;
   signIn: (email: string, password: string) => Promise<AuthResponse>;
   signOut: () => Promise<void>;
+  updateUser: (name: string) => Promise<void>;
   loading: boolean;
 }
 
@@ -41,6 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [userId, setUserId] = useState<UUID | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const setAll = useCallback((newSession: Session | null) => {
@@ -48,8 +51,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(newSession);
     const sessionUserId = (newSession.user.id as UUID) ?? null;
     const sessionUserEmail = newSession.user.email ?? null;
+    const sessionUserName = newSession.user.user_metadata?.display_name ?? null;
     setUserId(sessionUserId);
     setUserEmail(sessionUserEmail);
+    setUserName(sessionUserName);
   }, []);
 
   // Fetch the current user
@@ -106,7 +111,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!error) {
       setUserId(null);
       setUserEmail(null);
+      setUserName(null);
       setSession(null);
+    }
+  }, []);
+
+  const updateUser = useCallback(async (name: string) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: { display_name: name },
+      });
+
+      if (error) {
+        console.error('Update User Error:', error.message);
+        return;
+      }
+
+      // If successful, update userName in state
+      setUserName(name);
+    } catch (err) {
+      console.error('Unexpected error in updateUser:', err);
     }
   }, []);
 
@@ -115,12 +139,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       userId,
       userEmail,
+      userName,
       signIn,
       signOut,
       signUp,
+      updateUser,
       loading,
     }),
-    [session, userId, userEmail, signIn, signOut, signUp, loading],
+    [
+      session,
+      userId,
+      userEmail,
+      userName,
+      signIn,
+      signOut,
+      signUp,
+      updateUser,
+      loading,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

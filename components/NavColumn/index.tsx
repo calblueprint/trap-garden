@@ -56,7 +56,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const currentPath = usePathname();
   const router = useRouter();
 
-  const { signOut, userId, loading: authLoading } = useAuth();
+  const { signOut, userId, loading: authLoading, userName } = useAuth();
   const { profileData, profileReady } = useProfile();
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -128,7 +128,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
               <ProfileIcon type="profile" />
               <NameAndStatus>
                 <H4 $color={COLORS.shrub} $fontWeight={300}>
-                  Your Account
+                  {userName ?? 'Your Account'}
                 </H4>
                 <P3 $color={COLORS.shrub} $fontWeight={300}>
                   {userTypeLabels[profileData.user_type as UserTypeEnum] +
