@@ -1,3 +1,4 @@
+import { IconType } from '@/lib/icons';
 import {
   DropdownOption,
   Plant,
@@ -336,3 +337,31 @@ export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
+
+export const tipCategories = [
+  'Water Management',
+  'Helpful Flowers for Your Garden',
+  'Mulching',
+  'Harvesting',
+  'Planting',
+  'Weeding',
+];
+// Map category values to headers
+export const tipCategoryHeaders: Record<string, string> = {
+  'Helpful Flowers for Your Garden': 'Helpful Flowers',
+  'Water Management': 'Water Management',
+  Mulching: 'Mulching',
+  Harvesting: 'Harvesting',
+  Planting: 'Planting',
+  Weeding: 'Weeding',
+};
+
+//Map category values to icon name
+export const tipCategoryIcons: Record<string, IconType> = {
+  'Helpful Flowers for Your Garden': 'flower',
+  'Water Management': 'grayWateringCan',
+  Mulching: 'lawnCare',
+  Harvesting: 'harvestingBasket',
+  Planting: 'grayPlantHand',
+  Weeding: 'spade',
+};
