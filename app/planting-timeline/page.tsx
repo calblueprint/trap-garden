@@ -57,6 +57,12 @@ export default function SeasonalPlantingGuide() {
     setSelectedGrowingSeason([]);
     setSelectedHarvestSeason([]);
     setSelectedPlantingType([]);
+    setShowMyPlants(false);
+  };
+
+  const clearFiltersAndSearch = () => {
+    clearFilters();
+    setSearchTerm('');
   };
 
   const [showMyPlants, setShowMyPlants] = useState(false);
@@ -177,6 +183,7 @@ export default function SeasonalPlantingGuide() {
             searchTerm={searchTerm}
             showMyPlants={showMyPlants}
             myPlantIds={myPlantIds}
+            clearFilters={clearFiltersAndSearch}
           />
         </Box>
       )}
