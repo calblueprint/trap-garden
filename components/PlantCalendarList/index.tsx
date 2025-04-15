@@ -3,8 +3,9 @@ import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { getAllPlants } from '@/api/supabase/queries/plants';
 import CONFIG from '@/lib/configs';
+import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { H2, P3 } from '@/styles/text';
+import { H2, P1, P3 } from '@/styles/text';
 import {
   DropdownOption,
   OwnedPlant,
@@ -19,6 +20,8 @@ import {
   checkSearchTerm,
   checkUsState,
 } from '@/utils/helpers';
+import { Button } from '../Buttons';
+import Icon from '../Icon';
 import PlantCalendarRow from '../PlantCalendarRow';
 import { PlantCalendarRowContainer } from '../PlantCalendarRow/styles';
 import * as Styles from './styles';
@@ -31,6 +34,7 @@ interface PlantListProps {
   searchTerm: string;
   showMyPlants?: boolean;
   myPlantIds?: OwnedPlant[];
+  clearFilters: () => void;
 }
 
 const months = [
@@ -66,6 +70,7 @@ export const PlantCalendarList = ({
   searchTerm,
   showMyPlants = false,
   myPlantIds = [],
+  clearFilters,
 }: PlantListProps) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -91,7 +96,7 @@ export const PlantCalendarList = ({
         checkUsState(usStateFilterValue, plant),
     );
 
-    if (showMyPlants && myPlantIds && myPlantIds.length > 0) {
+    if (showMyPlants) {
       const myPlantIdSet = new Set(myPlantIds.map(owned => owned.plant.id));
       filtered = filtered.filter(plant => myPlantIdSet.has(plant.id as UUID));
     }
@@ -112,50 +117,92 @@ export const PlantCalendarList = ({
     router.push(`${CONFIG.generalPlant}/${plant.id}`);
   }
 
+  function ErrorScreen({
+    message,
+    handleClick,
+    buttonText,
+  }: {
+    message: string;
+    handleClick: () => void;
+    buttonText: string;
+  }) {
+    return (
+      <Flex
+        $direction="column"
+        $textAlign="center"
+        $justify="center"
+        $w="240px"
+        $align="center"
+        $m="auto"
+        $p="20px"
+        $gap="8px"
+        $h="60vh"
+      >
+        <Icon type="sprout"></Icon>
+        <P1 $color={COLORS.midgray}>{message}</P1>
+        <Button
+          $primaryColor={COLORS.shrub}
+          $width="170px"
+          onClick={handleClick}
+        >
+          {buttonText}
+        </Button>
+      </Flex>
+    );
+  }
+
   return (
     <>
       {isLoaded ? (
-        <Styles.TableContainer>
-          <Styles.StyledTable>
-            {/* set widths of each columns*/}
-            <colgroup>
-              <col style={{ maxWidth: 'min-content' }} />
-              <col style={{ minWidth: '400px' }} />
-            </colgroup>
-            <thead>
-              <tr>
-                <Styles.StickyTd></Styles.StickyTd>
-                <Styles.ScrollableTd>
-                  <MonthHeader />
-                </Styles.ScrollableTd>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPlantList.map(plant => (
-                <PlantCalendarRowContainer
-                  key={plant.id}
-                  onClick={() => handlePlantCalendarRowClick(plant)}
-                >
-                  <Styles.StickyTd>
-                    <P3>{plant.plant_name}</P3>
-                  </Styles.StickyTd>
+        filteredPlantList.length === 0 ? (
+          <ErrorScreen
+            message="No matching plants"
+            handleClick={clearFilters}
+            buttonText="Clear Filters & Search"
+          />
+        ) : (
+          <Styles.TableContainer>
+            <Styles.StyledTable>
+              {/* set widths of each columns*/}
+              <colgroup>
+                <col style={{ maxWidth: 'min-content' }} />
+                <col style={{ minWidth: '400px' }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <Styles.StickyTd></Styles.StickyTd>
                   <Styles.ScrollableTd>
-                    <PlantCalendarRow
-                      harvestStart={plant.harvest_start}
-                      harvestEnd={plant.harvest_end}
-                      transplantStart={plant.transplant_start}
-                      transplantEnd={plant.transplant_end}
-                      indoorsStart={plant.indoors_start}
-                      indoorsEnd={plant.indoors_end}
-                      outdoorsStart={plant.outdoors_start}
-                      outdoorsEnd={plant.outdoors_end}
-                    />
+                    <MonthHeader />
                   </Styles.ScrollableTd>
-                </PlantCalendarRowContainer>
-              ))}
-            </tbody>
-          </Styles.StyledTable>
-        </Styles.TableContainer>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPlantList.map(plant => (
+                  <PlantCalendarRowContainer
+                    key={plant.id}
+                    onClick={() => handlePlantCalendarRowClick(plant)}
+                  >
+                    <Styles.StickyTd>
+                      <P3>{plant.plant_name}</P3>
+                    </Styles.StickyTd>
+                    <Styles.ScrollableTd>
+                      <PlantCalendarRow
+                        harvestStart={plant.harvest_start}
+                        harvestEnd={plant.harvest_end}
+                        transplantStart={plant.transplant_start}
+                        transplantEnd={plant.transplant_end}
+                        indoorsStart={plant.indoors_start}
+                        indoorsEnd={plant.indoors_end}
+                        outdoorsStart={plant.outdoors_start}
+                        outdoorsEnd={plant.outdoors_end}
+                      />
+                    </Styles.ScrollableTd>
+                  </PlantCalendarRowContainer>
+                ))}
+              </tbody>
+            </Styles.StyledTable>
+          </Styles.TableContainer>
+        )
       ) : (
         <Flex $justify="center" $align="center" $h="30rem">
           <H2>Loading...</H2>
