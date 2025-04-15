@@ -114,7 +114,7 @@ export async function updateUserPlantDetails(
 export async function updateUserNote(
   user_id: UUID,
   plant_id: UUID,
-  user_notes: string | undefined,
+  user_notes: string,
 ) {
   const { data, error } = await supabase
     .from('user_plants')

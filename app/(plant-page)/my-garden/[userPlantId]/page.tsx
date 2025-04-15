@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
-import supabase from '@/api/supabase/createClient';
 import { getMatchingPlantForUserPlant } from '@/api/supabase/queries/plants';
 import {
   getUserPlantById,
@@ -21,6 +20,7 @@ import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { H4, P3 } from '@/styles/text';
 import { Plant, UserPlant } from '@/types/schema';
+import { useAuth } from '@/utils/AuthProvider';
 import { getCurrentTimestamp } from '@/utils/helpers';
 import {
   BackButton,
@@ -41,12 +41,14 @@ export default function UserPlantPage() {
   const [currentUserPlant, setCurrentUserPlant] = useState<UserPlant>();
   const [isHarvesting, setIsHarvesting] = useState(false);
 
+  const { userId } = useAuth();
+
   function handleHarvestAnimation() {
     setIsHarvesting(true);
     setTimeout(() => setIsHarvesting(false), 1000);
   }
-  const [userNotes, setUserNotes] = useState<string | undefined>();
-  const [canSubmitForm, setCanSubmitForm] = useState<boolean>(false);
+  const [userNotes, setUserNotes] = useState<string>('');
+  const [canSaveNotes, setCanSaveNotes] = useState<boolean>(false);
 
   useEffect(() => {
     const getPlant = async () => {
@@ -72,17 +74,12 @@ export default function UserPlantPage() {
   }
 
   const handleUserNotesChange = (newUserNotes: string) => {
-    setCanSubmitForm(true);
+    setCanSaveNotes(true);
     setUserNotes(newUserNotes);
   };
 
   const handleSaveNotes = async () => {
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      const userId = user?.id;
-
       if (!userId || !currentUserPlant) {
         console.error('User ID or user plant data missing');
         return;
@@ -90,14 +87,13 @@ export default function UserPlantPage() {
 
       await updateUserNote(
         userId as UUID,
-        currentUserPlant.plant_id,
+        currentUserPlant.plant_id!,
         userNotes,
       );
-      console.log('User notes saved successfully');
     } catch (err) {
       console.error('Error saving notes:', err);
     }
-    setCanSubmitForm(false);
+    setCanSaveNotes(false);
   };
 
   return currentPlant && currentUserPlant ? (
@@ -159,7 +155,7 @@ export default function UserPlantPage() {
             type="button"
             onClick={handleSaveNotes}
             $primaryColor={COLORS.shrub}
-            disabled={!canSubmitForm}
+            disabled={!canSaveNotes}
           >
             Save
           </BigButton>
