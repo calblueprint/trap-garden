@@ -4,8 +4,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import { insertTasks } from '@/api/supabase/queries/tasks';
+import { getPlantById } from '@/api/supabase/queries/plants';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
+import ConfirmationModal from '@/components/ConfirmationModal';
+import Icon from '@/components/Icon';
 import PlantDetails from '@/components/PlantDetails';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
@@ -13,10 +16,11 @@ import { Flex } from '@/styles/containers';
 import { H1, H3, H4, P1, P2 } from '@/styles/text';
 import { PlantingTypeEnum, SingleTask, UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { plantingTypeLabels } from '@/utils/helpers';
+import { formatListWithAnd, plantingTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
+  DeleteButton,
   FooterButton,
   ReviewDetailsContainer,
   ReviewGrid,
@@ -34,23 +38,42 @@ function ReviewPlant({
   plantName,
   dateAdded,
   plantingType,
+  removeFunction,
 }: {
   plantName: string;
   dateAdded: string;
   plantingType: PlantingTypeEnum;
+  removeFunction: () => void;
 }) {
+  const [show, setShow] = useState(true);
   return (
-    <Flex $direction="column" $gap="8px" $mb="16px">
-      <H4 $fontWeight={500} $color={COLORS.shrub}>
-        {plantName}
-      </H4>
-      <ReviewGrid>
-        <P2 $fontWeight={500}>Date Planted</P2>
-        <P2>{formatDate(dateAdded)}</P2>
-        <P2 $fontWeight={500}>Planting Type</P2>
-        <P2>{plantingTypeLabels[plantingType]}</P2>
-      </ReviewGrid>
-    </Flex>
+    <>
+      {show ? (
+        <Flex $direction="row" $justify="between" $align="center">
+          <Flex $direction="column" $gap="8px" $mb="16px">
+            <H4 $fontWeight={500} $color={COLORS.shrub}>
+              {plantName}
+            </H4>
+            <ReviewGrid>
+              <P2 $fontWeight={500}>Date Planted</P2>
+              <P2>{formatDate(dateAdded)}</P2>
+              <P2 $fontWeight={500}>Planting Type</P2>
+              <P2>{plantingTypeLabels[plantingType]}</P2>
+            </ReviewGrid>
+          </Flex>
+          <DeleteButton
+            onClick={() => {
+              removeFunction();
+              setShow(false);
+            }}
+          >
+            <Icon type="trashCan" />
+          </DeleteButton>
+        </Flex>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
 
@@ -58,6 +81,9 @@ export default function Home() {
   const { profileData, profileReady, plantsToAdd } = useProfile();
   const { userId } = useAuth();
   const router = useRouter();
+  const [showConfModal, setShowConfModal] = useState(false);
+  const [duplicates, setDuplicates] = useState<string[]>([]);
+
   // TODO: address error: if you try to signout from this page
   // it directs to /view-plants instead of login
   useEffect(() => {
@@ -133,34 +159,65 @@ export default function Home() {
     setDetails(updatedDetails);
   }
 
-  const handleSubmit = useCallback(async () => {
-    // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
-    // instead of doing userId!
-    if (!userId) return;
-    try {
-      const completedDetails: Omit<
-        UserPlant,
-        | 'id'
+  const confirmClick = () => {
+    handleSubmit(true);
+    setShowConfModal(false);
+  };
+
+  const handleSubmit = useCallback(
+    async (confirm: boolean) => {
+      // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
+      // instead of doing userId!
+      if (!userId) return;
+      try {
+        const completedDetails: Omit<
+          UserPlant,
+          | 'id'
         | 'date_removed'
         | 'recent_harvest'
         | 'num_harvested'
-        | 'user_notes'
+          | 'user_notes'
       >[] = details.map(detail => ({
-        user_id: userId,
-        plant_id: detail.plant_id!,
-        date_added: detail.date_added!,
-        planting_type: detail.planting_type!,
-        water_frequency: detail.water_frequency!,
+          user_id: userId,
+          plant_id: detail.plant_id!,
+          date_added: detail.date_added!,
+          planting_type: detail.planting_type!,
+          water_frequency: detail.water_frequency!,
         weeding_frequency: detail.weeding_frequency!,
         plant_name: detail.plant_name!,
         date_added_to_db: getDefaultDate(),
       }));
-      await insertUserPlants(completedDetails);
-      router.push('/view-plants');
-    } catch (error) {
-      console.error('Error inserting user plants:', error);
-    }
-    try {
+        const firstPress = await insertUserPlants(
+          completedDetails,
+          confirm,
+          userId,
+        );
+        console.log(firstPress);
+        if (!confirm) {
+          if (firstPress?.length != 0) {
+            if (firstPress) {
+              const plantNames = await Promise.all(
+                firstPress.map(async dup => {
+                  const plant = await getPlantById(dup.plant_id);
+                  return plant?.plant_name;
+                }),
+              );
+
+              // Remove any undefined values (in case a lookup failed)
+              setDuplicates(
+                plantNames.filter((name): name is string => !!name),
+              );
+            }
+            setShowConfModal(true);
+          } else {
+            await insertUserPlants(completedDetails, !confirm, userId);
+          }
+        }
+        router.push('/view-plants');
+      } catch (error) {
+        console.error('Error inserting user plants:', error);
+      }
+      try {
       const tasks: Omit<SingleTask, 'id' | 'date_removed'>[] = details.flatMap(
         (d, i) => {
           const base = {
@@ -187,13 +244,15 @@ export default function Home() {
     } catch (error) {
       console.error('Error inserting tasks:', error);
     }
-  }, [details, router, userId, plantsToAdd]);
+  },
+    [details, router, userId, plantsToAdd],
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key;
       if (key === 'Enter') {
-        handleSubmit();
+        handleSubmit(false);
       }
     };
 
@@ -270,6 +329,9 @@ export default function Home() {
                   plantName={plantsToAdd[index].plant_name}
                   plantingType={detail.planting_type!}
                   dateAdded={detail.date_added!}
+                  removeFunction={() =>
+                    details.splice(details.indexOf(detail), 1)
+                  }
                 />
               ))}
             </ReviewDetailsContainer>
@@ -278,7 +340,7 @@ export default function Home() {
                 Back
               </Button>
               <Button
-                onClick={handleSubmit}
+                onClick={() => handleSubmit(false)}
                 disabled={disableNext}
                 $primaryColor={COLORS.shrub}
                 $secondaryColor="white"
@@ -289,6 +351,15 @@ export default function Home() {
           </Flex>
         </Flex>
       )}
+      <ConfirmationModal
+        isOpen={showConfModal}
+        title="Add Duplicates?"
+        message={`${formatListWithAnd(duplicates)} ${duplicates.length === 1 ? 'is' : 'are'} already in your garden!`}
+        leftText="No"
+        rightText="Yes"
+        onCancel={() => setShowConfModal(false)}
+        onConfirm={confirmClick}
+      />
     </>
   );
 }
