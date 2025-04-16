@@ -59,15 +59,6 @@ export interface UserPlant {
   previous_last_weeded: string;
   due_date: string;
   user_notes: string;
-  water_frequency: string;
-  weeding_frequency: string;
-  last_watered: string;
-  last_weeded: string;
-  plant_name: string;
-  date_added_to_db: string;
-  previous_last_watered: string;
-  previous_last_weeded: string;
-  due_date: string;
   harvest_season: string;
 }
 

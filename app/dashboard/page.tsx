@@ -1,4 +1,3 @@
-// Page.tsx
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -18,6 +17,7 @@ import SingleTip from '@/components/SingleTip';
 import TaskItem from '@/components/TaskItem';
 import { PlantTip, SingleTask, ValidTask } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
+import { mapMonthToSeason } from '@/utils/helpers';
 import {
   computeDueDate,
   getCurrentSeason,
@@ -342,6 +342,56 @@ export default function Page() {
     return givenDate < currentDate;
   };
 
+  // Determine the current season using the provided map.
+  function getCurrentSeason() {
+    const now = new Date();
+    const monthName = now
+      .toLocaleString('en-US', { month: 'long' })
+      .toUpperCase();
+    return mapMonthToSeason(monthName);
+  }
+
+  // Return true if the recent harvest date falls in the current harvest window.
+  function isHarvestedThisSeason(
+    recent: Date,
+    current: Date,
+    harvestSeason: string,
+  ): boolean {
+    const monthNameCurrent = current
+      .toLocaleString('en-US', { month: 'long' })
+      .toUpperCase();
+    const currentSeason = mapMonthToSeason(monthNameCurrent);
+    if (harvestSeason !== currentSeason) {
+      return false;
+    }
+    // For non-WINTER seasons, require same calendar year.
+    if (harvestSeason !== 'WINTER') {
+      return recent.getFullYear() === current.getFullYear();
+    } else {
+      // For WINTER, handle December, January, and February.
+      const currentMonth = current.getMonth(); // 0-indexed: January = 0, February = 1, December = 11
+      if (currentMonth === 0 || currentMonth === 1) {
+        // January or February
+        // Accept if recent harvest was in January or February of the current year, or in December of previous year.
+        return (
+          (recent.getFullYear() === current.getFullYear() &&
+            (recent.getMonth() === 0 || recent.getMonth() === 1)) ||
+          (recent.getFullYear() === current.getFullYear() - 1 &&
+            recent.getMonth() === 11)
+        );
+      } else if (currentMonth === 11) {
+        // December
+        // Only accept if the harvest was in December of the current year.
+        return (
+          recent.getFullYear() === current.getFullYear() &&
+          recent.getMonth() === 11
+        );
+      }
+      // This fallback shouldn't be reached if all WINTER months are covered
+      return recent.getFullYear() === current.getFullYear();
+    }
+  }
+
   const computeDueDate = (
     lastTaskDate: Date | null,
     interval: number,
@@ -359,10 +409,24 @@ export default function Page() {
     return candidateDueDate;
   };
 
+  // Process tasks from the database (UserPlant[]) and add water, weed, and harvest tasks.
   function getValidTasks(tasks: UserPlant[]) {
-    const validTasks = [];
+    const validTasks: Array<{
+      type: 'water' | 'weed' | 'harvest';
+      plant_name: string;
+      completed: boolean;
+      due_date: Date;
+      id: string;
+      // For water/weed tasks we keep a previousDate
+      previousDate?: Date;
+      // For harvest tasks, store the season and an optional due message.
+      harvestSeason?: string;
+      dueMessage?: string;
+    }> = [];
+    const currentSeason = getCurrentSeason();
+
     for (const task of tasks) {
-      // Watering tasks logic
+      // --- Watering Tasks ---
       if (
         isOlderThanWateringFrequencyOrNull(task.last_watered) ||
         task.last_watered === task.date_added_to_db
@@ -379,7 +443,6 @@ export default function Page() {
           id: task.id,
           previousDate: new Date(task.last_watered),
         });
-        // If necessary, update previous_last_watered in database:
         if (task.previous_last_watered !== task.last_watered) {
           updateDate(task.id, new Date(task.last_watered), 'water', true);
         }
@@ -390,11 +453,10 @@ export default function Page() {
           completed: true,
           due_date: new Date(task.due_date),
           id: task.id,
-          previousDate: new Date(task.previous_last_watered),
         });
       }
 
-      // Weeding tasks logic
+      // --- Weeding Tasks ---
       if (
         isOlderThanWeedingFrequencyOrNull(
           task.weeding_frequency,
@@ -425,10 +487,31 @@ export default function Page() {
           completed: true,
           due_date: new Date(task.due_date),
           id: task.id,
-          previousDate: new Date(task.previous_last_weeded),
+        });
+      }
+
+      // --- Harvest Tasks ---
+      // Only add harvest tasks if it is currently the plant’s harvest season.
+      if (task.harvest_season && task.harvest_season === currentSeason) {
+        let completed = false;
+        if (task.recent_harvest) {
+          const recent = new Date(task.recent_harvest);
+          if (isHarvestedThisSeason(recent, new Date(), task.harvest_season)) {
+            completed = true;
+          }
+        }
+        validTasks.push({
+          type: 'harvest',
+          plant_name: task.plant_name,
+          completed,
+          due_date: new Date(),
+          dueMessage: `Due end of ${task.harvest_season} season`,
+          id: task.id,
+          harvestSeason: task.harvest_season,
         });
       }
     }
+
     return validTasks;
   }
 
