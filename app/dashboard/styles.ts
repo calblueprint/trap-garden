@@ -81,7 +81,6 @@ export const TaskContainer = styled.div`
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
-  height: 200px;
   margin-bottom: 8px;
 `;
 

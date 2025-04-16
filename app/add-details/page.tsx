@@ -118,6 +118,7 @@ export default function Home() {
       water_frequency: plantsToAdd[index].water_frequency,
       weeding_frequency: plantsToAdd[index].weeding_frequency,
       plant_name: plantsToAdd[index].plant_name,
+      harvest_season: plantsToAdd[index].harvest_season,
     };
     setDetails(updatedDetails);
   }
@@ -143,6 +144,7 @@ export default function Home() {
         date_added_to_db: getDefaultDate(),
         previous_last_watered: getDefaultDate(),
         previous_last_weeded: getDefaultDate(),
+        harvest_season: detail.harvest_season!,
       }));
       await insertUserPlants(completedDetails);
       router.push('/view-plants');

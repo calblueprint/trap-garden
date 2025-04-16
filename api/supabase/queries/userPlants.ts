@@ -79,8 +79,18 @@ export async function increaseHarvestedByOne(id: UUID) {
   }
 }
 
+export async function decreaseHarvestedByOne(id: UUID) {
+  const { error } = await supabase.rpc('decrement_num_harvested', {
+    row_id: id,
+  });
+
+  if (error) {
+    throw new Error('Error decrementing:', error);
+  }
+}
+
 export async function setRecentHarvestDate(
-  date: string,
+  date: string | null,
   id: UUID,
 ): Promise<void> {
   const { error } = await supabase
