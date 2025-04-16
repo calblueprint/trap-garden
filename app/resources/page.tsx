@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { getAllPlantTips } from '@/api/supabase/queries/resources';
 import { FAQDropdown } from '@/components/FAQDropdown';
-import { TipDropdown } from '@/components/TipDropdown';
 import Icon from '@/components/Icon';
 import PDFSmallPreview from '@/components/PDFSmallPreview';
+import { TipDropdown } from '@/components/TipDropdown';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, H4 } from '@/styles/text';
@@ -15,7 +15,6 @@ import {
   tipCategoryHeaders,
   tipCategoryIcons,
 } from '@/utils/helpers';
-import PDFSmallPreview from '@/components/PDFSmallPreview';
 import {
   GuidesGrid,
   HeaderButton,
