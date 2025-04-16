@@ -1,3 +1,4 @@
+// Page.tsx
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -319,6 +320,121 @@ export default function Page() {
     setModalAction(null);
     setIsModalOpen(false);
   }
+
+  // Your helper functions remain unchanged
+  const isOlderThanWateringFrequencyOrNull = (date: string | null): boolean => {
+    if (date == null) return true;
+    const givenDate = new Date(date);
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() - 3);
+    return givenDate < currentDate;
+  };
+
+  const isOlderThanWeedingFrequencyOrNull = (
+    weeding_frequency: string,
+    last_weeded_date: string | null,
+  ): boolean => {
+    if (!last_weeded_date) return true;
+    const givenDate = new Date(last_weeded_date);
+    const currentDate = new Date();
+    const threshold = weeding_frequency === 'Weekly' ? 3 : 7;
+    currentDate.setDate(currentDate.getDate() - threshold);
+    return givenDate < currentDate;
+  };
+
+  const computeDueDate = (
+    lastTaskDate: Date | null,
+    interval: number,
+    taskId: string,
+  ): Date => {
+    let candidateDueDate: Date;
+    if (lastTaskDate) {
+      candidateDueDate = new Date(lastTaskDate);
+      candidateDueDate.setDate(candidateDueDate.getDate() + interval);
+    } else {
+      candidateDueDate = new Date();
+      candidateDueDate.setDate(candidateDueDate.getDate() + interval);
+    }
+    setDueDate(candidateDueDate, taskId);
+    return candidateDueDate;
+  };
+
+  function getValidTasks(tasks: UserPlant[]) {
+    const validTasks = [];
+    for (const task of tasks) {
+      // Watering tasks logic
+      if (
+        isOlderThanWateringFrequencyOrNull(task.last_watered) ||
+        task.last_watered === task.date_added_to_db
+      ) {
+        const taskWateredDate = new Date(task.last_watered);
+        const due = task.due_date
+          ? new Date(task.due_date)
+          : computeDueDate(taskWateredDate, 7, task.id);
+        validTasks.push({
+          type: 'water',
+          plant_name: task.plant_name,
+          completed: false,
+          due_date: due,
+          id: task.id,
+          previousDate: new Date(task.last_watered),
+        });
+        // If necessary, update previous_last_watered in database:
+        if (task.previous_last_watered !== task.last_watered) {
+          updateDate(task.id, new Date(task.last_watered), 'water', true);
+        }
+      } else {
+        validTasks.push({
+          type: 'water',
+          plant_name: task.plant_name,
+          completed: true,
+          due_date: new Date(task.due_date),
+          id: task.id,
+          previousDate: new Date(task.previous_last_watered),
+        });
+      }
+
+      // Weeding tasks logic
+      if (
+        isOlderThanWeedingFrequencyOrNull(
+          task.weeding_frequency,
+          task.last_weeded,
+        ) ||
+        task.last_weeded === task.date_added_to_db
+      ) {
+        const taskWeededDate = new Date(task.last_weeded);
+        const interval = task.weeding_frequency === 'Weekly' ? 7 : 14;
+        const due = task.due_date
+          ? new Date(task.due_date)
+          : computeDueDate(taskWeededDate, interval, task.id);
+        validTasks.push({
+          type: 'weed',
+          plant_name: task.plant_name,
+          completed: false,
+          due_date: due,
+          id: task.id,
+          previousDate: new Date(task.last_weeded),
+        });
+        if (task.previous_last_weeded !== task.last_weeded) {
+          updateDate(task.id, new Date(task.last_weeded), 'weed', true);
+        }
+      } else {
+        validTasks.push({
+          type: 'weed',
+          plant_name: task.plant_name,
+          completed: true,
+          due_date: new Date(task.due_date),
+          id: task.id,
+          previousDate: new Date(task.previous_last_weeded),
+        });
+      }
+    }
+    return validTasks;
+  }
+
+  
+  // When user clicks to uncheck, store the task info and open modal.
+  
 
   useEffect(() => {
     if (!authLoading && userId) {

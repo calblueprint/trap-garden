@@ -144,7 +144,8 @@ export default function Home() {
         | 'id'
         | 'date_removed'
         | 'recent_harvest'
-        | 'num_harvested'
+        | 'num_harvested' 
+        | 'due_date'
         | 'user_notes'
         | 'due_date'
       >[] = details.map(detail => ({
