@@ -3,7 +3,7 @@ import { UserPlant } from '@/types/schema';
 import supabase from '../createClient';
 
 export async function insertUserPlants(
-  userPlants: Omit<UserPlant, 'id' | 'date_removed'>[],
+  userPlants: Omit<UserPlant, 'id' | 'date_removed' | 'due_date'>[],
 ) {
   const { error } = await supabase.from('user_plants').insert(userPlants);
   if (error) throw new Error(`Error inserting user plants: ${error.message}`);

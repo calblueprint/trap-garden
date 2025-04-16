@@ -48,6 +48,15 @@ export interface UserPlant {
   date_removed: string;
   // recent_date_harvest: string;
   planting_type: PlantingTypeEnum;
+  water_frequency: string;
+  weeding_frequency: string;
+  last_watered: string;
+  last_weeded: string;
+  plant_name: string;
+  date_added_to_db: string;
+  previous_last_watered: string;
+  previous_last_weeded: string;
+  due_date: string;
 }
 
 export interface DropdownOption<T = string> {
