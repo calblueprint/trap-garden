@@ -20,10 +20,10 @@ function formatDate(date: Date): string {
 }
 
 interface TaskItemProps {
-  type: 'water' | 'weed';
+  type: 'water' | 'weed' | 'harvest';
   plantName: string;
   completed: boolean;
-  dueDate: Date;
+  dueDate: Date | string;
   onToggle: () => void;
 }
 
@@ -34,10 +34,16 @@ export default function TaskItem({
   dueDate,
   onToggle,
 }: TaskItemProps) {
+  const iconType =
+    type === 'water'
+      ? 'bigCan'
+      : type === 'weed'
+        ? 'spade'
+        : 'harvestingBasket';
   return (
     <TaskWrapper completed={completed}>
       <TaskLeftSection>
-        <Icon type={type === 'water' ? 'bigCan' : 'spade'} />
+        <Icon type={iconType} />
 
         <TaskTextContainer>
           <TaskTitle completed={completed}>
@@ -45,7 +51,10 @@ export default function TaskItem({
           </TaskTitle>
 
           <TaskSubtitle completed={completed}>
-            Due {formatDate(dueDate)}
+            {typeof dueDate === 'string'
+              ? dueDate.substring(0, 1).toUpperCase() +
+                dueDate.substring(1).toLowerCase()
+              : 'Due ' + formatDate(dueDate)}
           </TaskSubtitle>
         </TaskTextContainer>
       </TaskLeftSection>

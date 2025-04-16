@@ -1,18 +1,24 @@
-// Page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
+import { UUID } from 'crypto';
 import {
   getDailyPlantTip,
   getPendingTasks,
   setDueDate,
   updateDate,
 } from '@/api/supabase/queries/dashboard';
+import {
+  decreaseHarvestedByOne,
+  increaseHarvestedByOne,
+  setRecentHarvestDate,
+} from '@/api/supabase/queries/userPlants';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import SingleTip from '@/components/SingleTip';
 import TaskItem from '@/components/TaskItem';
 import { PlantTip, UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
+import { mapMonthToSeason } from '@/utils/helpers';
 import {
   ArrowIcon,
   Container,
@@ -27,30 +33,37 @@ import {
   Title,
 } from './styles';
 
+// Define a type for modal actions
+type ModalAction =
+  | { id: UUID; type: 'water' | 'weed'; action: 'revert' }
+  | { id: UUID; type: 'harvest'; action: 'harvest-set' | 'harvest-clear' };
+
 export default function Page() {
   const [plantTip, setPlantTip] = useState<PlantTip | null>(null);
   const { userId, loading: authLoading } = useAuth();
   const [pendingTasks, setPendingTasks] = useState<
-    {
-      type: string;
+    Array<{
+      type: 'water' | 'weed' | 'harvest';
       plant_name: string;
       completed: boolean;
       due_date: Date;
       id: string;
-      previousDate: Date;
-    }[]
+      // For water/weed tasks we keep a previousDate
+      previousDate?: Date;
+      // For harvest tasks, store the season and an optional due message.
+      harvestSeason?: string;
+      dueMessage?: string;
+    }>
   >([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // new state to store the task we want to "uncheck"
-  const [uncheckTask, setUncheckTask] = useState<{
-    id: string;
-    type: string;
-  } | null>(null);
+  // Use one unified modal action state
+  const [modalAction, setModalAction] = useState<ModalAction | null>(null);
   const [selectedTab, setSelectedTab] = useState<'current' | 'completed'>(
     'current',
   );
 
-  // Your helper functions remain unchanged
+  // Helper functions for comparing dates
+
   const isOlderThanWateringFrequencyOrNull = (date: string | null): boolean => {
     if (date == null) return true;
     const givenDate = new Date(date);
@@ -71,6 +84,56 @@ export default function Page() {
     return givenDate < currentDate;
   };
 
+  // Determine the current season using the provided map.
+  function getCurrentSeason() {
+    const now = new Date();
+    const monthName = now
+      .toLocaleString('en-US', { month: 'long' })
+      .toUpperCase();
+    return mapMonthToSeason(monthName);
+  }
+
+  // Return true if the recent harvest date falls in the current harvest window.
+  function isHarvestedThisSeason(
+    recent: Date,
+    current: Date,
+    harvestSeason: string,
+  ): boolean {
+    const monthNameCurrent = current
+      .toLocaleString('en-US', { month: 'long' })
+      .toUpperCase();
+    const currentSeason = mapMonthToSeason(monthNameCurrent);
+    if (harvestSeason !== currentSeason) {
+      return false;
+    }
+    // For non-WINTER seasons, require same calendar year.
+    if (harvestSeason !== 'WINTER') {
+      return recent.getFullYear() === current.getFullYear();
+    } else {
+      // For WINTER, handle December, January, and February.
+      const currentMonth = current.getMonth(); // 0-indexed: January = 0, February = 1, December = 11
+      if (currentMonth === 0 || currentMonth === 1) {
+        // January or February
+        // Accept if recent harvest was in January or February of the current year, or in December of previous year.
+        return (
+          (recent.getFullYear() === current.getFullYear() &&
+            (recent.getMonth() === 0 || recent.getMonth() === 1)) ||
+          (recent.getFullYear() === current.getFullYear() - 1 &&
+            recent.getMonth() === 11)
+        );
+      } else if (currentMonth === 11) {
+        // December
+        // Only accept if the harvest was in December of the current year.
+        return (
+          recent.getFullYear() === current.getFullYear() &&
+          recent.getMonth() === 11
+        );
+      }
+      // This fallback shouldn't be reached if all WINTER months are covered
+      return recent.getFullYear() === current.getFullYear();
+    }
+  }
+
   const computeDueDate = (
     lastTaskDate: Date | null,
     interval: number,
@@ -88,10 +151,24 @@ export default function Page() {
     return candidateDueDate;
   };
 
+  // Process tasks from the database (UserPlant[]) and add water, weed, and harvest tasks.
   function getValidTasks(tasks: UserPlant[]) {
-    const validTasks = [];
+    const validTasks: Array<{
+      type: 'water' | 'weed' | 'harvest';
+      plant_name: string;
+      completed: boolean;
+      due_date: Date;
+      id: string;
+      // For water/weed tasks we keep a previousDate
+      previousDate?: Date;
+      // For harvest tasks, store the season and an optional due message.
+      harvestSeason?: string;
+      dueMessage?: string;
+    }> = [];
+    const currentSeason = getCurrentSeason();
+
     for (const task of tasks) {
-      // Watering tasks logic
+      // --- Watering Tasks ---
       if (
         isOlderThanWateringFrequencyOrNull(task.last_watered) ||
         task.last_watered === task.date_added_to_db
@@ -108,7 +185,6 @@ export default function Page() {
           id: task.id,
           previousDate: new Date(task.last_watered),
         });
-        // If necessary, update previous_last_watered in database:
         if (task.previous_last_watered !== task.last_watered) {
           updateDate(task.id, new Date(task.last_watered), 'water', true);
         }
@@ -119,11 +195,10 @@ export default function Page() {
           completed: true,
           due_date: new Date(task.due_date),
           id: task.id,
-          previousDate: new Date(task.previous_last_watered),
         });
       }
 
-      // Weeding tasks logic
+      // --- Weeding Tasks ---
       if (
         isOlderThanWeedingFrequencyOrNull(
           task.weeding_frequency,
@@ -154,16 +229,39 @@ export default function Page() {
           completed: true,
           due_date: new Date(task.due_date),
           id: task.id,
-          previousDate: new Date(task.previous_last_weeded),
+        });
+      }
+
+      // --- Harvest Tasks ---
+      // Only add harvest tasks if it is currently the plant’s harvest season.
+      if (task.harvest_season && task.harvest_season === currentSeason) {
+        let completed = false;
+        if (task.recent_harvest) {
+          const recent = new Date(task.recent_harvest);
+          if (isHarvestedThisSeason(recent, new Date(), task.harvest_season)) {
+            completed = true;
+          }
+        }
+        validTasks.push({
+          type: 'harvest',
+          plant_name: task.plant_name,
+          completed,
+          due_date: new Date(),
+          dueMessage: `Due end of ${task.harvest_season} season`,
+          id: task.id,
+          harvestSeason: task.harvest_season,
         });
       }
     }
+
     return validTasks;
   }
 
-  function handleCheck(userPlantRowId: string, taskType: string) {
+  // --- Task Handlers ---
+
+  // For water/weed tasks, immediately mark as complete.
+  function handleCheck(userPlantRowId: string, taskType: 'water' | 'weed') {
     const currDate = new Date();
-    // Update the "last" date with the current date, marking the task complete
     updateDate(userPlantRowId, currDate, taskType, false);
     setPendingTasks(prevTasks =>
       prevTasks.map(task => {
@@ -175,36 +273,81 @@ export default function Page() {
     );
   }
 
-  // When user clicks to uncheck, store the task info and open modal.
-  function handleUncheck(userPlantRowId: string, taskType: string) {
-    setUncheckTask({ id: userPlantRowId, type: taskType });
+  // For water/weed, when unchecking, we want to revert to the previous date.
+  function handleUncheck(userPlantRowId: string, taskType: 'water' | 'weed') {
+    setModalAction({
+      id: userPlantRowId as UUID,
+      type: taskType,
+      action: 'revert',
+    });
     setIsModalOpen(true);
   }
 
-  // When the modal is confirmed, revert the date to the previous date and mark the task as incomplete.
-  function processModalConfirm() {
-    if (!uncheckTask) return;
-    // Find the task in pendingTasks to get its previously stored date.
-    const task = pendingTasks.find(
-      t => t.id === uncheckTask.id && t.type === uncheckTask.type,
-    );
+  // For harvest tasks: if not harvested (current), ask to mark as harvested.
+  function handleHarvestSet(id: string) {
+    setModalAction({ id: id as UUID, type: 'harvest', action: 'harvest-set' });
+    setIsModalOpen(true);
+  }
 
-    const previousDate = task!.previousDate;
-    // Update the "last" date to the previous date.
-    updateDate(uncheckTask.id, previousDate, uncheckTask.type, false);
-    // Update UI state: mark task as incomplete.
-    setPendingTasks(prevTasks =>
-      prevTasks.map(t => {
-        if (t.id === uncheckTask.id && t.type === uncheckTask.type) {
-          return { ...t, completed: false };
-        }
-        return t;
-      }),
-    );
-    // Clear stored task and close modal.
-    setUncheckTask(null);
+  // For harvest tasks: if already harvested (completed), ask to clear the harvest marker.
+  function handleHarvestClear(id: string) {
+    setModalAction({
+      id: id as UUID,
+      type: 'harvest',
+      action: 'harvest-clear',
+    });
+    setIsModalOpen(true);
+  }
+
+  // When the confirmation modal is confirmed.
+  function processModalConfirm() {
+    if (!modalAction) return;
+    const { id, type, action } = modalAction;
+    if (type === 'harvest') {
+      const currentDate = new Date();
+      if (action === 'harvest-set') {
+        // Mark this plant as harvested for the current season.
+        setRecentHarvestDate(currentDate.toDateString(), id);
+        increaseHarvestedByOne(id);
+        setPendingTasks(prev =>
+          prev.map(task => {
+            if (task.id === id && task.type === 'harvest') {
+              return { ...task, completed: true };
+            }
+            return task;
+          }),
+        );
+      } else if (action === 'harvest-clear') {
+        // Clear the recent harvest; task becomes current.
+        setRecentHarvestDate(null, id);
+        decreaseHarvestedByOne(id);
+        setPendingTasks(prev =>
+          prev.map(task => {
+            if (task.id === id && task.type === 'harvest') {
+              return { ...task, completed: false };
+            }
+            return task;
+          }),
+        );
+      }
+    } else if (action === 'revert') {
+      // For water/weed tasks, revert to the previous date.
+      const task = pendingTasks.find(t => t.id === id && t.type === type);
+      const previousDate = task?.previousDate || new Date();
+      updateDate(id, previousDate, type, false);
+      setPendingTasks(prev =>
+        prev.map(t => {
+          if (t.id === id && t.type === type) {
+            return { ...t, completed: false };
+          }
+          return t;
+        }),
+      );
+    }
+    setModalAction(null);
     setIsModalOpen(false);
   }
+
   useEffect(() => {
     if (!authLoading && userId) {
       const fetchTip = async () => {
@@ -225,12 +368,12 @@ export default function Page() {
     }
   }, [authLoading, userId]);
 
-  // Filter tasks based on the selected tab
+  // Filter tasks based on the selected tab.
   const filteredTasks = pendingTasks.filter(task =>
     selectedTab === 'current' ? !task.completed : task.completed,
   );
 
-  // Compute counts for display in the filter tabs
+  // Compute counts for display in the filter tabs.
   const currentTasksCount = pendingTasks.filter(task => !task.completed).length;
   const completedTasksCount = pendingTasks.filter(
     task => task.completed,
@@ -245,7 +388,6 @@ export default function Page() {
           <Greeting>Hi, [Name]!</Greeting>
           <DashboardTitle>My Dashboard</DashboardTitle>
 
-          {/* Filter Tabs */}
           <FilterTabsContainer>
             <FilterTab
               active={selectedTab === 'current'}
@@ -261,21 +403,33 @@ export default function Page() {
             </FilterTab>
           </FilterTabsContainer>
 
-          {/* Task List */}
           <TaskContainer>
             {filteredTasks.length > 0 ? (
               filteredTasks.map((task, index) => (
                 <TaskItem
                   key={index}
-                  type={task.type as 'water' | 'weed'}
+                  type={task.type}
                   plantName={task.plant_name}
                   completed={task.completed}
-                  dueDate={task.due_date}
+                  // For harvest tasks, pass dueMessage if available.
+                  dueDate={
+                    task.type === 'harvest' && task.dueMessage
+                      ? task.dueMessage
+                      : task.due_date
+                  }
                   onToggle={() => {
-                    if (task.completed) {
-                      handleUncheck(task.id, task.type);
+                    if (task.type === 'harvest') {
+                      if (task.completed) {
+                        handleHarvestClear(task.id);
+                      } else {
+                        handleHarvestSet(task.id);
+                      }
                     } else {
-                      handleCheck(task.id, task.type);
+                      if (task.completed) {
+                        handleUncheck(task.id, task.type);
+                      } else {
+                        handleCheck(task.id, task.type);
+                      }
                     }
                   }}
                 />
@@ -285,13 +439,27 @@ export default function Page() {
             )}
           </TaskContainer>
 
-          {/* Confirmation Modal */}
           <ConfirmationModal
             isOpen={isModalOpen}
-            title="Are you sure you want to unmark this task?"
-            message="Clicking confirm will move this task back to pending."
-            onCancel={() => setIsModalOpen(false)}
-            onConfirm={processModalConfirm} // use processModalConfirm here
+            title={
+              modalAction?.type === 'harvest'
+                ? modalAction.action === 'harvest-set'
+                  ? 'Mark as harvested?'
+                  : 'Clear harvest record?'
+                : 'Are you sure you want to unmark this task?'
+            }
+            message={
+              modalAction?.type === 'harvest'
+                ? modalAction.action === 'harvest-set'
+                  ? 'Click confirm to record that you have harvested this plant for the current season.'
+                  : 'Click confirm to remove the harvest record, and mark this task as pending again.'
+                : 'Clicking confirm will move this task back to pending.'
+            }
+            onCancel={() => {
+              setModalAction(null);
+              setIsModalOpen(false);
+            }}
+            onConfirm={processModalConfirm}
           />
 
           <Header>
