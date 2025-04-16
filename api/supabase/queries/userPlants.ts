@@ -7,9 +7,21 @@ export async function insertUserPlants(
     UserPlant,
     'id' | 'date_removed' | 'recent_harvest' | 'num_harvested'
   >[],
+  confirmed: boolean,
+  userId: UUID,
 ) {
+  if (!confirmed) {
+    const allUserPlants = await getCurrentUserPlantsByUserId(userId);
+    const duplicateList = userPlants.filter(plant =>
+      allUserPlants.some(userPlant => userPlant.plant_id === plant.plant_id),
+    );
+    if (duplicateList) {
+      return duplicateList;
+    }
+  }
   const { error } = await supabase.from('user_plants').insert(userPlants);
   if (error) throw new Error(`Error inserting user plants: ${error.message}`);
+  return;
 }
 
 export async function getUserPlantById(userPlantId: UUID): Promise<UserPlant> {
