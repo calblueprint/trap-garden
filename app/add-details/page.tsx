@@ -159,12 +159,14 @@ export default function Home() {
         const completedDetails: Omit<
           UserPlant,
           'id' | 'date_removed' | 'recent_harvest' | 'num_harvested'
-        >[] = details.map(detail => ({
-          user_id: userId,
-          plant_id: detail.plant_id!,
-          date_added: detail.date_added!,
-          planting_type: detail.planting_type!,
-        }));
+        >[] = details
+          .map(detail => ({
+            user_id: userId,
+            plant_id: detail.plant_id!,
+            date_added: detail.date_added!,
+            planting_type: detail.planting_type!,
+          }))
+          .filter(plant => plant != undefined);
         const firstPress = await insertUserPlants(
           completedDetails,
           confirm,
@@ -280,9 +282,9 @@ export default function Home() {
                   plantName={plantsToAdd[index].plant_name}
                   plantingType={detail.planting_type!}
                   dateAdded={detail.date_added!}
-                  removeFunction={() =>
-                    details.splice(details.indexOf(detail), 1)
-                  }
+                  removeFunction={() => {
+                    delete details[index];
+                  }}
                 />
               ))}
             </ReviewDetailsContainer>
@@ -310,6 +312,7 @@ export default function Home() {
         rightText="Yes"
         onCancel={() => setShowConfModal(false)}
         onConfirm={confirmClick}
+        flip={true}
       />
     </>
   );

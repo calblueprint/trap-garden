@@ -17,6 +17,7 @@ interface ConfirmationModalProps {
   rightText?: string;
   onCancel: () => void;
   onConfirm: () => void;
+  flip?: boolean | false;
 }
 
 export default function ConfirmationModal({
@@ -27,6 +28,7 @@ export default function ConfirmationModal({
   rightText,
   onCancel,
   onConfirm,
+  flip,
 }: ConfirmationModalProps) {
   if (!isOpen) return null;
 
@@ -36,10 +38,25 @@ export default function ConfirmationModal({
         <ModalTitle>{title}</ModalTitle>
         <ModalMessage>{message}</ModalMessage>
         <ButtonRow>
-          <CancelButton onClick={onCancel}>{leftText || 'Cancel'}</CancelButton>
-          <ConfirmButton onClick={onConfirm}>
-            {rightText || 'Exit'}
-          </ConfirmButton>
+          {flip ? (
+            <>
+              <ConfirmButton onClick={onConfirm}>
+                {rightText || 'Exit'}
+              </ConfirmButton>
+              <CancelButton onClick={onCancel}>
+                {leftText || 'Cancel'}
+              </CancelButton>{' '}
+            </>
+          ) : (
+            <>
+              <CancelButton onClick={onCancel}>
+                {leftText || 'Cancel'}
+              </CancelButton>
+              <ConfirmButton onClick={onConfirm}>
+                {rightText || 'Exit'}
+              </ConfirmButton>
+            </>
+          )}
         </ButtonRow>
       </ModalContainer>
     </Overlay>
