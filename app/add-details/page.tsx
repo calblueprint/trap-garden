@@ -186,7 +186,7 @@ export default function Home() {
         weeding_frequency: detail.weeding_frequency!,
         plant_name: detail.plant_name!,
         date_added_to_db: getDefaultDate(),
-      }));
+      })).filter(plant => plant != undefined);
         const firstPress = await insertUserPlants(
           completedDetails,
           confirm,
@@ -329,9 +329,9 @@ export default function Home() {
                   plantName={plantsToAdd[index].plant_name}
                   plantingType={detail.planting_type!}
                   dateAdded={detail.date_added!}
-                  removeFunction={() =>
-                    details.splice(details.indexOf(detail), 1)
-                  }
+                  removeFunction={() => {
+                    delete details[index];
+                  }}
                 />
               ))}
             </ReviewDetailsContainer>
@@ -359,6 +359,7 @@ export default function Home() {
         rightText="Yes"
         onCancel={() => setShowConfModal(false)}
         onConfirm={confirmClick}
+        flip={true}
       />
     </>
   );
