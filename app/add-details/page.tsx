@@ -125,6 +125,9 @@ export default function Home() {
     updatedDetails[index] = {
       ...updatedDetails[index],
       [field]: value,
+      water_frequency: plantsToAdd[index].water_frequency,
+      weeding_frequency: plantsToAdd[index].weeding_frequency,
+      plant_name: plantsToAdd[index].plant_name,
     };
     setDetails(updatedDetails);
   }
@@ -139,13 +142,22 @@ export default function Home() {
         | 'id'
         | 'date_removed'
         | 'recent_harvest'
-        | 'num_harvested'
+        | 'num_harvested' 
+        | 'due_date'
         | 'user_notes'
       >[] = details.map(detail => ({
         user_id: userId,
         plant_id: detail.plant_id!,
         date_added: detail.date_added!,
         planting_type: detail.planting_type!,
+        water_frequency: detail.water_frequency!,
+        weeding_frequency: detail.weeding_frequency!,
+        last_watered: getDefaultDate(),
+        last_weeded: getDefaultDate(),
+        plant_name: detail.plant_name!,
+        date_added_to_db: getDefaultDate(),
+        previous_last_watered: getDefaultDate(),
+        previous_last_weeded: getDefaultDate(),
       }));
       await insertUserPlants(completedDetails);
       router.push('/view-plants');
