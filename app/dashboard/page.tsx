@@ -453,6 +453,7 @@ export default function Page() {
           completed: true,
           due_date: new Date(task.due_date),
           id: task.id,
+          previousDate: new Date(task.previous_last_watered),
         });
       }
 
@@ -487,6 +488,7 @@ export default function Page() {
           completed: true,
           due_date: new Date(task.due_date),
           id: task.id,
+          previousDate: new Date(task.previous_last_weeded),
         });
       }
 
