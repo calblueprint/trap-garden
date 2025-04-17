@@ -195,6 +195,7 @@ export default function Page() {
           completed: true,
           due_date: new Date(task.due_date),
           id: task.id,
+          previousDate: new Date(task.previous_last_watered),
         });
       }
 
@@ -229,6 +230,7 @@ export default function Page() {
           completed: true,
           due_date: new Date(task.due_date),
           id: task.id,
+          previousDate: new Date(task.previous_last_weeded),
         });
       }
 
@@ -300,7 +302,7 @@ export default function Page() {
   }
 
   // When the confirmation modal is confirmed.
-  function processModalConfirm() {
+  async function processModalConfirm() {
     if (!modalAction) return;
     const { id, type, action } = modalAction;
     if (type === 'harvest') {
@@ -334,7 +336,7 @@ export default function Page() {
       // For water/weed tasks, revert to the previous date.
       const task = pendingTasks.find(t => t.id === id && t.type === type);
       const previousDate = task?.previousDate || new Date();
-      updateDate(id, previousDate, type, false);
+      await updateDate(id, previousDate, type, false);
       setPendingTasks(prev =>
         prev.map(t => {
           if (t.id === id && t.type === type) {

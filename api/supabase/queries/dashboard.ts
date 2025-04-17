@@ -65,6 +65,8 @@ export async function updateDate(
   taskType: string,
   isPrevious: boolean = false,
 ) {
+  console.log(id, newDate, taskType, isPrevious);
+
   // Use the isPrevious flag to choose the proper mapping.
   const fieldMap: Record<string, string> = {
     water: isPrevious ? 'previous_last_watered' : 'last_watered',
@@ -80,12 +82,12 @@ export async function updateDate(
   const { data, error } = await supabase
     .from('user_plants')
     .update({ [fieldToUpdate]: newDate })
-    .eq('id', id);
+    .eq('id', id)
+    .select();
 
   if (error) {
     console.error(`Error updating ${fieldToUpdate} date:`, error);
   }
-
   return data;
 }
 
