@@ -365,3 +365,24 @@ export const tipCategoryIcons: Record<string, IconType> = {
   Planting: 'grayPlantHand',
   Weeding: 'spade',
 };
+
+export const userTypes: Record<
+  UserTypeEnum,
+  { filename: string; label: string; question: string }
+> = {
+  ORG: {
+    filename: 'CommunityGardenGuide.pdf',
+    label: 'Community',
+    question: "What is your organization's name?",
+  },
+  INDIV: {
+    filename: 'HomeGardenGuide.pdf',
+    label: 'Individual',
+    question: 'What is your name?',
+  },
+  SCHOOL: {
+    filename: 'SchoolGardenGuide.pdf',
+    label: 'School',
+    question: "What is your school's name?",
+  },
+};
