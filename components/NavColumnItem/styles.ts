@@ -49,6 +49,7 @@ export const SelectedIndicator = styled.div`
 `;
 
 export const StyledIcon = styled(Icon)`
-  min-height: 25px;
-  min-width: 25px;
+  height: 25px;
+  width: 25px;
+  color: ${COLORS.shrub};
 `;

@@ -1,3 +1,4 @@
+import { IconType } from '@/lib/icons';
 import {
   DropdownOption,
   Plant,
@@ -337,9 +338,30 @@ export function isValidEmail(email: string): boolean {
   return emailRegex.test(email);
 }
 
-export function formatListWithAnd(items: string[]): string {
-  if (items.length === 0) return '';
-  if (items.length === 1) return items[0];
-  if (items.length === 2) return `${items[0]} & ${items[1]}`;
-  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
-}
+export const tipCategories = [
+  'Water Management',
+  'Helpful Flowers for Your Garden',
+  'Mulching',
+  'Harvesting',
+  'Planting',
+  'Weeding',
+];
+// Map category values to headers
+export const tipCategoryHeaders: Record<string, string> = {
+  'Helpful Flowers for Your Garden': 'Helpful Flowers',
+  'Water Management': 'Water Management',
+  Mulching: 'Mulching',
+  Harvesting: 'Harvesting',
+  Planting: 'Planting',
+  Weeding: 'Weeding',
+};
+
+//Map category values to icon name
+export const tipCategoryIcons: Record<string, IconType> = {
+  'Helpful Flowers for Your Garden': 'flower',
+  'Water Management': 'grayWateringCan',
+  Mulching: 'lawnCare',
+  Harvesting: 'harvestingBasket',
+  Planting: 'grayPlantHand',
+  Weeding: 'spade',
+};

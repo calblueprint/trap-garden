@@ -5,15 +5,26 @@ import { UUID } from 'crypto';
 import {
   increaseHarvestedByOne,
   setRecentHarvestDate,
+  updateUserPlantDetails,
 } from '@/api/supabase/queries/userPlants';
 import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { P1, P3 } from '@/styles/text';
+import { P3 } from '@/styles/text';
 import { PlantingTypeEnum } from '@/types/schema';
+import { plantingTypeOptions } from '@/utils/dropdownOptions';
 import { formatTimestamp, toTitleCase } from '@/utils/helpers';
+import { SmallButton } from '../Buttons';
+import CustomSelect from '../CustomSelect';
+import DateInput from '../DateInput';
 import Icon from '../Icon';
-import { Container, HarvestButton, Header } from './style';
+import {
+  Container,
+  EditPlantLabel,
+  HarvestButton,
+  Header,
+  PlantDetailsText,
+} from './style';
 
 function DetailRow(iconType: IconType, text: string) {
   return (
@@ -51,24 +62,128 @@ export default function YourPlantDetails({
     onHarvest();
   }
 
+  // Initialize state with the passed-in props
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [localDatePlanted, setLocalDatePlanted] = useState<string>(datePlanted);
+  const [localPlantingType, setLocalPlantingType] =
+    useState<string>(plantingType);
+  const [yourPlantedDate, setYourPlantedDate] = useState<string>(datePlanted);
+  const [yourPlantingType, setYourPlantingType] =
+    useState<PlantingTypeEnum>(plantingType);
+
+  function EditDateRow(iconType: IconType, currentDate: string) {
+    return (
+      <Flex $align="center" $gap="8px">
+        <Icon type={iconType} />
+        <EditPlantLabel>Date Planted: </EditPlantLabel>
+        <DateInput
+          value={currentDate}
+          onChange={date => setYourPlantedDate(date)}
+          placeholder="Select planting date"
+        />
+      </Flex>
+    );
+  }
+
+  function EditPlantTypeRow(iconType: IconType, currentType: string) {
+    return (
+      <Flex $align="center" $gap="8px">
+        <Icon type={iconType} />
+        <EditPlantLabel>Planting Type: </EditPlantLabel>
+        <CustomSelect
+          placeholder="Choose Planting Type"
+          value={currentType}
+          options={plantingTypeOptions}
+          onChange={newType => setYourPlantingType(newType as PlantingTypeEnum)}
+          isContainerClickable={true}
+        />
+      </Flex>
+    );
+  }
+  function handleCancel() {
+    setIsEditing(false);
+  }
+
+  async function handleUpdateUserPlantDetails() {
+    try {
+      await updateUserPlantDetails(id, yourPlantedDate, yourPlantingType);
+      // After saving, exit edit mode.
+      setIsEditing(false);
+      setLocalDatePlanted(yourPlantedDate);
+      setLocalPlantingType(yourPlantingType);
+    } catch (error) {
+      console.error('Error updating plant details', error);
+    }
+  }
+
   return (
     <Container>
-      <Header>
-        <P1 $fontWeight={500} $color={COLORS.shrub}>
-          Your Plant Details
-        </P1>
-      </Header>
-      <Flex $direction="column" $gap="8px" $align="center">
-        {DetailRow('calendar', `Date Planted: ${formatTimestamp(datePlanted)}`)}
-        {DetailRow('plantHand', `Planting Type: ${toTitleCase(plantingType)}`)}
-        {localRecentHarvestDate
-          ? DetailRow(
-              'plant',
-              `Most Recent Harvest Date: ${formatTimestamp(localRecentHarvestDate)}`,
-            )
-          : DetailRow('plant', `Most Recent Harvest Date: Not harvested yet`)}
-        <HarvestButton onClick={harvestPlant}>Harvest</HarvestButton>
-      </Flex>
+      {isEditing ? (
+        <>
+          <Header>
+            <PlantDetailsText>Your Plant Details</PlantDetailsText>
+            <Flex $gap="4px" $justify="end">
+              <SmallButton
+                onClick={handleCancel}
+                $secondaryColor={COLORS.errorRed}
+              >
+                Cancel
+              </SmallButton>
+              <SmallButton
+                onClick={handleUpdateUserPlantDetails}
+                $secondaryColor={COLORS.shrub}
+              >
+                Save
+              </SmallButton>
+            </Flex>
+          </Header>
+          <Flex $direction="column" $gap="8px">
+            {EditDateRow('calendar', yourPlantedDate)}
+            {EditPlantTypeRow('plantHand', yourPlantingType)}
+            {localRecentHarvestDate
+              ? DetailRow(
+                  'plant',
+                  `Most Recent Harvest Date: ${formatTimestamp(localRecentHarvestDate)}`,
+                )
+              : DetailRow(
+                  'plant',
+                  `Most Recent Harvest Date: Not harvested yet`,
+                )}
+          </Flex>
+        </>
+      ) : (
+        <>
+          <Header>
+            <PlantDetailsText>Your Plant Details</PlantDetailsText>
+            <SmallButton
+              onClick={() => setIsEditing(true)}
+              $secondaryColor={COLORS.shrub}
+            >
+              Edit
+            </SmallButton>
+          </Header>
+          <Flex $direction="column" $gap="8px" $align="center">
+            {DetailRow(
+              'calendar',
+              `Date Planted: ${formatTimestamp(localDatePlanted)}`,
+            )}
+            {DetailRow(
+              'plantHand',
+              `Planting Type: ${toTitleCase(localPlantingType)}`,
+            )}
+            {localRecentHarvestDate
+              ? DetailRow(
+                  'plant',
+                  `Most Recent Harvest Date: ${formatTimestamp(localRecentHarvestDate)}`,
+                )
+              : DetailRow(
+                  'plant',
+                  `Most Recent Harvest Date: Not harvested yet`,
+                )}
+            <HarvestButton onClick={harvestPlant}>Harvest</HarvestButton>
+          </Flex>
+        </>
+      )}
     </Container>
   );
 }

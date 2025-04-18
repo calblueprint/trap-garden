@@ -12,13 +12,13 @@ import { userTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import { BigButton } from '../Buttons';
 import ConfirmationModal from '../ConfirmationModal';
-import Icon from '../Icon';
 import NavColumnItem from '../NavColumnItem';
 import {
   HamburgerButton,
   HamburgerIcon,
   LoginButton,
   LoginButtonsContainer,
+  LogoImage,
   NameAndStatus,
   NavColumnContainer,
   NavColumnHeader,
@@ -49,14 +49,15 @@ const navLinks: NavLink[] = [
     path: CONFIG.plantingTimeline,
     iconName: 'calendar',
   },
-  { name: 'Resources', path: CONFIG.resources, iconName: 'plant' },
+  { name: 'Resources', path: CONFIG.resources, iconName: 'plant' }, //temporary icon
+  { name: 'Dashboard', path: CONFIG.dashboard, iconName: 'calendar' }, //temporary icon
 ];
 
 export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const currentPath = usePathname();
   const router = useRouter();
 
-  const { signOut, userId, loading: authLoading } = useAuth();
+  const { signOut, userId, loading: authLoading, userName } = useAuth();
   const { profileData, profileReady } = useProfile();
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -119,24 +120,30 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
     if (userId) {
       return (
         <ProfileDisplayContainer>
-          {!profileData ? (
-            <OnboardingButton href={CONFIG.onboarding} onClick={safeOnClose}>
-              Go to Onboarding
-            </OnboardingButton>
-          ) : (
-            <Profile>
-              <ProfileIcon type="profile" />
-              <NameAndStatus>
-                <H4 $color={COLORS.shrub} $fontWeight={300}>
-                  Your Account
-                </H4>
-                <P3 $color={COLORS.shrub} $fontWeight={300}>
-                  {userTypeLabels[profileData.user_type as UserTypeEnum] +
-                    ' Garden'}
-                </P3>
-              </NameAndStatus>
-            </Profile>
-          )}
+          <Link
+            href={CONFIG.myAccount}
+            onClick={safeOnClose}
+            style={{ textDecoration: 'none' }}
+          >
+            {!profileData ? (
+              <OnboardingButton href={CONFIG.onboarding} onClick={safeOnClose}>
+                Go to Onboarding
+              </OnboardingButton>
+            ) : (
+              <Profile>
+                <ProfileIcon type="profile" />
+                <NameAndStatus>
+                  <H4 $color={COLORS.shrub} $fontWeight={300}>
+                    {userName ?? 'Your Account'}
+                  </H4>
+                  <P3 $color={COLORS.shrub} $fontWeight={300}>
+                    {userTypeLabels[profileData.user_type as UserTypeEnum] +
+                      ' Garden'}
+                  </P3>
+                </NameAndStatus>
+              </Profile>
+            )}
+          </Link>
           {/* For Sign Out, pass "signOut" as the action */}
           <BigButton
             $secondaryColor={COLORS.errorRed}
@@ -186,7 +193,10 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
               <NavColumnHeader>
                 <div>{/* Empty for spacing */}</div>
                 <Link onClick={safeOnClose} href={CONFIG.home}>
-                  <Icon type="logo" />
+                  <LogoImage
+                    src="/images/grow-together-logo.png"
+                    alt="Grow Together Logo"
+                  />
                 </Link>
                 <HamburgerButton onClick={onClose}>
                   <HamburgerIcon type="hamburger" />

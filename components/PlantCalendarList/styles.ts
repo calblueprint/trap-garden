@@ -5,6 +5,7 @@ import { P3 } from '@/styles/text';
 export const TableContainer = styled.div`
   width: 100%;
   overflow-x: auto; // Allow horizontal scrolling
+  overscroll-behavior: none;
 `;
 
 // Styled Table
@@ -39,7 +40,7 @@ export const ScrollableTd = styled.td`
 export const MonthsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  /* gap: 0.75rem; */
+  gap: 0.75rem;
   width: 100%;
   justify-items: center;
 `;
