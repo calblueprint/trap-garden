@@ -81,15 +81,27 @@ export const TaskContainer = styled.div`
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
-  height: 200px;
   margin-bottom: 8px;
 `;
-export const CalendarContainer = styled.div`
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
-  height: 125px;
-  margin-bottom: 8px;
+
+export const Task = styled.div`
+  width: 343.544px;
+  height: 72px;
+  background: blue;
+`;
+export const TaskHeader = styled.p`
+  color: ${COLORS.darkgray};
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
+export const TaskDueDate = styled.p`
+  color: ${COLORS.midgray};
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 `;
 
 export const PlaceholderText = styled.p`
@@ -101,26 +113,27 @@ export const PlaceholderText = styled.p`
   line-height: normal;
   padding: 20px;
 `;
-export const WeatherReminderWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 8px;
-`;
-export const WeatherContainer = styled.div`
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
-  height: 125px;
-  width: 50%;
-  margin-bottom: 8px;
-`;
-export const ReminderContainer = styled.div`
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
-  height: 125px;
-  width: 50%;
 
-  margin-bottom: 8px;
+export const FilterTabsContainer = styled.div`
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+`;
+
+export const FilterTab = styled.span<{ active: boolean }>`
+  cursor: pointer;
+  color: ${({ active }) => (active ? COLORS.shrub : COLORS.darkgray)};
+  text-decoration: ${({ active }) => (active ? 'underline' : 'none')};
+  margin-right: 1rem;
+`;
+
+export const TaskWrapper = styled.div<{ completed: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${({ completed }) => (completed ? '#F8FAEA' : '#FFFFFF')};
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin-bottom: 1rem;
 `;

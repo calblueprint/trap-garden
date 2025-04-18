@@ -5,7 +5,7 @@ import supabase from '../createClient';
 export async function insertUserPlants(
   userPlants: Omit<
     UserPlant,
-    'id' | 'date_removed' | 'recent_harvest' | 'num_harvested'
+    'id' | 'date_removed' | 'recent_harvest' | 'num_harvested' | 'due_date'
   >[],
 ) {
   const { error } = await supabase.from('user_plants').insert(userPlants);
@@ -79,8 +79,18 @@ export async function increaseHarvestedByOne(id: UUID) {
   }
 }
 
+export async function decreaseHarvestedByOne(id: UUID) {
+  const { error } = await supabase.rpc('decrement_num_harvested', {
+    row_id: id,
+  });
+
+  if (error) {
+    throw new Error('Error decrementing:', error);
+  }
+}
+
 export async function setRecentHarvestDate(
-  date: string,
+  date: string | null,
   id: UUID,
 ): Promise<void> {
   const { error } = await supabase
