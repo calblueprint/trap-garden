@@ -334,7 +334,7 @@ export default function Page() {
     weeding_frequency: string,
     last_weeded_date: string | null,
   ): boolean => {
-    if (!last_weeded_date) return true;
+    if (!last_weeded_date) return true; // check null too
     const givenDate = new Date(last_weeded_date);
     const currentDate = new Date();
     const threshold = weeding_frequency === 'Weekly' ? 3 : 7;
@@ -405,7 +405,7 @@ export default function Page() {
       candidateDueDate = new Date();
       candidateDueDate.setDate(candidateDueDate.getDate() + interval);
     }
-    setDueDate(candidateDueDate, taskId);
+    // setDueDate(candidateDueDate, taskId);
     return candidateDueDate;
   };
 
@@ -432,9 +432,7 @@ export default function Page() {
         task.last_watered === task.date_added_to_db
       ) {
         const taskWateredDate = new Date(task.last_watered);
-        const due = task.due_date
-          ? new Date(task.due_date)
-          : computeDueDate(taskWateredDate, 7, task.id);
+        const due = computeDueDate(taskWateredDate, 7, task.id);
         validTasks.push({
           type: 'water',
           plant_name: task.plant_name,
@@ -451,7 +449,11 @@ export default function Page() {
           type: 'water',
           plant_name: task.plant_name,
           completed: true,
-          due_date: new Date(task.due_date),
+          due_date: computeDueDate(
+            new Date(task.previous_last_watered),
+            7,
+            task.id,
+          ),
           id: task.id,
           previousDate: new Date(task.previous_last_watered),
         });
@@ -466,10 +468,11 @@ export default function Page() {
         task.last_weeded === task.date_added_to_db
       ) {
         const taskWeededDate = new Date(task.last_weeded);
-        const interval = task.weeding_frequency === 'Weekly' ? 7 : 14;
-        const due = task.due_date
-          ? new Date(task.due_date)
-          : computeDueDate(taskWeededDate, interval, task.id);
+        const interval = task.weeding_frequency.trim() === 'Weekly' ? 7 : 14;
+        const due = computeDueDate(taskWeededDate, interval, task.id);
+        // const due = task.due_date
+        //   ? new Date(task.due_date)
+        //   : computeDueDate(taskWeededDate, interval, task.id);
         validTasks.push({
           type: 'weed',
           plant_name: task.plant_name,
@@ -482,11 +485,16 @@ export default function Page() {
           updateDate(task.id, new Date(task.last_weeded), 'weed', true);
         }
       } else {
+        const interval = task.weeding_frequency.trim() === 'Weekly' ? 7 : 14;
         validTasks.push({
           type: 'weed',
           plant_name: task.plant_name,
           completed: true,
-          due_date: new Date(task.due_date),
+          due_date: computeDueDate(
+            new Date(task.previous_last_weeded),
+            interval,
+            task.id,
+          ),
           id: task.id,
           previousDate: new Date(task.previous_last_weeded),
         });
