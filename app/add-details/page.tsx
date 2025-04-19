@@ -20,6 +20,18 @@ import {
   ReviewGrid,
 } from './styles';
 
+const formatDate = (dateString: string) => {
+  try {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch {
+    return dateString;
+  }
+};
+
 function ReviewPlant({
   plantName,
   dateAdded,
@@ -36,7 +48,7 @@ function ReviewPlant({
       </H4>
       <ReviewGrid>
         <P2 $fontWeight={500}>Date Planted</P2>
-        <P2>{dateAdded}</P2>
+        <P2>{formatDate(dateAdded)}</P2>
         <P2 $fontWeight={500}>Planting Type</P2>
         <P2>{plantingTypeLabels[plantingType]}</P2>
       </ReviewGrid>
@@ -170,9 +182,9 @@ export default function Home() {
               plant={plantsToAdd[currentIndex - 1]}
               date={details[currentIndex - 1].date_added ?? getDefaultDate()}
               plantingType={details[currentIndex - 1].planting_type ?? ''}
-              onDateChange={date =>
-                updateInput('date_added', date, currentIndex - 1)
-              }
+              onDateChange={date => {
+                updateInput('date_added', date, currentIndex - 1);
+              }}
               onPlantingTypeChange={type =>
                 updateInput('planting_type', type, currentIndex - 1)
               }

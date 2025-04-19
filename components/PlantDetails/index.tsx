@@ -49,6 +49,7 @@ export default function PlantDetails({
             value={date}
             onChange={onDateChange}
             placeholder="Select planting date"
+            max={new Date().toISOString().split('T')[0]} // Prevent future date selection
           />
           <CustomSelect
             label="Planting Type"

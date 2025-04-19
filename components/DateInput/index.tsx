@@ -1,4 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { TextField } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P2 } from '@/styles/text';
@@ -24,7 +28,7 @@ export default function DateInput({
   max,
 }: DateInputProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const hiddenInputRef = useRef<HTMLInputElement | null>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   // Close the dropdown when clicking outside
   useEffect(() => {
@@ -41,28 +45,6 @@ export default function DateInput({
     };
   }, []);
 
-  // Automatically show picker when dropdown icon is clicked
-  const handleDropdownClick = () => {
-    // Use requestAnimationFrame to ensure the input is rendered before showing picker
-    requestAnimationFrame(() => {
-      hiddenInputRef.current?.showPicker();
-    });
-  };
-
-  const formatDate = (dateString: string) => {
-    if (!dateString) return placeholder;
-
-    try {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-    } catch {
-      return dateString;
-    }
-  };
-
   return (
     <Flex $direction="column" $gap="4px">
       {label && (
@@ -70,26 +52,50 @@ export default function DateInput({
           {label}
         </P2>
       )}
-      <DateInputWrapper onClick={handleDropdownClick}>
-        <SelectContainer ref={containerRef}>
-          <P2 $color={COLORS.midgray}>{formatDate(value)}</P2>
-          <DropdownIcon onClick={handleDropdownClick}>
-            <Icon type="calendar" />
-          </DropdownIcon>
-
-          <HiddenDateInput
-            ref={hiddenInputRef}
-            type="date"
-            id="date"
-            value={value}
-            onChange={e => {
-              onChange(e.target.value);
-            }}
-            min={min}
-            max={max}
-          />
-        </SelectContainer>
-      </DateInputWrapper>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {' '}
+        {/* config for Date Picker */}
+        <DatePicker
+          onChange={newValue => {
+            onChange(new Date(newValue?.toString() ?? '').toISOString());
+          }}
+          disableFuture
+          open={isDatePickerOpen}
+          onOpen={() => setIsDatePickerOpen(true)}
+          onClose={() => setIsDatePickerOpen(false)}
+          format="MM/DD/YYYY"
+          enableAccessibleFieldDOMStructure={false}
+          // custom styling for displayed date
+          slotProps={{
+            textField: {
+              placeholder: placeholder,
+              inputProps: {
+                readOnly: true,
+              },
+              onClick: () => setIsDatePickerOpen(true),
+              sx: {
+                '& input': {
+                  color: COLORS.midgray,
+                  cursor: 'pointer',
+                  fontFamily: 'Lexend',
+                  fontSize: '0.875rem',
+                  fontWeight: 300,
+                  padding: '12px 0px 12px 12px',
+                  width: '100%',
+                },
+              },
+            },
+          }}
+          slots={{
+            // customize icon for the calendar to open the date picker
+            openPickerIcon: () => (
+              <DropdownIcon>
+                <Icon type="calendar" />
+              </DropdownIcon>
+            ),
+          }}
+        />
+      </LocalizationProvider>
     </Flex>
   );
 }

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 
-export const DropdownIcon = styled.button`
+export const DropdownIcon = styled.div`
   background: none;
   border: none;
   cursor: pointer;
