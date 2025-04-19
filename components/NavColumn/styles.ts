@@ -5,7 +5,7 @@ import Icon from '../Icon';
 
 export const NavColumnContainer = styled.div`
   min-width: 289px;
-  height: 100vh;
+  height: 100%;
   background: ${COLORS.glimpse};
   position: fixed;
   z-index: 1000;

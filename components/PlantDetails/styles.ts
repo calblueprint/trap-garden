@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
 export const PlantImage = styled.img`
-  width: max-content;
+  width: auto;
   height: 120px;
 `;

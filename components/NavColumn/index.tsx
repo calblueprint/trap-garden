@@ -120,16 +120,16 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
     if (userId) {
       return (
         <ProfileDisplayContainer>
-          <Link
-            href={CONFIG.myAccount}
-            onClick={safeOnClose}
-            style={{ textDecoration: 'none' }}
-          >
-            {!profileData ? (
-              <OnboardingButton href={CONFIG.onboarding} onClick={safeOnClose}>
-                Go to Onboarding
-              </OnboardingButton>
-            ) : (
+          {!profileData ? (
+            <OnboardingButton href={CONFIG.onboarding} onClick={safeOnClose}>
+              Go to Onboarding
+            </OnboardingButton>
+          ) : (
+            <Link
+              href={CONFIG.myAccount}
+              onClick={safeOnClose}
+              style={{ textDecoration: 'none' }}
+            >
               <Profile>
                 <ProfileIcon type="profile" />
                 <NameAndStatus>
@@ -142,8 +142,8 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                   </P3>
                 </NameAndStatus>
               </Profile>
-            )}
-          </Link>
+            </Link>
+          )}
           {/* For Sign Out, pass "signOut" as the action */}
           <BigButton
             $secondaryColor={COLORS.errorRed}

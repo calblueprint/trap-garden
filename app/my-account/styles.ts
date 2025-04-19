@@ -55,7 +55,7 @@ export const BluePencilIcon = styled(Icon)`
 `;
 
 export const StyledInput = styled.input`
-  font-size: 0.875rem;
+  font-size: 1rem;
   padding: 0.5rem;
   border-radius: 5px;
   border: 1px solid ${COLORS.darkgray};

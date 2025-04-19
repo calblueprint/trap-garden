@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
-import { P2 } from '@/styles/text';
+import { P1, P2 } from '@/styles/text';
 
 export const InputWrapper = styled.div`
   position: relative;
@@ -12,7 +12,7 @@ export const StyledLabel = styled(P2).attrs({ as: 'label' })`
   margin-bottom: 0.25rem;
 `;
 
-export const StyledInput = styled(P2).attrs({ as: 'input' })<{
+export const StyledInput = styled(P1).attrs({ as: 'input' })<{
   $error?: boolean;
 }>`
   padding: 0.75rem;

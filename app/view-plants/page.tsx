@@ -473,7 +473,7 @@ export default function Page() {
           </NumberSelectedPlantsContainer>
         ) : null}
       </Box>
-      <Box $px="24px">
+      <Box $px="24px" $pb="32px">
         {/* Plant Cards and Body */}
         {!profileAndAuthReady ? <>Loading</> : <MainBody />}
       </Box>

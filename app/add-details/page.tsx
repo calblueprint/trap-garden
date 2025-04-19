@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dayjs from 'dayjs';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
 import PlantDetails from '@/components/PlantDetails';
@@ -20,6 +21,18 @@ import {
   ReviewGrid,
 } from './styles';
 
+const formatDate = (dateString: string) => {
+  try {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch {
+    return dateString;
+  }
+};
+
 function ReviewPlant({
   plantName,
   dateAdded,
@@ -36,7 +49,7 @@ function ReviewPlant({
       </H4>
       <ReviewGrid>
         <P2 $fontWeight={500}>Date Planted</P2>
-        <P2>{dateAdded}</P2>
+        <P2>{formatDate(dateAdded)}</P2>
         <P2 $fontWeight={500}>Planting Type</P2>
         <P2>{plantingTypeLabels[plantingType]}</P2>
       </ReviewGrid>
@@ -87,7 +100,8 @@ export default function Home() {
     plantsToAdd.map(plant => ({ plant_id: plant.id })),
   );
 
-  const getDefaultDate = () => new Date().toISOString().substring(0, 10);
+  //correctly gets current date without being affected by timezones, in YYYY-MM-DD format
+  const getDefaultDate = () => dayjs().format('YYYY-MM-DD');
 
   function move(steps: number) {
     if (currentIndex <= plantsToAdd.length) {
@@ -174,9 +188,9 @@ export default function Home() {
               plant={plantsToAdd[currentIndex - 1]}
               date={details[currentIndex - 1].date_added ?? getDefaultDate()}
               plantingType={details[currentIndex - 1].planting_type ?? ''}
-              onDateChange={date =>
-                updateInput('date_added', date, currentIndex - 1)
-              }
+              onDateChange={date => {
+                updateInput('date_added', date, currentIndex - 1);
+              }}
               onPlantingTypeChange={type =>
                 updateInput('planting_type', type, currentIndex - 1)
               }
