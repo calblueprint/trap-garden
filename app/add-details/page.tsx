@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dayjs from 'dayjs';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
 import PlantDetails from '@/components/PlantDetails';
@@ -99,7 +100,8 @@ export default function Home() {
     plantsToAdd.map(plant => ({ plant_id: plant.id })),
   );
 
-  const getDefaultDate = () => new Date().toISOString().substring(0, 10);
+  //correctly gets current date without being affected by timezones, in YYYY-MM-DD format
+  const getDefaultDate = () => dayjs().format('YYYY-MM-DD');
 
   function move(steps: number) {
     if (currentIndex <= plantsToAdd.length) {

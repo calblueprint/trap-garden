@@ -1,22 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P2 } from '@/styles/text';
-import { DropdownIcon, SelectContainer } from '../CustomSelect/styles';
 import Icon from '../Icon';
-import { DateInputWrapper, HiddenDateInput } from './styles';
+import { DropdownIcon } from './styles';
 
 interface DateInputProps {
   label?: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  min?: string;
-  max?: string;
 }
 
 export default function DateInput({
@@ -24,8 +21,6 @@ export default function DateInput({
   value,
   onChange,
   placeholder = '',
-  min,
-  max,
 }: DateInputProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -53,12 +48,12 @@ export default function DateInput({
         </P2>
       )}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        {' '}
         {/* config for Date Picker */}
         <DatePicker
           onChange={newValue => {
             onChange(new Date(newValue?.toString() ?? '').toISOString());
           }}
+          value={dayjs(value)}
           disableFuture
           open={isDatePickerOpen}
           onOpen={() => setIsDatePickerOpen(true)}
