@@ -5,6 +5,7 @@ import { P3 } from '@/styles/text';
 export const TableContainer = styled.div`
   width: 100%;
   overflow-x: auto; // Allow horizontal scrolling
+  overscroll-behavior: none;
 `;
 
 // Styled Table
@@ -24,6 +25,7 @@ export const StickyTd = styled(P3).attrs({
   left: 0;
   background-color: white; // Optional: Adds a background color to keep text visible when scrolling
   z-index: 1; // Ensures the sticky header is on top of other content
+  padding-right: 8px;
 `;
 
 // Scrollable container for PlantCalendarRow
@@ -38,7 +40,7 @@ export const ScrollableTd = styled.td`
 export const MonthsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  /* gap: 0.75rem; */
+  gap: 0.75rem;
   width: 100%;
   justify-items: center;
 `;

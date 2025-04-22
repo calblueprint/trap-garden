@@ -1,3 +1,4 @@
+import { IconType } from '@/lib/icons';
 import {
   DropdownOption,
   Plant,
@@ -337,20 +338,51 @@ export function isValidEmail(email: string): boolean {
   return emailRegex.test(email);
 }
 
-export const pdfFiles: Record<
+export const tipCategories = [
+  'Water Management',
+  'Helpful Flowers for Your Garden',
+  'Mulching',
+  'Harvesting',
+  'Planting',
+  'Weeding',
+];
+// Map category values to headers
+export const tipCategoryHeaders: Record<string, string> = {
+  'Helpful Flowers for Your Garden': 'Helpful Flowers',
+  'Water Management': 'Water Management',
+  Mulching: 'Mulching',
+  Harvesting: 'Harvesting',
+  Planting: 'Planting',
+  Weeding: 'Weeding',
+};
+
+//Map category values to icon name
+export const tipCategoryIcons: Record<string, IconType> = {
+  'Helpful Flowers for Your Garden': 'flower',
+  'Water Management': 'grayWateringCan',
+  Mulching: 'lawnCare',
+  Harvesting: 'harvestingBasket',
+  Planting: 'grayPlantHand',
+  Weeding: 'spade',
+};
+
+export const userTypes: Record<
   UserTypeEnum,
-  { filename: string; label: string }
+  { filename: string; label: string; question: string }
 > = {
   ORG: {
     filename: 'CommunityGardenGuide.pdf',
     label: 'Community',
+    question: "What is your organization's name?",
   },
   INDIV: {
     filename: 'HomeGardenGuide.pdf',
-    label: 'Home',
+    label: 'Individual',
+    question: 'What is your name?',
   },
   SCHOOL: {
     filename: 'SchoolGardenGuide.pdf',
     label: 'School',
+    question: "What is your school's name?",
   },
 };

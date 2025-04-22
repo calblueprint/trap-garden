@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
@@ -119,24 +119,41 @@ export default function Home() {
     setDetails(updatedDetails);
   }
 
-  const handleSubmit = async () => {
-    // TODO: elegantly handle not logged in case (e.g. when someone clicks "Back")
+  const handleSubmit = useCallback(async () => {
+    // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
     // instead of doing userId!
     if (!userId) return;
     try {
-      const completedDetails: Omit<UserPlant, 'id' | 'date_removed'>[] =
-        details.map(detail => ({
-          user_id: userId,
-          plant_id: detail.plant_id!,
-          date_added: detail.date_added!,
-          planting_type: detail.planting_type!,
-        }));
+      const completedDetails: Omit<
+        UserPlant,
+        'id' | 'date_removed' | 'recent_harvest' | 'num_harvested'
+      >[] = details.map(detail => ({
+        user_id: userId,
+        plant_id: detail.plant_id!,
+        date_added: detail.date_added!,
+        planting_type: detail.planting_type!,
+      }));
       await insertUserPlants(completedDetails);
       router.push('/view-plants');
     } catch (error) {
       console.error('Error inserting user plants:', error);
     }
-  };
+  }, [details, router, userId]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Enter') {
+        handleSubmit();
+      }
+    };
+
+    //add listener for keydown events
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleSubmit]);
 
   return (
     <>

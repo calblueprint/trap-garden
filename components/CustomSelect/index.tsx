@@ -4,9 +4,13 @@ import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P2 } from '@/styles/text';
 import { DropdownOption } from '@/types/schema';
+import { DropdownIcon } from '../DateInput/styles';
 import Icon from '../Icon';
 import {
-  DropdownIcon,
+  DropdownIconWrapper,
+  HorizontalLine,
+  NoBorderContainer,
+  NoBorderContent,
   Option,
   OptionsContainer,
   SelectContainer,
@@ -20,7 +24,8 @@ interface CustomSelectProps<T> {
   label?: string;
   id?: string;
   iconType?: IconType;
-  isContainerClickable?: boolean; // New boolean prop
+  isContainerClickable?: boolean;
+  border?: boolean;
 }
 
 export default function CustomSelect<T>({
@@ -31,7 +36,8 @@ export default function CustomSelect<T>({
   label,
   id,
   iconType = 'pencil',
-  isContainerClickable = false, // Default to false
+  isContainerClickable = false,
+  border = true,
 }: CustomSelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -41,7 +47,6 @@ export default function CustomSelect<T>({
     setIsOpen(false);
   };
 
-  // Close the dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -66,29 +71,60 @@ export default function CustomSelect<T>({
           {label}
         </P2>
       )}
-      <SelectContainer
-        ref={containerRef}
-        onClick={isContainerClickable ? () => setIsOpen(!isOpen) : undefined}
-      >
-        <P2 $color={COLORS.midgray}>
-          {options.find(option => option.value === value)?.label || placeholder}
-        </P2>
-        <DropdownIcon id={componentId} onClick={() => setIsOpen(!isOpen)}>
-          <Icon type={iconType} />
-        </DropdownIcon>
-        {isOpen && (
-          <OptionsContainer>
-            {options.map(option => (
-              <Option
-                key={String(option.value)}
-                onClick={() => handleOptionClick(option.value)}
-              >
-                {option.label}
-              </Option>
-            ))}
-          </OptionsContainer>
-        )}
-      </SelectContainer>
+      {border ? (
+        // Default Container Style
+        <SelectContainer
+          ref={containerRef}
+          onClick={isContainerClickable ? () => setIsOpen(!isOpen) : undefined}
+        >
+          <P2 $color={COLORS.midgray}>
+            {options.find(option => option.value === value)?.label ||
+              placeholder}
+          </P2>
+          <DropdownIcon id={componentId} onClick={() => setIsOpen(!isOpen)}>
+            <Icon type={iconType} />
+          </DropdownIcon>
+          {isOpen && (
+            <OptionsContainer>
+              {options.map(option => (
+                <Option
+                  key={String(option.value)}
+                  onClick={() => handleOptionClick(option.value)}
+                >
+                  {option.label}
+                </Option>
+              ))}
+            </OptionsContainer>
+          )}
+        </SelectContainer>
+      ) : (
+        // No-Border Style
+        <NoBorderContainer ref={containerRef}>
+          <NoBorderContent onClick={() => setIsOpen(!isOpen)}>
+            <P2 $color={COLORS.midgray}>
+              {options.find(option => option.value === value)?.label ||
+                placeholder}
+            </P2>
+
+            <DropdownIconWrapper>
+              <Icon type="dropdownArrowDown" />
+            </DropdownIconWrapper>
+          </NoBorderContent>
+          <HorizontalLine />
+          {isOpen && (
+            <OptionsContainer>
+              {options.map(option => (
+                <Option
+                  key={String(option.value)}
+                  onClick={() => handleOptionClick(option.value)}
+                >
+                  {option.label}
+                </Option>
+              ))}
+            </OptionsContainer>
+          )}
+        </NoBorderContainer>
+      )}
     </Flex>
   );
 }

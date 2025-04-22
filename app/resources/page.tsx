@@ -1,13 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAllPlantTips } from '@/api/supabase/queries/resources';
 import { FAQDropdown } from '@/components/FAQDropdown';
 import Icon from '@/components/Icon';
 import PDFSmallPreview from '@/components/PDFSmallPreview';
+import { TipDropdown } from '@/components/TipDropdown';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
 import { H1, H4 } from '@/styles/text';
-import { UserTypeEnum } from '@/types/schema';
+import { PlantTip, UserTypeEnum } from '@/types/schema';
+import {
+  tipCategories,
+  tipCategoryHeaders,
+  tipCategoryIcons,
+} from '@/utils/helpers';
 import {
   GuidesGrid,
   HeaderButton,
@@ -68,6 +75,35 @@ export default function Resources() {
     );
   }
 
+
+  function TipDisplay() {
+    const [fullTipList, setFullTipList] = useState<PlantTip[]>([]);
+    useEffect(() => {
+      (async () => {
+        const tipList = await getAllPlantTips();
+        setFullTipList(tipList);
+      })();
+    }, []);
+    return (
+      <>
+        <Box $pl="1.5rem" $mb="1rem">
+          <H4 $fontWeight={500} $color={COLORS.shrub}>
+            Gardening Tips
+          </H4>
+        </Box>
+        <Box $mb="2rem">
+          {tipCategories.map(cat => (
+            <TipDropdown
+              name={tipCategoryHeaders[cat]}
+              tips={fullTipList.filter(tip => tip.category === cat)}
+              icon={tipCategoryIcons[cat]}
+              key={cat}
+            />
+          ))}
+        </Box>
+      </>
+    );
+  }
   function FAQDisplay() {
     return (
       <div>
@@ -86,10 +122,6 @@ export default function Resources() {
         ))}
       </div>
     );
-  }
-
-  function TipDisplay() {
-    return <H1>Tips</H1>;
   }
 
   function GuideDisplay() {

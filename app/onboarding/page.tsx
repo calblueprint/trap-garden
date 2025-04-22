@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -23,22 +23,25 @@ import {
   plotOptions,
   usStateOptions,
 } from '@/utils/dropdownOptions';
-import { pdfFiles } from '@/utils/helpers';
+import { userTypes } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
   ContentContainer,
+  InputWrapper,
   OnboardingContainer,
   PDFButtonsContainer,
   PDFPageWrapper,
   QuestionDiv,
+  StyledInput,
+  StyledLabel,
 } from './styles';
 
-// ✅ Fix: Use a CDN to load the worker(idk why this works)
+// Use a CDN to load the worker
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const getPDFUrl = (userType: UserTypeEnum) => {
-  const pdfData = pdfFiles[userType].filename;
+  const pdfData = userTypes[userType].filename;
   return supabase.storage.from('pdfs').getPublicUrl(pdfData).data.publicUrl;
 };
 
@@ -50,7 +53,10 @@ interface ReviewPageProps {
   setSelectedGardenType: (selected: UserTypeEnum) => void;
   selectedPlot: boolean;
   setSelectedPlot: (selected: boolean) => void;
+  selectedName: string;
+  setSelectedName: (selected: string) => void;
   onBack: () => void;
+  currStep: number;
 }
 function PdfScreen({
   progress,
@@ -93,7 +99,7 @@ function PdfScreen({
               marginBottom: '8px',
             }}
           >
-            Learn how to setup a {pdfFiles[selectedGardenType].label} Garden
+            Learn how to setup a {userTypes[selectedGardenType].label} Garden
           </H3>
           <Document
             file={pdfUrl}
@@ -112,15 +118,15 @@ function PdfScreen({
                   style={
                     currentPage === 1
                       ? {
-                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
-                          color: 'white',
-                          borderColor: 'rgba(120, 120, 120, 0.5)',
-                        }
+                        backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
+                        color: 'white',
+                        borderColor: 'rgba(120, 120, 120, 0.5)',
+                      }
                       : {
-                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
-                          color: 'white',
-                          borderColor: 'rgba(200, 200, 200, 0.6)',
-                        }
+                        backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
+                        color: 'white',
+                        borderColor: 'rgba(200, 200, 200, 0.6)',
+                      }
                   }
                 >
                   Previous
@@ -133,15 +139,15 @@ function PdfScreen({
                   style={
                     currentPage === numPages
                       ? {
-                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
-                          color: 'white',
-                          borderColor: 'rgba(120, 120, 120, 0.5)',
-                        }
+                        backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
+                        color: 'white',
+                        borderColor: 'rgba(120, 120, 120, 0.5)',
+                      }
                       : {
-                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
-                          color: 'white',
-                          borderColor: 'rgba(200, 200, 200, 0.6)',
-                        }
+                        backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
+                        color: 'white',
+                        borderColor: 'rgba(200, 200, 200, 0.6)',
+                      }
                   }
                 >
                   Next
@@ -165,6 +171,7 @@ function PdfScreen({
 function SelectionScreen<T = string>({
   progress,
   questionTitle,
+  textInput,
   questionNumber,
   selectedValue,
   setSelectedValue,
@@ -175,6 +182,7 @@ function SelectionScreen<T = string>({
 }: {
   progress: number;
   questionTitle: string;
+  textInput: boolean | false;
   questionNumber: number;
   selectedValue: T | undefined;
   setSelectedValue: (selected: T) => void;
@@ -198,17 +206,32 @@ function SelectionScreen<T = string>({
               marginBottom: '8px',
             }}
           >
-            QUESTION {questionNumber} OF 3
+            QUESTION {questionNumber} OF 4
           </P3>
           <QuestionDiv>
             <H3 $color={COLORS.shrub}>{questionTitle}</H3>
           </QuestionDiv>
-          <RadioGroup
-            name={`Onboarding-${questionNumber}-RadioGroup`}
-            options={options}
-            onChange={setSelectedValue}
-            defaultValue={selectedValue}
-          />
+          {textInput ? (
+            <InputWrapper style={{ width: '100%' }}>
+              <StyledInput
+                value={(selectedValue as string) ?? ''}
+                onChange={e => setSelectedValue(e.target.value as T)}
+                style={{ color: COLORS.shrub }}
+              />
+              <StyledLabel
+                style={{ justifySelf: 'left', color: COLORS.midgray }}
+              >
+                This will be your display name
+              </StyledLabel>
+            </InputWrapper>
+          ) : (
+            <RadioGroup
+              name={`Onboarding-${questionNumber}-RadioGroup`}
+              options={options}
+              onChange={setSelectedValue}
+              defaultValue={selectedValue}
+            />
+          )}
           <Flex $pt="16px">{childComponent}</Flex>
         </Flex>
         <ButtonDiv>
@@ -238,16 +261,20 @@ const ReviewPage = ({
   setSelectedState,
   selectedGardenType,
   setSelectedGardenType,
+  selectedName,
+  setSelectedName,
   selectedPlot,
   setSelectedPlot,
   onBack,
+  currStep,
 }: ReviewPageProps) => {
   const { setProfile } = useProfile();
+  const { updateUser } = useAuth();
   const router = useRouter();
 
   // assumes userId is not null, since the not-logged in case
   // would have been handled by rerouting from the page
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     const profile: Profile = {
       user_id: userId,
       us_state: selectedState,
@@ -256,12 +283,37 @@ const ReviewPage = ({
     };
 
     try {
+      await updateUser(selectedName);
       await setProfile(profile);
       router.push(CONFIG.viewPlants);
     } catch (error) {
       console.error('Error upserting profile:', error);
     }
-  };
+  }, [
+    router,
+    selectedGardenType,
+    selectedPlot,
+    selectedState,
+    setProfile,
+    selectedName,
+    updateUser,
+    userId,
+  ]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key === 'Enter' && currStep === 4) {
+        handleSubmit();
+      }
+    };
+
+    //add listener for keydown events
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currStep, handleSubmit]);
 
   return (
     <>
@@ -282,6 +334,20 @@ const ReviewPage = ({
             Your Responses
           </P1>
           <Flex $direction="column" $gap="24px">
+            <InputWrapper style={{ width: '100%' }}>
+              <StyledLabel
+                style={{ justifySelf: 'left', color: COLORS.darkgray }}
+              >
+                Display Name
+              </StyledLabel>
+              <StyledInput
+                type="text"
+                value={selectedName}
+                onChange={e => setSelectedName(e.target.value)}
+                placeholder={selectedName}
+                style={{ color: COLORS.midgray }}
+              />
+            </InputWrapper>
             <CustomSelect
               label="State Location"
               value={selectedState}
@@ -329,6 +395,9 @@ export default function OnboardingFlow() {
   const [selectedPlot, setSelectedPlot] = useState<boolean | undefined>(
     undefined,
   );
+  const [selectedName, setSelectedName] = useState<string | undefined>(
+    undefined,
+  );
   const { push } = useRouter();
 
   // If user not logged in, re-route to /login
@@ -357,9 +426,10 @@ export default function OnboardingFlow() {
     <>
       {step === 1 && (
         <SelectionScreen
-          progress={3}
+          progress={20}
           questionNumber={1}
           questionTitle="What state are you in?"
+          textInput={false}
           options={usStateOptions}
           selectedValue={selectedState}
           setSelectedValue={setSelectedState}
@@ -368,9 +438,10 @@ export default function OnboardingFlow() {
       )}
       {step === 2 && (
         <SelectionScreen<UserTypeEnum>
-          progress={33}
+          progress={40}
           questionNumber={2}
           questionTitle="What type of garden are you starting?"
+          textInput={false}
           options={gardenTypeOptions}
           selectedValue={selectedGardenType}
           setSelectedValue={setSelectedGardenType}
@@ -379,10 +450,30 @@ export default function OnboardingFlow() {
         />
       )}
       {step === 3 && (
-        <SelectionScreen<boolean>
-          progress={66}
+        <SelectionScreen<string>
+          progress={60}
           questionNumber={3}
+          questionTitle={
+            selectedGardenType
+              ? userTypes[selectedGardenType].question
+              : 'What is your name?'
+          }
+          textInput={true}
+          options={[]}
+          selectedValue={selectedName}
+          setSelectedValue={value => {
+            setSelectedName(value);
+          }}
+          onBack={handleBack}
+          onNext={handleNext}
+        />
+      )}
+      {step === 4 && (
+        <SelectionScreen<boolean>
+          progress={80}
+          questionNumber={4}
           questionTitle="Do you already have a plot?"
+          textInput={false}
           options={plotOptions}
           selectedValue={selectedPlot}
           setSelectedValue={setSelectedPlot}
@@ -396,24 +487,27 @@ export default function OnboardingFlow() {
           }
         />
       )}
-      {step === 4 && (
+      {step === 5 && (
         <PdfScreen
-          progress={66}
+          progress={80}
           onBack={handleBack}
           onNext={handleNext}
           selectedGardenType={selectedGardenType!}
         />
       )}
-      {step === 5 && (
+      {step === 6 && (
         <ReviewPage
           userId={userId!}
           selectedState={selectedState!}
           setSelectedState={setSelectedState}
           selectedGardenType={selectedGardenType!}
           setSelectedGardenType={setSelectedGardenType}
+          selectedName={selectedName!}
+          setSelectedName={setSelectedName}
           selectedPlot={selectedPlot!}
           setSelectedPlot={setSelectedPlot}
           onBack={handleBack}
+          currStep={step}
         />
       )}
     </>

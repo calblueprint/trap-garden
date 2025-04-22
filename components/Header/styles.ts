@@ -22,3 +22,8 @@ export const ProfileIconWrapper = styled.button`
   border: none;
   cursor: pointer;
 `;
+
+export const Image = styled.img`
+  width: 69px;
+  height: 23px;
+`;

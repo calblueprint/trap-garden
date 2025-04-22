@@ -46,7 +46,8 @@ export interface UserPlant {
   plant_id: UUID;
   date_added: string;
   date_removed: string;
-  // recent_date_harvest: string;
+  recent_harvest: string;
+  num_harvested: number;
   planting_type: PlantingTypeEnum;
 }
 
@@ -71,7 +72,7 @@ export interface InputProps {
 
 export interface PlantTip {
   id: UUID;
-  category: Category;
+  category: TipCategory;
   body_text: string;
 }
 

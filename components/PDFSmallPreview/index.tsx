@@ -2,13 +2,13 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import supabase from '@/api/supabase/createClient';
 import { Flex } from '@/styles/containers';
 import { UserTypeEnum } from '@/types/schema';
-import { pdfFiles } from '@/utils/helpers';
+import { userTypes } from '@/utils/helpers';
 import Icon from '../Icon';
 import { TextWrapper } from './styles';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 const getPDFUrl = (userType: UserTypeEnum) => {
-  const pdfData = pdfFiles[userType].filename;
+  const pdfData = userTypes[userType].filename;
   return supabase.storage.from('pdfs').getPublicUrl(pdfData).data.publicUrl;
 };
 
@@ -39,7 +39,7 @@ export default function PDFSmallPreview(selectedGardenType: UserTypeEnum) {
       >
         <Icon type="pdf" />
         <TextWrapper>
-          {pdfFiles[selectedGardenType].label} Planting Guide
+          {userTypes[selectedGardenType].label} Planting Guide
         </TextWrapper>
       </Flex>
       <Document file={getPDFUrl(selectedGardenType)}>
