@@ -6,6 +6,7 @@ export const Card = styled.div`
   background: #f4f8e6;
   border-radius: 10px;
   box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
+  margin: -2rem;
   padding: 16px;
   display: flex;
   align-items: center;

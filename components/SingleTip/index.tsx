@@ -1,5 +1,6 @@
 import React from 'react';
 import { IconType } from '@/lib/icons';
+import { Flex } from '@/styles/containers';
 import { TipCategory } from '@/types/schema';
 import Icon from '../Icon';
 import { Card, Content, IconWrapper, Text, Title } from './styles';
@@ -36,14 +37,16 @@ interface TipCardProps {
 
 export default function TipCard({ category, body_text }: TipCardProps) {
   return (
-    <Card>
+    <Flex $justify="center" $direction="column" $align="center" $w="auto">
       <IconWrapper>
         <Icon type={categoryIcons[category]} />
       </IconWrapper>
-      <Content>
-        <Title>{categoryHeaders[category]}</Title>
-        <Text>{body_text}</Text>
-      </Content>
-    </Card>
+      <Card>
+        <Content>
+          <Title>{categoryHeaders[category]}</Title>
+          <Text>{body_text}</Text>
+        </Content>
+      </Card>
+    </Flex>
   );
 }
