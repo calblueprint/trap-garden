@@ -9,7 +9,16 @@ import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { isValidEmail } from '@/utils/helpers';
-import { BackButton, GrayP3, GreenH2, RedP3, StyledForm } from '../styles';
+import {
+  AuthContentContainer,
+  BackButton,
+  GrayP3,
+  GreenH2,
+  RedP3,
+  ResponsiveAuthSplitLayout,
+  SolidGreenDiv,
+  StyledForm,
+} from '../styles';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -47,43 +56,48 @@ export default function ForgotPassword() {
   }, [email]); // Runs whenever email changes
 
   return (
-    <StyledForm>
-      <BackButton
-        type="button"
-        onClick={e => {
-          e.preventDefault(); // prevents accidental form submission
-          router.push('/login');
-        }}
-      >
-        <Icon type={'backArrow'} />
-      </BackButton>
+    <ResponsiveAuthSplitLayout>
+      <SolidGreenDiv />
+      <AuthContentContainer>
+        <StyledForm>
+          <BackButton
+            type="button"
+            onClick={e => {
+              e.preventDefault(); // prevents accidental form submission
+              router.push('/login');
+            }}
+          >
+            <Icon type={'backArrow'} />
+          </BackButton>
 
-      <GreenH2>Reset your password</GreenH2>
-      <Flex $direction="column" $gap="1.5rem">
-        <GrayP3 as="span">Enter your email for recovery link</GrayP3>
+          <GreenH2>Reset your password</GreenH2>
+          <Flex $direction="column" $gap="1.5rem">
+            <GrayP3 as="span">Enter your email for recovery link</GrayP3>
 
-        <div>
-          <TextInput
-            id="email-input"
-            type="email"
-            label="Email"
-            onChange={handleEmailChange}
-            value={email}
-            error={!!invalidEmailError}
-          />
-          {/* Email input*/}
-          <RedP3>{invalidEmailError}</RedP3>
-        </div>
+            <div>
+              <TextInput
+                id="email-input"
+                type="email"
+                label="Email"
+                onChange={handleEmailChange}
+                value={email}
+                error={!!invalidEmailError}
+              />
+              {/* Email input*/}
+              <RedP3>{invalidEmailError}</RedP3>
+            </div>
 
-        <BigButton
-          type="button"
-          onClick={() => handleForgotPassword(email)}
-          $primaryColor={COLORS.shrub}
-          disabled={!canSubmitForm}
-        >
-          Send
-        </BigButton>
-      </Flex>
-    </StyledForm>
+            <BigButton
+              type="button"
+              onClick={() => handleForgotPassword(email)}
+              $primaryColor={COLORS.shrub}
+              disabled={!canSubmitForm}
+            >
+              Send
+            </BigButton>
+          </Flex>
+        </StyledForm>
+      </AuthContentContainer>
+    </ResponsiveAuthSplitLayout>
   );
 }

@@ -11,7 +11,13 @@ import PasswordComplexity, {
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { GreenH2, StyledForm } from '../styles';
+import {
+  AuthContentContainer,
+  GreenH2,
+  ResponsiveAuthSplitLayout,
+  SolidGreenDiv,
+  StyledForm,
+} from '../styles';
 
 export default function ResetPassword() {
   const [password, setPassword] = useState<string>('');
@@ -89,68 +95,73 @@ export default function ResetPassword() {
   };
 
   return (
-    <StyledForm>
-      <GreenH2>Set new password</GreenH2>
-      <Flex $direction="column" $gap="1.5rem">
-        <div>
-          {/* Password input*/}
-          <TextInput
-            id="new-password-input"
-            type="password"
-            value={password || ''}
-            onChange={handlePasswordChange}
-            isVisible={showPassword}
-            toggleVisibility={() => setShowPassword(!showPassword)}
-            label="New Password"
-            error={isSubmitted && !!verifyNewPasswordError}
-          />
-          {/* Password complexity requirements */}
-          <PasswordComplexity
-            password={password} // Set default value if password is null
-            setPasswordComplexityMet={setIsPasswordComplexityMet}
-          />
-        </div>
-        <div>
-          {/* Confirm password input with toggle visibility */}
-          {password && (
-            <>
+    <ResponsiveAuthSplitLayout>
+      <SolidGreenDiv />
+      <AuthContentContainer>
+        <StyledForm>
+          <GreenH2>Set new password</GreenH2>
+          <Flex $direction="column" $gap="1.5rem">
+            <div>
+              {/* Password input*/}
               <TextInput
-                id="confirm-new-password-input"
+                id="new-password-input"
                 type="password"
-                value={confirmPassword || ''}
-                onChange={handleConfirmPasswordChange}
-                isVisible={showConfirmPassword}
-                toggleVisibility={() =>
-                  setShowConfirmPassword(!showConfirmPassword)
-                }
-                label="Confirm New Password"
+                value={password || ''}
+                onChange={handlePasswordChange}
+                isVisible={showPassword}
+                toggleVisibility={() => setShowPassword(!showPassword)}
+                label="New Password"
                 error={isSubmitted && !!verifyNewPasswordError}
               />
-              {confirmPassword && (
-                <Requirement
-                  met={passwordsMatch}
-                  text={`Passwords ${passwordsMatch ? '' : 'do not'} match`}
-                />
+              {/* Password complexity requirements */}
+              <PasswordComplexity
+                password={password} // Set default value if password is null
+                setPasswordComplexityMet={setIsPasswordComplexityMet}
+              />
+            </div>
+            <div>
+              {/* Confirm password input with toggle visibility */}
+              {password && (
+                <>
+                  <TextInput
+                    id="confirm-new-password-input"
+                    type="password"
+                    value={confirmPassword || ''}
+                    onChange={handleConfirmPasswordChange}
+                    isVisible={showConfirmPassword}
+                    toggleVisibility={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
+                    label="Confirm New Password"
+                    error={isSubmitted && !!verifyNewPasswordError}
+                  />
+                  {confirmPassword && (
+                    <Requirement
+                      met={passwordsMatch}
+                      text={`Passwords ${passwordsMatch ? '' : 'do not'} match`}
+                    />
+                  )}
+                </>
               )}
-            </>
-          )}
-        </div>
-        {isSubmitted && confirmPassword && verifyNewPasswordError && (
-          <NewPasswordRequirement
-            met={!verifyNewPasswordError}
-            text={verifyNewPasswordError}
-          />
-        )}
-        {/* Sign up button */}
-        <BigButton
-          type="button"
-          onClick={handleNewPassword}
-          $primaryColor={COLORS.shrub}
-          disabled={!canSubmitForm}
-        >
-          Reset Password
-        </BigButton>
-      </Flex>
-    </StyledForm>
+            </div>
+            {isSubmitted && confirmPassword && verifyNewPasswordError && (
+              <NewPasswordRequirement
+                met={!verifyNewPasswordError}
+                text={verifyNewPasswordError}
+              />
+            )}
+            {/* Sign up button */}
+            <BigButton
+              type="button"
+              onClick={handleNewPassword}
+              $primaryColor={COLORS.shrub}
+              disabled={!canSubmitForm}
+            >
+              Reset Password
+            </BigButton>
+          </Flex>
+        </StyledForm>
+      </AuthContentContainer>
+    </ResponsiveAuthSplitLayout>
   );
 }

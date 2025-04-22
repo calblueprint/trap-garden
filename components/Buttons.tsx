@@ -77,6 +77,9 @@ export const Button = styled(P2).attrs({ as: 'button' })<ButtonProps>`
 
 export const BigButton = styled(Button)<ButtonProps>`
   width: 100%;
+  @media ${device.lg} {
+    font-size: 1.125rem;
+  }
 `;
 
 export const SmallButton = styled(P3).attrs({ as: 'button' })<ButtonProps>`

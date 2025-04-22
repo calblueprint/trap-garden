@@ -24,6 +24,9 @@ export const BackButton = styled.button`
 
 export const GrayP3 = styled(P3)`
   color: ${COLORS.midgray};
+
+  @media ${device.lg} {
+    font-size: 1.25rem; 
 `;
 
 export const ResetLinkButton = styled(StyledLinkButton)`
@@ -39,6 +42,10 @@ export const ColumnFlexContainer = styled.div`
 export const GreenH2 = styled(H2)`
   color: ${COLORS.shrub};
   margin-bottom: 8px;
+
+  @media ${device.lg} {
+    font-size: 4rem;
+  }
 `;
 
 export const RedP3 = styled(P3)`
@@ -49,6 +56,22 @@ export const LoginPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+export const SolidGreenDiv = styled.div`
+  display: none;
+
+  @media ${device.lg} {
+    display: block;
+    background-color: ${COLORS.shrub};
+    width: 41.61vw;
+    height: 100vh;
+  }
+`;
+
+export const ResponsiveAuthSplitLayout = styled.div`
+  display: flex;
+  flex-direction: column;
 
   @media ${device.lg} {
     flex-direction: row;
@@ -146,5 +169,18 @@ export const ResponsiveTextInput = styled(TextInput)`
 export const BigButtonText = styled(P3)`
   @media ${device.lg} {
     font-size: 18px;
+    width: 100vw;
+    height: 100vh;
+  }
+`;
+
+export const AuthContentContainer = styled.div`
+  width: 100%;
+
+  @media ${device.lg} {
+    width: 58.39vw;
+    padding-left: 11.06rem;
+    padding-right: 14.56rem;
+    overflow-y: auto;
   }
 `;
