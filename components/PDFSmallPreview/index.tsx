@@ -21,6 +21,7 @@ export default function PDFSmallPreview(selectedGardenType: UserTypeEnum) {
       $gap=".75rem"
       $align="center"
       $w="10.5rem"
+      $minH="16rem"
       onClick={() => window.open(url, '_blank')}
     >
       <Flex

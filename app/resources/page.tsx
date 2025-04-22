@@ -34,6 +34,40 @@ export default function Resources() {
     },
   ];
 
+  function IconDisplay() {
+    return (
+      <>
+        <div style={{ position: 'absolute', top: '3.5rem', left: '0rem' }}>
+          <Icon type="cuteShovel" />
+        </div>
+        <div style={{ position: 'absolute', top: '13rem', left: '.5rem' }}>
+          <Icon type="tomato" />
+        </div>
+        <div style={{ position: 'absolute', top: '15.1rem', left: '6rem' }}>
+          <Icon type="carrotBottom" />
+        </div>
+        <div style={{ position: 'absolute', top: '14.3rem', left: '6.9rem' }}>
+          <Icon type="carrotTop" />
+        </div>
+        <div style={{ position: 'absolute', top: '11.7rem', right: '0rem' }}>
+          <Icon type="lechuga" />
+        </div>
+        <div style={{ position: 'absolute', top: '3.75rem', right: '1.5rem' }}>
+          <Icon type="seedBag" />
+        </div>
+        <div style={{ position: 'absolute', top: '8.7rem', right: '4rem' }}>
+          <Icon type="seed" />
+        </div>
+        <div style={{ position: 'absolute', top: '7.5rem', right: '2.5rem' }}>
+          <Icon type="seedTilt" />
+        </div>
+        <div style={{ position: 'absolute', top: '8.7rem', right: '1.5rem' }}>
+          <Icon type="seedTilt2" />
+        </div>
+      </>
+    );
+  }
+
   function FAQDisplay() {
     return (
       <div>
@@ -67,11 +101,13 @@ export default function Resources() {
             Planting Guides
           </H4>
         </Box>
-        <GuidesGrid>
-          {userTypes.map(type => (
-            <div key={type}>{PDFSmallPreview(type)}</div>
-          ))}
-        </GuidesGrid>
+        <Box $p="1.5rem">
+          <GuidesGrid>
+            {userTypes.map(type => (
+              <div key={type}>{PDFSmallPreview(type)}</div>
+            ))}
+          </GuidesGrid>
+        </Box>
       </>
     );
   }
@@ -124,33 +160,7 @@ export default function Resources() {
         <H1 $color="white" $fontWeight={500}>
           Resource Page
         </H1>
-        <div style={{ position: 'absolute', top: '3.5rem', left: '0rem' }}>
-          <Icon type="cuteShovel" />
-        </div>
-        <div style={{ position: 'absolute', top: '13rem', left: '.5rem' }}>
-          <Icon type="tomato" />
-        </div>
-        <div style={{ position: 'absolute', top: '15.1rem', left: '6rem' }}>
-          <Icon type="carrotBottom" />
-        </div>
-        <div style={{ position: 'absolute', top: '14.3rem', left: '6.9rem' }}>
-          <Icon type="carrotTop" />
-        </div>
-        <div style={{ position: 'absolute', top: '11.7rem', right: '0rem' }}>
-          <Icon type="lechuga" />
-        </div>
-        <div style={{ position: 'absolute', top: '3.75rem', right: '1.5rem' }}>
-          <Icon type="seedBag" />
-        </div>
-        <div style={{ position: 'absolute', top: '8.7rem', right: '4rem' }}>
-          <Icon type="seed" />
-        </div>
-        <div style={{ position: 'absolute', top: '7.5rem', right: '2.5rem' }}>
-          <Icon type="seedTilt" />
-        </div>
-        <div style={{ position: 'absolute', top: '8.7rem', right: '1.5rem' }}>
-          <Icon type="seedTilt2" />
-        </div>
+        <IconDisplay />
       </Flex>
       <Box>
         <MainBody />

@@ -37,7 +37,6 @@ export const PageContainer = styled.div`
 `;
 
 export const GuidesGrid = styled.div`
-  margin: 1.5rem;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   align-content: center;
