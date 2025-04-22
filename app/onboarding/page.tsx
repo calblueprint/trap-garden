@@ -118,15 +118,15 @@ function PdfScreen({
                   style={
                     currentPage === 1
                       ? {
-                        backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
-                        color: 'white',
-                        borderColor: 'rgba(120, 120, 120, 0.5)',
-                      }
+                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
+                          color: 'white',
+                          borderColor: 'rgba(120, 120, 120, 0.5)',
+                        }
                       : {
-                        backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
-                        color: 'white',
-                        borderColor: 'rgba(200, 200, 200, 0.6)',
-                      }
+                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
+                          color: 'white',
+                          borderColor: 'rgba(200, 200, 200, 0.6)',
+                        }
                   }
                 >
                   Previous
@@ -139,15 +139,15 @@ function PdfScreen({
                   style={
                     currentPage === numPages
                       ? {
-                        backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
-                        color: 'white',
-                        borderColor: 'rgba(120, 120, 120, 0.5)',
-                      }
+                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
+                          color: 'white',
+                          borderColor: 'rgba(120, 120, 120, 0.5)',
+                        }
                       : {
-                        backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
-                        color: 'white',
-                        borderColor: 'rgba(200, 200, 200, 0.6)',
-                      }
+                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
+                          color: 'white',
+                          borderColor: 'rgba(200, 200, 200, 0.6)',
+                        }
                   }
                 >
                   Next

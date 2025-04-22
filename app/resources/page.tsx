@@ -75,7 +75,6 @@ export default function Resources() {
     );
   }
 
-
   function TipDisplay() {
     const [fullTipList, setFullTipList] = useState<PlantTip[]>([]);
     useEffect(() => {
