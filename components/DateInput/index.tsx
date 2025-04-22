@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -22,23 +22,7 @@ export default function DateInput({
   onChange,
   placeholder = '',
 }: DateInputProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-
-  // Close the dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   return (
     <Flex $direction="column" $gap="4px">
@@ -51,7 +35,9 @@ export default function DateInput({
         {/* config for Date Picker */}
         <DatePicker
           onChange={newValue => {
-            onChange(new Date(newValue?.toString() ?? '').toISOString());
+            onChange(
+              new Date(newValue?.toString() ?? new Date()).toISOString(),
+            );
           }}
           value={dayjs(value)}
           disableFuture

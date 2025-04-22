@@ -23,11 +23,7 @@ import {
 
 const formatDate = (dateString: string) => {
   try {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    return dayjs(dateString).format('MMMM D, YYYY');
   } catch {
     return dateString;
   }
@@ -184,9 +180,9 @@ export default function Home() {
               plant={plantsToAdd[currentIndex - 1]}
               date={details[currentIndex - 1].date_added ?? getDefaultDate()}
               plantingType={details[currentIndex - 1].planting_type ?? ''}
-              onDateChange={date => {
-                updateInput('date_added', date, currentIndex - 1);
-              }}
+              onDateChange={date =>
+                updateInput('date_added', date, currentIndex - 1)
+              }
               onPlantingTypeChange={type =>
                 updateInput('planting_type', type, currentIndex - 1)
               }
