@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { StyledLinkButton } from '@/components/Buttons';
-import Icon from '@/components/Icon';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
