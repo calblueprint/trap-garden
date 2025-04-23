@@ -10,6 +10,8 @@ export const Card = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+  width: 344px;
+  height: 99.941px;
 `;
 
 export const IconWrapper = styled.div`

@@ -10,6 +10,8 @@ export const TaskWrapper = styled.div<{ completed: boolean }>`
   border: 1px solid #ddd;
   padding: 1rem;
   margin-bottom: 1rem;
+  width: 344px;
+  height: 72px;
 `;
 
 export const TaskLeftSection = styled.div`

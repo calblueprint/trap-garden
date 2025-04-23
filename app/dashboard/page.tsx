@@ -22,15 +22,35 @@ import { mapMonthToSeason } from '@/utils/helpers';
 import {
   ArrowIcon,
   Container,
-  DashboardTitle,
+  DashboardBody,
+  DashboardContentWrapper,
+  DashboardHeading,
+  DashboardTopSection,
+  DateText,
+  DivisionLine,
   FilterTab,
   FilterTabsContainer,
   Greeting,
   Header,
+  LineBreak,
+  Marker,
   PlaceholderText,
+  ProgressBarContainer,
+  ProgressContainerWrapper,
+  ProgressFill,
+  ProgressIcon,
+  ProgressMessage,
+  ProgressWrapper,
+  SectionHeader,
+  SectionTitle,
   SeeAllLink,
   TaskContainer,
+  TasksLeft,
+  TasksLeftNumber,
   Title,
+  WeeklyFilterButton,
+  WeeklyFiltersContainer,
+  WhiteIconWrapper,
 } from './styles';
 
 // Define a type for modal actions
@@ -61,6 +81,7 @@ export default function Page() {
   const [selectedTab, setSelectedTab] = useState<'current' | 'completed'>(
     'current',
   );
+  const [activeFilter, setActiveFilter] = useState('All');
 
   // Helper functions for comparing dates
 
@@ -348,6 +369,17 @@ export default function Page() {
     setIsModalOpen(false);
   }
 
+  function getTimeOfDay(): 'morning' | 'afternoon' | 'evening' {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return 'morning';
+    } else if (hour < 18) {
+      return 'afternoon';
+    } else {
+      return 'evening';
+    }
+  }
+
   useEffect(() => {
     if (!authLoading && userId) {
       const fetchTip = async () => {
@@ -369,8 +401,14 @@ export default function Page() {
   }, [authLoading, userId]);
 
   // Filter tasks based on the selected tab.
-  const filteredTasks = pendingTasks.filter(task =>
-    selectedTab === 'current' ? !task.completed : task.completed,
+  const filteredTasks = pendingTasks.filter(
+    task =>
+      // status filter
+      (selectedTab === 'current' ? !task.completed : task.completed) &&
+      // type filter: remove last 3 chars ('ing') to match task.type
+      (activeFilter === 'All' ||
+        task.type ===
+          activeFilter.toLowerCase().substring(0, activeFilter.length - 3)),
   );
 
   // Compute counts for display in the filter tabs.
@@ -378,6 +416,37 @@ export default function Page() {
   const completedTasksCount = pendingTasks.filter(
     task => task.completed,
   ).length;
+  // Date and greeting
+  const now = new Date();
+  const dateString = now.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  });
+  const percentage =
+    pendingTasks.length > 0
+      ? (completedTasksCount / pendingTasks.length) * 100
+      : 0;
+  const divisions = Math.max(pendingTasks.length - 1, 0);
+
+  // choose message
+  let progressMessage: string;
+  let progressIcon: 'sprout' | 'bloomflower' | 'leaf'; //yo this was hella smart not even tryna glaze me but im him for thinking of this oml
+  if (completedTasksCount === 0) {
+    progressMessage = "Let's Start!";
+    progressIcon = 'sprout';
+  } else if (completedTasksCount === pendingTasks.length) {
+    progressMessage = 'Finished!';
+    progressIcon = 'bloomflower';
+  } else if (completedTasksCount / pendingTasks.length < 0.5) {
+    progressMessage = 'Keep going!';
+    progressIcon = 'leaf';
+  } else {
+    progressMessage = 'Almost there!';
+    progressIcon = 'leaf';
+  }
+
+  // Tasks left this week
 
   return (
     <div>
@@ -385,98 +454,150 @@ export default function Page() {
         <p>Log in please!</p>
       ) : (
         <Container>
-          <Greeting>Hi, [Name]!</Greeting>
-          <DashboardTitle>My Dashboard</DashboardTitle>
+          <DashboardTopSection>
+            <DashboardHeading>
+              <DateText>{dateString}</DateText>
+              <Greeting>Good {getTimeOfDay()}, [Name]!</Greeting>
+            </DashboardHeading>
+            <ProgressContainerWrapper>
+              <TasksLeft>
+                You have{' '}
+                <TasksLeftNumber>{currentTasksCount} tasks</TasksLeftNumber>{' '}
+                left this week.
+              </TasksLeft>
+              <ProgressWrapper>
+                <ProgressBarContainer>
+                  <ProgressFill percentage={percentage} />
+                  {Array.from({ length: divisions }, (_, i) => (
+                    <DivisionLine
+                      key={i}
+                      index={i + 1}
+                      total={pendingTasks.length}
+                      passed={i + 1 < completedTasksCount}
+                    />
+                  ))}
+                  <Marker percentage={percentage}>
+                    <WhiteIconWrapper>
+                      <ProgressIcon type={progressIcon} />
+                    </WhiteIconWrapper>
+                  </Marker>
+                </ProgressBarContainer>
+                <ProgressMessage percentage={percentage}>
+                  {progressMessage}
+                </ProgressMessage>
+              </ProgressWrapper>
+            </ProgressContainerWrapper>
+          </DashboardTopSection>
+          <LineBreak></LineBreak>
 
-          <FilterTabsContainer>
-            <FilterTab
-              active={selectedTab === 'current'}
-              onClick={() => setSelectedTab('current')}
-            >
-              Current ({currentTasksCount})
-            </FilterTab>
-            <FilterTab
-              active={selectedTab === 'completed'}
-              onClick={() => setSelectedTab('completed')}
-            >
-              Completed ({completedTasksCount})
-            </FilterTab>
-          </FilterTabsContainer>
+          <SectionHeader>
+            <SectionTitle>Weekly Tasks</SectionTitle>
+            <SeeAllLink href="/tasks">See All →</SeeAllLink>
+          </SectionHeader>
 
-          <TaskContainer>
-            {filteredTasks.length > 0 ? (
-              filteredTasks.map((task, index) => (
-                <TaskItem
-                  key={index}
-                  type={task.type}
-                  plantName={task.plant_name}
-                  completed={task.completed}
-                  // For harvest tasks, pass dueMessage if available.
-                  dueDate={
-                    task.type === 'harvest' && task.dueMessage
-                      ? task.dueMessage
-                      : task.due_date
-                  }
-                  onToggle={() => {
-                    if (task.type === 'harvest') {
-                      if (task.completed) {
-                        handleHarvestClear(task.id);
-                      } else {
-                        handleHarvestSet(task.id);
+          <WeeklyFiltersContainer>
+            {['All', 'Watering', 'Weeding', 'Harvesting'].map(tab => (
+              <WeeklyFilterButton
+                key={tab}
+                active={activeFilter === tab}
+                onClick={() => setActiveFilter(tab)}
+              >
+                {tab}
+              </WeeklyFilterButton>
+            ))}
+          </WeeklyFiltersContainer>
+          <DashboardBody>
+            <DashboardContentWrapper>
+              <FilterTabsContainer>
+                <FilterTab
+                  active={selectedTab === 'current'}
+                  onClick={() => setSelectedTab('current')}
+                >
+                  Current ({currentTasksCount})
+                </FilterTab>
+                <FilterTab
+                  active={selectedTab === 'completed'}
+                  onClick={() => setSelectedTab('completed')}
+                >
+                  Completed ({completedTasksCount})
+                </FilterTab>
+              </FilterTabsContainer>
+              <TaskContainer>
+                {filteredTasks.length > 0 ? (
+                  filteredTasks.map((task, index) => (
+                    <TaskItem
+                      key={index}
+                      type={task.type}
+                      plantName={task.plant_name}
+                      completed={task.completed}
+                      // For harvest tasks, pass dueMessage if available.
+                      dueDate={
+                        task.type === 'harvest' && task.dueMessage
+                          ? task.dueMessage
+                          : task.due_date
                       }
-                    } else {
-                      if (task.completed) {
-                        handleUncheck(task.id, task.type);
-                      } else {
-                        handleCheck(task.id, task.type);
-                      }
-                    }
-                  }}
+                      onToggle={() => {
+                        if (task.type === 'harvest') {
+                          if (task.completed) {
+                            handleHarvestClear(task.id);
+                          } else {
+                            handleHarvestSet(task.id);
+                          }
+                        } else {
+                          if (task.completed) {
+                            handleUncheck(task.id, task.type);
+                          } else {
+                            handleCheck(task.id, task.type);
+                          }
+                        }
+                      }}
+                    />
+                  ))
+                ) : (
+                  <PlaceholderText>No tasks available</PlaceholderText>
+                )}
+              </TaskContainer>
+
+              <ConfirmationModal
+                isOpen={isModalOpen}
+                title={
+                  modalAction?.type === 'harvest'
+                    ? modalAction.action === 'harvest-set'
+                      ? 'Mark as harvested?'
+                      : 'Clear harvest record?'
+                    : 'Are you sure you want to unmark this task?'
+                }
+                message={
+                  modalAction?.type === 'harvest'
+                    ? modalAction.action === 'harvest-set'
+                      ? 'Click confirm to record that you have harvested this plant for the current season.'
+                      : 'Click confirm to remove the harvest record, and mark this task as pending again.'
+                    : 'Clicking confirm will move this task back to pending.'
+                }
+                onCancel={() => {
+                  setModalAction(null);
+                  setIsModalOpen(false);
+                }}
+                onConfirm={processModalConfirm}
+              />
+
+              <Header>
+                <Title>Resources</Title>
+                <SeeAllLink href="/resources">
+                  See All <ArrowIcon>→</ArrowIcon>
+                </SeeAllLink>
+              </Header>
+
+              {plantTip == null ? (
+                <p>Loading...</p>
+              ) : (
+                <SingleTip
+                  category={plantTip.category}
+                  body_text={plantTip.body_text}
                 />
-              ))
-            ) : (
-              <PlaceholderText>No tasks available</PlaceholderText>
-            )}
-          </TaskContainer>
-
-          <ConfirmationModal
-            isOpen={isModalOpen}
-            title={
-              modalAction?.type === 'harvest'
-                ? modalAction.action === 'harvest-set'
-                  ? 'Mark as harvested?'
-                  : 'Clear harvest record?'
-                : 'Are you sure you want to unmark this task?'
-            }
-            message={
-              modalAction?.type === 'harvest'
-                ? modalAction.action === 'harvest-set'
-                  ? 'Click confirm to record that you have harvested this plant for the current season.'
-                  : 'Click confirm to remove the harvest record, and mark this task as pending again.'
-                : 'Clicking confirm will move this task back to pending.'
-            }
-            onCancel={() => {
-              setModalAction(null);
-              setIsModalOpen(false);
-            }}
-            onConfirm={processModalConfirm}
-          />
-
-          <Header>
-            <Title>Resources</Title>
-            <SeeAllLink href="/resources">
-              See All <ArrowIcon>→</ArrowIcon>
-            </SeeAllLink>
-          </Header>
-
-          {plantTip == null ? (
-            <p>Loading...</p>
-          ) : (
-            <SingleTip
-              category={plantTip.category}
-              body_text={plantTip.body_text}
-            />
-          )}
+              )}
+            </DashboardContentWrapper>
+          </DashboardBody>
         </Container>
       )}
     </div>
