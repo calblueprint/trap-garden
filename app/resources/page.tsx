@@ -8,7 +8,6 @@ import PDFSmallPreview from '@/components/PDFSmallPreview';
 import { TipDropdown } from '@/components/TipDropdown';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
-import { H1, H4 } from '@/styles/text';
 import { PlantTip, UserTypeEnum } from '@/types/schema';
 import {
   tipCategories,

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { P3 } from '@/styles/text';
 import { PlantTip } from '@/types/schema';
 import Icon from '../Icon';
 import {
