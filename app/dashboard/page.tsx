@@ -17,13 +17,14 @@ import SingleTip from '@/components/SingleTip';
 import TaskItem from '@/components/TaskItem';
 import { PlantTip, SingleTask, ValidTask } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { mapMonthToSeason } from '@/utils/helpers';
 import {
   computeDueDate,
   getCurrentSeason,
   isHarvestedThisSeason,
-  isOlderThanFreqeuncyOrNull,
+  isOlderThanWateringFrequencyOrNull,
+  isOlderThanWeedingFrequencyOrNull,
 } from '@/utils/taskHelpers';
+
 import {
   ArrowIcon,
   Container,
@@ -410,19 +411,8 @@ export default function Page() {
   };
 
   // Process tasks from the database (UserPlant[]) and add water, weed, and harvest tasks.
-  function getValidTasks(tasks: UserPlant[]) {
-    const validTasks: Array<{
-      type: 'water' | 'weed' | 'harvest';
-      plant_name: string;
-      completed: boolean;
-      due_date: Date;
-      id: string;
-      // For water/weed tasks we keep a previousDate
-      previousDate?: Date;
-      // For harvest tasks, store the season and an optional due message.
-      harvestSeason?: string;
-      dueMessage?: string;
-    }> = [];
+  const getValidTasks = useCallback(async (tasks: UserPlant[]) => {
+    const validTasks: ValidTask[] = [];
     const currentSeason = getCurrentSeason();
 
     for (const task of tasks) {
@@ -442,7 +432,7 @@ export default function Page() {
           previousDate: new Date(task.last_watered),
         });
         if (task.previous_last_watered !== task.last_watered) {
-          updateDate(task.id, new Date(task.last_watered), 'water', true);
+          await updateDate(task.id, new Date(task.last_watered), 'water', true);
         }
       } else {
         validTasks.push({
@@ -482,7 +472,7 @@ export default function Page() {
           previousDate: new Date(task.last_weeded),
         });
         if (task.previous_last_weeded !== task.last_weeded) {
-          updateDate(task.id, new Date(task.last_weeded), 'weed', true);
+          await updateDate(task.id, new Date(task.last_weeded), 'weed', true);
         }
       } else {
         const interval = task.weeding_frequency.trim() === 'Weekly' ? 7 : 14;
@@ -523,7 +513,7 @@ export default function Page() {
     }
 
     return validTasks;
-  }
+  }, []);
 
   
   // When user clicks to uncheck, store the task info and open modal.
