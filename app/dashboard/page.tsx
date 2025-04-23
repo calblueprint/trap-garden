@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UUID } from 'crypto';
 import {
   getDailyPlantTip,
   getPendingTasks,
-  setDueDate,
   updateDate,
 } from '@/api/supabase/queries/dashboard';
 import {
@@ -16,9 +15,15 @@ import {
 import ConfirmationModal from '@/components/ConfirmationModal';
 import SingleTip from '@/components/SingleTip';
 import TaskItem from '@/components/TaskItem';
-import { PlantTip, UserPlant } from '@/types/schema';
+import { PlantTip, UserPlant, ValidTask } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { mapMonthToSeason } from '@/utils/helpers';
+import {
+  computeDueDate,
+  getCurrentSeason,
+  isHarvestedThisSeason,
+  isOlderThanWateringFrequencyOrNull,
+  isOlderThanWeedingFrequencyOrNull,
+} from '@/utils/taskHelpers';
 import {
   ArrowIcon,
   Container,
@@ -62,109 +67,9 @@ export default function Page() {
     'current',
   );
 
-  // Helper functions for comparing dates
-
-  const isOlderThanWateringFrequencyOrNull = (date: string | null): boolean => {
-    if (date == null) return true;
-    const givenDate = new Date(date);
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - 3);
-    return givenDate < currentDate;
-  };
-
-  const isOlderThanWeedingFrequencyOrNull = (
-    weeding_frequency: string,
-    last_weeded_date: string | null,
-  ): boolean => {
-    if (!last_weeded_date) return true; // check null too
-    const givenDate = new Date(last_weeded_date);
-    const currentDate = new Date();
-    const threshold = weeding_frequency === 'Weekly' ? 3 : 7;
-    currentDate.setDate(currentDate.getDate() - threshold);
-    return givenDate < currentDate;
-  };
-
-  // Determine the current season using the provided map.
-  function getCurrentSeason() {
-    const now = new Date();
-    const monthName = now
-      .toLocaleString('en-US', { month: 'long' })
-      .toUpperCase();
-    return mapMonthToSeason(monthName);
-  }
-
-  // Return true if the recent harvest date falls in the current harvest window.
-  function isHarvestedThisSeason(
-    recent: Date,
-    current: Date,
-    harvestSeason: string,
-  ): boolean {
-    const monthNameCurrent = current
-      .toLocaleString('en-US', { month: 'long' })
-      .toUpperCase();
-    const currentSeason = mapMonthToSeason(monthNameCurrent);
-    if (harvestSeason !== currentSeason) {
-      return false;
-    }
-    // For non-WINTER seasons, require same calendar year.
-    if (harvestSeason !== 'WINTER') {
-      return recent.getFullYear() === current.getFullYear();
-    } else {
-      // For WINTER, handle December, January, and February.
-      const currentMonth = current.getMonth(); // 0-indexed: January = 0, February = 1, December = 11
-      if (currentMonth === 0 || currentMonth === 1) {
-        // January or February
-        // Accept if recent harvest was in January or February of the current year, or in December of previous year.
-        return (
-          (recent.getFullYear() === current.getFullYear() &&
-            (recent.getMonth() === 0 || recent.getMonth() === 1)) ||
-          (recent.getFullYear() === current.getFullYear() - 1 &&
-            recent.getMonth() === 11)
-        );
-      } else if (currentMonth === 11) {
-        // December
-        // Only accept if the harvest was in December of the current year.
-        return (
-          recent.getFullYear() === current.getFullYear() &&
-          recent.getMonth() === 11
-        );
-      }
-      // This fallback shouldn't be reached if all WINTER months are covered
-      return recent.getFullYear() === current.getFullYear();
-    }
-  }
-
-  const computeDueDate = (
-    lastTaskDate: Date | null,
-    interval: number,
-    taskId: string,
-  ): Date => {
-    let candidateDueDate: Date;
-    if (lastTaskDate) {
-      candidateDueDate = new Date(lastTaskDate);
-      candidateDueDate.setDate(candidateDueDate.getDate() + interval);
-    } else {
-      candidateDueDate = new Date();
-      candidateDueDate.setDate(candidateDueDate.getDate() + interval);
-    }
-    // setDueDate(candidateDueDate, taskId);
-    return candidateDueDate;
-  };
-
   // Process tasks from the database (UserPlant[]) and add water, weed, and harvest tasks.
-  function getValidTasks(tasks: UserPlant[]) {
-    const validTasks: Array<{
-      type: 'water' | 'weed' | 'harvest';
-      plant_name: string;
-      completed: boolean;
-      due_date: Date;
-      id: string;
-      // For water/weed tasks we keep a previousDate
-      previousDate?: Date;
-      // For harvest tasks, store the season and an optional due message.
-      harvestSeason?: string;
-      dueMessage?: string;
-    }> = [];
+  const getValidTasks = useCallback(async (tasks: UserPlant[]) => {
+    const validTasks: ValidTask[] = [];
     const currentSeason = getCurrentSeason();
 
     for (const task of tasks) {
@@ -184,7 +89,7 @@ export default function Page() {
           previousDate: new Date(task.last_watered),
         });
         if (task.previous_last_watered !== task.last_watered) {
-          updateDate(task.id, new Date(task.last_watered), 'water', true);
+          await updateDate(task.id, new Date(task.last_watered), 'water', true);
         }
       } else {
         validTasks.push({
@@ -224,7 +129,7 @@ export default function Page() {
           previousDate: new Date(task.last_weeded),
         });
         if (task.previous_last_weeded !== task.last_weeded) {
-          updateDate(task.id, new Date(task.last_weeded), 'weed', true);
+          await updateDate(task.id, new Date(task.last_weeded), 'weed', true);
         }
       } else {
         const interval = task.weeding_frequency.trim() === 'Weekly' ? 7 : 14;
@@ -265,14 +170,17 @@ export default function Page() {
     }
 
     return validTasks;
-  }
+  }, []);
 
   // --- Task Handlers ---
 
   // For water/weed tasks, immediately mark as complete.
-  function handleCheck(userPlantRowId: string, taskType: 'water' | 'weed') {
+  async function handleCheck(
+    userPlantRowId: string,
+    taskType: 'water' | 'weed',
+  ) {
     const currDate = new Date();
-    updateDate(userPlantRowId, currDate, taskType, false);
+    await updateDate(userPlantRowId, currDate, taskType, false);
     setPendingTasks(prevTasks =>
       prevTasks.map(task => {
         if (task.id === userPlantRowId && task.type === taskType) {
@@ -307,6 +215,21 @@ export default function Page() {
       action: 'harvest-clear',
     });
     setIsModalOpen(true);
+  }
+  function handleToggle(task: ValidTask) {
+    if (task.type === 'harvest') {
+      if (task.completed) {
+        handleHarvestClear(task.id);
+      } else {
+        handleHarvestSet(task.id);
+      }
+    } else {
+      if (task.completed) {
+        handleUncheck(task.id, task.type);
+      } else {
+        handleCheck(task.id, task.type);
+      }
+    }
   }
 
   // When the confirmation modal is confirmed.
@@ -372,22 +295,35 @@ export default function Page() {
     if (!authLoading && userId) {
       const fetchTasks = async () => {
         const tasks = await getPendingTasks(userId);
-        setPendingTasks(getValidTasks(tasks));
+        setPendingTasks(await getValidTasks(tasks));
       };
       fetchTasks();
     }
-  }, [authLoading, userId]);
+  }, [authLoading, userId, getValidTasks]);
 
   // Filter tasks based on the selected tab.
-  const filteredTasks = pendingTasks.filter(task =>
-    selectedTab === 'current' ? !task.completed : task.completed,
-  );
+  const filteredTasks = useMemo(() => {
+    // One pass only, returns the right slice immediately
+    return pendingTasks.filter(task =>
+      selectedTab === 'current' ? !task.completed : task.completed,
+    );
+  }, [pendingTasks, selectedTab]);
+
+  // If you also want the counts without another pass:
+  const { currentTasksCount, completedTasksCount } = useMemo(() => {
+    let current = 0;
+    let completed = 0;
+    for (const t of pendingTasks) {
+      t.completed ? completed++ : current++;
+    }
+    return { currentTasksCount: current, completedTasksCount: completed };
+  }, [pendingTasks]);
 
   // Compute counts for display in the filter tabs.
-  const currentTasksCount = pendingTasks.filter(task => !task.completed).length;
-  const completedTasksCount = pendingTasks.filter(
-    task => task.completed,
-  ).length;
+  // const currentTasksCount = pendingTasks.filter(task => !task.completed).length;
+  // const completedTasksCount = pendingTasks.filter(
+  //   task => task.completed,
+  // ).length;
 
   return (
     <div>
@@ -428,19 +364,7 @@ export default function Page() {
                       : task.due_date
                   }
                   onToggle={() => {
-                    if (task.type === 'harvest') {
-                      if (task.completed) {
-                        handleHarvestClear(task.id);
-                      } else {
-                        handleHarvestSet(task.id);
-                      }
-                    } else {
-                      if (task.completed) {
-                        handleUncheck(task.id, task.type);
-                      } else {
-                        handleCheck(task.id, task.type);
-                      }
-                    }
+                    handleToggle(task);
                   }}
                 />
               ))
