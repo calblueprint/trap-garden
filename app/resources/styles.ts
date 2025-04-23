@@ -35,3 +35,13 @@ export const PageContainer = styled.div`
   minheight: '100vh';
   backgroundcolor: 'white';
 `;
+
+export const GuidesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 300;
+  justify-content: center;
+`;
