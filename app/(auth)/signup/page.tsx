@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
+import Icon from '@/components/Icon';
 import PasswordComplexity, {
   Requirement,
 } from '@/components/PasswordComplexity';
@@ -112,6 +113,15 @@ export default function SignUp() {
     <LoginPageContainer>
       <LoginLeftDiv>
         <LoginLeftDivText>Let&apos;s grow together.</LoginLeftDivText>
+        <div style={{ position: 'absolute', bottom: '15.5rem', left: '0rem' }}>
+          <Icon type="bigShovel" />
+        </div>
+        <div style={{ position: 'absolute', bottom: '2rem', left: '0rem' }}>
+          <Icon type="bigTomato" />
+        </div>
+        <div style={{ position: 'absolute', bottom: '0rem', left: '7.5rem' }}>
+          <Icon type="bigCarrot" />
+        </div>
       </LoginLeftDiv>
       <LoginFormWrapper>
         <StyledForm onSubmit={handleSignUp}>

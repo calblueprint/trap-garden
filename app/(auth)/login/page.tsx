@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
+import Icon from '@/components/Icon';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { P3 } from '@/styles/text';
@@ -86,6 +87,15 @@ export default function Login() {
     <LoginPageContainer>
       <LoginLeftDiv>
         <LoginLeftDivText>Let&apos;s grow together.</LoginLeftDivText>
+        <div style={{ position: 'absolute', bottom: '15.5rem', left: '0rem' }}>
+          <Icon type="bigShovel" />
+        </div>
+        <div style={{ position: 'absolute', bottom: '2rem', left: '0rem' }}>
+          <Icon type="bigTomato" />
+        </div>
+        <div style={{ position: 'absolute', bottom: '0rem', left: '7.5rem' }}>
+          <Icon type="bigCarrot" />
+        </div>
       </LoginLeftDiv>
       <LoginFormWrapper>
         <StyledForm onSubmit={handleLogin}>

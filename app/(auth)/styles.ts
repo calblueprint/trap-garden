@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { StyledLinkButton } from '@/components/Buttons';
+import Icon from '@/components/Icon';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
@@ -104,7 +105,7 @@ export const LoginLeftDiv = styled.div`
     flex-direction: column;
     background-color: ${COLORS.shrub};
     width: 41.61vw;
-    height: 100vh;
+    height: calc(100vh - 60px);
   }
 `;
 
