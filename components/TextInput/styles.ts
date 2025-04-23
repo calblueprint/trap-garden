@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
 import { P2 } from '@/styles/text';
 
@@ -10,6 +11,13 @@ export const InputWrapper = styled.div`
 
 export const StyledLabel = styled(P2).attrs({ as: 'label' })`
   margin-bottom: 0.25rem;
+
+  @media ${device.lg} {
+    font-size: 18px;
+    font-family: 'AirbnbCereal_W_Bk';
+    font-weight: 400;
+    color: ${COLORS.darkgray};
+  }
 `;
 
 export const StyledInput = styled(P2).attrs({ as: 'input' })<{
@@ -26,6 +34,13 @@ export const StyledInput = styled(P2).attrs({ as: 'input' })<{
   &:focus {
     border-color: ${({ $error }) => ($error ? COLORS.errorRed : COLORS.shrub)};
     outline: none;
+  }
+
+  @media ${device.lg} {
+    padding: 1rem;
+    font-size: 18px;
+    font-family: 'AirbnbCereal_W_Bk';
+    font-weight: 400;
   }
 `;
 
@@ -62,6 +77,11 @@ export const IconWrapper = styled.span`
   align-items: center;
   justify-content: center;
   color: ${COLORS.darkgray};
+
+  @media ${device.lg} {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 export const StyledButton = styled.button`

@@ -1,12 +1,17 @@
 import styled from 'styled-components';
 import { StyledLinkButton } from '@/components/Buttons';
+import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { H2, P3 } from '@/styles/text';
-import { device } from './breakpoints';
+import { device } from '../../styles/breakpoints';
 
 export const StyledForm = styled.form`
   padding: 24px;
   padding-top: 48px;
+
+  @media ${device.lg} {
+    padding: 0;
+  }
 `;
 
 export const BackButton = styled.button`
@@ -104,7 +109,7 @@ export const LoginLeftDiv = styled.div`
 `;
 
 export const LoginLeftDivText = styled.p`
-  font-size: 5rem;
+  font-size: 80px;
   color: white;
   font-weight: 500;
   margin-left: 52px;
@@ -113,12 +118,33 @@ export const LoginLeftDivText = styled.p`
 
 export const ResponsiveH2 = styled(H2)`
   @media ${device.lg} {
-    font-size: 4rem;
+    font-size: 64px;
+    font-family: 'AirbnbCereal_W_Md';
+    font-weight: 500;
   }
 `;
 
 export const ResponsiveP3 = styled(P3)`
   @media ${device.lg} {
-    font-size: 1.25rem;
+    font-family: 'AirbnbCereal_W_Bk';
+    font-size: 20px;
+  }
+`;
+
+export const ResponsiveP3Lexend = styled(P3)`
+  @media ${device.lg} {
+    font-size: 16px;
+  }
+`;
+
+export const ResponsiveTextInput = styled(TextInput)`
+  @media ${device.lg} {
+    font-size: 18px !important;
+  }
+`;
+
+export const BigButtonText = styled(P3)`
+  @media ${device.lg} {
+    font-size: 18px;
   }
 `;

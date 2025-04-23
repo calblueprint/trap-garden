@@ -6,10 +6,10 @@ import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { H2, P3 } from '@/styles/text';
+import { P3 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
 import {
-  LoginFormImage,
+  BigButtonText,
   LoginFormWrapper,
   LoginLeftDiv,
   LoginLeftDivText,
@@ -17,6 +17,7 @@ import {
   ResetLinkButton,
   ResponsiveH2,
   ResponsiveP3,
+  ResponsiveP3Lexend,
   StyledForm,
 } from '../styles';
 
@@ -84,19 +85,12 @@ export default function Login() {
 
   return (
     <LoginPageContainer>
-      {/* <LoginImage src="/images/login.png" alt="trap garden logo" /> */}
       <LoginLeftDiv>
         <LoginLeftDivText>Let's grow together.</LoginLeftDivText>
       </LoginLeftDiv>
       <LoginFormWrapper>
         <StyledForm onSubmit={handleLogin}>
-          <Flex $align="center" $justify="center">
-            {/* <LoginFormImage
-              src="/images/growtogether.png"
-              alt="trap garden logo"
-            /> */}
-          </Flex>
-          <ResponsiveH2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
+          <ResponsiveH2 $color={COLORS.shrub} style={{ marginBottom: '12px' }}>
             Log In
           </ResponsiveH2>
           <div
@@ -144,10 +138,10 @@ export default function Login() {
               $primaryColor={COLORS.shrub}
               disabled={!canSubmitForm}
             >
-              Log In
+              <BigButtonText $color="white">Log In</BigButtonText>
             </BigButton>
             {/* Sign in button */}
-            <ResponsiveP3
+            <ResponsiveP3Lexend
               as="span"
               $color={COLORS.midgray}
               style={{ textAlign: 'center' }}
@@ -156,7 +150,7 @@ export default function Login() {
               <ResetLinkButton href="/forgot-password">
                 Reset Here
               </ResetLinkButton>
-            </ResponsiveP3>
+            </ResponsiveP3Lexend>
           </div>
         </StyledForm>
       </LoginFormWrapper>

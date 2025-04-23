@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import styled, { css } from 'styled-components';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
 import { P2, P3 } from '@/styles/text';
 
@@ -68,6 +69,10 @@ export const Button = styled(P2).attrs({ as: 'button' })<ButtonProps>`
   width: ${({ $width }) => $width || '156px'};
   height: 44px;
   border-radius: 44px;
+
+  @media ${device.lg} {
+    height: 60px;
+  }
 `;
 
 export const BigButton = styled(Button)<ButtonProps>`

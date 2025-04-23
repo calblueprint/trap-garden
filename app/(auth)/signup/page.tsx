@@ -8,16 +8,17 @@ import PasswordComplexity, {
 } from '@/components/PasswordComplexity';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
-import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import { useAuth } from '@/utils/AuthProvider';
 import { isValidEmail } from '@/utils/helpers';
 import {
-  GreenH2,
-  LoginFormImage,
+  BigButtonText,
   LoginFormWrapper,
-  LoginImage,
+  LoginLeftDiv,
+  LoginLeftDivText,
   LoginPageContainer,
+  ResponsiveH2,
+  ResponsiveP3,
   StyledForm,
 } from '../styles';
 
@@ -109,26 +110,24 @@ export default function SignUp() {
 
   return (
     <LoginPageContainer>
-      <LoginImage src="/images/login.png" />
+      <LoginLeftDiv>
+        <LoginLeftDivText>Let's grow together.</LoginLeftDivText>
+      </LoginLeftDiv>
       <LoginFormWrapper>
         <StyledForm onSubmit={handleSignUp}>
-          <Flex $align="center" $justify="center">
-            <LoginFormImage
-              src="/images/growtogether.png"
-              alt="trap garden logo"
-            />
-          </Flex>
-          <GreenH2>Sign Up</GreenH2>
+          <ResponsiveH2 $color={COLORS.shrub} style={{ marginBottom: '12px' }}>
+            Sign Up
+          </ResponsiveH2>
 
           <div
             style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
           >
-            <P3 as="span" $color={COLORS.midgray}>
+            <ResponsiveP3 as="span" $color={COLORS.midgray}>
               Already have an account?
               <StyledLinkButton href="/login" style={{ padding: '4px' }}>
                 Log in
               </StyledLinkButton>
-            </P3>
+            </ResponsiveP3>
             <div>
               {/* Email input*/}
               <TextInput
@@ -193,7 +192,7 @@ export default function SignUp() {
               $primaryColor={COLORS.shrub}
               disabled={!canSubmitForm}
             >
-              <P3 $color="white">Sign Up</P3>
+              <BigButtonText $color="white">Sign Up</BigButtonText>
             </BigButton>
           </div>
         </StyledForm>
