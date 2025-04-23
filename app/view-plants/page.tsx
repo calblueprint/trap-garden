@@ -153,13 +153,15 @@ export default function Page() {
   ]);
 
   const filteredUserPlantList = useMemo(() => {
-    return ownedPlants.filter(
-      ownedPlant =>
-        checkGrowingSeason(selectedGrowingSeason, ownedPlant.plant) &&
-        checkSunlight(selectedSunlight, ownedPlant.plant) &&
-        checkDifficulty(selectedDifficulty, ownedPlant.plant) &&
-        checkSearchTerm(searchTerm, ownedPlant.plant),
-    );
+    return ownedPlants
+      .filter(
+        ownedPlant =>
+          checkGrowingSeason(selectedGrowingSeason, ownedPlant.plant) &&
+          checkSunlight(selectedSunlight, ownedPlant.plant) &&
+          checkDifficulty(selectedDifficulty, ownedPlant.plant) &&
+          checkSearchTerm(searchTerm, ownedPlant.plant),
+      )
+      .sort((a, b) => a.plant.plant_name.localeCompare(b.plant.plant_name));
   }, [
     ownedPlants,
     selectedDifficulty,
