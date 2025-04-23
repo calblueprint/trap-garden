@@ -45,10 +45,10 @@ function ReviewPlant({
   plantingType: PlantingTypeEnum;
   removeFunction: () => void;
 }) {
-  const [show, setShow] = useState(true);
+  const [showReviewRow, setShowReviewRow] = useState(true);
   return (
     <>
-      {show ? (
+      {showReviewRow && (
         <Flex $direction="row" $justify="between" $align="center">
           <Flex $direction="column" $gap="8px" $mb="16px">
             <H4 $fontWeight={500} $color={COLORS.shrub}>
@@ -64,14 +64,12 @@ function ReviewPlant({
           <DeleteButton
             onClick={() => {
               removeFunction();
-              setShow(false);
+              setShowReviewRow(false);
             }}
           >
             <Icon type="trashCan" />
           </DeleteButton>
         </Flex>
-      ) : (
-        <></>
       )}
     </>
   );
@@ -119,15 +117,16 @@ export default function Home() {
   }, [profileData, profileReady, router]);
 
   const [currentIndex, setCurrentIndex] = useState<number>(1);
+  const [pendingPlants, setPendingPlants] = useState(plantsToAdd);
   const [details, setDetails] = useState<Partial<UserPlant>[]>(
-    plantsToAdd.map(plant => ({ plant_id: plant.id })),
+    pendingPlants.map(plant => ({ plant_id: plant.id })),
   );
 
   //correctly gets current date without being affected by timezones, in YYYY-MM-DD format
   const getDefaultDate = () => dayjs().format('YYYY-MM-DD');
 
   function move(steps: number) {
-    if (currentIndex <= plantsToAdd.length) {
+    if (currentIndex <= pendingPlants.length) {
       const currentDetail = details[currentIndex - 1];
       if (!currentDetail || !currentDetail.date_added) {
         updateInput('date_added', getDefaultDate(), currentIndex - 1);
@@ -137,15 +136,15 @@ export default function Home() {
     if (
       steps !== 0 &&
       currentIndex + steps > 0 &&
-      currentIndex + steps <= plantsToAdd.length + 1
+      currentIndex + steps <= pendingPlants.length + 1
     ) {
       setCurrentIndex(prevIndex => prevIndex + steps);
     }
   }
 
   const disableNext =
-    currentIndex <= plantsToAdd.length &&
-    !details[currentIndex - 1].planting_type;
+    currentIndex <= pendingPlants.length &&
+    !details[currentIndex - 1]?.planting_type;
 
   function updateInput(field: string, value: string, index: number) {
     const updatedDetails = [...details];
@@ -192,22 +191,15 @@ export default function Home() {
           confirm,
           userId,
         );
-        console.log(firstPress);
         if (!confirm) {
-          if (firstPress?.length != 0) {
-            if (firstPress) {
-              const plantNames = await Promise.all(
-                firstPress.map(async dup => {
-                  const plant = await getPlantById(dup.plant_id);
-                  return plant?.plant_name;
-                }),
-              );
-
-              // Remove any undefined values (in case a lookup failed)
-              setDuplicates(
-                plantNames.filter((name): name is string => !!name),
-              );
-            }
+          if (firstPress!.length != 0) {
+            const plantNames = await Promise.all(
+              firstPress!.map(async dup => {
+                const plant = await getPlantById(dup.plant_id);
+                return plant?.plant_name;
+              }),
+            );
+            setDuplicates(plantNames);
             setShowConfModal(true);
           } else {
             await insertUserPlants(completedDetails, !confirm, userId);
@@ -263,19 +255,25 @@ export default function Home() {
     };
   }, [handleSubmit]);
 
+  useEffect(() => {
+    if (details.length == 0) {
+      router.push(CONFIG.viewPlants);
+    }
+  }, [details, router]);
+
   return (
     <>
-      {currentIndex !== plantsToAdd.length + 1 && (
+      {currentIndex !== pendingPlants.length + 1 && (
         <Flex $direction="column" $justify="between">
           <Flex $direction="column" $justify="start">
             <Flex $gap="16px" $direction="column" $textAlign="center">
               <H1 $color={COLORS.shrub}>Add Plant Details</H1>
               <P1 $color={COLORS.midgray}>
-                {currentIndex} / {plantsToAdd.length}
+                {currentIndex} / {pendingPlants.length}
               </P1>
             </Flex>
             <PlantDetails
-              plant={plantsToAdd[currentIndex - 1]}
+              plant={pendingPlants[currentIndex - 1]}
               date={details[currentIndex - 1].date_added ?? getDefaultDate()}
               plantingType={details[currentIndex - 1].planting_type ?? ''}
               onDateChange={date =>
@@ -305,7 +303,7 @@ export default function Home() {
           </FooterButton>
         </Flex>
       )}
-      {currentIndex === plantsToAdd.length + 1 && (
+      {currentIndex === pendingPlants.length + 1 && (
         <Flex
           $minH="full-screen"
           $direction="column"
@@ -325,12 +323,20 @@ export default function Home() {
             <ReviewDetailsContainer>
               {details.map((detail, index) => (
                 <ReviewPlant
-                  key={plantsToAdd[index].id}
-                  plantName={plantsToAdd[index].plant_name}
+                  key={pendingPlants[index].id}
+                  plantName={pendingPlants[index].plant_name}
                   plantingType={detail.planting_type!}
                   dateAdded={detail.date_added!}
                   removeFunction={() => {
-                    delete details[index];
+                    const newDetails = [...details];
+                    const newPlants = [...pendingPlants];
+
+                    newDetails.splice(index, 1);
+                    newPlants.splice(index, 1);
+
+                    setDetails(newDetails);
+                    setPendingPlants(newPlants);
+                    setCurrentIndex(newDetails.length + 1);
                   }}
                 />
               ))}
@@ -359,7 +365,7 @@ export default function Home() {
         rightText="Yes"
         onCancel={() => setShowConfModal(false)}
         onConfirm={confirmClick}
-        flip={true}
+        flipButtons={true}
       />
     </>
   );
