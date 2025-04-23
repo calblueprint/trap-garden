@@ -93,3 +93,16 @@ export type TipCategory =
   | 'Harvesting'
   | 'Planting'
   | 'Weeding';
+
+export interface ValidTask {
+  type: 'water' | 'weed' | 'harvest';
+  plant_name: string;
+  completed: boolean;
+  due_date: Date;
+  id: string;
+  // For water/weed tasks we keep a previousDate
+  previousDate?: Date;
+  // For harvest tasks, store the season and an optional due message.
+  harvestSeason?: string;
+  dueMessage?: string;
+}
