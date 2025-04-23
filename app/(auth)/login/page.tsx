@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import TextInput from '@/components/TextInput';
 import COLORS from '@/styles/colors';
-import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
 import {
@@ -86,7 +85,7 @@ export default function Login() {
   return (
     <LoginPageContainer>
       <LoginLeftDiv>
-        <LoginLeftDivText>Let's grow together.</LoginLeftDivText>
+        <LoginLeftDivText>Let&apos;s grow together.</LoginLeftDivText>
       </LoginLeftDiv>
       <LoginFormWrapper>
         <StyledForm onSubmit={handleLogin}>

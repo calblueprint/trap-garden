@@ -111,7 +111,7 @@ export default function SignUp() {
   return (
     <LoginPageContainer>
       <LoginLeftDiv>
-        <LoginLeftDivText>Let's grow together.</LoginLeftDivText>
+        <LoginLeftDivText>Let&apos;s grow together.</LoginLeftDivText>
       </LoginLeftDiv>
       <LoginFormWrapper>
         <StyledForm onSubmit={handleSignUp}>
