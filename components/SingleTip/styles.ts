@@ -2,6 +2,12 @@ import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 import { P3 } from '@/styles/text';
 
+export const WhiteIconWrapper = styled.div`
+  svg image {
+    filter: brightness(0) saturate(100%) invert(100%);
+  }
+`;
+
 export const IconWrapper = styled.div`
   background-color: ${COLORS.shrub};
   border-radius: 50%;

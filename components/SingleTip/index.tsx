@@ -5,7 +5,7 @@ import { Flex } from '@/styles/containers';
 import { P2 } from '@/styles/text';
 import { TipCategory } from '@/types/schema';
 import Icon from '../Icon';
-import { Card, Content, IconWrapper, Text } from './styles';
+import { Card, Content, IconWrapper, Text, WhiteIconWrapper } from './styles';
 
 // Define the category type with specific values
 
@@ -41,7 +41,9 @@ export default function TipCard({ category, body_text }: TipCardProps) {
   return (
     <Flex $justify="center" $direction="column" $align="center" $w="100%">
       <IconWrapper>
-        <Icon type={categoryIcons[category]} />
+        <WhiteIconWrapper>
+          <Icon type={categoryIcons[category]} />
+        </WhiteIconWrapper>
       </IconWrapper>
       <Card>
         <P2 $color={COLORS.shrub}>{categoryHeaders[category]}</P2>
