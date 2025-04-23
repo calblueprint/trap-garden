@@ -19,3 +19,11 @@
     url('../styles/fonts/AirbnbCereal_W_Md.otf') format('truetype');
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'AirbnbCereal_W_Lt';
+  src:
+    local('AirbnbCereal_W_Lt'),
+    url('../styles/fonts/AirbnbCereal_W_Lt.otf') format('truetype');
+  font-style: normal;
+}
