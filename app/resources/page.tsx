@@ -189,7 +189,7 @@ export default function Resources() {
         $h="15rem"
       >
         <H1 $color="white" $fontWeight={500}>
-          Resource Page
+          Resources Page
         </H1>
         <IconDisplay />
       </Flex>
