@@ -49,8 +49,7 @@ export const LoginPageContainer = styled.div`
     flex-direction: row;
     align-items: stretch;
     justify-content: flex-start;
-    width: 100vw;
-    height: 100vh;
+    height: 100%;
     gap: 0;
   }
 `;
@@ -70,15 +69,14 @@ export const LoginImage = styled.img`
 
 export const LoginFormWrapper = styled.div`
   width: 100%;
-  max-width: 400px;
   padding: 24px;
 
   @media ${device.lg} {
-    flex-grow: 1; // take up remaining space
-    max-width: none;
-    padding-left: 110px;
-    padding-right: 85px;
-    box-sizing: border-box; //padding included in total width
+    width: 58.39vw;
+    padding-left: 175px;
+    padding-right: 175px;
+    padding-top: 100px;
+    overflow-y: auto;
   }
 `;
 
@@ -90,5 +88,37 @@ export const LoginFormImage = styled.img`
     width: 159px;
     height: 68px;
     margin-bottom: 90px;
+  }
+`;
+
+export const LoginLeftDiv = styled.div`
+  display: none;
+
+  @media ${device.lg} {
+    display: flex;
+    flex-direction: column;
+    background-color: ${COLORS.shrub};
+    width: 41.61vw;
+    height: 100vh;
+  }
+`;
+
+export const LoginLeftDivText = styled.p`
+  font-size: 5rem;
+  color: white;
+  font-weight: 500;
+  margin-left: 52px;
+  margin-top: 166px;
+`;
+
+export const ResponsiveH2 = styled(H2)`
+  @media ${device.lg} {
+    font-size: 4rem;
+  }
+`;
+
+export const ResponsiveP3 = styled(P3)`
+  @media ${device.lg} {
+    font-size: 1.25rem;
   }
 `;

@@ -11,9 +11,12 @@ import { useAuth } from '../../../utils/AuthProvider';
 import {
   LoginFormImage,
   LoginFormWrapper,
-  LoginImage,
+  LoginLeftDiv,
+  LoginLeftDivText,
   LoginPageContainer,
   ResetLinkButton,
+  ResponsiveH2,
+  ResponsiveP3,
   StyledForm,
 } from '../styles';
 
@@ -81,18 +84,21 @@ export default function Login() {
 
   return (
     <LoginPageContainer>
-      <LoginImage src="/images/login.png" alt="trap garden logo" />
+      {/* <LoginImage src="/images/login.png" alt="trap garden logo" /> */}
+      <LoginLeftDiv>
+        <LoginLeftDivText>Let's grow together.</LoginLeftDivText>
+      </LoginLeftDiv>
       <LoginFormWrapper>
         <StyledForm onSubmit={handleLogin}>
           <Flex $align="center" $justify="center">
-            <LoginFormImage
+            {/* <LoginFormImage
               src="/images/growtogether.png"
               alt="trap garden logo"
-            />
+            /> */}
           </Flex>
-          <H2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
+          <ResponsiveH2 $color={COLORS.shrub} style={{ marginBottom: '8px' }}>
             Log In
-          </H2>
+          </ResponsiveH2>
           <div
             style={{
               display: 'flex',
@@ -100,12 +106,12 @@ export default function Login() {
               gap: '1.5rem',
             }}
           >
-            <P3 as="span" $color={COLORS.midgray}>
+            <ResponsiveP3 as="span" $color={COLORS.midgray}>
               Don’t have an account?
               <StyledLinkButton href="/signup" style={{ padding: '4px' }}>
                 Sign up
               </StyledLinkButton>
-            </P3>
+            </ResponsiveP3>
             <div>
               <TextInput
                 id="email-input"
@@ -141,7 +147,7 @@ export default function Login() {
               Log In
             </BigButton>
             {/* Sign in button */}
-            <P3
+            <ResponsiveP3
               as="span"
               $color={COLORS.midgray}
               style={{ textAlign: 'center' }}
@@ -150,7 +156,7 @@ export default function Login() {
               <ResetLinkButton href="/forgot-password">
                 Reset Here
               </ResetLinkButton>
-            </P3>
+            </ResponsiveP3>
           </div>
         </StyledForm>
       </LoginFormWrapper>
