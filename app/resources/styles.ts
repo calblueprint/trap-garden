@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { H1, H4 } from '@/styles/text';
 
 export const ViewSelection = styled.div`
   display: flex;
@@ -44,4 +45,12 @@ export const GuidesGrid = styled.div`
   gap: 1rem;
   font-weight: 300;
   justify-content: center;
+`;
+
+export const AirbnbH1 = styled(H1)`
+  font-family: 'AirbnbCereal_W_Md', sans-serif;
+`;
+
+export const AirbnbH4 = styled(H4)`
+  font-family: 'AirbnbCereal_W_Md', sans-serif;
 `;
