@@ -1,8 +1,18 @@
 import { useEffect } from 'react';
+import styled from 'styled-components';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import Icon from './Icon';
+
+const ResponsiveP3 = styled(P3)`
+  @media ${device.lg} {
+    font-size: 14px;
+    font-family: 'AirbnbCereal_W_Bk';
+    font-weight: 400;
+  }
+`;
 
 export default function PasswordComplexity({
   password,
@@ -56,12 +66,15 @@ export default function PasswordComplexity({
 // Helper component to display each requirement with conditional styling
 export function Requirement({ met, text }: { met: boolean; text: string }) {
   return (
-    <P3 as="span" $color={met ? COLORS.successGreen : COLORS.errorRed}>
+    <ResponsiveP3
+      as="span"
+      $color={met ? COLORS.successGreen : COLORS.errorRed}
+    >
       <Flex $align="center" $gap="8px">
         <Icon type={met ? 'check' : 'x'} />
         {text}
       </Flex>
-    </P3>
+    </ResponsiveP3>
   );
 }
 
@@ -73,11 +86,14 @@ export function NewPasswordRequirement({
   text: string;
 }) {
   return (
-    <P3 as="span" $color={met ? COLORS.successGreen : COLORS.errorRed}>
+    <ResponsiveP3
+      as="span"
+      $color={met ? COLORS.successGreen : COLORS.errorRed}
+    >
       <Flex $align="center" $gap="8px">
         {!met && <Icon type="x" />}
         {text}
       </Flex>
-    </P3>
+    </ResponsiveP3>
   );
 }
