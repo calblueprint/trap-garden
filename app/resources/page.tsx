@@ -16,6 +16,8 @@ import {
   tipCategoryIcons,
 } from '@/utils/helpers';
 import {
+  AirbnbH1,
+  AirbnbH4,
   GuidesGrid,
   HeaderButton,
   PageContainer,
@@ -86,9 +88,9 @@ export default function Resources() {
     return (
       <>
         <Box $pl="1.5rem" $mb="1rem">
-          <H4 $fontWeight={500} $color={COLORS.shrub}>
+          <AirbnbH4 $fontWeight={500} $color={COLORS.shrub}>
             Gardening Tips
-          </H4>
+          </AirbnbH4>
         </Box>
         <Box $mb="2rem">
           {tipCategories.map(cat => (
@@ -107,9 +109,9 @@ export default function Resources() {
     return (
       <div>
         <Box $pl="1.5rem" $mb="-1rem">
-          <H4 $fontWeight={500} $color={COLORS.shrub}>
+          <AirbnbH4 $fontWeight={500} $color={COLORS.shrub}>
             FAQs
-          </H4>
+          </AirbnbH4>
         </Box>
 
         {dummy.map((item, index) => (
@@ -128,9 +130,9 @@ export default function Resources() {
     return (
       <>
         <Box $pl="1.5rem" $pr="1.5rem">
-          <H4 $fontWeight={500} $color={COLORS.shrub}>
+          <AirbnbH4 $fontWeight={500} $color={COLORS.shrub}>
             Planting Guides
-          </H4>
+          </AirbnbH4>
         </Box>
         <Box $p="1.5rem">
           <GuidesGrid>
@@ -188,9 +190,9 @@ export default function Resources() {
         $background={COLORS.shrub}
         $h="15rem"
       >
-        <H1 $color="white" $fontWeight={500}>
+        <AirbnbH1 $color="white" $fontWeight={500}>
           Resources Page
-        </H1>
+        </AirbnbH1>
         <IconDisplay />
       </Flex>
       <Box>

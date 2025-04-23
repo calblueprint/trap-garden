@@ -4,11 +4,14 @@ import COLORS from '@/styles/colors';
 export const Question = styled.div`
   font-weight: 500;
   font-size: 14px;
+  font-family: 'AirbnbCereal_W_Md', sans-serif;
+  line-height: normal;
 `;
 
 export const Answer = styled.div`
   font-size: 12px;
   font-weight: 300;
+  font-family: 'AirbnbCereal_W_Lt', sans-serif;
 `;
 
 export const HorizontalLine = styled.div`
