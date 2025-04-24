@@ -20,6 +20,10 @@ export const BackButton = styled.button`
   font-size: 1.125rem;
   cursor: pointer;
   padding: 0;
+
+  @media ${device.lg} {
+    display: none;
+  }
 `;
 
 export const GrayP3 = styled(P3)`
@@ -27,6 +31,9 @@ export const GrayP3 = styled(P3)`
 
   @media ${device.lg} {
     font-size: 1.25rem; 
+    font-family: 'AirbnbCereal_W_Bk';
+    font-weight: 400;
+    margin-bottom: 72px;
 `;
 
 export const ResetLinkButton = styled(StyledLinkButton)`
@@ -45,11 +52,18 @@ export const GreenH2 = styled(H2)`
 
   @media ${device.lg} {
     font-size: 4rem;
+    font-family: 'AirbnbCereal_W_Md';
+    font-weight: 500;
   }
 `;
 
 export const RedP3 = styled(P3)`
   color: ${COLORS.errorRed};
+
+  @media ${device.lg} {
+    font-family: 'AirbnbCereal_W_Bk';
+    font-size: 14px;
+  }
 `;
 
 export const LoginPageContainer = styled.div`
@@ -65,7 +79,7 @@ export const SolidGreenDiv = styled.div`
     display: block;
     background-color: ${COLORS.shrub};
     width: 41.61vw;
-    height: 100vh;
+    height: calc(100vh - 60px);
   }
 `;
 
@@ -179,8 +193,9 @@ export const AuthContentContainer = styled.div`
 
   @media ${device.lg} {
     width: 58.39vw;
-    padding-left: 11.06rem;
-    padding-right: 14.56rem;
+    padding-left: 11rem;
+    padding-right: 14rem;
+    padding-top: 7rem;
     overflow-y: auto;
   }
 `;
