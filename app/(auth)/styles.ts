@@ -70,6 +70,14 @@ export const LoginPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media ${device.lg} {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    height: 100%;
+    gap: 0;
+  }
 `;
 
 export const SolidGreenDiv = styled.div`
@@ -183,8 +191,6 @@ export const ResponsiveTextInput = styled(TextInput)`
 export const BigButtonText = styled(P3)`
   @media ${device.lg} {
     font-size: 18px;
-    width: 100vw;
-    height: 100vh;
   }
 `;
 
