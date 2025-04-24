@@ -1,4 +1,5 @@
 import type { UUID } from 'crypto';
+import { Stringifier } from 'styled-components/dist/types';
 
 export type SunlightEnum = 'SHADE' | 'PARTIAL_SHADE' | 'PARTIAL_SUN' | 'FULL';
 
@@ -105,4 +106,20 @@ export interface ValidTask {
   // For harvest tasks, store the season and an optional due message.
   harvestSeason?: string;
   dueMessage?: string;
+  user_id: string;
+  plant_id: string;
+}
+
+export interface SingleTask {
+  id: UUID;
+  user_id: UUID;
+  plant_id: UUID;
+  date_added_to_db: string;
+  date_removed: string;
+  plant_name: string;
+  previous_completed_date: string;
+  completed_date: string;
+  frequency: string;
+  isCompleted: boolean;
+  type: string;
 }

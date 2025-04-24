@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { UUID } from 'crypto';
+import { updateDateAndCompletedThroughPlantAndUserIdAndType } from '@/api/supabase/queries/tasks';
 import {
   increaseHarvestedByOne,
-  setRecentHarvestDate,
+  setRecentHarvestDateThroughId,
   updateUserPlantDetails,
 } from '@/api/supabase/queries/userPlants';
 import { IconType } from '@/lib/icons';
@@ -41,12 +42,16 @@ export default function YourPlantDetails({
   recentHarvestDate,
   id,
   onHarvest,
+  plant_id,
+  user_id,
 }: {
   datePlanted: string;
   plantingType: PlantingTypeEnum;
   recentHarvestDate: string | null;
   id: UUID;
   onHarvest: () => void;
+  plant_id: UUID;
+  user_id: UUID;
 }) {
   // Local state to track the most recent harvest date.
   const [localRecentHarvestDate, setLocalRecentHarvestDate] = useState<
@@ -55,10 +60,17 @@ export default function YourPlantDetails({
 
   async function harvestPlant() {
     await increaseHarvestedByOne(id);
-    const currentDate = new Date().toISOString();
-    await setRecentHarvestDate(currentDate, id);
-
-    setLocalRecentHarvestDate(currentDate);
+    const currentDate = new Date();
+    await setRecentHarvestDateThroughId(currentDate.toISOString(), id);
+    await updateDateAndCompletedThroughPlantAndUserIdAndType(
+      plant_id,
+      user_id,
+      'harvest',
+      currentDate,
+      false,
+      true,
+    ); //can always do true bc dashboard will correct if its not
+    setLocalRecentHarvestDate(currentDate.toISOString());
     onHarvest();
   }
 
