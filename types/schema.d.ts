@@ -1,5 +1,4 @@
 import type { UUID } from 'crypto';
-import { Stringifier } from 'styled-components/dist/types';
 
 export type SunlightEnum = 'SHADE' | 'PARTIAL_SHADE' | 'PARTIAL_SUN' | 'FULL';
 
