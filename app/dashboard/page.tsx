@@ -2,27 +2,26 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UUID } from 'crypto';
+import { getDailyPlantTip } from '@/api/supabase/queries/dashboard';
 import {
-  getDailyPlantTip,
-  getPendingTasks,
-  updateDate,
-} from '@/api/supabase/queries/dashboard';
+  getUserTasks,
+  updateCompleted,
+  updateDateAndCompleted,
+} from '@/api/supabase/queries/tasks';
 import {
-  decreaseHarvestedByOne,
-  increaseHarvestedByOne,
+  changeHarvested,
   setRecentHarvestDate,
 } from '@/api/supabase/queries/userPlants';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import SingleTip from '@/components/SingleTip';
 import TaskItem from '@/components/TaskItem';
-import { PlantTip, UserPlant, ValidTask } from '@/types/schema';
+import { PlantTip, SingleTask, ValidTask } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import {
   computeDueDate,
   getCurrentSeason,
   isHarvestedThisSeason,
-  isOlderThanWateringFrequencyOrNull,
-  isOlderThanWeedingFrequencyOrNull,
+  isOlderThanFreqeuncyOrNull,
 } from '@/utils/taskHelpers';
 import {
   ArrowIcon,
@@ -40,26 +39,19 @@ import {
 
 // Define a type for modal actions
 type ModalAction =
-  | { id: UUID; type: 'water' | 'weed'; action: 'revert' }
-  | { id: UUID; type: 'harvest'; action: 'harvest-set' | 'harvest-clear' };
+  | { user_id: UUID; plant_id: UUID; type: 'water' | 'weed'; action: 'revert' }
+  | {
+      user_id: UUID;
+      plant_id: UUID;
+      type: 'harvest';
+      action: 'harvest-set' | 'harvest-clear';
+    };
 
 export default function Page() {
   const [plantTip, setPlantTip] = useState<PlantTip | null>(null);
   const { userId, loading: authLoading } = useAuth();
-  const [pendingTasks, setPendingTasks] = useState<
-    Array<{
-      type: 'water' | 'weed' | 'harvest';
-      plant_name: string;
-      completed: boolean;
-      due_date: Date;
-      id: string;
-      // For water/weed tasks we keep a previousDate
-      previousDate?: Date;
-      // For harvest tasks, store the season and an optional due message.
-      harvestSeason?: string;
-      dueMessage?: string;
-    }>
-  >([]);
+  const [pendingTasks, setPendingTasks] = useState<ValidTask[]>([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   // Use one unified modal action state
   const [modalAction, setModalAction] = useState<ModalAction | null>(null);
@@ -68,122 +60,139 @@ export default function Page() {
   );
 
   // Process tasks from the database (UserPlant[]) and add water, weed, and harvest tasks.
-  const getValidTasks = useCallback(async (tasks: UserPlant[]) => {
+  const getValidTasks = useCallback(async (tasks: SingleTask[]) => {
     const validTasks: ValidTask[] = [];
     const currentSeason = getCurrentSeason();
-
+    console.log(tasks);
     for (const task of tasks) {
-      // --- Watering Tasks ---
-      if (
-        isOlderThanWateringFrequencyOrNull(task.last_watered) ||
-        task.last_watered === task.date_added_to_db
-      ) {
-        const taskWateredDate = new Date(task.last_watered);
-        const due = computeDueDate(taskWateredDate, 7, task.id);
-        validTasks.push({
-          type: 'water',
-          plant_name: task.plant_name,
-          completed: false,
-          due_date: due,
-          id: task.id,
-          previousDate: new Date(task.last_watered),
-        });
-        if (task.previous_last_watered !== task.last_watered) {
-          await updateDate(task.id, new Date(task.last_watered), 'water', true);
-        }
-      } else {
-        validTasks.push({
-          type: 'water',
-          plant_name: task.plant_name,
-          completed: true,
-          due_date: computeDueDate(
-            new Date(task.previous_last_watered),
-            7,
-            task.id,
-          ),
-          id: task.id,
-          previousDate: new Date(task.previous_last_watered),
-        });
-      }
+      if (task.isCompleted) {
+        if (task.type == 'harvest') {
+          const recent = new Date(task.completed_date);
+          if (
+            task.frequency == currentSeason &&
+            isHarvestedThisSeason(recent, new Date(), task.frequency)
+          ) {
+            //correctly in completed
+            validTasks.push({
+              type: task.type,
+              plant_name: task.plant_name,
+              completed: true,
+              id: task.id,
+              due_date: new Date(),
+              dueMessage: `Due end of ${task.frequency} season`,
+              user_id: task.user_id,
+              plant_id: task.plant_id,
+            });
+          } else {
+            if (task.frequency == currentSeason) {
+              // this task is not completed set it back to not completed
+              validTasks.push({
+                type: task.type,
+                plant_name: task.plant_name,
+                completed: false,
+                id: task.id,
+                due_date: new Date(),
+                dueMessage: `Due end of ${task.frequency} season`,
+                user_id: task.user_id,
+                plant_id: task.plant_id,
+              });
+              updateCompleted(task.id, false);
+            } else {
+              continue;
+            }
+          }
+        } else {
+          const interval =
+            task.type == 'water' ? 7 : task.frequency == 'weekly' ? 7 : 14;
+          if (isOlderThanFreqeuncyOrNull(task.completed_date, interval)) {
+            console.log('got here');
+            //this task is not completed set it back to not completed
+            validTasks.push({
+              type: task.type as 'water' | 'weed',
+              plant_name: task.plant_name,
+              completed: false,
+              id: task.id,
+              due_date: computeDueDate(new Date(task.completed_date), interval),
+              previousDate: new Date(task.completed_date),
+              user_id: task.user_id,
+              plant_id: task.plant_id,
+            });
+            updateCompleted(task.id, false);
 
-      // --- Weeding Tasks ---
-      if (
-        isOlderThanWeedingFrequencyOrNull(
-          task.weeding_frequency,
-          task.last_weeded,
-        ) ||
-        task.last_weeded === task.date_added_to_db
-      ) {
-        const taskWeededDate = new Date(task.last_weeded);
-        const interval = task.weeding_frequency.trim() === 'Weekly' ? 7 : 14;
-        const due = computeDueDate(taskWeededDate, interval, task.id);
-        // const due = task.due_date
-        //   ? new Date(task.due_date)
-        //   : computeDueDate(taskWeededDate, interval, task.id);
-        validTasks.push({
-          type: 'weed',
-          plant_name: task.plant_name,
-          completed: false,
-          due_date: due,
-          id: task.id,
-          previousDate: new Date(task.last_weeded),
-        });
-        if (task.previous_last_weeded !== task.last_weeded) {
-          await updateDate(task.id, new Date(task.last_weeded), 'weed', true);
-        }
-      } else {
-        const interval = task.weeding_frequency.trim() === 'Weekly' ? 7 : 14;
-        validTasks.push({
-          type: 'weed',
-          plant_name: task.plant_name,
-          completed: true,
-          due_date: computeDueDate(
-            new Date(task.previous_last_weeded),
-            interval,
-            task.id,
-          ),
-          id: task.id,
-          previousDate: new Date(task.previous_last_weeded),
-        });
-      }
-
-      // --- Harvest Tasks ---
-      // Only add harvest tasks if it is currently the plant’s harvest season.
-      if (task.harvest_season && task.harvest_season === currentSeason) {
-        let completed = false;
-        if (task.recent_harvest) {
-          const recent = new Date(task.recent_harvest);
-          if (isHarvestedThisSeason(recent, new Date(), task.harvest_season)) {
-            completed = true;
+            //function to modify completed to false in db
+          } else {
+            console.log('got here');
+            //correctly in completed
+            validTasks.push({
+              type: task.type as 'water' | 'weed',
+              plant_name: task.plant_name,
+              completed: true,
+              id: task.id,
+              due_date: computeDueDate(
+                new Date(task.previous_completed_date),
+                interval,
+              ),
+              previousDate: new Date(task.previous_completed_date),
+              user_id: task.user_id,
+              plant_id: task.plant_id,
+            });
           }
         }
-        validTasks.push({
-          type: 'harvest',
-          plant_name: task.plant_name,
-          completed,
-          due_date: new Date(),
-          dueMessage: `Due end of ${task.harvest_season} season`,
-          id: task.id,
-          harvestSeason: task.harvest_season,
-        });
+      } else {
+        if (task.type == 'water' || task.type == 'weed') {
+          const interval =
+            task.type == 'water' ? 7 : task.frequency == 'weekly' ? 7 : 14;
+          validTasks.push({
+            type: task.type,
+            plant_name: task.plant_name,
+            completed: false,
+            id: task.id,
+            due_date: computeDueDate(new Date(task.completed_date), interval),
+            previousDate: new Date(task.completed_date),
+            user_id: task.user_id,
+            plant_id: task.plant_id,
+          });
+          if (task.completed_date != task.previous_completed_date) {
+            await updateDateAndCompleted(
+              task.id,
+              new Date(task.completed_date),
+              false,
+              false,
+            );
+          }
+        } else {
+          if (task.frequency != currentSeason) {
+            continue;
+          } else {
+            const dueMessage = `Due end of ${task.frequency} season`;
+            validTasks.push({
+              type: 'harvest',
+              plant_name: task.plant_name,
+              completed: false,
+              id: task.id,
+              due_date: new Date(),
+              dueMessage: dueMessage,
+              user_id: task.user_id,
+              plant_id: task.plant_id,
+            });
+          }
+        }
       }
     }
 
+    console.log(validTasks);
     return validTasks;
   }, []);
 
   // --- Task Handlers ---
 
   // For water/weed tasks, immediately mark as complete.
-  async function handleCheck(
-    userPlantRowId: string,
-    taskType: 'water' | 'weed',
-  ) {
+  async function handleCheck(taskRowID: string, taskType: 'water' | 'weed') {
     const currDate = new Date();
-    await updateDate(userPlantRowId, currDate, taskType, false);
+    await updateDateAndCompleted(taskRowID, currDate, false, true);
     setPendingTasks(prevTasks =>
       prevTasks.map(task => {
-        if (task.id === userPlantRowId && task.type === taskType) {
+        if (task.id === taskRowID && task.type === taskType) {
           return { ...task, completed: true };
         }
         return task;
@@ -192,9 +201,14 @@ export default function Page() {
   }
 
   // For water/weed, when unchecking, we want to revert to the previous date.
-  function handleUncheck(userPlantRowId: string, taskType: 'water' | 'weed') {
+  function handleUncheck(
+    user_id: string,
+    plant_id: string,
+    taskType: 'water' | 'weed',
+  ) {
     setModalAction({
-      id: userPlantRowId as UUID,
+      user_id: user_id as UUID,
+      plant_id: plant_id as UUID,
       type: taskType,
       action: 'revert',
     });
@@ -202,15 +216,21 @@ export default function Page() {
   }
 
   // For harvest tasks: if not harvested (current), ask to mark as harvested.
-  function handleHarvestSet(id: string) {
-    setModalAction({ id: id as UUID, type: 'harvest', action: 'harvest-set' });
+  function handleHarvestSet(user_id: string, plant_id: string) {
+    setModalAction({
+      user_id: user_id as UUID,
+      plant_id: plant_id as UUID,
+      type: 'harvest',
+      action: 'harvest-set',
+    });
     setIsModalOpen(true);
   }
 
   // For harvest tasks: if already harvested (completed), ask to clear the harvest marker.
-  function handleHarvestClear(id: string) {
+  function handleHarvestClear(user_id: string, plant_id: string) {
     setModalAction({
-      id: id as UUID,
+      user_id: user_id as UUID,
+      plant_id: plant_id as UUID,
       type: 'harvest',
       action: 'harvest-clear',
     });
@@ -219,13 +239,13 @@ export default function Page() {
   function handleToggle(task: ValidTask) {
     if (task.type === 'harvest') {
       if (task.completed) {
-        handleHarvestClear(task.id);
+        handleHarvestClear(task.user_id, task.plant_id);
       } else {
-        handleHarvestSet(task.id);
+        handleHarvestSet(task.user_id, task.plant_id);
       }
     } else {
       if (task.completed) {
-        handleUncheck(task.id, task.type);
+        handleUncheck(task.user_id, task.plant_id, task.type);
       } else {
         handleCheck(task.id, task.type);
       }
@@ -235,16 +255,21 @@ export default function Page() {
   // When the confirmation modal is confirmed.
   async function processModalConfirm() {
     if (!modalAction) return;
-    const { id, type, action } = modalAction;
+    const { user_id, plant_id, type, action } = modalAction;
     if (type === 'harvest') {
       const currentDate = new Date();
       if (action === 'harvest-set') {
         // Mark this plant as harvested for the current season.
-        setRecentHarvestDate(currentDate.toDateString(), id);
-        increaseHarvestedByOne(id);
+        setRecentHarvestDate(currentDate.toDateString(), user_id, plant_id);
+        changeHarvested(user_id, plant_id, 1);
         setPendingTasks(prev =>
           prev.map(task => {
-            if (task.id === id && task.type === 'harvest') {
+            if (
+              task.user_id === user_id &&
+              task.plant_id === plant_id &&
+              task.type === 'harvest'
+            ) {
+              updateCompleted(task.id, true);
               return { ...task, completed: true };
             }
             return task;
@@ -252,11 +277,18 @@ export default function Page() {
         );
       } else if (action === 'harvest-clear') {
         // Clear the recent harvest; task becomes current.
-        setRecentHarvestDate(null, id);
-        decreaseHarvestedByOne(id);
+        setRecentHarvestDate(null, user_id, plant_id);
+
+        changeHarvested(user_id, plant_id, -1);
+
         setPendingTasks(prev =>
           prev.map(task => {
-            if (task.id === id && task.type === 'harvest') {
+            if (
+              task.user_id === user_id &&
+              task.plant_id === plant_id &&
+              task.type === 'harvest'
+            ) {
+              updateCompleted(task.id, false);
               return { ...task, completed: false };
             }
             return task;
@@ -265,12 +297,19 @@ export default function Page() {
       }
     } else if (action === 'revert') {
       // For water/weed tasks, revert to the previous date.
-      const task = pendingTasks.find(t => t.id === id && t.type === type);
+      const task = pendingTasks.find(
+        t =>
+          t.user_id === user_id && t.plant_id === plant_id && t.type === type,
+      );
       const previousDate = task?.previousDate || new Date();
-      await updateDate(id, previousDate, type, false);
+      await updateDateAndCompleted(task!.id, previousDate, false, false);
       setPendingTasks(prev =>
         prev.map(t => {
-          if (t.id === id && t.type === type) {
+          if (
+            t.user_id === user_id &&
+            t.plant_id === plant_id &&
+            t.type === type
+          ) {
             return { ...t, completed: false };
           }
           return t;
@@ -294,7 +333,7 @@ export default function Page() {
   useEffect(() => {
     if (!authLoading && userId) {
       const fetchTasks = async () => {
-        const tasks = await getPendingTasks(userId);
+        const tasks = await getUserTasks(userId);
         setPendingTasks(await getValidTasks(tasks));
       };
       fetchTasks();

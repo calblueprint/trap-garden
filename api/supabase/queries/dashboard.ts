@@ -59,47 +59,47 @@ export async function getPendingTasks(userId: string): Promise<UserPlant[]> {
   return data ?? [];
 }
 
-export async function updateDate(
-  id: string,
-  newDate: Date,
-  taskType: string,
-  isPrevious: boolean = false,
-) {
-  console.log(id, newDate, taskType, isPrevious);
+// export async function updateDate(
+//   id: string,
+//   newDate: Date,
+//   taskType: string,
+//   isPrevious: boolean = false,
+// ) {
+//   console.log(id, newDate, taskType, isPrevious);
 
-  // Use the isPrevious flag to choose the proper mapping.
-  const fieldMap: Record<string, string> = {
-    water: isPrevious ? 'previous_last_watered' : 'last_watered',
-    weed: isPrevious ? 'previous_last_weeded' : 'last_weeded',
-  };
+//   // Use the isPrevious flag to choose the proper mapping.
+//   const fieldMap: Record<string, string> = {
+//     water: isPrevious ? 'previous_last_watered' : 'last_watered',
+//     weed: isPrevious ? 'previous_last_weeded' : 'last_weeded',
+//   };
 
-  const fieldToUpdate = fieldMap[taskType];
-  if (!fieldToUpdate) {
-    console.error(`Invalid task type: ${taskType}`);
-    return;
-  }
+//   const fieldToUpdate = fieldMap[taskType];
+//   if (!fieldToUpdate) {
+//     console.error(`Invalid task type: ${taskType}`);
+//     return;
+//   }
 
-  const { data, error } = await supabase
-    .from('user_plants')
-    .update({ [fieldToUpdate]: newDate })
-    .eq('id', id)
-    .select();
+//   const { data, error } = await supabase
+//     .from('user_plants')
+//     .update({ [fieldToUpdate]: newDate })
+//     .eq('id', id)
+//     .select();
 
-  if (error) {
-    console.error(`Error updating ${fieldToUpdate} date:`, error);
-  }
-  return data;
-}
+//   if (error) {
+//     console.error(`Error updating ${fieldToUpdate} date:`, error);
+//   }
+//   return data;
+// }
 
-export async function setDueDate(new_date: Date, id: string) {
-  const { data, error } = await supabase
-    .from('user_plants')
-    .update({ due_date: new_date })
-    .eq('id', id);
+// export async function setDueDate(new_date: Date, id: string) {
+//   const { data, error } = await supabase
+//     .from('user_plants')
+//     .update({ due_date: new_date })
+//     .eq('id', id);
 
-  if (error) {
-    console.error(`Error updating due date:`, error);
-  }
+//   if (error) {
+//     console.error(`Error updating due date:`, error);
+//   }
 
-  return data;
-}
+//   return data;
+// }
