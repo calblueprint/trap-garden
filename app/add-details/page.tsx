@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
+import { insertTasks } from '@/api/supabase/queries/tasks';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
 import PlantDetails from '@/components/PlantDetails';
@@ -10,7 +11,7 @@ import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { H1, H3, H4, P1, P2 } from '@/styles/text';
-import { PlantingTypeEnum, UserPlant } from '@/types/schema';
+import { PlantingTypeEnum, SingleTask, UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import { plantingTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
@@ -166,7 +167,34 @@ export default function Home() {
     } catch (error) {
       console.error('Error inserting user plants:', error);
     }
-  }, [details, router, userId]);
+    try {
+      const tasks: Omit<SingleTask, 'id' | 'date_removed'>[] = details.flatMap(
+        (d, i) => {
+          const base = {
+            user_id: userId,
+            plant_id: d.plant_id!,
+            plant_name: plantsToAdd[i].plant_name,
+            isCompleted: false,
+            previous_completed_date: getDefaultDate(),
+            completed_date: getDefaultDate(),
+            date_added_to_db: getDefaultDate(),
+          };
+
+          const p = plantsToAdd[i]; // shortcut
+
+          return [
+            { ...base, type: 'water', frequency: p.water_frequency },
+            { ...base, type: 'weed', frequency: p.weeding_frequency },
+            { ...base, type: 'harvest', frequency: p.harvest_season },
+          ];
+        },
+      );
+
+      await insertTasks(tasks);
+    } catch (error) {
+      console.error('Error inserting tasks:', error);
+    }
+  }, [details, router, userId, plantsToAdd]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

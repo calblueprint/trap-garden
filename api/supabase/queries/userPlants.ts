@@ -88,8 +88,37 @@ export async function decreaseHarvestedByOne(id: UUID) {
     throw new Error('Error decrementing:', error);
   }
 }
+export async function changeHarvested(
+  user_id: UUID,
+  plant_id: UUID,
+  amount: number,
+) {
+  const { error } = await supabase.rpc('change_num_harvested', {
+    p_user_id: user_id,
+    p_plant_id: plant_id,
+    p_amount: amount,
+  });
+  if (error) {
+    throw new Error('Error decrementing:', error);
+  }
+}
 
 export async function setRecentHarvestDate(
+  date: string | null,
+  user_id: UUID,
+  plant_id: UUID,
+): Promise<void> {
+  const { error } = await supabase
+    .from('user_plants')
+    .update({ recent_harvest: date })
+    .eq('user_id', user_id)
+    .eq('plant_id', plant_id);
+
+  if (error) {
+    throw new Error('Failed to update: ', error);
+  }
+}
+export async function setRecentHarvestDateThroughId(
   date: string | null,
   id: UUID,
 ): Promise<void> {

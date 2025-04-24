@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { getMatchingPlantForUserPlant } from '@/api/supabase/queries/plants';
+import { deletePlantTasks } from '@/api/supabase/queries/tasks';
 import {
   getUserPlantById,
   updateUserNote,
@@ -67,6 +68,10 @@ export default function UserPlantPage() {
       // Originally, removeUserPlantById(userPlantId);
       currentUserPlant.date_removed = getCurrentTimestamp();
       await upsertUserPlant(currentUserPlant);
+      await deletePlantTasks(
+        currentUserPlant.user_id,
+        currentUserPlant.plant_id,
+      );
     } catch (error) {
       console.error(error);
     }
@@ -141,6 +146,8 @@ export default function UserPlantPage() {
             recentHarvestDate={currentUserPlant.recent_harvest}
             id={currentUserPlant.id}
             onHarvest={handleHarvestAnimation}
+            plant_id={currentUserPlant.plant_id}
+            user_id={currentUserPlant.user_id}
           />
 
           <TextInput

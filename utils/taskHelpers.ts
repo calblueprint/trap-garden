@@ -1,28 +1,40 @@
 import { mapMonthToSeason } from './helpers';
 
-export function isOlderThanWateringFrequencyOrNull(
+export function isOlderThanFreqeuncyOrNull(
   date: string | null,
+  frequency: number,
 ): boolean {
   if (date == null) return true;
   const givenDate = new Date(date);
   const currentDate = new Date();
-  // Subtract 3 days from the current date because we want to show watering task after 3 days again
-  currentDate.setDate(currentDate.getDate() - 3);
-  return givenDate < currentDate;
-}
-
-export function isOlderThanWeedingFrequencyOrNull(
-  weeding_frequency: string,
-  last_weeded_date: string | null,
-): boolean {
-  if (!last_weeded_date) return true; // check null too
-  const givenDate = new Date(last_weeded_date);
-  const currentDate = new Date();
-  // Subtract 3 or 7 days from the current date because we want to show task after 3 or 7 days again
-  const threshold = weeding_frequency === 'Weekly' ? 3 : 7;
+  const threshold = frequency == 7 ? 3 : 7;
+  // Subtract the frequency from the current date because we want to show task after frequency days again
   currentDate.setDate(currentDate.getDate() - threshold);
   return givenDate < currentDate;
 }
+// export function isOlderThanWateringFrequencyOrNull(
+//   date: string | null,
+// ): boolean {
+//   if (date == null) return true;
+//   const givenDate = new Date(date);
+//   const currentDate = new Date();
+//   // Subtract 3 days from the current date because we want to show watering task after 3 days again
+//   currentDate.setDate(currentDate.getDate() - 3);
+//   return givenDate < currentDate;
+// }
+
+// export function isOlderThanWeedingFrequencyOrNull(
+//   weeding_frequency: string,
+//   last_weeded_date: string | null,
+// ): boolean {
+//   if (!last_weeded_date) return true; // check null too
+//   const givenDate = new Date(last_weeded_date);
+//   const currentDate = new Date();
+//   // Subtract 3 or 7 days from the current date because we want to show task after 3 or 7 days again
+//   const threshold = weeding_frequency === 'Weekly' ? 3 : 7;
+//   currentDate.setDate(currentDate.getDate() - threshold);
+//   return givenDate < currentDate;
+// }
 
 // Determine the current season using the provided map.
 export function getCurrentSeason() {
@@ -77,7 +89,6 @@ export function isHarvestedThisSeason(
 export function computeDueDate(
   lastTaskDate: Date | null,
   interval: number,
-  taskId: string,
 ): Date {
   let candidateDueDate: Date;
   if (lastTaskDate) {
