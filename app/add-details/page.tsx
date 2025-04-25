@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dayjs from 'dayjs';
 import { insertTasks } from '@/api/supabase/queries/tasks';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
@@ -21,6 +22,14 @@ import {
   ReviewGrid,
 } from './styles';
 
+const formatDate = (dateString: string) => {
+  try {
+    return dayjs(dateString).format('MMMM D, YYYY');
+  } catch {
+    return dateString;
+  }
+};
+
 function ReviewPlant({
   plantName,
   dateAdded,
@@ -37,7 +46,7 @@ function ReviewPlant({
       </H4>
       <ReviewGrid>
         <P2 $fontWeight={500}>Date Planted</P2>
-        <P2>{dateAdded}</P2>
+        <P2>{formatDate(dateAdded)}</P2>
         <P2 $fontWeight={500}>Planting Type</P2>
         <P2>{plantingTypeLabels[plantingType]}</P2>
       </ReviewGrid>
@@ -88,7 +97,8 @@ export default function Home() {
     plantsToAdd.map(plant => ({ plant_id: plant.id })),
   );
 
-  const getDefaultDate = () => new Date().toISOString().substring(0, 10);
+  //correctly gets current date without being affected by timezones, in YYYY-MM-DD format
+  const getDefaultDate = () => dayjs().format('YYYY-MM-DD');
 
   function move(steps: number) {
     if (currentIndex <= plantsToAdd.length) {
@@ -131,7 +141,12 @@ export default function Home() {
     try {
       const completedDetails: Omit<
         UserPlant,
-        'id' | 'date_removed' | 'recent_harvest' | 'num_harvested' | 'due_date'
+        | 'id'
+        | 'date_removed'
+        | 'recent_harvest'
+        | 'num_harvested'
+        | 'due_date'
+        | 'user_notes'
       >[] = details.map(detail => ({
         user_id: userId,
         plant_id: detail.plant_id!,

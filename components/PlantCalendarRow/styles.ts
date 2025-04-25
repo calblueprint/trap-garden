@@ -8,6 +8,7 @@ export const PlantCalendarRowContainer = styled.tr`
 
 export const CalendarGrid = styled.div`
   display: grid;
+  position: sticky;
   min-width: 272px;
   height: 30px;
   width: 100%;
@@ -22,4 +23,27 @@ export const CalendarCell = styled.div<{ $color: string }>`
   height: 100%;
   background-color: ${({ $color }) => $color};
   background-clip: padding-box;
+`;
+
+export const SingleDisplayScrollContainer = styled.div`
+  overflow-x: auto;
+  width: 100%;
+  scrollbar-width: none;
+  overscroll-behavior: none;
+`;
+
+// for single display to handle scrolling
+export const StyledTable = styled.table`
+  overflow-x: scroll;
+  width: 100%;
+  min-width: 400px;
+  border-spacing: 0;
+  border-collapse: separate;
+`;
+
+export const ScrollableTd = styled.td`
+  overflow-x: scroll;
+  width: inherit;
+  display: block;
+  padding-bottom: 8px;
 `;

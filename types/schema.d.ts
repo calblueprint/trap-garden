@@ -58,6 +58,7 @@ export interface UserPlant {
   previous_last_watered: string;
   previous_last_weeded: string;
   due_date: string;
+  user_notes: string;
   harvest_season: string;
 }
 

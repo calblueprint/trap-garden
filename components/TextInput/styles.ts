@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
-import { P2 } from '@/styles/text';
+import { P1, P2 } from '@/styles/text';
 
 export const InputWrapper = styled.div`
   position: relative;
@@ -10,9 +11,16 @@ export const InputWrapper = styled.div`
 
 export const StyledLabel = styled(P2).attrs({ as: 'label' })`
   margin-bottom: 0.25rem;
+
+  @media ${device.lg} {
+    font-size: 18px;
+    font-family: 'AirbnbCereal_W_Bk';
+    font-weight: 400;
+    color: ${COLORS.darkgray};
+  }
 `;
 
-export const StyledInput = styled(P2).attrs({ as: 'input' })<{
+export const StyledInput = styled(P1).attrs({ as: 'input' })<{
   $error?: boolean;
 }>`
   padding: 0.75rem;
@@ -22,6 +30,37 @@ export const StyledInput = styled(P2).attrs({ as: 'input' })<{
   font-family: inherit; /* Inherit font-family from P2 */
   margin-bottom: 0.25rem;
   transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: ${({ $error }) => ($error ? COLORS.errorRed : COLORS.shrub)};
+    outline: none;
+  }
+
+  @media ${device.lg} {
+    padding: 1rem;
+    font-size: 18px;
+    font-family: 'AirbnbCereal_W_Bk';
+    font-weight: 400;
+  }
+`;
+
+export const StyledNotesInput = styled(P2).attrs({ as: 'textarea' })<{
+  $error?: boolean;
+}>`
+  padding: 0.75rem;
+  border: 1px solid ${({ $error }) => ($error ? COLORS.errorRed : '#ccc')};
+  border-radius: 0.3125rem;
+  font-family: inherit;
+  margin-bottom: 0.25rem;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
 
   &:focus {
     border-color: ${({ $error }) => ($error ? COLORS.errorRed : COLORS.shrub)};
@@ -38,6 +77,11 @@ export const IconWrapper = styled.span`
   align-items: center;
   justify-content: center;
   color: ${COLORS.darkgray};
+
+  @media ${device.lg} {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 export const StyledButton = styled.button`

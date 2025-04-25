@@ -3,3 +3,27 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: 'AirbnbCereal_W_Bk';
+  src:
+    local('AirbnbCereal_W_Bk'),
+    url('../styles/fonts/AirbnbCereal_W_Bk.otf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AirbnbCereal_W_Md';
+  src:
+    local('AirbnbCereal_W_Md'),
+    url('../styles/fonts/AirbnbCereal_W_Md.otf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AirbnbCereal_W_Lt';
+  src:
+    local('AirbnbCereal_W_Lt'),
+    url('../styles/fonts/AirbnbCereal_W_Lt.otf') format('truetype');
+  font-style: normal;
+}

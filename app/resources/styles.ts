@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { H1, H4 } from '@/styles/text';
 
 export const ViewSelection = styled.div`
   display: flex;
@@ -34,4 +35,22 @@ export const HeaderButton = styled.button<{
 export const PageContainer = styled.div`
   minheight: '100vh';
   backgroundcolor: 'white';
+`;
+
+export const GuidesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 300;
+  justify-content: center;
+`;
+
+export const AirbnbH1 = styled(H1)`
+  font-family: 'AirbnbCereal_W_Md', sans-serif;
+`;
+
+export const AirbnbH4 = styled(H4)`
+  font-family: 'AirbnbCereal_W_Md', sans-serif;
 `;

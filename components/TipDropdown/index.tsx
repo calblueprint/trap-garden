@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { P3 } from '@/styles/text';
 import { PlantTip } from '@/types/schema';
 import Icon from '../Icon';
-import { CategoryName, Dropdown, OrderedTipList, StyledIcon } from './styles';
+import {
+  AirbnbP3,
+  CategoryName,
+  Dropdown,
+  OrderedTipList,
+  StyledIcon,
+} from './styles';
 
 interface TipDropdownProps {
   name: string;
@@ -40,7 +45,7 @@ export function TipDropdown({ name, tips, icon }: TipDropdownProps) {
             <CategoryName $colorString={expanded ? COLORS.shrub : 'black'}>
               {name}
             </CategoryName>
-            <P3 $color={COLORS.midgray}>{tips.length} Tips</P3>
+            <AirbnbP3 $color={COLORS.midgray}>{tips.length} Tips</AirbnbP3>
           </Flex>
         </Flex>
         <Dropdown onClick={() => setExpanded(!expanded)}>

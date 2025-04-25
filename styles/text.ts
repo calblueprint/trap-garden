@@ -22,6 +22,7 @@ export const H1 = styled.h1<TextProps>`
 
 export const H2 = styled.h2<TextProps>`
   ${TextStyles}
+  font-family: 'AirbnbCereal_W_Bk', sans-serif;
   font-weight: ${({ $fontWeight }) => $fontWeight || '400'};
   font-size: 1.75rem;
 `;

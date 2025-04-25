@@ -3,7 +3,13 @@ import COLORS from '@/styles/colors';
 import { fillCalendarGridArrayRowWithColor } from '@/utils/helpers';
 import { MonthHeader } from '../PlantCalendarList';
 import SeasonColorKey from '../SeasonColorKey';
-import { CalendarCell, CalendarGrid } from './styles';
+import {
+  CalendarCell,
+  CalendarGrid,
+  ScrollableTd,
+  SingleDisplayScrollContainer,
+  StyledTable,
+} from './styles';
 
 interface PlantCalendarRowProps {
   harvestStart: string;
@@ -80,17 +86,42 @@ const PlantCalendarRow = memo(function PlantCalendarRow({
 
   return (
     <>
-      {singleDisplay && (
+      {singleDisplay ? (
         <>
           <SeasonColorKey />
-          <MonthHeader />
+          <SingleDisplayScrollContainer>
+            <StyledTable>
+              <colgroup>
+                <col style={{ minWidth: '400px' }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <ScrollableTd>
+                    <MonthHeader />
+                  </ScrollableTd>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <CalendarGrid>
+                      {CalendarGridArray.map((color, index) => (
+                        <CalendarCell key={index} $color={color} />
+                      ))}
+                    </CalendarGrid>
+                  </td>
+                </tr>
+              </tbody>
+            </StyledTable>
+          </SingleDisplayScrollContainer>
         </>
+      ) : (
+        <CalendarGrid>
+          {CalendarGridArray.map((color, index) => (
+            <CalendarCell key={index} $color={color} />
+          ))}
+        </CalendarGrid>
       )}
-      <CalendarGrid>
-        {CalendarGridArray.map((color, index) => (
-          <CalendarCell key={index} $color={color} />
-        ))}
-      </CalendarGrid>
     </>
   );
 });
