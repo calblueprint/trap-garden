@@ -63,7 +63,6 @@ export default function Page() {
   const getValidTasks = useCallback(async (tasks: SingleTask[]) => {
     const validTasks: ValidTask[] = [];
     const currentSeason = getCurrentSeason();
-    console.log(tasks);
     for (const task of tasks) {
       if (task.isCompleted) {
         if (task.type == 'harvest') {
@@ -105,7 +104,6 @@ export default function Page() {
           const interval =
             task.type == 'water' ? 7 : task.frequency == 'weekly' ? 7 : 14;
           if (isOlderThanFreqeuncyOrNull(task.completed_date, interval)) {
-            console.log('got here');
             //this task is not completed set it back to not completed
             validTasks.push({
               type: task.type as 'water' | 'weed',
@@ -121,7 +119,6 @@ export default function Page() {
 
             //function to modify completed to false in db
           } else {
-            console.log('got here');
             //correctly in completed
             validTasks.push({
               type: task.type as 'water' | 'weed',
@@ -180,7 +177,6 @@ export default function Page() {
       }
     }
 
-    console.log(validTasks);
     return validTasks;
   }, []);
 

@@ -121,5 +121,5 @@ export interface SingleTask {
   completed_date: string;
   frequency: string;
   isCompleted: boolean;
-  type: string;
+  type: 'water' | 'weed' | 'harvest';
 }
