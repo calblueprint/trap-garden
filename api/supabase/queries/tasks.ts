@@ -26,24 +26,8 @@ export async function setTaskCompleted(
     .from('tasks')
     .update({
       isCompleted: completed,
-      previous_completed_date: completed ? null : (date?.toISOString() ?? null),
-      completed_date: completed ? date?.toISOString() : null,
-    })
-    .eq('id', taskId);
-  if (error) throw error;
-}
-
-export async function toggleTaskCompleted(
-  taskId: string,
-  makeCompleted: boolean,
-  date: Date | null,
-) {
-  const { error } = await supabase
-    .from('TaskTable')
-    .update({
-      completed: makeCompleted,
-      completed_date: makeCompleted ? date?.toISOString() : null,
-      previous_completed_date: makeCompleted ? null : date?.toISOString(),
+      previous_completed_date: completed ? null : (date?.toString() ?? null),
+      completed_date: completed ? date?.toString() : null,
     })
     .eq('id', taskId);
   if (error) throw error;
@@ -107,7 +91,6 @@ export async function updateDateAndCompleted(
     return null;
   }
 
-  // Supabase returns an array; most callers expect a single row
   return data?.[0] ?? null;
 }
 
@@ -142,19 +125,5 @@ export async function updateDateAndCompletedThroughPlantAndUserIdAndType(
     return null;
   }
 
-  // Supabase returns an array; most callers expect a single row
   return data?.[0] ?? null;
-}
-
-export async function setDueDate(new_date: Date, id: string) {
-  const { data, error } = await supabase
-    .from('user_plants')
-    .update({ due_date: new_date })
-    .eq('id', id);
-
-  if (error) {
-    console.error(`Error updating due date:`, error);
-  }
-
-  return data;
 }

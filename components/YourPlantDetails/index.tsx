@@ -61,7 +61,7 @@ export default function YourPlantDetails({
   async function harvestPlant() {
     await increaseHarvestedByOne(id);
     const currentDate = new Date();
-    await setRecentHarvestDateThroughId(currentDate.toISOString(), id);
+    await setRecentHarvestDateThroughId(currentDate.toString(), id);
     await updateDateAndCompletedThroughPlantAndUserIdAndType(
       plant_id,
       user_id,
@@ -70,7 +70,7 @@ export default function YourPlantDetails({
       false,
       true,
     ); //can always do true bc dashboard will correct if its not
-    setLocalRecentHarvestDate(currentDate.toISOString());
+    setLocalRecentHarvestDate(currentDate.toString());
     onHarvest();
   }
 
