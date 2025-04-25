@@ -1087,18 +1087,6 @@ export const IconSvgs = {
     </svg>
   ),
   bigCan: (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0.363281 0.508789H35.3633V35.5088H0.363281V0.508789Z" fill="url(#pattern0_3184_24080)"/>
-    <defs>
-    <pattern id="pattern0_3184_24080" patternContentUnits="objectBoundingBox" width="1" height="1">
-    <use href="#image0_3184_24080" transform="scale(0.0111111)"/>
-    </pattern>
-    <image id="image0_3184_24080" width="90" height="90" preserveAspectRatio="none" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFQklEQVR4nO2dWWhcVRjHv9hFq6K1LogLKvigdeuroEYQJWJ1Mrnf7042CHUZRG0FQfqkUSqoIG6UmopP+uh7HlqqImpRaxOq1AXrVmzV0saiiTVVRw7ch1Rz7tybzHLOnfODD/Jwl+/88813zneWGZFAIBDoKLqiKLpWVdcDW4G3gX2qekRVZ4E/k7+/VtW3gLHk2mvMve123nW64ji+CXhNVQ8BtQXaL+YZURTdGESfQ09Pz8mqei/w1SLEtZl55j3AculkVLUf2N8EgU8wVf3BvEs6jb6+vkuAHc0WeB7BtwOXSScQx3EvcLjVIs8R+yhQkSIDPJFDlGPANuDxOI7v7Ovru2JwcPCs7u7updVqdZn5u1KpXJn84x4zow9V/SPH8zdJ0RgdHT0pGaZlEWCXqq4rlUor874HONN0fqr6UcbofhVYIkUB2JKh0Z9EUXRLo94ZRdFt5plZxJYiADxZp7HTwAYT9U1495KkkJkudBoB7gL+qTPOXd1sP+I4vhr4PMUP42NZfKRSqVwKTKV8ZHeaDq1V/gCrgPdTxJ4yPotvAOMpIr8HnN5qn9auXXtqHbG3iU8AlRSRv+zt7T27jb6tqpNGYvGB7u7upWZWzdKImWSGra0kOdvWQX5nxuniOqq6LiVaHhZHSEYjNj/vFtcBPrOkjEkT7eIIZugH7LalN6enWIHrU6LkDnEMoCfF3xvEVYAxi9O7XY0Q4GOLz1vFVYDvLU7fL44CVC0+/+xkcACrLQ4fb2VhkhczeZXMFP7P9yiKrhLXAO6zCP2uOE6y+Duf7w+Ka6jqS75O2KjqqMX3LeIaWJam4jiOxHHMhJJF6B3iy/gZN2xKVTcDK3L2L/vENYCDDghaz8bm831gYOCc+a43+0vEMbrM7iEHhKxn0/MtMJi9JZbrj4mDa4Izvgo9MjJyiuX6GXENsi++ts1U9RWL7+db7tkvrgGsSErwaQcFPgK8bOsMTWFiuW8ytxBJHnou2bwybVZ/h4eHT2uEyL4DaEOGd4nI415NnLQQ4ClLRG9uhMjmQb87OXHiTgk+vGiRE6GPSocDnAv8ZdHo8qwPebZOJzFpFiulg8E+GXYw86ddVX/K0CsfNutnLi0ztZAuVf3UossLmZ8CHMgxBNprlnYW6jEODONsZvM5iqLbU+5bk6fxTy/AsXGzRbboQler1WXAHss9E3kbv1xVnzH5RlV/TIR/J0N0zybzy5nzN54JDTyacs+ILJahoaEzkk4wa0W1McthGzwSOo7j61Iq2D0N29laqVQuznNIJ0v+xhOhzXY0Vf22ZdsizNYs4NecTo+b4wy+Cl0qlVbWOQ0wLs0giqKbbSvAKdE9m0zQnJC/cVxoM7lfR+QD5XL5vKYInQgUq+rfeZ3/b/7GAUFTbA3wTUpbTPtvbZrIc8R+ZKGNUNW9dcajLli9RYmN0ipU9XkHBKm1wTa1oxx9w4GG11poL0o7SAqc7Q4IUGuyHW9pulhsQeOjqeqhRp5nbGlBgz/2JnChuIRZsEyGcLUC2BeLmZlsOgspaHDQvJhrX2hBg0MmvqCqD7RbLDpBaN8LGvEMs5Hx9XaLRgcI7W1BIz7iY0EjvtLf339BylG3mmsmPmOOI/hS0IjvmK+41HzfzBWELnJBI0VBHS9opEjggKBBaILQIaJ9AwdSREgdBKFDRPsG8Fu7I7cjzukAHzoq9E4pEsCGdotqsYekgL8+MemAsHNtopC/WFEuly9ySOwJ5/ZwNCGy15vc2IYO0rzvA5MuChnJgUAgEAgEAoFAIBAIBALSfP4FUacvcDze9xAAAAAASUVORK5CYII="/>
-    </defs>
-    </svg>
-
-  )
-  bigCan: (
     <svg
       width="36"
       height="36"
@@ -1108,19 +1096,19 @@ export const IconSvgs = {
     >
       <path
         d="M0.363281 0.508789H35.3633V35.5088H0.363281V0.508789Z"
-        fill="url(#pattern0_3180_22894)"
+        fill="url(#pattern0_3184_24080)"
       />
       <defs>
         <pattern
-          id="pattern0_3180_22894"
+          id="pattern0_3184_24080"
           patternContentUnits="objectBoundingBox"
           width="1"
           height="1"
         >
-          <use href="#image0_3180_22894" transform="scale(0.0111111)" />
+          <use href="#image0_3184_24080" transform="scale(0.0111111)" />
         </pattern>
         <image
-          id="image0_3180_22894"
+          id="image0_3184_24080"
           width="90"
           height="90"
           preserveAspectRatio="none"
