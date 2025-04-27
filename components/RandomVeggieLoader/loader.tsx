@@ -171,7 +171,10 @@ const Cauliflower = styled(VeggieBase)`
 const veggies = [Tomato, Beet, Cauliflower];
 
 export default function RandomVeggieLoader() {
-  const Loader = useMemo(() => veggies[2], []);
+  const Loader = useMemo(
+    () => veggies[Math.floor(Math.random() * veggies.length)],
+    [],
+  );
 
   return (
     <Overlay>
