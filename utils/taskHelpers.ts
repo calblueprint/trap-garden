@@ -91,7 +91,7 @@ export function computeDueDate(
   lastTaskDate: Date | null,
   interval: number,
 ): Date {
-  let candidateDueDate = new Date();
+  const candidateDueDate = new Date();
   if (lastTaskDate) {
     // candidateDueDate = new Date(lastTaskDate);
     const dayJsDueDate = dayjs(lastTaskDate).utc();
