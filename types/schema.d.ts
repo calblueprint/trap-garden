@@ -49,6 +49,10 @@ export interface UserPlant {
   recent_harvest: string;
   num_harvested: number;
   planting_type: PlantingTypeEnum;
+  water_frequency: string;
+  weeding_frequency: string;
+  plant_name: string;
+  date_added_to_db: string;
   user_notes: string;
 }
 
@@ -84,3 +88,32 @@ export type TipCategory =
   | 'Harvesting'
   | 'Planting'
   | 'Weeding';
+
+export interface ValidTask {
+  type: 'water' | 'weed' | 'harvest';
+  plant_name: string;
+  completed: boolean;
+  due_date: Date;
+  id: string;
+  // For water/weed tasks we keep a previousDate
+  previousDate?: Date;
+  // For harvest tasks, store the season and an optional due message.
+  harvestSeason?: string;
+  dueMessage?: string;
+  user_id: string;
+  plant_id: string;
+}
+
+export interface SingleTask {
+  id: UUID;
+  user_id: UUID;
+  plant_id: UUID;
+  date_added_to_db: string;
+  date_removed: string;
+  plant_name: string;
+  previous_completed_date: string;
+  completed_date: string;
+  frequency: string;
+  isCompleted: boolean;
+  type: 'water' | 'weed' | 'harvest';
+}
