@@ -34,6 +34,9 @@ export const GrayP3 = styled(P3)`
     font-family: 'AirbnbCereal_W_Bk';
     font-weight: 400;
     margin-bottom: 72px;
+    white-space: nowrap;
+    overflow: visible;
+    max-width: none;
 `;
 
 export const ResetLinkButton = styled(StyledLinkButton)`
@@ -51,7 +54,18 @@ export const GreenH2 = styled(H2)`
   margin-bottom: 8px;
 
   @media ${device.lg} {
-    font-size: 4rem;
+    font-size: 2.625rem;
+    font-family: 'AirbnbCereal_W_Md';
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: visible;
+    max-width: none;
+  }
+`;
+
+export const ResponsiveH2 = styled(H2)`
+  @media ${device.lg} {
+    font-size: 2.625rem;
     font-family: 'AirbnbCereal_W_Md';
     font-weight: 500;
   }
@@ -70,6 +84,14 @@ export const LoginPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media ${device.lg} {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    height: 100%;
+    gap: 0;
+  }
 }
 `;
 
@@ -154,14 +176,6 @@ export const LoginLeftDivText = styled.p`
   margin-top: 166px;
 `;
 
-export const ResponsiveH2 = styled(H2)`
-  @media ${device.lg} {
-    font-size: 64px;
-    font-family: 'AirbnbCereal_W_Md';
-    font-weight: 500;
-  }
-`;
-
 export const ResponsiveP3 = styled(P3)`
   @media ${device.lg} {
     font-family: 'AirbnbCereal_W_Bk';
@@ -177,15 +191,13 @@ export const ResponsiveP3Lexend = styled(P3)`
 
 export const ResponsiveTextInput = styled(TextInput)`
   @media ${device.lg} {
-    font-size: 18px !important;
+    font-size: 1.125rem !important;
   }
 `;
 
 export const BigButtonText = styled(P3)`
   @media ${device.lg} {
-    font-size: 18px;
-    width: 100vw;
-    height: 100vh;
+    font-size: 1.125rem;
   }
 `;
 
@@ -196,7 +208,18 @@ export const AuthContentContainer = styled.div`
     width: 58.39vw;
     padding-left: 11rem;
     padding-right: 14rem;
-    padding-top: 7rem;
+    padding-top: 6rem;
+    padding-bottom: 7rem;
     overflow-y: auto;
+  }
+`;
+
+export const DesktopOnlyResetPassSubtitle = styled(GrayP3)`
+  display: none;
+
+  @media ${device.lg} {
+    display: block;
+    margin-top: 0.75rem;
+    margin-bottom: 4.5rem;
   }
 `;

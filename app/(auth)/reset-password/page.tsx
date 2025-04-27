@@ -13,6 +13,7 @@ import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import {
   AuthContentContainer,
+  DesktopOnlyResetPassSubtitle,
   GreenH2,
   ResponsiveAuthSplitLayout,
   SolidGreenDiv,
@@ -100,6 +101,9 @@ export default function ResetPassword() {
       <AuthContentContainer>
         <StyledForm>
           <GreenH2>Set new password</GreenH2>
+          <DesktopOnlyResetPassSubtitle>
+            Enter a new password
+          </DesktopOnlyResetPassSubtitle>
           <Flex $direction="column" $gap="1.5rem">
             <div>
               {/* Password input*/}
