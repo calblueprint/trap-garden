@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   getAllPlants,
   getMatchingPlantForUserPlant,
@@ -76,6 +76,20 @@ export default function Page() {
   const router = useRouter();
   const { profileData, profileReady, setPlantsToAdd } = useProfile();
   const { userId, loading: authLoading } = useAuth();
+
+  const searchParams = useSearchParams();
+  const viewParam = searchParams.get('view');
+
+  useEffect(() => {
+    if (viewParam === 'all' || viewParam === 'myPlants') {
+      setViewingOption(viewParam);
+    }
+  }, [viewParam]);
+
+  const handleMyGardenOrAllView = (option: 'myPlants' | 'all') => {
+    setViewingOption(option);
+    router.push(`?view=${option}`);
+  };
 
   const [viewingOption, setViewingOption] = useState<'myPlants' | 'all'>(
     'myPlants',
@@ -196,7 +210,7 @@ export default function Page() {
         setSelectedPlants([...selectedPlants, plant]);
       }
     } else {
-      router.push(`${CONFIG.generalPlant}/${plant.id}`);
+      router.push(`${CONFIG.generalPlant}/${plant.id}?view=${viewingOption}`);
     }
   }
   function handleAddPlants() {
@@ -245,13 +259,13 @@ export default function Page() {
           <ViewSelection>
             <HeaderButton
               $isCurrentMode={viewingOption !== 'all'}
-              onClick={() => setViewingOption('myPlants')}
+              onClick={() => handleMyGardenOrAllView('myPlants')}
             >
               My Garden
             </HeaderButton>
             <HeaderButton
               $isCurrentMode={viewingOption === 'all'}
-              onClick={() => setViewingOption('all')}
+              onClick={() => handleMyGardenOrAllView('all')}
             >
               All
             </HeaderButton>
