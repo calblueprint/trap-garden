@@ -10,6 +10,7 @@ import supabase from '@/api/supabase/createClient';
 import { Button } from '@/components/Buttons';
 import CustomSelect from '@/components/CustomSelect';
 import GardenSetupGuide from '@/components/GardenSetupGuide';
+import Icon from '@/components/Icon';
 import ProgressBar from '@/components/ProgressBar';
 import RadioGroup from '@/components/RadioGroup';
 import CONFIG from '@/lib/configs';
@@ -31,6 +32,7 @@ import {
   InputWrapper,
   OnboardingContainer,
   PDFButtonsContainer,
+  PdfContainer,
   PDFPageWrapper,
   QuestionDiv,
   StyledInput,
@@ -101,70 +103,80 @@ function PdfScreen({
           >
             Learn how to setup a {userTypes[selectedGardenType].label} Garden
           </H3>
+
           <Document
             file={pdfUrl}
             onLoadSuccess={({ numPages }) => setNumPages(numPages)}
           >
-            <PDFPageWrapper>
-              <Page
-                pageNumber={currentPage}
-                width={containerWidth}
-                renderTextLayer={true}
-              />
-              <PDFButtonsContainer style={{ width: containerWidth }}>
-                <Button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  style={
-                    currentPage === 1
-                      ? {
-                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
-                          color: 'white',
-                          borderColor: 'rgba(120, 120, 120, 0.5)',
-                        }
-                      : {
-                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
-                          color: 'white',
-                          borderColor: 'rgba(200, 200, 200, 0.6)',
-                        }
-                  }
-                >
-                  Previous
-                </Button>
-                <Button
-                  onClick={() =>
-                    setCurrentPage(prev => Math.min(prev + 1, numPages || 1))
-                  }
-                  disabled={currentPage === numPages}
-                  style={
-                    currentPage === numPages
-                      ? {
-                          backgroundColor: 'rgba(120, 120, 120, 0.5)', // darker gray with 50% opacity
-                          color: 'white',
-                          borderColor: 'rgba(120, 120, 120, 0.5)',
-                        }
-                      : {
-                          backgroundColor: 'rgba(200, 200, 200, 0.6)', // light gray with 60% opacity
-                          color: 'white',
-                          borderColor: 'rgba(200, 200, 200, 0.6)',
-                        }
-                  }
-                >
-                  Next
-                </Button>
-              </PDFButtonsContainer>
-            </PDFPageWrapper>
+            <PdfContainer>
+              <Flex
+                $direction="row"
+                $gap="10px"
+                $align="center"
+                style={{ marginBottom: '20px' }}
+              >
+                <Icon type="pdf" />
+                <P3>
+                  {userTypes[selectedGardenType].label} Garden How-to guide
+                </P3>
+              </Flex>
+              <PDFPageWrapper>
+                <Page
+                  pageNumber={currentPage}
+                  width={containerWidth}
+                  renderTextLayer={true}
+                />
+                <PDFButtonsContainer>
+                  <button
+                    onClick={() => {
+                      if (currentPage > 1)
+                        setCurrentPage(prev => Math.max(prev - 1, 1));
+                    }}
+                    style={{
+                      all: 'unset',
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: currentPage > 1 ? 'pointer' : 'default',
+                    }}
+                  >
+                    <Icon type="forwardCarrot" />
+                  </button>
+                  <P3>
+                    {' '}
+                    {currentPage} of {numPages}
+                  </P3>
+                  <button
+                    onClick={() => {
+                      if (currentPage < (numPages || 1))
+                        setCurrentPage(prev =>
+                          Math.min(prev + 1, numPages || 1),
+                        );
+                    }}
+                    style={{
+                      all: 'unset',
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: currentPage > 1 ? 'pointer' : 'default',
+                    }}
+                  >
+                    <Icon type="backCarrot" />
+                  </button>
+                </PDFButtonsContainer>
+              </PDFPageWrapper>
+            </PdfContainer>
           </Document>
         </Flex>
-        <ButtonDiv style={{ bottom: '80px' }}>
-          <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
-            Back
-          </Button>
-          <Button onClick={onNext} $primaryColor={COLORS.shrub}>
-            Next
-          </Button>
-        </ButtonDiv>
       </OnboardingContainer>
+      <ButtonDiv
+        style={{ position: 'relative', gap: '30px', justifyContent: 'center' }}
+      >
+        <Button onClick={onBack} $secondaryColor={COLORS.shrub}>
+          Back
+        </Button>
+        <Button onClick={onNext} $primaryColor={COLORS.shrub}>
+          Next
+        </Button>
+      </ButtonDiv>
     </>
   );
 }

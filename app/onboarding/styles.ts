@@ -40,6 +40,7 @@ export const ButtonDiv = styled.div`
   display: flex;
   width: 100%;
   bottom: 100px;
+  z-index: 10;
   position: absolute;
   justify-content: space-between;
   &:has(:only-child) {
@@ -61,26 +62,14 @@ export const PDFButtonsContainer = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-  gap: 4px;
-  background: transparent;
+  gap: 10px;
+  background: white;
+  border-radius: 5px;
+  height: 27px;
   z-index: 10;
-  padding: 2px 6px;
-  border-radius: 4px;
-  bottom: 0;
+  top: 0;
   margin-top: 8px;
-  width: 100%; /* ✅ restrict to width of PDF wrapper */
-
-  button {
-    font-size: clamp(8px, 2.5vw, 11px);
-    padding: clamp(2px, 0.4vw, 4px) clamp(6px, 1.5vw, 10px);
-    line-height: 1;
-  }
-
-  p {
-    font-size: clamp(8px, 2.5vw, 11px);
-    margin: 0 2px;
-    line-height: 1;
-  }
+  width: 84px; /* ✅ restrict to width of PDF wrapper */
 `;
 export const InputWrapper = styled.div`
   position: relative;
@@ -107,4 +96,12 @@ export const StyledInput = styled(P1).attrs({ as: 'input' })<{
     border-color: ${({ $error }) => ($error ? COLORS.errorRed : COLORS.shrub)};
     outline: none;
   }
+`;
+
+export const PdfContainer = styled.div`
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  border-radius: 5px;
+  border: 1px solid var(--light-grey, #ddd);
 `;
