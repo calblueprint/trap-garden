@@ -43,21 +43,21 @@ export const getDailyPlantTip = async (): Promise<PlantTip | null> => {
   return shuffledTips[dayInCycle];
 };
 
-export async function getPendingTasks(userId: string): Promise<UserPlant[]> {
-  const { data, error } = await supabase
-    .from('user_plants')
-    .select('*')
-    .eq('user_id', userId)
-    .is('date_removed', null)
-    .not('last_watered', 'is', null)
-    .not('last_weeded', 'is', null);
+// export async function getPendingTasks(userId: string): Promise<UserPlant[]> {
+//   const { data, error } = await supabase
+//     .from('user_plants')
+//     .select('*')
+//     .eq('user_id', userId)
+//     .is('date_removed', null)
+//     .not('last_watered', 'is', null)
+//     .not('last_weeded', 'is', null);
 
-  if (error) {
-    console.error('Error fetching user plants:', error);
-  }
+//   if (error) {
+//     console.error('Error fetching user plants:', error);
+//   }
 
-  return data ?? [];
-}
+//   return data ?? [];
+// }
 
 // export async function updateDate(
 //   id: string,
