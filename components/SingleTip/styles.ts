@@ -25,7 +25,7 @@ export const Card = styled.div`
   border-radius: 0.75rem;
   padding: 2rem;
   padding-bottom: 1.5rem;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
