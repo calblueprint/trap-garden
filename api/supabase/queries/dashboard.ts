@@ -1,4 +1,4 @@
-import { PlantTip, UserPlant } from '@/types/schema';
+import { PlantTip } from '@/types/schema';
 import supabase from '../createClient';
 
 //quick lil documentation drop:
