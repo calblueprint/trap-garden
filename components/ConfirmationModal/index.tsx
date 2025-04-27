@@ -13,16 +13,22 @@ interface ConfirmationModalProps {
   isOpen: boolean;
   title?: string;
   message?: string;
+  leftText?: string | 'Cancel';
+  rightText?: string | 'Exit';
   onCancel: () => void;
   onConfirm: () => void;
+  flipButtons?: boolean | false;
 }
 
 export default function ConfirmationModal({
   isOpen,
   title,
   message,
+  leftText,
+  rightText,
   onCancel,
   onConfirm,
+  flipButtons,
 }: ConfirmationModalProps) {
   if (!isOpen) return null;
 
@@ -32,8 +38,17 @@ export default function ConfirmationModal({
         <ModalTitle>{title}</ModalTitle>
         <ModalMessage>{message}</ModalMessage>
         <ButtonRow>
-          <CancelButton onClick={onCancel}>Cancel</CancelButton>
-          <ConfirmButton onClick={onConfirm}>Exit</ConfirmButton>
+          {flipButtons ? (
+            <>
+              <ConfirmButton onClick={onConfirm}>{rightText}</ConfirmButton>
+              <CancelButton onClick={onCancel}>{leftText}</CancelButton>{' '}
+            </>
+          ) : (
+            <>
+              <CancelButton onClick={onCancel}>{leftText}</CancelButton>
+              <ConfirmButton onClick={onConfirm}>{rightText}</ConfirmButton>
+            </>
+          )}
         </ButtonRow>
       </ModalContainer>
     </Overlay>

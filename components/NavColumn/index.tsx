@@ -61,6 +61,7 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const { profileData, profileReady } = useProfile();
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showOnboardConfirmModal, setShowOnboardConfirmModal] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
 
   const handleSignOut = async () => {
@@ -83,6 +84,16 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       }
       // For both navigation and sign out on /add-details, show confirmation.
       setShowConfirmModal(true);
+    } else if (currentPath === '/onboarding') {
+      e?.preventDefault();
+      if (action === 'navigate') {
+        const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
+          'href',
+        );
+        if (href) setPendingHref(href);
+      }
+      // For both navigation and sign out on /add-details, show confirmation.
+      setShowOnboardConfirmModal(true);
     } else {
       // If not on /add-details, perform the action immediately.
       if (action === 'signOut') {
@@ -102,12 +113,14 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       handleSignOut();
     }
     setShowConfirmModal(false);
+    setShowOnboardConfirmModal(false);
     setPendingHref(null);
     onClose();
   };
 
   const handleCancel = () => {
     setShowConfirmModal(false);
+    setShowOnboardConfirmModal(false);
     setPendingHref(null);
   };
 
@@ -231,6 +244,13 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       <ConfirmationModal
         isOpen={showConfirmModal}
         title="Exit Add Plant Details?"
+        message="You will lose all information entered for your plants"
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      />
+      <ConfirmationModal
+        isOpen={showOnboardConfirmModal}
+        title="Exit Onboarding?"
         message="You will lose all information entered for your plants"
         onCancel={handleCancel}
         onConfirm={handleConfirm}

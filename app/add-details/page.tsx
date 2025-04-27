@@ -3,9 +3,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
+import { getPlantById } from '@/api/supabase/queries/plants';
 import { insertTasks } from '@/api/supabase/queries/tasks';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
+import ConfirmationModal from '@/components/ConfirmationModal';
+import Icon from '@/components/Icon';
 import PlantDetails from '@/components/PlantDetails';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
@@ -13,10 +16,11 @@ import { Flex } from '@/styles/containers';
 import { H1, H3, H4, P1, P2 } from '@/styles/text';
 import { PlantingTypeEnum, SingleTask, UserPlant } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
-import { plantingTypeLabels } from '@/utils/helpers';
+import { formatListWithAnd, plantingTypeLabels } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   ButtonDiv,
+  DeleteButton,
   FooterButton,
   ReviewDetailsContainer,
   ReviewGrid,
@@ -34,23 +38,40 @@ function ReviewPlant({
   plantName,
   dateAdded,
   plantingType,
+  removeFunction,
 }: {
   plantName: string;
   dateAdded: string;
   plantingType: PlantingTypeEnum;
+  removeFunction: () => void;
 }) {
+  const [showReviewRow, setShowReviewRow] = useState(true);
   return (
-    <Flex $direction="column" $gap="8px" $mb="16px">
-      <H4 $fontWeight={500} $color={COLORS.shrub}>
-        {plantName}
-      </H4>
-      <ReviewGrid>
-        <P2 $fontWeight={500}>Date Planted</P2>
-        <P2>{formatDate(dateAdded)}</P2>
-        <P2 $fontWeight={500}>Planting Type</P2>
-        <P2>{plantingTypeLabels[plantingType]}</P2>
-      </ReviewGrid>
-    </Flex>
+    <>
+      {showReviewRow && (
+        <Flex $direction="row" $justify="between" $align="center">
+          <Flex $direction="column" $gap="8px" $mb="16px">
+            <H4 $fontWeight={500} $color={COLORS.shrub}>
+              {plantName}
+            </H4>
+            <ReviewGrid>
+              <P2 $fontWeight={500}>Date Planted</P2>
+              <P2>{formatDate(dateAdded)}</P2>
+              <P2 $fontWeight={500}>Planting Type</P2>
+              <P2>{plantingTypeLabels[plantingType]}</P2>
+            </ReviewGrid>
+          </Flex>
+          <DeleteButton
+            onClick={() => {
+              removeFunction();
+              setShowReviewRow(false);
+            }}
+          >
+            <Icon type="trashCan" />
+          </DeleteButton>
+        </Flex>
+      )}
+    </>
   );
 }
 
@@ -58,6 +79,9 @@ export default function Home() {
   const { profileData, profileReady, plantsToAdd } = useProfile();
   const { userId } = useAuth();
   const router = useRouter();
+  const [showConfModal, setShowConfModal] = useState(false);
+  const [duplicates, setDuplicates] = useState<string[]>([]);
+
   // TODO: address error: if you try to signout from this page
   // it directs to /view-plants instead of login
   useEffect(() => {
@@ -93,15 +117,16 @@ export default function Home() {
   }, [profileData, profileReady, router]);
 
   const [currentIndex, setCurrentIndex] = useState<number>(1);
+  const [pendingPlants, setPendingPlants] = useState(plantsToAdd);
   const [details, setDetails] = useState<Partial<UserPlant>[]>(
-    plantsToAdd.map(plant => ({ plant_id: plant.id })),
+    pendingPlants.map(plant => ({ plant_id: plant.id })),
   );
 
   //correctly gets current date without being affected by timezones, in YYYY-MM-DD format
   const getDefaultDate = () => dayjs().format('YYYY-MM-DD');
 
   function move(steps: number) {
-    if (currentIndex <= plantsToAdd.length) {
+    if (currentIndex <= pendingPlants.length) {
       const currentDetail = details[currentIndex - 1];
       if (!currentDetail || !currentDetail.date_added) {
         updateInput('date_added', getDefaultDate(), currentIndex - 1);
@@ -111,15 +136,15 @@ export default function Home() {
     if (
       steps !== 0 &&
       currentIndex + steps > 0 &&
-      currentIndex + steps <= plantsToAdd.length + 1
+      currentIndex + steps <= pendingPlants.length + 1
     ) {
       setCurrentIndex(prevIndex => prevIndex + steps);
     }
   }
 
   const disableNext =
-    currentIndex <= plantsToAdd.length &&
-    !details[currentIndex - 1].planting_type;
+    currentIndex <= pendingPlants.length &&
+    !details[currentIndex - 1]?.planting_type;
 
   function updateInput(field: string, value: string, index: number) {
     const updatedDetails = [...details];
@@ -133,67 +158,94 @@ export default function Home() {
     setDetails(updatedDetails);
   }
 
-  const handleSubmit = useCallback(async () => {
-    // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
-    // instead of doing userId!
-    if (!userId) return;
-    try {
-      const completedDetails: Omit<
-        UserPlant,
-        | 'id'
-        | 'date_removed'
-        | 'recent_harvest'
-        | 'num_harvested'
-        | 'user_notes'
-      >[] = details.map(detail => ({
-        user_id: userId,
-        plant_id: detail.plant_id!,
-        date_added: detail.date_added!,
-        planting_type: detail.planting_type!,
-        water_frequency: detail.water_frequency!,
-        weeding_frequency: detail.weeding_frequency!,
-        plant_name: detail.plant_name!,
-        date_added_to_db: getDefaultDate(),
-      }));
-      await insertUserPlants(completedDetails);
-      router.push('/view-plants');
-    } catch (error) {
-      console.error('Error inserting user plants:', error);
-    }
-    try {
-      const tasks: Omit<SingleTask, 'id' | 'date_removed'>[] = details.flatMap(
-        (d, i) => {
-          const base = {
+  const confirmClick = () => {
+    handleSubmit(true);
+    setShowConfModal(false);
+  };
+
+  const handleSubmit = useCallback(
+    async (confirm: boolean) => {
+      // TODO: elegantly handle not logged in case (e.g. when someonee clicks "Back")
+      // instead of doing userId!
+      if (!userId) return;
+      try {
+        const completedDetails: Omit<
+          UserPlant,
+          | 'id'
+          | 'date_removed'
+          | 'recent_harvest'
+          | 'num_harvested'
+          | 'user_notes'
+        >[] = details
+          .map(detail => ({
             user_id: userId,
-            plant_id: d.plant_id!,
-            plant_name: plantsToAdd[i].plant_name,
-            isCompleted: false,
-            previous_completed_date: getDefaultDate(),
-            completed_date: getDefaultDate(),
+            plant_id: detail.plant_id!,
+            date_added: detail.date_added!,
+            planting_type: detail.planting_type!,
+            water_frequency: detail.water_frequency!,
+            weeding_frequency: detail.weeding_frequency!,
+            plant_name: detail.plant_name!,
             date_added_to_db: getDefaultDate(),
-          };
+          }))
+          .filter(plant => plant != undefined);
+        const firstPress = await insertUserPlants(
+          completedDetails,
+          confirm,
+          userId,
+        );
+        if (!confirm) {
+          if (firstPress!.length != 0) {
+            const plantNames = await Promise.all(
+              firstPress!.map(async dup => {
+                const plant = await getPlantById(dup.plant_id);
+                return plant?.plant_name;
+              }),
+            );
+            setDuplicates(plantNames);
+            setShowConfModal(true);
+          } else {
+            await insertUserPlants(completedDetails, !confirm, userId);
+          }
+        }
+        router.push('/view-plants');
+      } catch (error) {
+        console.error('Error inserting user plants:', error);
+      }
+      try {
+        const tasks: Omit<SingleTask, 'id' | 'date_removed'>[] =
+          details.flatMap((d, i) => {
+            const base = {
+              user_id: userId,
+              plant_id: d.plant_id!,
+              plant_name: plantsToAdd[i].plant_name,
+              isCompleted: false,
+              previous_completed_date: getDefaultDate(),
+              completed_date: getDefaultDate(),
+              date_added_to_db: getDefaultDate(),
+            };
 
-          const p = plantsToAdd[i]; // shortcut
+            const p = plantsToAdd[i]; // shortcut
 
-          return [
-            { ...base, type: 'water', frequency: p.water_frequency },
-            { ...base, type: 'weed', frequency: p.weeding_frequency },
-            { ...base, type: 'harvest', frequency: p.harvest_season },
-          ];
-        },
-      );
+            return [
+              { ...base, type: 'water', frequency: p.water_frequency },
+              { ...base, type: 'weed', frequency: p.weeding_frequency },
+              { ...base, type: 'harvest', frequency: p.harvest_season },
+            ];
+          });
 
-      await insertTasks(tasks);
-    } catch (error) {
-      console.error('Error inserting tasks:', error);
-    }
-  }, [details, router, userId, plantsToAdd]);
+        await insertTasks(tasks);
+      } catch (error) {
+        console.error('Error inserting tasks:', error);
+      }
+    },
+    [details, router, userId, plantsToAdd],
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key;
       if (key === 'Enter') {
-        handleSubmit();
+        handleSubmit(false);
       }
     };
 
@@ -204,19 +256,25 @@ export default function Home() {
     };
   }, [handleSubmit]);
 
+  useEffect(() => {
+    if (details.length == 0) {
+      router.push(CONFIG.viewPlants);
+    }
+  }, [details, router]);
+
   return (
     <>
-      {currentIndex !== plantsToAdd.length + 1 && (
+      {currentIndex !== pendingPlants.length + 1 && (
         <Flex $direction="column" $justify="between">
           <Flex $direction="column" $justify="start">
             <Flex $gap="16px" $direction="column" $textAlign="center">
               <H1 $color={COLORS.shrub}>Add Plant Details</H1>
               <P1 $color={COLORS.midgray}>
-                {currentIndex} / {plantsToAdd.length}
+                {currentIndex} / {pendingPlants.length}
               </P1>
             </Flex>
             <PlantDetails
-              plant={plantsToAdd[currentIndex - 1]}
+              plant={pendingPlants[currentIndex - 1]}
               date={details[currentIndex - 1].date_added ?? getDefaultDate()}
               plantingType={details[currentIndex - 1].planting_type ?? ''}
               onDateChange={date =>
@@ -246,7 +304,7 @@ export default function Home() {
           </FooterButton>
         </Flex>
       )}
-      {currentIndex === plantsToAdd.length + 1 && (
+      {currentIndex === pendingPlants.length + 1 && (
         <Flex
           $minH="full-screen"
           $direction="column"
@@ -266,10 +324,21 @@ export default function Home() {
             <ReviewDetailsContainer>
               {details.map((detail, index) => (
                 <ReviewPlant
-                  key={plantsToAdd[index].id}
-                  plantName={plantsToAdd[index].plant_name}
+                  key={pendingPlants[index].id}
+                  plantName={pendingPlants[index].plant_name}
                   plantingType={detail.planting_type!}
                   dateAdded={detail.date_added!}
+                  removeFunction={() => {
+                    const newDetails = [...details];
+                    const newPlants = [...pendingPlants];
+
+                    newDetails.splice(index, 1);
+                    newPlants.splice(index, 1);
+
+                    setDetails(newDetails);
+                    setPendingPlants(newPlants);
+                    setCurrentIndex(newDetails.length + 1);
+                  }}
                 />
               ))}
             </ReviewDetailsContainer>
@@ -278,7 +347,7 @@ export default function Home() {
                 Back
               </Button>
               <Button
-                onClick={handleSubmit}
+                onClick={() => handleSubmit(false)}
                 disabled={disableNext}
                 $primaryColor={COLORS.shrub}
                 $secondaryColor="white"
@@ -289,6 +358,16 @@ export default function Home() {
           </Flex>
         </Flex>
       )}
+      <ConfirmationModal
+        isOpen={showConfModal}
+        title="Add Duplicates?"
+        message={`${formatListWithAnd(duplicates)} ${duplicates.length === 1 ? 'is' : 'are'} already in your garden!`}
+        leftText="No"
+        rightText="Yes"
+        onCancel={() => setShowConfModal(false)}
+        onConfirm={confirmClick}
+        flipButtons={true}
+      />
     </>
   );
 }

@@ -36,3 +36,9 @@ export const ReviewGrid = styled.div`
   row-gap: 4px;
   grid-template-columns: auto 1fr;
 `;
+
+export const DeleteButton = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;

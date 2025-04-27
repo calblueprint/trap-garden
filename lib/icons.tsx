@@ -1117,5 +1117,34 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
+  trashCan: (
+    <svg
+      width="25"
+      height="25"
+      viewBox="0 0 25 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+    >
+      <rect width="25" height="25" fill="url(#pattern0_3322_12659)" />
+      <defs>
+        <pattern
+          id="pattern0_3322_12659"
+          patternContentUnits="objectBoundingBox"
+          width="1"
+          height="1"
+        >
+          <use xlinkHref="#image0_3322_12659" transform="scale(0.0111111)" />
+        </pattern>
+        <image
+          id="image0_3322_12659"
+          width="90"
+          height="90"
+          preserveAspectRatio="none"
+          xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAACw0lEQVR4nO2cT29MYRjFH382LHwB/2LPJygLlvgC6gtgpTZqI7FhTZXuy6YLFuybkDTXPadp+ATs2GhTIdFZvPJSiYwI4m3veR7PLznJZFYzv7mZe3POzDVLkiRJkiRJkmHouu4IgKma5eXlw/k5bAEkTwD4QLLU1McAJlJ2e9H9d8k/pEvRjQHweVx0fS5FN4Y/H81fk6K/HYUTJF+Q3PiVKIHU19a5/b6vVwUk1wVElj/MussrGQBXBOSVv8xlU4TkXgCzJNcEJJWtCIBVAHeXlpb2DCl6bmgR3L7MDSK5lLKT5CcBAWWb8rG+5xTNoKL/w6+O+zYU9QRBcqaeMARElK0IgPck7wx6MkySJEmSJNl+gvYda6YGyVcBr6FfmhoknwYU/cTUIHkvoOhZU4PktaHFsH2mTQ2S5wXElMaZNMUfuAiIKY1z3NQgeUhATGmZvu8PmhoLCwu7SI6GlsN2GS0uLu42RUi+ERBUWgTAa1OF5PNAop+ZKiQfBhL9wFQheSuQ6JumCslLQwtiu1w0VUieFRBUGuWMqULymICg0iJ93x81Vbqu2ze0IDZKfS+mTIQBAMCqqRNhAIBi4R9xAIBi4R9xAIBi4R90AJg2dYIMAJOmTi3LBUSVf4mLf2hFGAB6xcI/4AAwki38Iw0AUC78Iw0AUC78Iw0AUC78Iw0AUC78x6mluWPRF8wLtTR3LPq0ecHzANArF/6RBoBOvfCPMADAQ+EfYQCAh8I/wgAAD4V/hAEAHgr/cWp57lD0VfNGLc8dij5n3vA4AMBD4R9hAOg9FP4BBoCRm8Lf8wAAT4W/5wEAngr/cQDMOxI9b17xdNtMAFPmla7rDojfabdsZmNlZWW/eQbADQGRv8t1887mrTVnBGT+KrdLKTssCiRPkXwM4J2A3LcAHpE8ObSXJEmSJEmSJEmSJEkSc8gXlsypsDpEf64AAAAASUVORK5CYII="
+        />
+      </defs>
+    </svg>
+  ),
 };
 export type IconType = keyof typeof IconSvgs;
