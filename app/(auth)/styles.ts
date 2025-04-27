@@ -89,7 +89,7 @@ export const LoginPageContainer = styled.div`
     flex-direction: row;
     align-items: stretch;
     justify-content: flex-start;
-    height: 100%;
+    min-height: 100vh;
     gap: 0;
   }
 }
@@ -102,7 +102,7 @@ export const SolidGreenDiv = styled.div`
     display: block;
     background-color: ${COLORS.shrub};
     width: 41.61vw;
-    height: calc(100vh - 60px);
+    min-height: 100%;
   }
 `;
 
@@ -114,7 +114,7 @@ export const ResponsiveAuthSplitLayout = styled.div`
     flex-direction: row;
     align-items: stretch;
     justify-content: flex-start;
-    height: 100%;
+    min-height: 100vh;
     gap: 0;
   }
 `;
@@ -164,7 +164,7 @@ export const LoginLeftDiv = styled.div`
     flex-direction: column;
     background-color: ${COLORS.shrub};
     width: 41.61vw;
-    height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
   }
 `;
 
@@ -211,6 +211,7 @@ export const AuthContentContainer = styled.div`
     padding-top: 6rem;
     padding-bottom: 7rem;
     overflow-y: auto;
+    height: 100%;
   }
 `;
 
