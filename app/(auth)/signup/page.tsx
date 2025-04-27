@@ -35,6 +35,8 @@ export default function SignUp() {
     useState<boolean>(false);
   const [signupError, setSignupError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [signupButtonText, setSignupButtonText] = useState('Sign Up');
+  const [isSignupButtonDisabled, setIsSignupButtonDisabled] = useState(false);
 
   const router = useRouter();
   const passwordsMatch = password === confirmPassword;
@@ -73,9 +75,13 @@ export default function SignUp() {
     }
 
     try {
+      setSignupButtonText('Loading...');
+      setIsSignupButtonDisabled(true);
       const result = await signUp(email, password);
       if (result.error) {
         setSignupError(result.error.message);
+        setSignupButtonText('Sign Up');
+        setIsSignupButtonDisabled(false);
       } else {
         // Handle successful sign-up (e.g., navigate to another page)
         setSignupError('');
@@ -84,6 +90,8 @@ export default function SignUp() {
     } catch (error) {
       console.error('Sign up failed:', error);
       alert('There was an error during sign up. Please try again.');
+      setSignupButtonText('Sign Up');
+      setIsSignupButtonDisabled(false);
     }
   }, [email, password, router, signUp]);
 
@@ -200,9 +208,9 @@ export default function SignUp() {
               type="button"
               onClick={handleSignUp}
               $primaryColor={COLORS.shrub}
-              disabled={!canSubmitForm}
+              disabled={!canSubmitForm || isSignupButtonDisabled}
             >
-              <BigButtonText $color="white">Sign Up</BigButtonText>
+              <BigButtonText $color="white">{signupButtonText}</BigButtonText>
             </BigButton>
           </div>
         </StyledForm>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   getAllPlants,
@@ -8,6 +8,7 @@ import {
 } from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
 import { Button, SmallButton } from '@/components/Buttons';
+import Loader from '@/components/CircularLoader/loader';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
@@ -66,6 +67,7 @@ const growingSeasonOptions: DropdownOption<SeasonEnum>[] = [
 
 export default function Page() {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const { profileData, profileReady, setPlantsToAdd } = useProfile();
   const { userId, loading: authLoading } = useAuth();
 
@@ -172,7 +174,9 @@ export default function Page() {
 
   // Handle Button Clicks
   function handleUserPlantCardClick(ownedPlant: OwnedPlant) {
-    router.push(`${CONFIG.userPlant}/${ownedPlant.userPlantId}`);
+    startTransition(() => {
+      router.push(`${CONFIG.userPlant}/${ownedPlant.userPlantId}`);
+    });
   }
 
   function handlePlantCardClick(plant: Plant) {
@@ -183,12 +187,16 @@ export default function Page() {
         setSelectedPlants([...selectedPlants, plant]);
       }
     } else {
-      router.push(`${CONFIG.generalPlant}/${plant.id}`);
+      startTransition(() => {
+        router.push(`${CONFIG.generalPlant}/${plant.id}`);
+      });
     }
   }
   function handleAddPlants() {
     setPlantsToAdd(selectedPlants);
-    router.push('/add-details');
+    startTransition(() => {
+      router.push('/add-details');
+    });
   }
 
   function handleCancelAddMode() {
@@ -419,66 +427,75 @@ export default function Page() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
-      <TopRowContainer>
-        <Flex $direction="row" $gap="10px" $align="center">
-          <H1 $color={COLORS.shrub} $fontWeight={500}>
-            View Plants
-          </H1>
-          <div style={{ position: 'relative' }}>
-            <InfoButton
-              onClick={() => setIsCardKeyOpen(!isCardKeyOpen)}
-              ref={infoButtonRef}
-            >
-              <Icon type="info" />
-            </InfoButton>
-            {isCardKeyOpen && (
-              <div ref={cardKeyRef}>
-                <PlantCardKey />
+      {!profileAndAuthReady || isPending ? (
+        <Loader />
+      ) : (
+        <>
+          <TopRowContainer>
+            <Flex $direction="row" $gap="10px" $align="center">
+              <H1 $color={COLORS.shrub} $fontWeight={500}>
+                View Plants
+              </H1>
+              <div style={{ position: 'relative' }}>
+                <InfoButton
+                  onClick={() => setIsCardKeyOpen(!isCardKeyOpen)}
+                  ref={infoButtonRef}
+                >
+                  <Icon type="info" />
+                </InfoButton>
+                {isCardKeyOpen && (
+                  <div ref={cardKeyRef}>
+                    <PlantCardKey />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </Flex>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <FilterContainer>
-          <FilterDropdownMultiple
-            value={selectedDifficulty}
-            setStateAction={setSelectedDifficulty}
-            options={difficultyOptions}
-            placeholder="Difficulty Level"
-          />
-          <FilterDropdownMultiple
-            value={selectedSunlight}
-            setStateAction={setSelectedSunlight}
-            options={sunlightOptions}
-            placeholder="Sunlight"
-          />
-          <FilterDropdownMultiple
-            value={selectedGrowingSeason}
-            setStateAction={setSelectedGrowingSeason}
-            options={growingSeasonOptions}
-            placeholder="Growing Season"
-          />
+            </Flex>
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <FilterContainer>
+              <FilterDropdownMultiple
+                value={selectedDifficulty}
+                setStateAction={setSelectedDifficulty}
+                options={difficultyOptions}
+                placeholder="Difficulty Level"
+              />
+              <FilterDropdownMultiple
+                value={selectedSunlight}
+                setStateAction={setSelectedSunlight}
+                options={sunlightOptions}
+                placeholder="Sunlight"
+              />
+              <FilterDropdownMultiple
+                value={selectedGrowingSeason}
+                setStateAction={setSelectedGrowingSeason}
+                options={growingSeasonOptions}
+                placeholder="Growing Season"
+              />
 
-          <SmallButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
-            Clear Filters
-          </SmallButton>
-        </FilterContainer>
-      </TopRowContainer>
-      <Box $h="24px">
-        {viewingOption === 'all' && inAddMode ? (
-          <NumberSelectedPlantsContainer>
-            <NumberSelectedPlants>
-              {selectedPlants.length
-                ? `${selectedPlants.length} ${plantPluralityString} Selected`
-                : 'Select Plants'}
-            </NumberSelectedPlants>
-          </NumberSelectedPlantsContainer>
-        ) : null}
-      </Box>
-      <Box $px="24px" $pb="32px">
-        {/* Plant Cards and Body */}
-        {!profileAndAuthReady ? <>Loading</> : <MainBody />}
-      </Box>
+              <SmallButton
+                $secondaryColor={COLORS.shrub}
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </SmallButton>
+            </FilterContainer>
+          </TopRowContainer>
+          <Box $h="24px">
+            {viewingOption === 'all' && inAddMode ? (
+              <NumberSelectedPlantsContainer>
+                <NumberSelectedPlants>
+                  {selectedPlants.length
+                    ? `${selectedPlants.length} ${plantPluralityString} Selected`
+                    : 'Select Plants'}
+                </NumberSelectedPlants>
+              </NumberSelectedPlantsContainer>
+            ) : null}
+          </Box>
+          <Box $px="24px" $pb="32px">
+            {/* Plant Cards and Body */}
+            {!profileAndAuthReady ? null : <MainBody />}
+          </Box>
+        </>
+      )}
     </div>
   );
 }
