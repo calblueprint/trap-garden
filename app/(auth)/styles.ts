@@ -20,10 +20,23 @@ export const BackButton = styled.button`
   font-size: 1.125rem;
   cursor: pointer;
   padding: 0;
+
+  @media ${device.lg} {
+    display: none;
+  }
 `;
 
 export const GrayP3 = styled(P3)`
   color: ${COLORS.midgray};
+
+  @media ${device.lg} {
+    font-size: 1.25rem; 
+    font-family: 'AirbnbCereal_W_Bk';
+    font-weight: 400;
+    margin-bottom: 72px;
+    white-space: nowrap;
+    overflow: visible;
+    max-width: none;
 `;
 
 export const ResetLinkButton = styled(StyledLinkButton)`
@@ -39,10 +52,32 @@ export const ColumnFlexContainer = styled.div`
 export const GreenH2 = styled(H2)`
   color: ${COLORS.shrub};
   margin-bottom: 8px;
+
+  @media ${device.lg} {
+    font-size: 2.625rem;
+    font-family: 'AirbnbCereal_W_Md';
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: visible;
+    max-width: none;
+  }
+`;
+
+export const ResponsiveH2 = styled(H2)`
+  @media ${device.lg} {
+    font-size: 2.625rem;
+    font-family: 'AirbnbCereal_W_Md';
+    font-weight: 500;
+  }
 `;
 
 export const RedP3 = styled(P3)`
   color: ${COLORS.errorRed};
+
+  @media ${device.lg} {
+    font-family: 'AirbnbCereal_W_Bk';
+    font-size: 14px;
+  }
 `;
 
 export const LoginPageContainer = styled.div`
@@ -54,7 +89,32 @@ export const LoginPageContainer = styled.div`
     flex-direction: row;
     align-items: stretch;
     justify-content: flex-start;
-    height: 100%;
+    min-height: 100vh;
+    gap: 0;
+  }
+}
+`;
+
+export const SolidGreenDiv = styled.div`
+  display: none;
+
+  @media ${device.lg} {
+    display: block;
+    background-color: ${COLORS.shrub};
+    width: 41.61vw;
+    min-height: 100%;
+  }
+`;
+
+export const ResponsiveAuthSplitLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media ${device.lg} {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    min-height: 100vh;
     gap: 0;
   }
 `;
@@ -104,7 +164,7 @@ export const LoginLeftDiv = styled.div`
     flex-direction: column;
     background-color: ${COLORS.shrub};
     width: 41.61vw;
-    height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
   }
 `;
 
@@ -114,14 +174,6 @@ export const LoginLeftDivText = styled.p`
   font-weight: 500;
   margin-left: 52px;
   margin-top: 166px;
-`;
-
-export const ResponsiveH2 = styled(H2)`
-  @media ${device.lg} {
-    font-size: 64px;
-    font-family: 'AirbnbCereal_W_Md';
-    font-weight: 500;
-  }
 `;
 
 export const ResponsiveP3 = styled(P3)`
@@ -139,12 +191,36 @@ export const ResponsiveP3Lexend = styled(P3)`
 
 export const ResponsiveTextInput = styled(TextInput)`
   @media ${device.lg} {
-    font-size: 18px !important;
+    font-size: 1.125rem !important;
   }
 `;
 
 export const BigButtonText = styled(P3)`
   @media ${device.lg} {
-    font-size: 18px;
+    font-size: 1.125rem;
+  }
+`;
+
+export const AuthContentContainer = styled.div`
+  width: 100%;
+
+  @media ${device.lg} {
+    width: 58.39vw;
+    padding-left: 11rem;
+    padding-right: 14rem;
+    padding-top: 6rem;
+    padding-bottom: 7rem;
+    overflow-y: auto;
+    height: 100%;
+  }
+`;
+
+export const DesktopOnlyResetPassSubtitle = styled(GrayP3)`
+  display: none;
+
+  @media ${device.lg} {
+    display: block;
+    margin-top: 0.75rem;
+    margin-bottom: 4.5rem;
   }
 `;
