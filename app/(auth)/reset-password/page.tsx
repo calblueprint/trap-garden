@@ -31,14 +31,21 @@ export default function ResetPassword() {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [verifyNewPasswordError, setVerifyNewPasswordError] =
     useState<string>('');
+  const [resetButtonText, setResetButtonText] = useState('Send');
+  const [isResetButtonDisabled, setIsResetButtonDisabled] = useState(false);
+
   const router = useRouter();
   const passwordsMatch = password === confirmPassword;
   const canSubmitForm = password && passwordsMatch && isPasswordComplexityMet;
 
   const handleNewPassword = async () => {
+    setResetButtonText('Sending...');
+    setIsResetButtonDisabled(true);
     const { data: user } = await supabase.auth.getUser();
     if (!user) {
       setVerifyNewPasswordError('User not authenticated.');
+      setResetButtonText('Send');
+      setIsResetButtonDisabled(false);
       return;
     }
 
@@ -49,12 +56,16 @@ export default function ResetPassword() {
     if (error) {
       console.error('Supabase RPC Error:', error.message);
       setVerifyNewPasswordError('Error verifying password.');
+      setResetButtonText('Send');
+      setIsResetButtonDisabled(false);
       return;
     }
 
     if (data) {
       setVerifyNewPasswordError('Password has been used before');
       setIsSubmitted(true);
+      setResetButtonText('Send');
+      setIsResetButtonDisabled(false);
       return;
     }
 
@@ -64,6 +75,8 @@ export default function ResetPassword() {
 
       if (error) {
         console.error('Something went wrong. Please try again later.');
+        setResetButtonText('Send');
+        setIsResetButtonDisabled(false);
         return;
       }
 
@@ -82,6 +95,8 @@ export default function ResetPassword() {
       console.error(
         err instanceof Error ? err.message : 'Unexpected error occurred.',
       );
+      setResetButtonText('Send');
+      setIsResetButtonDisabled(false);
     }
   };
 
@@ -147,25 +162,25 @@ export default function ResetPassword() {
                   )}
                 </>
               )}
-            </div>
-            {isSubmitted && confirmPassword && verifyNewPasswordError && (
-              <NewPasswordRequirement
-                met={!verifyNewPasswordError}
-                text={verifyNewPasswordError}
-              />
-            )}
-            {/* Sign up button */}
-            <BigButton
-              type="button"
-              onClick={handleNewPassword}
-              $primaryColor={COLORS.shrub}
-              disabled={!canSubmitForm}
-            >
-              Reset Password
-            </BigButton>
-          </Flex>
-        </StyledForm>
-      </AuthContentContainer>
-    </ResponsiveAuthSplitLayout>
+            </>
+          )}
+        </div>
+        {isSubmitted && confirmPassword && verifyNewPasswordError && (
+          <NewPasswordRequirement
+            met={!verifyNewPasswordError}
+            text={verifyNewPasswordError}
+          />
+        )}
+        {/* Sign up button */}
+        <BigButton
+          type="button"
+          onClick={handleNewPassword}
+          $primaryColor={COLORS.shrub}
+          disabled={!canSubmitForm || isResetButtonDisabled}
+        >
+          {resetButtonText}
+        </BigButton>
+      </Flex>
+    </StyledForm>
   );
 }
