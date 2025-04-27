@@ -366,11 +366,6 @@ export default function Page() {
   //   task => task.completed,
   // ).length;
 
-  useEffect(() => {
-    console.log('Pending tasks:', pendingTasks);
-    console.log('Filtered tasks:', filteredTasks);
-  }, [pendingTasks, filteredTasks]);
-
   return (
     <div>
       {authLoading || !userId ? (
