@@ -400,6 +400,42 @@ export default function OnboardingFlow() {
   );
   const { push } = useRouter();
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  });
+  useEffect(() => {
+    // Only push once
+    window.history.pushState(null, '', window.location.href);
+
+    const handlePopState = () => {
+      const confirmLeave = window.confirm(
+        'You have unsaved changes. Are you sure you want to leave?',
+      );
+
+      if (confirmLeave) {
+        // Unbind listener and go back
+        window.removeEventListener('popstate', handlePopState);
+        window.history.back();
+        window.history.back(); // will leave the page
+      } else {
+        // Re-push to reset state, keep user on the page
+        window.history.pushState(null, '', window.location.href);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  });
+
   // If user not logged in, re-route to /login
   useEffect(() => {
     if (!authLoading && !userId) push('/login');

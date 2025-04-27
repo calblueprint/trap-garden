@@ -28,11 +28,17 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
   const { userId, loading: authLoading } = useAuth();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
+  const [confDetails, setConfDetails] = useState<string[]>([]);
 
   const safeOnClose = (
     e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
   ) => {
-    if (currentPath === '/add-details') {
+    if (currentPath === '/add-details' || currentPath === '/onboarding') {
+      if (currentPath === '/add-details') {
+        setConfDetails(['Add Plant Details', 'plants']);
+      } else {
+        setConfDetails(['Onboarding', 'garden']);
+      }
       e?.preventDefault();
       const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
         'href',
@@ -112,8 +118,8 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
       <AuthOrProfileButtons />
       <ConfirmationModal
         isOpen={showConfirmModal}
-        title="Exit Add Plant Details?"
-        message="You will lose all information entered for your plants"
+        title={`Exit ${confDetails[0]}?`}
+        message={`You will lose all information entered for your ${confDetails[1]}!`}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
       />
