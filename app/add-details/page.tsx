@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
-import { insertTasks } from '@/api/supabase/queries/tasks';
 import { getPlantById } from '@/api/supabase/queries/plants';
+import { insertTasks } from '@/api/supabase/queries/tasks';
 import { insertUserPlants } from '@/api/supabase/queries/userPlants';
 import { Button } from '@/components/Buttons';
 import ConfirmationModal from '@/components/ConfirmationModal';
@@ -172,20 +172,22 @@ export default function Home() {
         const completedDetails: Omit<
           UserPlant,
           | 'id'
-        | 'date_removed'
-        | 'recent_harvest'
-        | 'num_harvested'
+          | 'date_removed'
+          | 'recent_harvest'
+          | 'num_harvested'
           | 'user_notes'
-      >[] = details.map(detail => ({
-          user_id: userId,
-          plant_id: detail.plant_id!,
-          date_added: detail.date_added!,
-          planting_type: detail.planting_type!,
-          water_frequency: detail.water_frequency!,
-        weeding_frequency: detail.weeding_frequency!,
-        plant_name: detail.plant_name!,
-        date_added_to_db: getDefaultDate(),
-      })).filter(plant => plant != undefined);
+        >[] = details
+          .map(detail => ({
+            user_id: userId,
+            plant_id: detail.plant_id!,
+            date_added: detail.date_added!,
+            planting_type: detail.planting_type!,
+            water_frequency: detail.water_frequency!,
+            weeding_frequency: detail.weeding_frequency!,
+            plant_name: detail.plant_name!,
+            date_added_to_db: getDefaultDate(),
+          }))
+          .filter(plant => plant != undefined);
         const firstPress = await insertUserPlants(
           completedDetails,
           confirm,
@@ -210,33 +212,32 @@ export default function Home() {
         console.error('Error inserting user plants:', error);
       }
       try {
-      const tasks: Omit<SingleTask, 'id' | 'date_removed'>[] = details.flatMap(
-        (d, i) => {
-          const base = {
-            user_id: userId,
-            plant_id: d.plant_id!,
-            plant_name: plantsToAdd[i].plant_name,
-            isCompleted: false,
-            previous_completed_date: getDefaultDate(),
-            completed_date: getDefaultDate(),
-            date_added_to_db: getDefaultDate(),
-          };
+        const tasks: Omit<SingleTask, 'id' | 'date_removed'>[] =
+          details.flatMap((d, i) => {
+            const base = {
+              user_id: userId,
+              plant_id: d.plant_id!,
+              plant_name: plantsToAdd[i].plant_name,
+              isCompleted: false,
+              previous_completed_date: getDefaultDate(),
+              completed_date: getDefaultDate(),
+              date_added_to_db: getDefaultDate(),
+            };
 
-          const p = plantsToAdd[i]; // shortcut
+            const p = plantsToAdd[i]; // shortcut
 
-          return [
-            { ...base, type: 'water', frequency: p.water_frequency },
-            { ...base, type: 'weed', frequency: p.weeding_frequency },
-            { ...base, type: 'harvest', frequency: p.harvest_season },
-          ];
-        },
-      );
+            return [
+              { ...base, type: 'water', frequency: p.water_frequency },
+              { ...base, type: 'weed', frequency: p.weeding_frequency },
+              { ...base, type: 'harvest', frequency: p.harvest_season },
+            ];
+          });
 
-      await insertTasks(tasks);
-    } catch (error) {
-      console.error('Error inserting tasks:', error);
-    }
-  },
+        await insertTasks(tasks);
+      } catch (error) {
+        console.error('Error inserting tasks:', error);
+      }
+    },
     [details, router, userId, plantsToAdd],
   );
 
