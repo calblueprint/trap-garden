@@ -110,7 +110,10 @@ export default function Page() {
               plant_name: task.plant_name,
               completed: false,
               id: task.id,
-              due_date: computeDueDate(new Date(task.completed_date), interval),
+              due_date: computeDueDate(
+                new Date(task.completed_date),
+                interval + 1,
+              ),
               previousDate: new Date(task.completed_date),
               user_id: task.user_id,
               plant_id: task.plant_id,
@@ -127,7 +130,7 @@ export default function Page() {
               id: task.id,
               due_date: computeDueDate(
                 new Date(task.previous_completed_date),
-                interval,
+                interval + 1,
               ),
               previousDate: new Date(task.previous_completed_date),
               user_id: task.user_id,
@@ -144,7 +147,10 @@ export default function Page() {
             plant_name: task.plant_name,
             completed: false,
             id: task.id,
-            due_date: computeDueDate(new Date(task.completed_date), interval),
+            due_date: computeDueDate(
+              new Date(task.completed_date),
+              interval + 1,
+            ),
             previousDate: new Date(task.completed_date),
             user_id: task.user_id,
             plant_id: task.plant_id,
@@ -359,6 +365,11 @@ export default function Page() {
   // const completedTasksCount = pendingTasks.filter(
   //   task => task.completed,
   // ).length;
+
+  useEffect(() => {
+    console.log('Pending tasks:', pendingTasks);
+    console.log('Filtered tasks:', filteredTasks);
+  }, [pendingTasks, filteredTasks]);
 
   return (
     <div>

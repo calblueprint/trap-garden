@@ -1,5 +1,8 @@
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
 import { mapMonthToSeason } from './helpers';
+
+dayjs.extend(timezone);
 
 export function isOlderThanFreqeuncyOrNull(
   date: string | null,
@@ -91,14 +94,26 @@ export function computeDueDate(
   lastTaskDate: Date | null,
   interval: number,
 ): Date {
-  const candidateDueDate = new Date();
+  // const candidateDueDate = new Date();
+  // console.log('lastTaskDate', lastTaskDate);
+  // console.log('interval', interval);
+  // if (lastTaskDate) {
+  //   // candidateDueDate = new Date(lastTaskDate);
+  //   const dayJsDueDate = dayjs(lastTaskDate).utc().toDate();
+  //   candidateDueDate.setDate(dayJsDueDate.getDate() + interval);
+  // } else {
+  //   const dayJsDueDate = dayjs().utc().toDate();
+  //   candidateDueDate.setDate(dayJsDueDate.getDate() + interval);
+  // }
+  // console.log('computeDueDate', candidateDueDate);
+  let candidateDueDate: Date;
   if (lastTaskDate) {
-    // candidateDueDate = new Date(lastTaskDate);
-    const dayJsDueDate = dayjs(lastTaskDate).utc();
-    candidateDueDate.setDate(dayJsDueDate.date() + interval);
+    candidateDueDate = new Date(lastTaskDate);
+    candidateDueDate.setDate(candidateDueDate.getDate() + interval);
   } else {
-    const dayJsDueDate = dayjs().utc();
-    candidateDueDate.setDate(dayJsDueDate.date() + interval);
+    candidateDueDate = new Date();
+    candidateDueDate.setDate(candidateDueDate.getDate() + interval);
   }
+
   return candidateDueDate;
 }
