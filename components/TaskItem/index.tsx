@@ -1,5 +1,6 @@
 // TaskItem.tsx
 import React from 'react';
+import dayjs from 'dayjs';
 // adjust the path as needed
 import Icon from '@/components/Icon'; // adjust the import path accordingly
 import {
@@ -13,7 +14,8 @@ import {
 
 // Helper to format a Date into a string (e.g., "Mar 6")
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', {
+  const dateJs = dayjs(date).utc().toDate();
+  return dateJs.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
   });

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { mapMonthToSeason } from './helpers';
 
 export function isOlderThanFreqeuncyOrNull(
@@ -90,13 +91,14 @@ export function computeDueDate(
   lastTaskDate: Date | null,
   interval: number,
 ): Date {
-  let candidateDueDate: Date;
+  let candidateDueDate = new Date();
   if (lastTaskDate) {
-    candidateDueDate = new Date(lastTaskDate);
-    candidateDueDate.setDate(candidateDueDate.getDate() + interval);
+    // candidateDueDate = new Date(lastTaskDate);
+    const dayJsDueDate = dayjs(lastTaskDate).utc();
+    candidateDueDate.setDate(dayJsDueDate.date() + interval);
   } else {
-    candidateDueDate = new Date();
-    candidateDueDate.setDate(candidateDueDate.getDate() + interval);
+    const dayJsDueDate = dayjs().utc();
+    candidateDueDate.setDate(dayJsDueDate.date() + interval);
   }
   return candidateDueDate;
 }
