@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { P1 } from '@/styles/text';
 import { Plant } from '@/types/schema';
 import { mapMonthToSeason, toTitleCase } from '@/utils/helpers';
 import DifficultyLevelBar from '../DifficultyLevelBar';
@@ -13,6 +12,7 @@ import {
   PlantAttributes,
   PlantHeader,
   PlantImage,
+  ResponsiveP1,
   RoundCheck,
   TopRight,
 } from './styles';
@@ -40,7 +40,7 @@ const PlantCard = memo(function PlantCard({
       </CardPic>
       <CardContent>
         <PlantHeader>
-          <P1 $fontWeight={400}>{plant.plant_name}</P1>
+          <ResponsiveP1 $fontWeight={400}>{plant.plant_name}</ResponsiveP1>
           <DifficultyLevelBar difficultyLevel={plant.difficulty_level} />
         </PlantHeader>
 

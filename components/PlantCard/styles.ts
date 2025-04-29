@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
+import { P1 } from '@/styles/text';
 
 export const CardContainer = styled.div<{ $isSelected?: boolean }>`
   position: relative;
@@ -11,16 +13,7 @@ export const CardContainer = styled.div<{ $isSelected?: boolean }>`
   align-items: start;
   border-radius: 12px;
   background-color: white;
-  box-shadow: ${({ $isSelected }) =>
-    $isSelected
-      ? `
-  0 24px 38px 3px rgb(148, 181, 6, 0.14),
-  0 9px 46px 8px rgb(148, 181, 6, 0.12),
-  0 11px 15px -7px rgb(148, 181, 6, 0.2)`
-      : `
-  0 24px 38px 3px rgba(0, 0, 0, 0.14),
-  0 9px 46px 8px rgba(0, 0, 0, 0.12),
-  0 11px 15px -7px rgba(0, 0, 0, 0.2)`};
+  box-shadow: 3px 3px 4px 0px rgba(0, 0, 0, 0.05);
 
   border: ${({ $isSelected }) =>
     $isSelected ? `1px solid ${COLORS.sprout}` : '1px solid transparent'};
@@ -29,6 +22,12 @@ export const CardContainer = styled.div<{ $isSelected?: boolean }>`
   &:hover {
     cursor: pointer;
     //TODO: add hover effect to show highlighted card
+  }
+
+  @media ${device.lg} {
+    height: 300px;
+    border: ${({ $isSelected }) =>
+      $isSelected ? `2px solid ${COLORS.sprout}` : 'none'};
   }
 `;
 
@@ -41,6 +40,10 @@ export const CardPic = styled.div`
   align-items: center;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+
+  @media ${device.lg} {
+    height: 150px;
+  }
 `;
 
 export const CardContent = styled.div`
@@ -49,12 +52,19 @@ export const CardContent = styled.div`
   padding: 12px 16px 8px 16px;
   row-gap: 6px;
   width: 100%;
+
+  @media ${device.lg} {
+    padding: 12px 16px 20px 20px;
 `;
 
 export const PlantAttributes = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+
+  @media ${device.lg} {
+    gap: 8px;
+  }
 `;
 
 export const Attribute = styled.div`
@@ -103,6 +113,10 @@ export const AttributeContent = styled.p`
   font-weight: 300;
   line-height: normal;
   margin: 0;
+
+  @media ${device.lg} {
+    font-size: 14px;
+  }
 `;
 
 export const PlantHeader = styled.div`
@@ -110,10 +124,25 @@ export const PlantHeader = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  @media ${device.lg} {
+    margin-bottom: 6px;
+  }
 `;
 
 export const PlantImage = styled.img`
   width: 75px;
   height: 75px;
   font-size: 10px;
+
+  @media ${device.lg} {
+    width: 105px;
+    height: 105px;
+  }
+`;
+
+export const ResponsiveP1 = styled(P1)`
+  @media ${device.lg} {
+    font-size: 20px;
+  }
 `;

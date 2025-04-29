@@ -72,6 +72,7 @@ export const Button = styled(P2).attrs({ as: 'button' })<ButtonProps>`
 
   @media ${device.lg} {
     height: 60px;
+    font-size: 16px;
   }
 `;
 
@@ -90,4 +91,10 @@ export const SmallButton = styled(P3).attrs({ as: 'button' })<ButtonProps>`
   min-width: 60px;
   flex-shrink: 0; // to prevent Clear Filters from collapsing on overflow
   padding: 4px 8px;
+
+  @media ${device.lg} {
+    font-size: 18px;
+    height: 30px;
+    min-width: 95px;
+  }
 `;
