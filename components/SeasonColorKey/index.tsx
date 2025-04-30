@@ -1,10 +1,10 @@
 import React from 'react';
 import COLORS from '@/styles/colors';
-import { Flex } from '@/styles/containers';
 import { P3 } from '@/styles/text';
 import {
   ColorCell,
   ColorKeyItemContainer,
+  ComponentContainer,
   SeasonColorKeyContainer,
 } from './styles';
 
@@ -19,13 +19,13 @@ function ColorKeyItem({ label, color }: { label: string; color: string }) {
 
 export default function SeasonColorKey() {
   return (
-    <Flex $justify="center">
+    <ComponentContainer>
       <SeasonColorKeyContainer>
-        <ColorKeyItem label="Indoor Season" color={COLORS.indoors} />
+        <ColorKeyItem label="Indoor" color={COLORS.indoors} />
         <ColorKeyItem label="Transplant" color={COLORS.transplant} />
-        <ColorKeyItem label="Outdoor Season" color={COLORS.outdoors} />
-        <ColorKeyItem label="Harvest Season" color={COLORS.harvest} />
+        <ColorKeyItem label="Outdoor" color={COLORS.outdoors} />
+        <ColorKeyItem label="Harvest" color={COLORS.harvest} />
       </SeasonColorKeyContainer>
-    </Flex>
+    </ComponentContainer>
   );
 }

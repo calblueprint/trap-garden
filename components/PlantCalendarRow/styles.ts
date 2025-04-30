@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from '@/styles/breakpoints';
 
 export const PlantCalendarRowContainer = styled.tr`
   &:hover {
@@ -11,6 +12,9 @@ export const CalendarGrid = styled.div`
   position: sticky;
   min-width: 272px;
   height: 30px;
+  @media ${device.lg} {
+    height: 56px;
+  }
   width: 100%;
   grid-template-columns: repeat(24, 1fr);
   grid-template-rows: repeat(4, 1fr);
@@ -23,6 +27,7 @@ export const CalendarCell = styled.div<{ $color: string }>`
   height: 100%;
   background-color: ${({ $color }) => $color};
   background-clip: padding-box;
+  border-radius: 3px;
 `;
 
 export const SingleDisplayScrollContainer = styled.div`

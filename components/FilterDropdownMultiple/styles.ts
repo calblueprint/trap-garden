@@ -79,7 +79,7 @@ export const customSelectStyles = <T>(): StylesConfig<
   // }),
   option: baseStyles => ({
     ...baseStyles,
-    // style as a P3 with fontWeight 400
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     fontSize: '0.75rem',
     fontWeight: 400,
     '@media (min-width: 1280px)': {

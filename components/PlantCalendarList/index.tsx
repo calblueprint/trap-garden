@@ -5,7 +5,7 @@ import { getAllPlants } from '@/api/supabase/queries/plants';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
-import { H2, P1, P3 } from '@/styles/text';
+import { H2, P1 } from '@/styles/text';
 import {
   DropdownOption,
   OwnedPlant,
@@ -25,6 +25,7 @@ import Icon from '../Icon';
 import PlantCalendarRow from '../PlantCalendarRow';
 import { PlantCalendarRowContainer } from '../PlantCalendarRow/styles';
 import * as Styles from './styles';
+import { HeaderText } from './styles';
 
 interface PlantListProps {
   harvestSeasonFilterValue: DropdownOption<SeasonEnum>[];
@@ -56,7 +57,7 @@ export const MonthHeader = () => {
   return (
     <Styles.MonthsContainer>
       {months.map((month, index) => (
-        <P3 key={index}>{month}</P3>
+        <HeaderText key={index}>{month}</HeaderText>
       ))}
     </Styles.MonthsContainer>
   );
@@ -183,7 +184,7 @@ export const PlantCalendarList = ({
                     onClick={() => handlePlantCalendarRowClick(plant)}
                   >
                     <Styles.StickyTd>
-                      <P3>{plant.plant_name}</P3>
+                      <HeaderText>{plant.plant_name}</HeaderText>
                     </Styles.StickyTd>
                     <Styles.ScrollableTd>
                       <PlantCalendarRow

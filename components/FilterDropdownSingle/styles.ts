@@ -1,5 +1,7 @@
 import { StylesConfig } from 'react-select';
+import { useMediaQuery } from '@mui/material';
 import styled from 'styled-components';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
 import { DropdownOption } from '@/types/schema';
 
@@ -43,7 +45,9 @@ export const customSelectStyles = <T>(
     margin: 'auto',
     // style as a P3 with fontWeight 400
     color: COLORS.midgray,
-    fontSize: '0.75rem',
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    fontSize: useMediaQuery(device.lg) ? '0.875rem' : '0.75rem',
+
     fontWeight: 400,
   }),
   // hide vertical bar between arrow and text
@@ -72,13 +76,15 @@ export const customSelectStyles = <T>(
     paddingLeft: '0px',
     // style as a P3 with fontWeight 400
     color: state.hasValue ? `#fff` : `${COLORS.black}`, // replace with `#fff`?
-    fontSize: '0.75rem',
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    fontSize: useMediaQuery(device.lg) ? '0.875rem' : '0.75rem',
     fontWeight: 400,
   }),
   option: baseStyles => ({
     ...baseStyles,
     // style as a P3 with fontWeight 400
-    fontSize: '0.75rem',
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    fontSize: useMediaQuery(device.lg) ? '0.875rem' : '0.75rem',
     fontWeight: 400,
   }),
 });
