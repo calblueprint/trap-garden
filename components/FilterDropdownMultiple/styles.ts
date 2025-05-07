@@ -1,5 +1,8 @@
 import { StylesConfig } from 'react-select';
+import styled from 'styled-components';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
+import { P3 } from '@/styles/text';
 import { DropdownOption } from '@/types/schema';
 
 // custom styles for react-select component
@@ -15,7 +18,7 @@ export const customSelectStyles = <T>(): StylesConfig<
     height: '30px',
     border: `0.5px solid ${COLORS.midgray}`,
     backgroundColor: state.isDisabled ? COLORS.lightgray : '#fff',
-    padding: '8px 14px',
+    padding: '6px 14px',
     color: COLORS.midgray,
     minWidth: '138px',
     width: 'max-content', // prevent collapse on scroll
@@ -24,10 +27,13 @@ export const customSelectStyles = <T>(): StylesConfig<
   placeholder: baseStyles => ({
     ...baseStyles,
     color: COLORS.midgray,
-    fontSize: '0.75rem',
+    fontSize: '12px',
     fontWeight: 400,
     padding: '0px',
     margin: 'auto',
+    '@media (min-width: 1280px)': {
+      fontSize: '18px',
+    },
   }),
   // hide vertical bar between arrow and text
   indicatorSeparator: baseStyles => ({
@@ -76,5 +82,14 @@ export const customSelectStyles = <T>(): StylesConfig<
     // style as a P3 with fontWeight 400
     fontSize: '0.75rem',
     fontWeight: 400,
+    '@media (min-width: 1280px)': {
+      fontSize: '18px',
+    },
   }),
 });
+
+export const ResponsiveP3 = styled(P3)`
+  @media ${device.lg} {
+    font-size: 18px;
+  }
+`;

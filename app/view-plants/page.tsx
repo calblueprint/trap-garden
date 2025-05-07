@@ -12,11 +12,10 @@ import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
 import PlantCardKey from '@/components/PlantCardKey';
-import SearchBar from '@/components/SearchBar';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
-import { Box, Flex } from '@/styles/containers';
-import { H1, H2, P1 } from '@/styles/text';
+import { Flex } from '@/styles/containers';
+import { H2, P1 } from '@/styles/text';
 import {
   DropdownOption,
   OwnedPlant,
@@ -34,12 +33,21 @@ import {
 import { useProfile } from '@/utils/ProfileProvider';
 import {
   AddButtonContainer,
+  DesktopOnlySearchBar,
+  DesktopOnlySearchBarContainer,
+  FilterAndSearchBarContainer,
   FilterContainer,
   HeaderButton,
   InfoButton,
   NumberSelectedPlants,
   NumberSelectedPlantsContainer,
   PlantGridContainer,
+  ResponsiveBox,
+  ResponsiveH1,
+  ResponsiveSearchBar,
+  ResponsiveSearchBarContainer,
+  ResponsiveSmallButton,
+  SelectModeBox,
   TopRowContainer,
   ViewSelection,
 } from './styles';
@@ -93,6 +101,11 @@ export default function Page() {
   const userState = profileData?.us_state ?? null;
 
   const profileAndAuthReady = profileReady && !authLoading;
+
+  const anyFilterActive =
+    selectedGrowingSeason.length > 0 ||
+    selectedDifficulty.length > 0 ||
+    selectedSunlight.length > 0;
 
   // Fetch All Plants
   useEffect(() => {
@@ -421,9 +434,9 @@ export default function Page() {
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
       <TopRowContainer>
         <Flex $direction="row" $gap="10px" $align="center">
-          <H1 $color={COLORS.shrub} $fontWeight={500}>
+          <ResponsiveH1 $color={COLORS.shrub} $fontWeight={500}>
             View Plants
-          </H1>
+          </ResponsiveH1>
           <div style={{ position: 'relative' }}>
             <InfoButton
               onClick={() => setIsCardKeyOpen(!isCardKeyOpen)}
@@ -438,33 +451,51 @@ export default function Page() {
             )}
           </div>
         </Flex>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <FilterContainer>
-          <FilterDropdownMultiple
-            value={selectedDifficulty}
-            setStateAction={setSelectedDifficulty}
-            options={difficultyOptions}
-            placeholder="Difficulty Level"
+        <ResponsiveSearchBarContainer>
+          <ResponsiveSearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
           />
-          <FilterDropdownMultiple
-            value={selectedSunlight}
-            setStateAction={setSelectedSunlight}
-            options={sunlightOptions}
-            placeholder="Sunlight"
-          />
-          <FilterDropdownMultiple
-            value={selectedGrowingSeason}
-            setStateAction={setSelectedGrowingSeason}
-            options={growingSeasonOptions}
-            placeholder="Growing Season"
-          />
+        </ResponsiveSearchBarContainer>
+        <FilterAndSearchBarContainer>
+          <FilterContainer>
+            <FilterDropdownMultiple
+              value={selectedDifficulty}
+              setStateAction={setSelectedDifficulty}
+              options={difficultyOptions}
+              placeholder="Difficulty Level"
+            />
+            <FilterDropdownMultiple
+              value={selectedSunlight}
+              setStateAction={setSelectedSunlight}
+              options={sunlightOptions}
+              placeholder="Sunlight"
+            />
+            <FilterDropdownMultiple
+              value={selectedGrowingSeason}
+              setStateAction={setSelectedGrowingSeason}
+              options={growingSeasonOptions}
+              placeholder="Growing Season"
+            />
 
-          <SmallButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
-            Clear Filters
-          </SmallButton>
-        </FilterContainer>
+            {anyFilterActive && (
+              <ResponsiveSmallButton
+                $secondaryColor={COLORS.shrub}
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </ResponsiveSmallButton>
+            )}
+          </FilterContainer>
+          <DesktopOnlySearchBarContainer>
+            <DesktopOnlySearchBar
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+          </DesktopOnlySearchBarContainer>
+        </FilterAndSearchBarContainer>
       </TopRowContainer>
-      <Box $h="24px">
+      <SelectModeBox $h="24px">
         {viewingOption === 'all' && inAddMode ? (
           <NumberSelectedPlantsContainer>
             <NumberSelectedPlants>
@@ -474,11 +505,11 @@ export default function Page() {
             </NumberSelectedPlants>
           </NumberSelectedPlantsContainer>
         ) : null}
-      </Box>
-      <Box $px="24px" $pb="32px">
+      </SelectModeBox>
+      <ResponsiveBox $px="24px" $pb="32px">
         {/* Plant Cards and Body */}
         {!profileAndAuthReady ? <>Loading</> : <MainBody />}
-      </Box>
+      </ResponsiveBox>
     </div>
   );
 }

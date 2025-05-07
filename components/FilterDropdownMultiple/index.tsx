@@ -6,9 +6,8 @@ import Select, {
   MultiValueProps,
   OptionProps,
 } from 'react-select';
-import { P3 } from '@/styles/text';
 import { DropdownOption } from '@/types/schema';
-import { customSelectStyles } from './styles';
+import { customSelectStyles, ResponsiveP3 } from './styles';
 
 interface FilterDropdownProps<T> {
   value: DropdownOption<T>[];
@@ -47,7 +46,7 @@ export default function FilterDropdownMultiple<T>({
       const additionalCount = selectProps.value.length - 1;
 
       return (
-        <P3 $fontWeight={400}>
+        <ResponsiveP3 $fontWeight={400}>
           {/* display label of first selected option */}
           {isFirst ? (
             <>
@@ -57,7 +56,7 @@ export default function FilterDropdownMultiple<T>({
             </>
           ) : // don't display anything if not the first selected option
           null}
-        </P3>
+        </ResponsiveP3>
       );
     }
 

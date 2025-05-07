@@ -27,4 +27,5 @@ export const SearchBarInput = styled(P3).attrs({ as: 'input', type: 'search' })`
   width: 100%;
   color: ${COLORS.midgray};
   font-family: inherit;
+  font-size: 16px;
 `;
