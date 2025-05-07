@@ -102,6 +102,11 @@ export default function Page() {
 
   const profileAndAuthReady = profileReady && !authLoading;
 
+  const anyFilterActive =
+    selectedGrowingSeason.length > 0 ||
+    selectedDifficulty.length > 0 ||
+    selectedSunlight.length > 0;
+
   // Fetch All Plants
   useEffect(() => {
     // Only fetch plants when profile is ready and we have a state
@@ -473,12 +478,14 @@ export default function Page() {
               placeholder="Growing Season"
             />
 
-            <ResponsiveSmallButton
-              $secondaryColor={COLORS.shrub}
-              onClick={clearFilters}
-            >
-              Clear Filters
-            </ResponsiveSmallButton>
+            {anyFilterActive && (
+              <ResponsiveSmallButton
+                $secondaryColor={COLORS.shrub}
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </ResponsiveSmallButton>
+            )}
           </FilterContainer>
           <DesktopOnlySearchBarContainer>
             <DesktopOnlySearchBar
