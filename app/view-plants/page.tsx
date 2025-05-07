@@ -83,8 +83,11 @@ export default function Page() {
   useEffect(() => {
     if (viewParam === 'all' || viewParam === 'myPlants') {
       setViewingOption(viewParam);
+    } else {
+      setViewingOption('myPlants');
+      router.replace('?view=myPlants');
     }
-  }, [viewParam]);
+  }, [viewParam, router]);
 
   const handleMyGardenOrAllView = (option: 'myPlants' | 'all') => {
     setViewingOption(option);
