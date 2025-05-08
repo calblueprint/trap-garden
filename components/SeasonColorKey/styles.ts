@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { device } from '@/styles/breakpoints';
+import { P3 } from '@/styles/text';
 
 export const SeasonColorKeyContainer = styled.div`
   gap: .5rem;
   @media ${device.lg} {
-    gap: 2rem;
+    gap: 1.5rem;
   }
   width: max-content;
   margin-bottom: 12px;
@@ -37,5 +38,12 @@ export const ComponentContainer = styled.div`
   @media ${device.lg} {
     width: auto;
     align-items: center;
+    padding: 2rem;
+  }
+`;
+
+export const ColorItemLabel = styled(P3)`
+  @media ${device.lg} {
+    font-size: 16px;
   }
 `;

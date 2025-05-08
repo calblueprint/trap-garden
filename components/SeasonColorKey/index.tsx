@@ -1,8 +1,8 @@
 import React from 'react';
 import COLORS from '@/styles/colors';
-import { P3 } from '@/styles/text';
 import {
   ColorCell,
+  ColorItemLabel,
   ColorKeyItemContainer,
   ComponentContainer,
   SeasonColorKeyContainer,
@@ -12,7 +12,7 @@ function ColorKeyItem({ label, color }: { label: string; color: string }) {
   return (
     <ColorKeyItemContainer>
       <ColorCell $color={color} />
-      <P3>{label}</P3>
+      <ColorItemLabel>{label}</ColorItemLabel>
     </ColorKeyItemContainer>
   );
 }

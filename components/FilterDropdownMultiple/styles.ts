@@ -27,13 +27,13 @@ export const customSelectStyles = <T>(): StylesConfig<
   placeholder: baseStyles => ({
     ...baseStyles,
     color: COLORS.midgray,
-    fontSize: '12px',
+    fontSize: '0.75rem',
+    '@media (min-width: 1280px)': {
+      fontSize: '0.875rem',
+    },
     fontWeight: 400,
     padding: '0px',
     margin: 'auto',
-    '@media (min-width: 1280px)': {
-      fontSize: '18px',
-    },
   }),
   // hide vertical bar between arrow and text
   indicatorSeparator: baseStyles => ({
@@ -79,12 +79,11 @@ export const customSelectStyles = <T>(): StylesConfig<
   // }),
   option: baseStyles => ({
     ...baseStyles,
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     fontSize: '0.75rem',
-    fontWeight: 400,
     '@media (min-width: 1280px)': {
-      fontSize: '18px',
+      fontSize: '0.875rem',
     },
+    fontWeight: 400,
   }),
 });
 

@@ -128,8 +128,8 @@ export const Title = styled.h1<{ $color: string }>`
   @media ${device.lg} {
     font-size: 4rem;
     font-weight: 500;
+    font-family: AirbnbCereal_W_Md;
   }
-  font-family: AirbnbCereal_W_Md;
 `;
 
 export const FilterText = styled.div<{ $color: string; $underline?: boolean }>`

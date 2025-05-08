@@ -209,10 +209,8 @@ export default function SeasonalPlantingGuide() {
           />
         </StateOptionsContainer>
       ) : (
-        <Box $pt="20px">
-          <Box $p="2rem">
-            <SeasonColorKey />
-          </Box>
+        <Box $p="20px">
+          <SeasonColorKey />
           <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}
             harvestSeasonFilterValue={selectedHarvestSeason}

@@ -7,8 +7,8 @@ export const TableContainer = styled.div`
   width: 100%;
   overflow-x: auto; // Allow horizontal scrolling
   overscroll-behavior: none;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 // Styled Table
@@ -23,8 +23,11 @@ export const StickyTd = styled(P3).attrs({
   as: 'td',
 })`
   // TODO: make this more compact
-  width: 40px;
-  position: relative;
+  width: auto;
+  @media ${device.lg} {
+    width: 40px;
+  }
+  position: sticky;
   left: 0;
   background-color: white; // Optional: Adds a background color to keep text visible when scrolling
   z-index: 1; // Ensures the sticky header is on top of other content

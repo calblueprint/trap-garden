@@ -27,7 +27,6 @@ export const CalendarCell = styled.div<{ $color: string }>`
   height: 100%;
   background-color: ${({ $color }) => $color};
   background-clip: padding-box;
-  border-radius: 3px;
 `;
 
 export const SingleDisplayScrollContainer = styled.div`

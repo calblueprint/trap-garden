@@ -1,7 +1,5 @@
 import { StylesConfig } from 'react-select';
-import { useMediaQuery } from '@mui/material';
 import styled from 'styled-components';
-import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
 import { DropdownOption } from '@/types/schema';
 
@@ -45,8 +43,10 @@ export const customSelectStyles = <T>(
     margin: 'auto',
     // style as a P3 with fontWeight 400
     color: COLORS.midgray,
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    fontSize: useMediaQuery(device.lg) ? '0.875rem' : '0.75rem',
+    fontSize: '0.75rem',
+    '@media (min-width: 1280px)': {
+      fontSize: '0.875rem',
+    },
 
     fontWeight: 400,
   }),
@@ -76,15 +76,19 @@ export const customSelectStyles = <T>(
     paddingLeft: '0px',
     // style as a P3 with fontWeight 400
     color: state.hasValue ? `#fff` : `${COLORS.black}`, // replace with `#fff`?
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    fontSize: useMediaQuery(device.lg) ? '0.875rem' : '0.75rem',
+    fontSize: '0.75rem',
+    '@media (min-width: 1280px)': {
+      fontSize: '0.875rem',
+    },
     fontWeight: 400,
   }),
   option: baseStyles => ({
     ...baseStyles,
     // style as a P3 with fontWeight 400
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    fontSize: useMediaQuery(device.lg) ? '0.875rem' : '0.75rem',
+    fontSize: '0.75rem',
+    '@media (min-width: 1280px)': {
+      fontSize: '0.875rem',
+    },
     fontWeight: 400,
   }),
 });
