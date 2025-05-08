@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { BigButton, StyledLinkButton } from '@/components/Buttons';
 import Icon from '@/components/Icon';
 import TextInput from '@/components/TextInput';
+import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { P3 } from '@/styles/text';
 import { useAuth } from '../../../utils/AuthProvider';
@@ -59,7 +60,7 @@ export default function Login() {
       // Clear errors on success
       setInvalidEmailError('');
       setInvalidPasswordError('');
-      router.push('/view-plants');
+      router.push(`${CONFIG.viewPlants}`);
     } catch (err) {
       console.error('Login Error:', err);
       setInvalidEmailError('An unexpected error occurred. Please try again.');

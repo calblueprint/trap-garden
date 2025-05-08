@@ -438,12 +438,12 @@ export default function OnboardingFlow() {
 
   // If user not logged in, re-route to /login
   useEffect(() => {
-    if (!authLoading && !userId) push('/login');
+    if (!authLoading && !userId) push(`${CONFIG.login}`);
   }, [authLoading, userId, push]);
 
   // If user already onboarded, re-route to /view-plants
   useEffect(() => {
-    if (profileReady && profileData) push('/view-plants');
+    if (profileReady && profileData) push(`${CONFIG.viewPlants}`);
   }, [profileReady, profileData, push]);
 
   const handleNext = () => {

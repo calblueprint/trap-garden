@@ -207,7 +207,7 @@ export default function Home() {
             await insertUserPlants(completedDetails, !confirm, userId);
           }
         }
-        router.push('/view-plants');
+        router.push(`${CONFIG.viewPlants}`);
       } catch (error) {
         console.error('Error inserting user plants:', error);
       }

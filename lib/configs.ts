@@ -4,7 +4,7 @@ const CONFIG = {
   signup: '/signup',
   onboarding: '/onboarding',
   myAccount: '/my-account',
-  viewPlants: '/view-plants',
+  viewPlants: '/view-plants?view=myPlants',
   userPlant: '/my-garden',
   generalPlant: '/all-plants',
   plantingTimeline: '/planting-timeline',
