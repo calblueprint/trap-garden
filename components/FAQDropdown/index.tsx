@@ -20,9 +20,15 @@ export function FAQDropdown({ question, answer }: FAQDropdownProps) {
       $mb="1.5rem"
     >
       <HorizontalLine />
-      <Flex $direction="row" $justify="between" $align="center">
+      <Flex
+        $direction="row"
+        $justify="between"
+        $align="center"
+        onClick={() => setExpanded(!expanded)}
+        style={{ cursor: 'pointer' }}
+      >
         <Question>{question}</Question>
-        <Dropdown onClick={() => setExpanded(!expanded)}>
+        <Dropdown>
           {!expanded ? (
             <Icon type="dropdownArrowDown"></Icon>
           ) : (
