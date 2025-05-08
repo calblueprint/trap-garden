@@ -29,7 +29,7 @@ export const customSelectStyles = <T>(): StylesConfig<
     color: COLORS.midgray,
     fontSize: '0.75rem',
     '@media (min-width: 1280px)': {
-      fontSize: '0.875rem',
+      fontSize: '16px',
     },
     fontWeight: 400,
     padding: '0px',
@@ -81,7 +81,7 @@ export const customSelectStyles = <T>(): StylesConfig<
     ...baseStyles,
     fontSize: '0.75rem',
     '@media (min-width: 1280px)': {
-      fontSize: '0.875rem',
+      fontSize: '16px',
     },
     fontWeight: 400,
   }),
@@ -89,6 +89,6 @@ export const customSelectStyles = <T>(): StylesConfig<
 
 export const ResponsiveP3 = styled(P3)`
   @media ${device.lg} {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;

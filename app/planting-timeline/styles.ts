@@ -138,7 +138,7 @@ export const Title = styled(H1)<{ $color: string }>`
 export const FilterText = styled.div<{ $color: string; $underline?: boolean }>`
   font-size: 0.75rem;
   @media ${device.lg} {
-    font-size: 0.875rem;
+    font-size: 16px;
   }
   color: ${({ $color }) => $color || COLORS.black};
   &:hover {

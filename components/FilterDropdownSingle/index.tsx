@@ -1,8 +1,7 @@
 import React from 'react';
 import Select, { MultiValue, SingleValue } from 'react-select';
 import { DropdownOption } from '@/types/schema';
-import { TextSize } from '../FilterDropdownMultiple/styles';
-import { customSelectStyles } from './styles';
+import { customSelectStyles, TextSize } from './styles';
 
 interface FilterDropdownProps<T> {
   value: DropdownOption<T> | null;
