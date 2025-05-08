@@ -17,7 +17,7 @@ export function FAQDropdown({ question, answer }: FAQDropdownProps) {
       $justify="center"
       $pl="1.5rem"
       $pr="1.5rem"
-      $mt="1.5rem"
+      $mb="1.5rem"
     >
       <HorizontalLine />
       <Flex $direction="row" $justify="between" $align="center">

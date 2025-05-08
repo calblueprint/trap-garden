@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
 import { H1, H4 } from '@/styles/text';
 
@@ -45,6 +46,14 @@ export const GuidesGrid = styled.div`
   gap: 1rem;
   font-weight: 300;
   justify-content: center;
+
+  @media ${device.lg} {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2rem;
+  }
 `;
 
 export const AirbnbH1 = styled(H1)`

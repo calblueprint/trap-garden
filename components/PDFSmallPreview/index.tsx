@@ -15,41 +15,43 @@ const getPDFUrl = (userType: UserTypeEnum) => {
 export default function PDFSmallPreview(selectedGardenType: UserTypeEnum) {
   const url = getPDFUrl(selectedGardenType);
   return (
-    <Flex
-      $direction="column"
-      $justify="center"
-      $gap=".75rem"
-      $align="center"
-      $w="10.5rem"
-      $minH="16rem"
-      onClick={() => window.open(url, '_blank')}
-    >
+    <div style={{ cursor: 'pointer' }}>
       <Flex
-        $direction="row"
-        $background="#F0F0F0"
-        $pl=".5rem"
-        $pr=".5rem"
-        $pt="1rem"
-        $pb="1rem"
+        $direction="column"
         $justify="center"
-        $gap=".25rem"
+        $gap=".75rem"
         $align="center"
-        $radius="5px 5px 0px 0px"
-        $h="3rem"
+        $w="10.5rem"
+        $minH="16rem"
+        onClick={() => window.open(url, '_blank')}
       >
-        <Icon type="pdf" />
-        <TextWrapper>
-          {userTypes[selectedGardenType].label} Planting Guide
-        </TextWrapper>
+        <Flex
+          $direction="row"
+          $background="#F0F0F0"
+          $pl=".5rem"
+          $pr=".5rem"
+          $pt="1rem"
+          $pb="1rem"
+          $justify="center"
+          $gap=".25rem"
+          $align="center"
+          $radius="5px 5px 0px 0px"
+          $h="3rem"
+        >
+          <Icon type="pdf" />
+          <TextWrapper>
+            {userTypes[selectedGardenType].label} Planting Guide
+          </TextWrapper>
+        </Flex>
+        <Document file={getPDFUrl(selectedGardenType)}>
+          <Page
+            pageNumber={1}
+            renderAnnotationLayer={false}
+            renderTextLayer={false}
+            width={148}
+          />
+        </Document>
       </Flex>
-      <Document file={getPDFUrl(selectedGardenType)}>
-        <Page
-          pageNumber={1}
-          renderAnnotationLayer={false}
-          renderTextLayer={false}
-          width={148}
-        />
-      </Document>
-    </Flex>
+    </div>
   );
 }
