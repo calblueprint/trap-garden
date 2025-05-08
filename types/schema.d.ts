@@ -117,3 +117,9 @@ export interface SingleTask {
   isCompleted: boolean;
   type: 'water' | 'weed' | 'harvest';
 }
+
+export interface FAQ {
+  id: UUID;
+  question: string;
+  answer: string;
+}
