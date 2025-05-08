@@ -71,6 +71,14 @@ export const PDFButtonsContainer = styled.div`
   margin-top: 8px;
   width: 84px; /* ✅ restrict to width of PDF wrapper */
 `;
+
+export const PDFButton = styled.button<{ $showCursor: boolean }>`
+  all: unset;
+  display: flex;
+  align-items: center;
+  cursor: ${({ $showCursor }) => ($showCursor ? 'pointer' : 'not-allowed')};
+`;
+
 export const InputWrapper = styled.div`
   position: relative;
   display: flex;

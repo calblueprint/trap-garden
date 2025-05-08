@@ -15,7 +15,7 @@ import ProgressBar from '@/components/ProgressBar';
 import RadioGroup from '@/components/RadioGroup';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
-import { Flex } from '@/styles/containers';
+import { Box, Flex } from '@/styles/containers';
 import { H3, P1, P3 } from '@/styles/text';
 import { DropdownOption, Profile, UserTypeEnum } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
@@ -31,6 +31,7 @@ import {
   ContentContainer,
   InputWrapper,
   OnboardingContainer,
+  PDFButton,
   PDFButtonsContainer,
   PdfContainer,
   PDFPageWrapper,
@@ -80,7 +81,7 @@ function PdfScreen({
   useEffect(() => {
     const updateSize = () => {
       if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
+        setContainerWidth(Math.min(containerRef.current.offsetWidth, 345));
       }
     };
 
@@ -98,7 +99,7 @@ function PdfScreen({
             style={{
               textAlign: 'center',
               marginTop: '36px',
-              marginBottom: '8px',
+              marginBottom: '16px',
             }}
           >
             Learn how to setup a {userTypes[selectedGardenType].label} Garden
@@ -108,62 +109,53 @@ function PdfScreen({
             file={pdfUrl}
             onLoadSuccess={({ numPages }) => setNumPages(numPages)}
           >
-            <PdfContainer>
-              <Flex
-                $direction="row"
-                $gap="10px"
-                $align="center"
-                style={{ marginBottom: '20px' }}
-              >
-                <Icon type="pdf" />
-                <P3>
-                  {userTypes[selectedGardenType].label} Garden How-to guide
-                </P3>
-              </Flex>
-              <PDFPageWrapper>
-                <Page
-                  pageNumber={currentPage}
-                  width={containerWidth}
-                  renderTextLayer={true}
-                />
-                <PDFButtonsContainer>
-                  <button
-                    onClick={() => {
-                      if (currentPage > 1)
-                        setCurrentPage(prev => Math.max(prev - 1, 1));
-                    }}
-                    style={{
-                      all: 'unset',
-                      display: 'flex',
-                      alignItems: 'center',
-                      cursor: currentPage > 1 ? 'pointer' : 'default',
-                    }}
-                  >
-                    <Icon type="forwardCarrot" />
-                  </button>
+            <Box $mb="24px">
+              <PdfContainer>
+                <Flex
+                  $direction="row"
+                  $gap="10px"
+                  $align="center"
+                  style={{ marginBottom: '20px' }}
+                >
+                  <Icon type="pdf" />
                   <P3>
-                    {' '}
-                    {currentPage} of {numPages}
+                    {userTypes[selectedGardenType].label} Garden How-to guide
                   </P3>
-                  <button
-                    onClick={() => {
-                      if (currentPage < (numPages || 1))
-                        setCurrentPage(prev =>
-                          Math.min(prev + 1, numPages || 1),
-                        );
-                    }}
-                    style={{
-                      all: 'unset',
-                      display: 'flex',
-                      alignItems: 'center',
-                      cursor: currentPage > 1 ? 'pointer' : 'default',
-                    }}
-                  >
-                    <Icon type="backCarrot" />
-                  </button>
-                </PDFButtonsContainer>
-              </PDFPageWrapper>
-            </PdfContainer>
+                </Flex>
+                <PDFPageWrapper>
+                  <Page
+                    pageNumber={currentPage}
+                    width={containerWidth}
+                    renderTextLayer={true}
+                  />
+                  <PDFButtonsContainer>
+                    <PDFButton
+                      onClick={() => {
+                        if (currentPage > 1)
+                          setCurrentPage(prev => Math.max(prev - 1, 1));
+                      }}
+                      $showCursor={currentPage > 1}
+                    >
+                      <Icon type="forwardCarrot" />
+                    </PDFButton>
+                    <P3>
+                      {currentPage} of {numPages}
+                    </P3>
+                    <PDFButton
+                      onClick={() => {
+                        if (currentPage < (numPages || 1))
+                          setCurrentPage(prev =>
+                            Math.min(prev + 1, numPages || 1),
+                          );
+                      }}
+                      $showCursor={currentPage < numPages!}
+                    >
+                      <Icon type="backCarrot" />
+                    </PDFButton>
+                  </PDFButtonsContainer>
+                </PDFPageWrapper>
+              </PdfContainer>
+            </Box>
           </Document>
         </Flex>
       </OnboardingContainer>
