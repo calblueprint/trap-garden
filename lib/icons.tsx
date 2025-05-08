@@ -1146,5 +1146,37 @@ export const IconSvgs = {
       </defs>
     </svg>
   ),
+  forwardCarrot: (
+    <svg
+      width="10"
+      height="7"
+      viewBox="0 0 10 7"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g transform="rotate(90 5 3.5)">
+        <path
+          d="M5.16886 6.61426L9.99886 1.25989L8.86248 0.000148773L5.16565 4.09833L1.46881 0.000148773L0.338867 1.25989L5.16886 6.61426Z"
+          fill="#888888"
+        />
+      </g>
+    </svg>
+  ),
+  backCarrot: (
+    <svg
+      width="10"
+      height="7"
+      viewBox="0 0 10 7"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g transform="rotate(-90 5 3.5)">
+        <path
+          d="M5.16886 6.61426L9.99886 1.25989L8.86248 0.000148773L5.16565 4.09833L1.46881 0.000148773L0.338867 1.25989L5.16886 6.61426Z"
+          fill="#888888"
+        />
+      </g>
+    </svg>
+  ),
 };
 export type IconType = keyof typeof IconSvgs;
