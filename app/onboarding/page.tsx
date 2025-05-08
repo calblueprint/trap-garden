@@ -108,6 +108,7 @@ function PdfScreen({
           <Document
             file={pdfUrl}
             onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+            onClick={() => window.open(pdfUrl, '_blank')}
           >
             <Box $mb="24px">
               <PdfContainer>
@@ -130,7 +131,8 @@ function PdfScreen({
                   />
                   <PDFButtonsContainer>
                     <PDFButton
-                      onClick={() => {
+                      onClick={event => {
+                        event.stopPropagation(); // prevent document onClick from propagating to button onClick
                         if (currentPage > 1)
                           setCurrentPage(prev => Math.max(prev - 1, 1));
                       }}
@@ -142,7 +144,8 @@ function PdfScreen({
                       {currentPage} of {numPages}
                     </P3>
                     <PDFButton
-                      onClick={() => {
+                      onClick={event => {
+                        event.stopPropagation(); // prevent document onClick from propagating to button onClick
                         if (currentPage < (numPages || 1))
                           setCurrentPage(prev =>
                             Math.min(prev + 1, numPages || 1),

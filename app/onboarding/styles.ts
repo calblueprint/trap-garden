@@ -66,7 +66,7 @@ export const PDFButtonsContainer = styled.div`
   background: white;
   border-radius: 5px;
   height: 27px;
-  z-index: 10;
+  z-index: 1000;
   top: 0;
   margin-top: 8px;
   width: 84px; /* ✅ restrict to width of PDF wrapper */
