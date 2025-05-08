@@ -6,6 +6,7 @@ const COLORS = {
   shrub: '#1F5A2A',
   sprout: '#94B506',
   sproutLight: 'rgba(148, 181, 6, 0.1)', // 10% transparent
+  lightGreen: '#EDEFDB',
 
   // grey
   black: '#222222',

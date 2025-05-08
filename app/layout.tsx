@@ -5,6 +5,7 @@ import StyledComponentsRegistry from '@/lib/registry';
 import ProfileProvider from '@/utils/ProfileProvider';
 import { AuthProvider } from '../utils/AuthProvider';
 import './globals.css';
+import Toast from '@/components/ToastContainer';
 
 // font definitions
 const sans = Lexend({
@@ -31,6 +32,7 @@ export default function RootLayout({
             <StyledComponentsRegistry>
               <NavSystem />
               {children}
+              <Toast />
             </StyledComponentsRegistry>
           </ProfileProvider>
         </AuthProvider>

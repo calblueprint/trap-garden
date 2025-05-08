@@ -1,3 +1,5 @@
+'use client';
+
 import BPLogo from '@/assets/images/bp-logo.png';
 import { Container, Image } from './page.style';
 
