@@ -6,9 +6,6 @@ import { P3 } from '@/styles/text';
 export const TableContainer = styled.div`
   width: 100%;
   overflow-x: auto; // Allow horizontal scrolling
-  overscroll-behavior: none;
-  padding-left: 10px;
-  padding-right: 10px;
 `;
 
 // Styled Table
@@ -22,7 +19,6 @@ export const StyledTable = styled.table`
 export const StickyTd = styled(P3).attrs({
   as: 'td',
 })`
-  // TODO: make this more compact
   width: auto;
   @media ${device.lg} {
     width: 40px;
@@ -39,7 +35,22 @@ export const ScrollableTd = styled.td`
   // overflow-x: scroll;
   width: inherit;
   padding-bottom: 8px;
-  // maybe replace with 4px above and below to center padding?
+
+  @media ${device.lg} {
+    padding-bottom: 16px;
+  }
+`;
+
+// Scrollable container for Month Header (but not working as expected)
+export const MonthScrollableTd = styled.td`
+  position: sticky;
+  top: 0;
+  background-color: white;
+  padding-bottom: 8px;
+
+  @media ${device.lg} {
+    padding-bottom: 16px;
+  }
 `;
 
 // month header at the top of PlantCalendarList

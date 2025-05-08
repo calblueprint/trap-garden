@@ -172,9 +172,9 @@ export const PlantCalendarList = ({
               <thead>
                 <tr>
                   <Styles.StickyTd></Styles.StickyTd>
-                  <Styles.ScrollableTd>
+                  <Styles.MonthScrollableTd>
                     <MonthHeader />
-                  </Styles.ScrollableTd>
+                  </Styles.MonthScrollableTd>
                 </tr>
               </thead>
               <tbody>

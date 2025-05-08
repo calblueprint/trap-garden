@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
+import { H1 } from '@/styles/text';
 import { device } from '../../styles/breakpoints';
 
 export const PageContainer = styled.div`
@@ -33,6 +34,7 @@ export const FilterContainer = styled.div`
   align-items: center;
   @media ${device.lg} {
     gap: 20px;
+    margin: 0px;
   }
 `;
 
@@ -122,13 +124,14 @@ export const WhiteIcon = styled.div`
   }
 `;
 
-export const Title = styled.h1<{ $color: string }>`
+export const Title = styled(H1)<{ $color: string }>`
   font-size: 2rem;
   color: ${({ $color }) => $color || COLORS.black};
   @media ${device.lg} {
     font-size: 4rem;
     font-weight: 500;
     font-family: AirbnbCereal_W_Md;
+    margin-bottom: 12px;
   }
 `;
 
@@ -151,4 +154,8 @@ export const FilterRowContainer = styled.div`
   justify-content: space-between;
   flex-wrap: nowrap;
   align-items: center;
+
+  @media ${device.lg} {
+    margin-bottom: 20px;
+  }
 `;
