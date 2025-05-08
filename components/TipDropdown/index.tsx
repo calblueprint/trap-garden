@@ -50,7 +50,7 @@ export function TipDropdown({ name, tips, icon }: TipDropdownProps) {
             <AirbnbP3 $color={COLORS.midgray}>{tips.length} Tips</AirbnbP3>
           </Flex>
         </Flex>
-        <Dropdown onClick={() => setExpanded(!expanded)}>
+        <Dropdown>
           {!expanded ? (
             <Icon type="dropdownArrowDown" />
           ) : (
