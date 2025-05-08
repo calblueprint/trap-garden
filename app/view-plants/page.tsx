@@ -210,7 +210,7 @@ export default function Page() {
         setSelectedPlants([...selectedPlants, plant]);
       }
     } else {
-      router.push(`${CONFIG.generalPlant}/${plant.id}?view=${viewingOption}`);
+      router.push(`${CONFIG.generalPlant}/${plant.id}`);
     }
   }
   function handleAddPlants() {

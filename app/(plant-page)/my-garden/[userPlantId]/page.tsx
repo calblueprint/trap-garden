@@ -17,6 +17,7 @@ import PlantCalendarRow from '@/components/PlantCalendarRow';
 import PlantCareDescription from '@/components/PlantCareDescription';
 import TextInput from '@/components/TextInput';
 import YourPlantDetails from '@/components/YourPlantDetails';
+import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
 import { H4, P3 } from '@/styles/text';
@@ -75,7 +76,7 @@ export default function UserPlantPage() {
     } catch (error) {
       console.error(error);
     }
-    router.push(`/view-plants`);
+    router.push(`${CONFIG.viewPlants}`);
   }
 
   const handleUserNotesChange = (newUserNotes: string) => {
@@ -107,7 +108,7 @@ export default function UserPlantPage() {
         <ButtonWrapper>
           <BackButton
             onClick={() => {
-              router.push(`/view-plants`);
+              router.push(`${CONFIG.viewPlants}`);
             }}
           >
             ←
