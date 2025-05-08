@@ -27,13 +27,13 @@ export const customSelectStyles = <T>(): StylesConfig<
   placeholder: baseStyles => ({
     ...baseStyles,
     color: COLORS.midgray,
-    fontSize: '12px',
+    fontSize: '0.75rem',
+    '@media (min-width: 1280px)': {
+      fontSize: '16px',
+    },
     fontWeight: 400,
     padding: '0px',
     margin: 'auto',
-    '@media (min-width: 1280px)': {
-      fontSize: '18px',
-    },
   }),
   // hide vertical bar between arrow and text
   indicatorSeparator: baseStyles => ({
@@ -79,17 +79,16 @@ export const customSelectStyles = <T>(): StylesConfig<
   // }),
   option: baseStyles => ({
     ...baseStyles,
-    // style as a P3 with fontWeight 400
     fontSize: '0.75rem',
-    fontWeight: 400,
     '@media (min-width: 1280px)': {
-      fontSize: '18px',
+      fontSize: '16px',
     },
+    fontWeight: 400,
   }),
 });
 
 export const ResponsiveP3 = styled(P3)`
   @media ${device.lg} {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;

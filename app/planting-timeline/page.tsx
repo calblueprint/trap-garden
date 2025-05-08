@@ -3,21 +3,22 @@
 import React, { useEffect, useState } from 'react';
 import { getMatchingPlantForUserPlant } from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
-import { SmallButton } from '@/components/Buttons';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import FilterDropdownSingle from '@/components/FilterDropdownSingle';
+import Icon from '@/components/Icon';
 import { PlantCalendarList } from '@/components/PlantCalendarList';
 import SearchBar from '@/components/SearchBar';
 import SeasonColorKey from '@/components/SeasonColorKey';
 import COLORS from '@/styles/colors';
 import { Box } from '@/styles/containers';
-import { H1, H3 } from '@/styles/text';
+import { H3 } from '@/styles/text';
 import {
   DropdownOption,
   OwnedPlant,
   PlantingTypeEnum,
   SeasonEnum,
 } from '@/types/schema';
+import { useAuth } from '@/utils/AuthProvider';
 import {
   plantingTypeOptions,
   seasonOptions,
@@ -26,12 +27,19 @@ import {
 import { toTitleCase } from '@/utils/helpers';
 import { useProfile } from '@/utils/ProfileProvider';
 import {
+  DesktopSearchContainer,
   FilterContainer,
+  FilterRowContainer,
+  FilterText,
   HeaderContainer,
   PageContainer,
   PageTitle,
+  SearchBarWrapper,
+  ShowPlantsButton,
   StateOptionsContainer,
+  Title,
   VerticalSeparator,
+  WhiteIcon,
 } from './styles';
 
 // (static) filter options imported from utils/dropdownOptions
@@ -39,6 +47,7 @@ const growingSeasonOptions = seasonOptions;
 const harvestSeasonOptions = seasonOptions;
 
 export default function SeasonalPlantingGuide() {
+  const { userId } = useAuth();
   const { profileData, profileReady } = useProfile();
   const [selectedGrowingSeason, setSelectedGrowingSeason] = useState<
     DropdownOption<SeasonEnum>[]
@@ -66,6 +75,12 @@ export default function SeasonalPlantingGuide() {
   };
 
   const [showMyPlants, setShowMyPlants] = useState(false);
+  const anyFilterActive =
+    selectedGrowingSeason.length > 0 ||
+    selectedHarvestSeason.length > 0 ||
+    selectedPlantingType.length > 0 ||
+    searchTerm.trim() !== '' ||
+    showMyPlants;
 
   const toggleShowMyPlants = () => {
     setShowMyPlants(!showMyPlants);
@@ -107,60 +122,81 @@ export default function SeasonalPlantingGuide() {
     <PageContainer>
       <HeaderContainer>
         <PageTitle>
-          <H1 $color={COLORS.shrub} $align="left">
-            Planting Timeline
-          </H1>
+          <Title $color={COLORS.shrub}>Planting Timeline</Title>
         </PageTitle>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <FilterContainer>
-          <FilterDropdownSingle
-            value={selectedUsState}
-            setStateAction={setSelectedUsState}
-            placeholder="State"
-            options={usStateOptions}
-            disabled={!selectedUsState}
-            small={true}
-          />
+        <SearchBarWrapper>
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        </SearchBarWrapper>
+        <FilterRowContainer>
+          <FilterContainer>
+            <FilterDropdownSingle
+              value={selectedUsState}
+              setStateAction={setSelectedUsState}
+              placeholder="State"
+              options={usStateOptions}
+              disabled={!selectedUsState}
+              small={true}
+            />
 
-          {/* vertical bar to separate state and other filters */}
-          <VerticalSeparator />
+            {/* vertical bar to separate state and other filters */}
+            <VerticalSeparator />
+            {userId && (
+              <ShowPlantsButton
+                onClick={toggleShowMyPlants}
+                $primaryColor={showMyPlants ? COLORS.shrub : undefined}
+                $secondaryColor={!showMyPlants ? COLORS.shrub : undefined}
+              >
+                <FilterText $color={!showMyPlants ? COLORS.shrub : 'white'}>
+                  My Plants
+                </FilterText>
+                {showMyPlants ? (
+                  <WhiteIcon>
+                    <Icon type="leaf" />
+                  </WhiteIcon>
+                ) : (
+                  <Icon type="leaf" />
+                )}
+              </ShowPlantsButton>
+            )}
 
-          <FilterDropdownMultiple
-            value={selectedGrowingSeason}
-            setStateAction={setSelectedGrowingSeason}
-            options={growingSeasonOptions}
-            placeholder="Growing Season"
-            disabled={!selectedUsState}
-          />
+            <FilterDropdownMultiple
+              value={selectedGrowingSeason}
+              setStateAction={setSelectedGrowingSeason}
+              options={growingSeasonOptions}
+              placeholder="Growing Season"
+              disabled={!selectedUsState}
+            />
 
-          <FilterDropdownMultiple
-            value={selectedHarvestSeason}
-            setStateAction={setSelectedHarvestSeason}
-            options={harvestSeasonOptions}
-            placeholder="Harvest Season"
-            disabled={!selectedUsState}
-          />
+            <FilterDropdownMultiple
+              value={selectedHarvestSeason}
+              setStateAction={setSelectedHarvestSeason}
+              options={harvestSeasonOptions}
+              placeholder="Harvest Season"
+              disabled={!selectedUsState}
+            />
 
-          <FilterDropdownMultiple
-            value={selectedPlantingType}
-            setStateAction={setSelectedPlantingType}
-            options={plantingTypeOptions}
-            placeholder="Planting Type"
-            disabled={!selectedUsState}
-          />
+            <FilterDropdownMultiple
+              value={selectedPlantingType}
+              setStateAction={setSelectedPlantingType}
+              options={plantingTypeOptions}
+              placeholder="Planting Type"
+              disabled={!selectedUsState}
+            />
 
-          <SmallButton
-            onClick={toggleShowMyPlants}
-            $primaryColor={showMyPlants ? COLORS.shrub : undefined}
-            $secondaryColor={!showMyPlants ? COLORS.shrub : undefined}
-          >
-            Show My Plants
-          </SmallButton>
-
-          <SmallButton $secondaryColor={COLORS.shrub} onClick={clearFilters}>
-            Clear Filters
-          </SmallButton>
-        </FilterContainer>
+            {anyFilterActive && (
+              <FilterText
+                $color={COLORS.midgray}
+                onClick={clearFilters}
+                $underline={true}
+              >
+                Clear All
+              </FilterText>
+            )}
+          </FilterContainer>
+          <DesktopSearchContainer>
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          </DesktopSearchContainer>
+        </FilterRowContainer>
       </HeaderContainer>
       {!selectedUsState ? (
         <StateOptionsContainer>
@@ -173,7 +209,7 @@ export default function SeasonalPlantingGuide() {
           />
         </StateOptionsContainer>
       ) : (
-        <Box $p="20px">
+        <Box $p="20px" $pl="32px" $pr="32px">
           <SeasonColorKey />
           <PlantCalendarList
             growingSeasonFilterValue={selectedGrowingSeason}
