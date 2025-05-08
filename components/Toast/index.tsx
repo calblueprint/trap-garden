@@ -1,7 +1,9 @@
 'use client';
 
 import { toast } from 'react-toastify';
-import { StyledToast, UndoButton } from './style';
+import { Flex } from '@/styles/containers';
+import { P2 } from '@/styles/text';
+import { GreenDiv, StyledToast, UndoButton } from './style';
 
 interface ToastOptions {
   message: string;
@@ -12,19 +14,22 @@ interface ToastOptions {
 export function showToast({ message, undo, undoAction }: ToastOptions) {
   toast(
     ({ closeToast }) => (
-      <StyledToast>
-        <span>{message}</span>
-        {undo && undoAction && (
-          <UndoButton
-            onClick={() => {
-              undoAction();
-              closeToast?.();
-            }}
-          >
-            Undo
-          </UndoButton>
-        )}
-      </StyledToast>
+      <Flex $direction="row">
+        <GreenDiv />
+        <StyledToast>
+          <P2>{message}</P2>
+          {undo && undoAction && (
+            <UndoButton
+              onClick={() => {
+                undoAction();
+                closeToast?.();
+              }}
+            >
+              Undo
+            </UndoButton>
+          )}
+        </StyledToast>
+      </Flex>
     ),
     {
       closeButton: false,
