@@ -1,14 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getAllPlantTips } from '@/api/supabase/queries/resources';
+import { getAllFAQs, getAllPlantTips } from '@/api/supabase/queries/resources';
 import { FAQDropdown } from '@/components/FAQDropdown';
 import Icon from '@/components/Icon';
 import PDFSmallPreview from '@/components/PDFSmallPreview';
 import { TipDropdown } from '@/components/TipDropdown';
 import COLORS from '@/styles/colors';
 import { Box, Flex } from '@/styles/containers';
-import { PlantTip, UserTypeEnum } from '@/types/schema';
+import { H1 } from '@/styles/text';
+import { FAQ, PlantTip, UserTypeEnum } from '@/types/schema';
 import {
   tipCategories,
   tipCategoryHeaders,
@@ -28,19 +29,19 @@ export default function Resources() {
     'FAQs' | 'Tips' | 'Guides'
   >('FAQs');
 
-  //placeholder query, replace
-  const dummy = [
-    {
-      question: 'How do I choose which plant to plant?',
-      answer:
-        'Choose a plant based on your climate, sunlight, soil type, water needs, purpose, space, and maintenance level.',
-    },
-    {
-      question: 'How do I evaluate my soil quality?',
-      answer:
-        'You can evaluate your soil quality by observing its texture, color, and drainage, and by conducting a soil test to measure nutrient levels and pH.',
-    },
-  ];
+  const [fullTipList, setFullTipList] = useState<PlantTip[]>([]);
+  const [FAQlist, setFAQList] = useState<FAQ[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const tipList = await getAllPlantTips();
+      setFullTipList(tipList);
+      const faqs = await getAllFAQs();
+      setFAQList(faqs);
+      setLoading(false);
+    })();
+  }, []);
 
   function IconDisplay() {
     return (
@@ -77,14 +78,11 @@ export default function Resources() {
   }
 
   function TipDisplay() {
-    const [fullTipList, setFullTipList] = useState<PlantTip[]>([]);
-    useEffect(() => {
-      (async () => {
-        const tipList = await getAllPlantTips();
-        setFullTipList(tipList);
-      })();
-    }, []);
-    return (
+    return loading ? (
+      <Flex $justify="center" $align="center" $h="100%">
+        <H1 $color="black">Loading...</H1>
+      </Flex>
+    ) : (
       <>
         <Box $pl="1.5rem" $mb="1rem">
           <AirbnbH4 $fontWeight={500} $color={COLORS.shrub}>
@@ -105,22 +103,26 @@ export default function Resources() {
     );
   }
   function FAQDisplay() {
-    return (
-      <div>
-        <Box $pl="1.5rem" $mb="-1rem">
+    return loading ? (
+      <Flex $justify="center" $align="center" $h="100%">
+        <H1 $color="black">Loading...</H1>
+      </Flex>
+    ) : (
+      <Box $pb="2rem">
+        <Box $pl="1.5rem" $mb="1rem">
           <AirbnbH4 $fontWeight={500} $color={COLORS.shrub}>
             FAQs
           </AirbnbH4>
         </Box>
 
-        {dummy.map((item, index) => (
+        {FAQlist.map((item, index) => (
           <FAQDropdown
             key={index}
             question={item.question}
             answer={item.answer}
           />
         ))}
-      </div>
+      </Box>
     );
   }
 

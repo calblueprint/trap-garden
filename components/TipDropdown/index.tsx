@@ -38,6 +38,8 @@ export function TipDropdown({ name, tips, icon }: TipDropdownProps) {
         $align="center"
         $p="1rem"
         $background={expanded ? '#F0F0F0' : '#FFFFFF'}
+        onClick={() => setExpanded(!expanded)}
+        style={{ cursor: 'pointer' }}
       >
         <Flex $gap="1rem" $direction="row" $align="center">
           <StyledIcon type={icon} />
@@ -48,7 +50,7 @@ export function TipDropdown({ name, tips, icon }: TipDropdownProps) {
             <AirbnbP3 $color={COLORS.midgray}>{tips.length} Tips</AirbnbP3>
           </Flex>
         </Flex>
-        <Dropdown onClick={() => setExpanded(!expanded)}>
+        <Dropdown>
           {!expanded ? (
             <Icon type="dropdownArrowDown" />
           ) : (
