@@ -79,7 +79,6 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const { profileData, profileReady } = useProfile();
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [confDetails, setConfDetails] = useState<string[]>([]);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
 
   /* ---------------------------------------------------------------------- */
@@ -88,31 +87,9 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   function safeOnClose(
     e?: ReactMouseEvent<HTMLElement>,
     action: 'signOut' | 'navigate' = 'navigate',
-  ) => {
-    if (currentPath === '/add-details' || currentPath === '/onboarding') {
-      if (currentPath === '/add-details') {
-        setConfDetails(['Add Plant Details', 'plants']);
-      } else {
-        setConfDetails(['Onboarding', 'garden']);
-      }
-      e?.preventDefault();
-      if (action === 'navigate') {
-        const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
-          'href',
-        );
-        if (href) setPendingHref(href);
-      }
-      // For both navigation and sign out on /add-details, show confirmation.
-      setShowConfirmModal(true);
-    } else {
-      // If not on /add-details, perform the action immediately.
-      if (action === 'signOut') {
-        handleSignOut();
-      } else {
-        onClose();
-      }
-    }
-  };
+    href?: string, // explicit href for zero-arg wrappers
+  ) {
+    const isAddDetails = pathname === '/add-details';
 
     if (isAddDetails) {
       // keep drawer open; decide later in modal
@@ -301,9 +278,9 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
 
       <ConfirmationModal
         isOpen={showConfirmModal}
-        title={`Exit ${confDetails[0]}?`}
-        message={`You will lose all information entered for your ${confDetails[1]}!`}
-        onCancel={handleCancel}
+        title="Exit Add Plant Details?"
+        message="You will lose all information entered for your plants"
+        onCancel={() => setShowConfirmModal(false)}
         onConfirm={handleConfirm}
       />
     </>
