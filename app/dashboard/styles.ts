@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Icon from '@/components/Icon';
-import { deviceMin } from '@/styles/breakpoints';
+import { device, deviceMin } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
 import { H1, H2, P2 } from '@/styles/text';
 
@@ -52,6 +52,10 @@ export const SeeAllLink = styled.a`
   font-size: 10px;
   font-weight: 300;
   text-decoration: none;
+
+  @media ${device.lg} {
+    font-size: 16px;
+  }
 `;
 
 export const ArrowIcon = styled.span`
@@ -252,16 +256,29 @@ export const WeeklyFilterButton = styled.button<{ active: boolean }>`
   border-radius: 57px;
   border: ${({ active }) => (active ? 'none' : '0.5px solid #888')};
   background-color: ${({ active }) => (active ? COLORS.shrub : '#FFFFFF')};
-  color: ${({ active }) => (active ? '#FFFFFF' : COLORS.shrub)};
+  color: ${({ active }) => (active ? '#FFFFFF' : COLORS.midgray)};
   font-size: 14px;
   cursor: pointer;
-  font-family: inherit;
+  font-family: 'AirbnbCereal_W_Bk';
+  font-weight: 400;
   padding: 8px 14px;
-  height: 30px;
 `;
 
 /* ───── tasks & resources wrapper (same width) ──────────── */
-export const DashboardTasksResourcesWrapper = styled.div`
+export const DashboardTasksWrapper = styled.div`
+  width: 100%;
+  max-width: ${CONTENT_MAX};
+  margin: auto;
+
+  @media ${deviceMin.sm} {
+    max-width: ${TABLET_MAX};
+  }
+  @media ${deviceMin.md} {
+    max-width: ${DESKTOP_MAX};
+  }
+`;
+
+export const ResourcesWrapper = styled.div`
   width: 100%;
   max-width: ${CONTENT_MAX};
   margin: auto;
@@ -278,7 +295,6 @@ export const DashboardTasksResourcesWrapper = styled.div`
 export const TaskContainer = styled.div`
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 2px 0px 8px 0px rgba(0, 0, 0, 0.1);
   margin-bottom: 8px;
 `;
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { getDailyPlantTip } from '@/api/supabase/queries/dashboard';
 import {
@@ -12,10 +13,16 @@ import {
   changeHarvested,
   setRecentHarvestDate,
 } from '@/api/supabase/queries/userPlants';
+import { Button } from '@/components/Buttons';
 import ConfirmationModal from '@/components/ConfirmationModal';
+import Icon from '@/components/Icon';
 import SingleTip from '@/components/SingleTip';
 import TaskItem from '@/components/TaskItem';
 import { showToast } from '@/components/Toast';
+import CONFIG from '@/lib/configs';
+import COLORS from '@/styles/colors';
+import { Flex } from '@/styles/containers';
+import { P1 } from '@/styles/text';
 import { PlantTip, SingleTask, ValidTask } from '@/types/schema';
 import { useAuth } from '@/utils/AuthProvider';
 import {
@@ -28,7 +35,7 @@ import {
   ArrowIcon,
   Container,
   DashboardHeading,
-  DashboardTasksResourcesWrapper,
+  DashboardTasksWrapper,
   DashboardTopSection,
   DateText,
   DivisionLine,
@@ -45,6 +52,7 @@ import {
   ProgressIcon,
   ProgressMessage,
   ProgressWrapper,
+  ResourcesWrapper,
   SectionHeader,
   SectionTitle,
   SeeAllLink,
@@ -90,6 +98,7 @@ export default function Page() {
   const [activeFilter, setActiveFilter] = useState<
     'All' | 'Watering' | 'Weeding' | 'Harvesting'
   >('All');
+  const router = useRouter();
 
   const getTimeOfDay = (): 'morning' | 'afternoon' | 'evening' => {
     const h = new Date().getHours();
@@ -387,7 +396,7 @@ export default function Page() {
   // Effects – data fetch
   // ────────────────────────────
   useEffect(() => {
-    if (!authLoading && userId) {
+    if (!authLoading) {
       (async () => {
         const tip = await getDailyPlantTip();
         setPlantTip(tip);
@@ -419,11 +428,18 @@ export default function Page() {
   }, [pendingTasks, selectedTab, activeFilter]);
 
   const { currentTasksCount, completedTasksCount } = useMemo(() => {
-    let c = 0,
-      d = 0;
-    for (const t of pendingTasks) t.completed ? d++ : c++;
-    return { currentTasksCount: c, completedTasksCount: d };
-  }, [pendingTasks]);
+    let current = 0,
+      completed = 0;
+    const filteredTaskOnlyType = pendingTasks.filter(t => {
+      const typeOK =
+        activeFilter === 'All'
+          ? true
+          : t.type === activeFilter.toLowerCase().slice(0, -3); // "Watering" → "water"
+      return typeOK;
+    });
+    for (const t of filteredTaskOnlyType) t.completed ? completed++ : current++;
+    return { currentTasksCount: current, completedTasksCount: completed };
+  }, [pendingTasks, selectedTab, activeFilter]);
 
   const tasksTotal = pendingTasks.length;
   const percentComplete = tasksTotal
@@ -441,11 +457,6 @@ export default function Page() {
     return { progressMsg: 'Almost there!', progressIcon: 'leaf' } as const;
   }, [completedTasksCount, tasksTotal]);
 
-  // -----------------------------
-  // Render
-  // -----------------------------
-  if (authLoading || !userId) return <p>Log in please!</p>;
-
   return (
     <Container>
       {/* ─── Top banner + progress */}
@@ -458,126 +469,153 @@ export default function Page() {
           </Greeting>
         </DashboardHeading>
 
-        <ProgressContainerWrapper>
-          <TasksLeft>
-            You have{' '}
-            <TasksLeftNumber>{currentTasksCount} tasks</TasksLeftNumber> left
-            this week.
-          </TasksLeft>
+        {authLoading || !userId ? (
+          <Flex
+            $direction="column"
+            $gap="8px"
+            $justify="center"
+            $align="center"
+          >
+            <Icon type="sprout" />
+            <P1 $color={COLORS.midgray}>Log in to view Weekly Tasks</P1>
+            <Button
+              $primaryColor={COLORS.shrub}
+              onClick={() => router.push(CONFIG.login)}
+            >
+              Log In
+            </Button>
+          </Flex>
+        ) : (
+          <ProgressContainerWrapper>
+            <TasksLeft>
+              You have{' '}
+              <TasksLeftNumber>{currentTasksCount} tasks</TasksLeftNumber> left
+              this week.
+            </TasksLeft>
 
-          <ProgressWrapper>
-            <ProgressBarContainer>
-              <ProgressFill percentage={percentComplete} />
-              {Array.from({ length: divisions }, (_, i) => (
-                <DivisionLine
-                  key={i}
-                  index={i + 1}
-                  total={tasksTotal}
-                  passed={i + 1 < completedTasksCount}
-                />
-              ))}
-              <Marker percentage={percentComplete}>
-                <WhiteIconWrapper>
-                  <ProgressIcon type={progressIcon} />
-                </WhiteIconWrapper>
-              </Marker>
-            </ProgressBarContainer>
-            <ProgressMessage percentage={percentComplete}>
-              {progressMsg}
-            </ProgressMessage>
-          </ProgressWrapper>
-        </ProgressContainerWrapper>
+            <ProgressWrapper>
+              <ProgressBarContainer>
+                <ProgressFill percentage={percentComplete} />
+                {Array.from({ length: divisions }, (_, i) => (
+                  <DivisionLine
+                    key={i}
+                    index={i + 1}
+                    total={tasksTotal}
+                    passed={i + 1 < completedTasksCount}
+                  />
+                ))}
+                <Marker percentage={percentComplete}>
+                  <WhiteIconWrapper>
+                    <ProgressIcon type={progressIcon} />
+                  </WhiteIconWrapper>
+                </Marker>
+              </ProgressBarContainer>
+              <ProgressMessage percentage={percentComplete}>
+                {progressMsg}
+              </ProgressMessage>
+            </ProgressWrapper>
+          </ProgressContainerWrapper>
+        )}
       </DashboardTopSection>
 
-      <LineBreak />
-
       {/* ─── Weekly Tasks header + type pills */}
-      <SectionHeader>
-        <SectionTitle>Weekly Tasks</SectionTitle>
-        <SeeAllLink href="/tasks">See All →</SeeAllLink>
-      </SectionHeader>
+      {authLoading || !userId ? (
+        <></>
+      ) : (
+        <>
+          <LineBreak />
+          <SectionHeader>
+            <SectionTitle>Weekly Tasks</SectionTitle>
+            <SeeAllLink href="/tasks">See All →</SeeAllLink>
+          </SectionHeader>
 
-      <WeeklyFiltersContainer>
-        {['All', 'Watering', 'Weeding', 'Harvesting'].map(tab => (
-          <WeeklyFilterButton
-            key={tab}
-            active={activeFilter === tab}
-            onClick={() =>
-              setActiveFilter(
-                tab as 'All' | 'Watering' | 'Weeding' | 'Harvesting',
-              )
-            }
-          >
-            {tab}
-          </WeeklyFilterButton>
-        ))}
-      </WeeklyFiltersContainer>
-
-      {/* ─── Current / Completed tabs + list */}
-      <DashboardTasksResourcesWrapper>
-        <FilterTabsContainer>
-          <FilterTab
-            active={selectedTab === 'current'}
-            onClick={() => setSelectedTab('current')}
-          >
-            Current ({currentTasksCount})
-          </FilterTab>
-          <FilterTab
-            active={selectedTab === 'completed'}
-            onClick={() => setSelectedTab('completed')}
-          >
-            Completed ({completedTasksCount})
-          </FilterTab>
-        </FilterTabsContainer>
-
-        <TaskContainer>
-          {filteredTasks.length ? (
-            filteredTasks.map(task => (
-              <TaskItem
-                key={task.id}
-                type={task.type}
-                plantName={task.plant_name}
-                completed={task.completed}
-                dueDate={
-                  task.type === 'harvest' && task.dueMessage
-                    ? task.dueMessage
-                    : task.due_date
+          <WeeklyFiltersContainer>
+            {['All', 'Watering', 'Weeding', 'Harvesting'].map(tab => (
+              <WeeklyFilterButton
+                key={tab}
+                active={activeFilter === tab}
+                onClick={() =>
+                  setActiveFilter(
+                    tab as 'All' | 'Watering' | 'Weeding' | 'Harvesting',
+                  )
                 }
-                onToggle={() => handleToggle(task)}
-              />
-            ))
-          ) : (
-            <PlaceholderText>No tasks available</PlaceholderText>
-          )}
-        </TaskContainer>
+              >
+                {tab}
+              </WeeklyFilterButton>
+            ))}
+          </WeeklyFiltersContainer>
 
-        {/* ─── Modal */}
-        <ConfirmationModal
-          isOpen={isModalOpen}
-          title={
-            modalAction?.type === 'harvest'
-              ? modalAction.action === 'harvest-set'
-                ? 'Mark as harvested?'
-                : 'Clear harvest record?'
-              : 'Are you sure you want to unmark this task?'
-          }
-          message={
-            modalAction?.type === 'harvest'
-              ? modalAction.action === 'harvest-set'
-                ? 'Click confirm to record that you have harvested this plant for the current season.'
-                : 'Click confirm to remove the harvest record, and mark this task as pending again.'
-              : 'Clicking confirm will move this task back to pending.'
-          }
-          onCancel={() => {
-            setModalAction(null);
-            setIsModalOpen(false);
-          }}
-          onConfirm={processModalConfirm}
-        />
+          {/* ─── Current / Completed tabs + list */}
+          <DashboardTasksWrapper>
+            <FilterTabsContainer>
+              <FilterTab
+                active={selectedTab === 'current'}
+                onClick={() => setSelectedTab('current')}
+              >
+                Current ({currentTasksCount})
+              </FilterTab>
+              <FilterTab
+                active={selectedTab === 'completed'}
+                onClick={() => setSelectedTab('completed')}
+              >
+                Completed ({completedTasksCount})
+              </FilterTab>
+            </FilterTabsContainer>
 
-        {/* ─── Resources */}
+            <TaskContainer>
+              {filteredTasks.length ? (
+                filteredTasks.map(task => (
+                  <TaskItem
+                    key={task.id}
+                    type={task.type}
+                    plantName={task.plant_name}
+                    completed={task.completed}
+                    dueDate={
+                      task.type === 'harvest' && task.dueMessage
+                        ? task.dueMessage
+                        : task.due_date
+                    }
+                    onToggle={() => handleToggle(task)}
+                  />
+                ))
+              ) : (
+                <PlaceholderText>No tasks available</PlaceholderText>
+              )}
+            </TaskContainer>
+
+            {/* ─── Modal */}
+            <ConfirmationModal
+              isOpen={isModalOpen}
+              title={
+                modalAction?.type === 'harvest'
+                  ? modalAction.action === 'harvest-set'
+                    ? 'Mark as harvested?'
+                    : 'Clear harvest record?'
+                  : 'Are you sure you want to unmark this task?'
+              }
+              message={
+                modalAction?.type === 'harvest'
+                  ? modalAction.action === 'harvest-set'
+                    ? 'Click confirm to record that you have harvested this plant for the current season.'
+                    : 'Click confirm to remove the harvest record, and mark this task as pending again.'
+                  : 'Clicking confirm will move this task back to pending.'
+              }
+              onCancel={() => {
+                setModalAction(null);
+                setIsModalOpen(false);
+              }}
+              onConfirm={processModalConfirm}
+              rightText="Confirm"
+              leftText="Cancel"
+            />
+          </DashboardTasksWrapper>
+        </>
+      )}
+
+      {/* ─── Resources */}
+      <ResourcesWrapper>
         <Header>
-          <Title>Resources</Title>
+          <Title>Tip of the Day</Title>
           <SeeAllLink href="/resources">
             See All <ArrowIcon>→</ArrowIcon>
           </SeeAllLink>
@@ -591,7 +629,7 @@ export default function Page() {
         ) : (
           <p>Loading…</p>
         )}
-      </DashboardTasksResourcesWrapper>
+      </ResourcesWrapper>
     </Container>
   );
 }
