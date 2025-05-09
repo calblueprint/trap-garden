@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Icon from '@/components/Icon';
+import { device } from '@/styles/breakpoints';
 import COLORS from '@/styles/colors';
 
 export const ProfilePictureContainer = styled.section`
@@ -24,6 +25,10 @@ export const GardenInformationContainer = styled.section`
   flex-direction: column;
   align-items: flex-start;
   padding: 0 1.5rem;
+
+  @media ${device.lg} {
+    margin-bottom: 40px;
+  }
 `;
 
 export const InfoField = styled.section`

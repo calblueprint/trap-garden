@@ -6,6 +6,7 @@ import ProfileProvider from '@/utils/ProfileProvider';
 import { AuthProvider } from '../utils/AuthProvider';
 import './globals.css';
 import { Suspense } from 'react';
+import Footer from '@/components/Footer';
 import Toast from '@/components/ToastContainer';
 
 // font definitions
@@ -34,6 +35,7 @@ export default function RootLayout({
               <NavSystem />
               {/*To avoid CSR errors with useSearchParams*/}
               <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+              <Footer />
               <Toast />
             </StyledComponentsRegistry>
           </ProfileProvider>

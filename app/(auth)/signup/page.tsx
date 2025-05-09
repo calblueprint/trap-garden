@@ -112,14 +112,24 @@ export default function SignUp() {
   return (
     <LoginPageContainer>
       <LoginLeftDiv>
-        <LoginLeftDivText>Let&apos;s grow together.</LoginLeftDivText>
+        <LoginLeftDivText style={{ zIndex: 10 }}>
+          Let&apos;s grow together.
+        </LoginLeftDivText>
         <div style={{ position: 'absolute', bottom: '15.5rem', left: '0rem' }}>
           <Icon type="bigShovel" />
         </div>
         <div style={{ position: 'absolute', bottom: '2rem', left: '0rem' }}>
           <Icon type="bigTomato" />
         </div>
-        <div style={{ position: 'absolute', bottom: '0rem', left: '7.5rem' }}>
+        {/* hide carrot icon for now, positioning bugs */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '0rem',
+            left: '7.5rem',
+            display: 'none',
+          }}
+        >
           <Icon type="bigCarrot" />
         </div>
       </LoginLeftDiv>
