@@ -5,6 +5,7 @@ import { BigButton } from '@/components/Buttons';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
+import { useAuth } from '@/utils/AuthProvider';
 import {
   ButtonContainer,
   Container,
@@ -20,6 +21,7 @@ import {
 
 export default function Home() {
   const router = useRouter();
+  const { userId, loading: authLoading } = useAuth();
 
   return (
     <Container>
@@ -38,18 +40,37 @@ export default function Home() {
         </ResponsiveP1>
 
         <ButtonContainer>
-          <BigButton
-            $primaryColor={COLORS.shrub}
-            onClick={() => router.push(CONFIG.signup)}
-          >
-            Sign Up
-          </BigButton>
-          <BigButton
-            $secondaryColor={COLORS.shrub}
-            onClick={() => router.push(CONFIG.login)}
-          >
-            Log In
-          </BigButton>
+          {!authLoading && userId ? (
+            <>
+              <BigButton
+                $primaryColor={COLORS.shrub}
+                onClick={() => router.push(CONFIG.dashboard)}
+              >
+                Go to Dashboard
+              </BigButton>
+              <BigButton
+                $secondaryColor={COLORS.shrub}
+                onClick={() => router.push(CONFIG.viewPlants)}
+              >
+                Go to My Garden
+              </BigButton>
+            </>
+          ) : (
+            <>
+              <BigButton
+                $primaryColor={COLORS.shrub}
+                onClick={() => router.push(CONFIG.signup)}
+              >
+                Sign Up
+              </BigButton>
+              <BigButton
+                $secondaryColor={COLORS.shrub}
+                onClick={() => router.push(CONFIG.login)}
+              >
+                Log In
+              </BigButton>
+            </>
+          )}
         </ButtonContainer>
       </WhiteDiv>
       <GreenDiv>

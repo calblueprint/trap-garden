@@ -24,3 +24,9 @@ export const device = {
   xl: `(min-width: ${size.xl})`,
   xxl: `(min-width: ${size.xxl})`,
 };
+
+export const deviceMin = {
+  sm: `(min-width: ${size.sm})`,
+  md: `(min-width: ${size.md})`,
+  lg: `(min-width: ${size.lg})`,
+};
