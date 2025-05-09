@@ -109,9 +109,11 @@ export const ProgressContainerWrapper = styled.div`
   width: 100%;
   max-width: ${CONTENT_MAX};
   padding-top: 15px;
+  padding-left: 32px;
+  padding-right: 32px;
   gap: 16px;
   border-radius: 10px;
-  border: 0.5px solid var(--light-grey, #ddd);
+  border: 0.5px solid ${COLORS.lightgray};
   opacity: 0.8;
   height: 110px;
 
@@ -160,7 +162,7 @@ export const ProgressFill = styled.div<{ percentage: number }>`
   left: 0;
   width: ${({ percentage }) => percentage}%;
   height: 100%;
-  background: linear-gradient(to right, white, #a1be23);
+  background: linear-gradient(to right, #ced9a0, #a1be23);
   border-radius: 20px;
 `;
 

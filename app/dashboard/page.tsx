@@ -98,6 +98,8 @@ export default function Page() {
   const [activeFilter, setActiveFilter] = useState<
     'All' | 'Watering' | 'Weeding' | 'Harvesting'
   >('All');
+  const [fixedCurrentTasksCount, setFixedCurrentTasksCount] = useState(0);
+  const [fixedCompletedTasksCount, setFixedCompletedTasksCount] = useState(0);
   const router = useRouter();
 
   const getTimeOfDay = (): 'morning' | 'afternoon' | 'evening' => {
@@ -441,9 +443,14 @@ export default function Page() {
     return { currentTasksCount: current, completedTasksCount: completed };
   }, [pendingTasks, selectedTab, activeFilter]);
 
+  useEffect(() => {
+    setFixedCompletedTasksCount(pendingTasks.filter(t => t.completed).length);
+    setFixedCurrentTasksCount(pendingTasks.filter(t => !t.completed).length);
+  }, [pendingTasks]);
+
   const tasksTotal = pendingTasks.length;
   const percentComplete = tasksTotal
-    ? (completedTasksCount / tasksTotal) * 100
+    ? (fixedCompletedTasksCount / tasksTotal) * 100
     : 0;
   const divisions = Math.max(tasksTotal - 1, 0);
 
@@ -489,8 +496,8 @@ export default function Page() {
           <ProgressContainerWrapper>
             <TasksLeft>
               You have{' '}
-              <TasksLeftNumber>{currentTasksCount} tasks</TasksLeftNumber> left
-              this week.
+              <TasksLeftNumber>{fixedCurrentTasksCount} tasks</TasksLeftNumber>{' '}
+              left this week.
             </TasksLeft>
 
             <ProgressWrapper>
