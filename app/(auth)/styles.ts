@@ -164,7 +164,7 @@ export const LoginLeftDiv = styled.div`
     flex-direction: column;
     background-color: ${COLORS.shrub};
     width: 41.61vw;
-    min-height: calc(100vh - 60px);
+    min-height: 100%;
   }
 `;
 
