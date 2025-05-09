@@ -92,83 +92,8 @@ const Beet = styled(VeggieBase)`
   }
 `;
 
-/* ═══════════════════════ 3. CAULIFLOWER ═══════════════════════ */
-/* — Cauliflower — */
-const Cauliflower = styled(VeggieBase)`
-  /* main curd */
-  background: #f8f7f3;
-  border-radius: 46% 46% 54% 54% / 52% 52% 60% 60%;
-  position: relative;
-
-  /* sprinkle extra “florets” */
-  box-shadow:
-    -14px -6px 0 -6px #ece9d8,
-    10px -8px 0 -6px #ebe8d6,
-    -4px 6px 0 -6px #e5e2cd,
-    8px 2px 0 -6px #e8e4d1,
-    -9px -11px 0 -5px #f4f2e6,
-    5px -13px 0 -5px #efeede;
-
-  /* leaf #1 (center front) */
-  &::before {
-    content: '';
-    position: absolute;
-    width: 120%;
-    height: 48%;
-    left: 50%;
-    bottom: -4px;
-    transform: translateX(-50%) rotate(-2deg);
-    background: radial-gradient(
-      ellipse at 50% 100%,
-      #3fa34d 0%,
-      #2c7b36 70%,
-      transparent 72%
-    );
-    border-radius: 50%;
-    filter: blur(0.4px);
-  }
-
-  /* leaf #2 (left) */
-  &::after {
-    content: '';
-    position: absolute;
-    width: 60%;
-    height: 46%;
-    left: -10%;
-    bottom: 4px;
-    transform: rotate(22deg);
-    background: radial-gradient(
-      ellipse at 80% 100%,
-      #4cb958 0%,
-      #337f3e 70%,
-      transparent 72%
-    );
-    border-radius: 50%;
-    filter: blur(0.4px);
-  }
-
-  /* leaf #3 (right) */
-  & div {
-    content: '';
-    position: absolute;
-    width: 60%;
-    height: 46%;
-    right: -10%;
-    bottom: 6px;
-    transform: rotate(-25deg);
-    background: radial-gradient(
-      ellipse at 20% 100%,
-      #4cb958 0%,
-      #337f3e 70%,
-      transparent 72%
-    );
-    border-radius: 50%;
-    filter: blur(0.4px);
-  }
-`;
-
 /* ——————————————————— random picker ——————————————————— */
-const veggies = [Tomato, Beet, Cauliflower];
+const veggies = [Tomato, Beet];
 
 export default function RandomVeggieLoader() {
   const Loader = useMemo(

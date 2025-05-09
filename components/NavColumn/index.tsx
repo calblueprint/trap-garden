@@ -1,6 +1,15 @@
-import React, { useEffect, useState } from 'react';
+// components/NavColumn/index.tsx
+'use client';
+
+import React, {
+  MouseEvent as ReactMouseEvent,
+  useEffect,
+  useState,
+  useTransition,
+} from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import Loader from '@/components/CircularLoader';
 import CONFIG from '@/lib/configs';
 import { IconType } from '@/lib/icons';
 import COLORS from '@/styles/colors';
@@ -31,6 +40,10 @@ import {
   SignUpButton,
 } from './styles';
 
+/* -------------------------------------------------------------------------- */
+/*                             helper definitions                             */
+/* -------------------------------------------------------------------------- */
+
 interface NavColumnProps {
   isOpen: boolean;
   onClose: () => void;
@@ -49,13 +62,18 @@ const navLinks: NavLink[] = [
     path: CONFIG.plantingTimeline,
     iconName: 'calendar',
   },
-  { name: 'Resources', path: CONFIG.resources, iconName: 'plant' }, //temporary icon
-  { name: 'Dashboard', path: CONFIG.dashboard, iconName: 'calendar' }, //temporary icon
+  { name: 'Resources', path: CONFIG.resources, iconName: 'plant' },
+  { name: 'Dashboard', path: CONFIG.dashboard, iconName: 'calendar' },
 ];
 
+/* -------------------------------------------------------------------------- */
+/*                                   Component                                */
+/* -------------------------------------------------------------------------- */
+
 export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
-  const currentPath = usePathname();
+  const pathname = usePathname();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const { signOut, userId, loading: authLoading, userName } = useAuth();
   const { profileData, profileReady } = useProfile();
@@ -64,14 +82,11 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
   const [confDetails, setConfDetails] = useState<string[]>([]);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
 
-  const handleSignOut = async () => {
-    await signOut();
-    router.push(CONFIG.login);
-    onClose();
-  };
-
-  const safeOnClose = (
-    e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  /* ---------------------------------------------------------------------- */
+  /* safeOnClose — single helper covers sign-out and navigation w/confirm    */
+  /* ---------------------------------------------------------------------- */
+  function safeOnClose(
+    e?: ReactMouseEvent<HTMLElement>,
     action: 'signOut' | 'navigate' = 'navigate',
   ) => {
     if (currentPath === '/add-details' || currentPath === '/onboarding') {
@@ -99,29 +114,60 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
     }
   };
 
-  // Confirm handler for the modal:
-  const handleConfirm = () => {
-    if (pendingHref) {
-      router.push(pendingHref);
-    } else {
-      // If there's no pendingHref, assume it's a sign out.
-      handleSignOut();
+    if (isAddDetails) {
+      // keep drawer open; decide later in modal
+      if (action === 'navigate') {
+        const targetHref =
+          href ??
+          (e?.currentTarget as HTMLElement | null)?.getAttribute('href');
+        if (targetHref) setPendingHref(targetHref);
+      }
+      setShowConfirmModal(true);
+      return;
     }
+
+    if (action === 'signOut') {
+      handleSignOut();
+    } else {
+      onClose();
+    }
+  }
+
+  async function handleSignOut() {
+    await signOut();
+    startTransition(() => router.push(CONFIG.login));
+    onClose();
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* keyboard: close on ESC                                                 */
+  /* ---------------------------------------------------------------------- */
+  useEffect(() => {
+    const handler = (evt: KeyboardEvent) => {
+      if (evt.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  /* ---------------------------------------------------------------------- */
+  /* modal confirm / cancel                                                 */
+  /* ---------------------------------------------------------------------- */
+  function handleConfirm() {
+    if (pendingHref) startTransition(() => router.push(pendingHref));
+    else handleSignOut();
+
     setShowConfirmModal(false);
     setPendingHref(null);
     onClose();
-  };
+  }
 
-  const handleCancel = () => {
-    setShowConfirmModal(false);
-    setPendingHref(null);
-  };
-
-  const AuthOrProfileButtons = () => {
-    const authAndProfileReady = profileReady && !authLoading;
-    if (!authAndProfileReady) {
-      return <div>Loading...</div>;
-    }
+  /* ---------------------------------------------------------------------- */
+  /* auth or profile area                                                   */
+  /* ---------------------------------------------------------------------- */
+  function AuthOrProfileButtons() {
+    const ready = profileReady && !authLoading;
+    if (!ready) return <div>Loading…</div>;
 
     if (userId) {
       return (
@@ -143,17 +189,17 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                     {userName ?? 'Your Account'}
                   </H4>
                   <P3 $color={COLORS.shrub} $fontWeight={300}>
-                    {userTypeLabels[profileData.user_type as UserTypeEnum] +
-                      ' Garden'}
+                    {userTypeLabels[profileData.user_type as UserTypeEnum]}{' '}
+                    Garden
                   </P3>
                 </NameAndStatus>
               </Profile>
             </Link>
           )}
-          {/* For Sign Out, pass "signOut" as the action */}
+
           <BigButton
             $secondaryColor={COLORS.errorRed}
-            onClick={e => safeOnClose(e, 'signOut')}
+            onClick={() => safeOnClose(undefined, 'signOut')}
           >
             Sign Out
           </BigButton>
@@ -161,7 +207,6 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
       );
     }
 
-    // If not logged in
     return (
       <LoginButtonsContainer>
         <LoginButton href={CONFIG.login} onClick={safeOnClose}>
@@ -172,33 +217,45 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
         </SignUpButton>
       </LoginButtonsContainer>
     );
-  };
+  }
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const key = e.key;
-      if (key === 'Escape') {
-        onClose();
-      }
-    };
-
-    //add listener for keydown events
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  });
-
+  /* ---------------------------------------------------------------------- */
+  /* JSX                                                                    */
+  /* ---------------------------------------------------------------------- */
   return (
     <>
+      {/* loader while any transition is unresolved */}
+      {isPending && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: 'rgba(255,255,255,0.55)',
+            zIndex: 10_000,
+          }}
+        >
+          <Loader />
+        </div>
+      )}
+
       {isOpen && (
         <>
           <Overlay onClick={onClose} $isOpen={isOpen} />
           <NavColumnContainer>
             <div>
+              {/* ─── logo / hamburger header ─── */}
               <NavColumnHeader>
-                <div>{/* Empty for spacing */}</div>
-                <Link onClick={safeOnClose} href={CONFIG.home}>
+                <div />
+                <Link
+                  href={CONFIG.home}
+                  onClick={e => {
+                    safeOnClose(e, 'navigate');
+                    startTransition(() => router.push(CONFIG.home));
+                  }}
+                >
                   <LogoImage
                     src="/images/grow-together-logo.png"
                     alt="Grow Together Logo"
@@ -208,19 +265,27 @@ export default function NavColumn({ isOpen, onClose }: NavColumnProps) {
                   <HamburgerIcon type="hamburger" />
                 </HamburgerButton>
               </NavColumnHeader>
+
+              {/* ─── nav links ─── */}
               <NavLinksContainer>
-                {navLinks.map((link: NavLink, key) => (
+                {navLinks.map(link => (
                   <NavColumnItem
-                    key={key}
+                    key={link.path}
                     routeName={link.name}
                     path={link.path}
-                    isSelected={currentPath === link.path}
                     icon={link.iconName}
-                    onClose={safeOnClose}
+                    isSelected={pathname === link.path}
+                    /* zero-arg wrapper satisfies the expected () => void type */
+                    onClose={() => {
+                      safeOnClose(undefined, 'navigate', link.path);
+                      startTransition(() => router.push(link.path));
+                    }}
                   />
                 ))}
               </NavLinksContainer>
             </div>
+
+            {/* ─── account / auth footer ─── */}
             <Flex
               $direction="column"
               $pb="52px"

@@ -11,7 +11,7 @@ import {
   upsertUserPlant,
 } from '@/api/supabase/queries/userPlants';
 import { BigButton, SmallButton } from '@/components/Buttons';
-import Loader from '@/components/CircularLoader/loader';
+import Loader from '@/components/CircularLoader';
 import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
 import PlantCalendarRow from '@/components/PlantCalendarRow';

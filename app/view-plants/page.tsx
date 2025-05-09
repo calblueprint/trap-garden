@@ -8,7 +8,7 @@ import {
 } from '@/api/supabase/queries/plants';
 import { getCurrentUserPlantsByUserId } from '@/api/supabase/queries/userPlants';
 import { Button, SmallButton } from '@/components/Buttons';
-import Loader from '@/components/CircularLoader/loader';
+import Loader from '@/components/CircularLoader';
 import FilterDropdownMultiple from '@/components/FilterDropdownMultiple';
 import Icon from '@/components/Icon';
 import PlantCard from '@/components/PlantCard';
@@ -225,7 +225,7 @@ export default function Page() {
   function handleAddPlants() {
     setPlantsToAdd(selectedPlants);
     startTransition(() => {
-      router.push('/add-details');
+      router.push(CONFIG.addDetails);
     });
   }
 
