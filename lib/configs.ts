@@ -10,6 +10,7 @@ const CONFIG = {
   plantingTimeline: '/planting-timeline',
   resources: '/resources',
   dashboard: '/dashboard',
+  addDetails: '/add-details',
 };
 
 export default CONFIG;

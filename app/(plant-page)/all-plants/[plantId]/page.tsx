@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { getPlantById } from '@/api/supabase/queries/plants';
 import { SmallButton } from '@/components/Buttons';
+import Loader from '@/components/CircularLoader';
 import DifficultyLevelBar from '@/components/DifficultyLevelBar';
 import GardeningTips from '@/components/GardeningTips';
 import Icon from '@/components/Icon';
@@ -108,6 +109,6 @@ export default function GeneralPlantPage() {
       </Content>
     </>
   ) : (
-    <>Loading</>
+    <Loader />
   );
 }

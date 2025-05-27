@@ -29,6 +29,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [invalidEmailError, setInvalidEmailError] = useState('');
   const [invalidPasswordError, setInvalidPasswordError] = useState('');
+  const [loginButtonText, setLoginButtonText] = useState('Log In');
+  const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
 
   const canSubmitForm = email && password;
 
@@ -46,6 +48,8 @@ export default function Login() {
 
   const handleLogin = useCallback(async () => {
     try {
+      setLoginButtonText('Loading...');
+      setIsLoginButtonDisabled(true);
       const { error } = await signIn(email, password);
 
       if (error) {
@@ -64,6 +68,8 @@ export default function Login() {
     } catch (err) {
       console.error('Login Error:', err);
       setInvalidEmailError('An unexpected error occurred. Please try again.');
+      setLoginButtonText('Log In');
+      setIsLoginButtonDisabled(false);
     }
   }, [email, password, router, signIn]);
 
@@ -156,9 +162,9 @@ export default function Login() {
               type="button"
               onClick={handleLogin}
               $primaryColor={COLORS.shrub}
-              disabled={!canSubmitForm}
+              disabled={!canSubmitForm || isLoginButtonDisabled}
             >
-              <BigButtonText $color="white">Log In</BigButtonText>
+              <BigButtonText $color="white">{loginButtonText}</BigButtonText>
             </BigButton>
             {/* Sign in button */}
             <ResponsiveP3Lexend

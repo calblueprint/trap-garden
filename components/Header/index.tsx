@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import Loader from '@/components/CircularLoader';
 import CONFIG from '@/lib/configs';
 import COLORS from '@/styles/colors';
 import { Flex } from '@/styles/containers';
@@ -21,61 +24,58 @@ interface HeaderProps {
 }
 
 export default function Header({ toggleNavColumn }: HeaderProps) {
-  const currentPath = usePathname();
+  const pathname = usePathname();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const { profileReady, profileData } = useProfile();
   const { userId, loading: authLoading } = useAuth();
+
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
   const [confDetails, setConfDetails] = useState<string[]>([]);
 
+  /** helper that always navigates inside a transition */
+  const push = (href: string) => startTransition(() => router.push(href));
+
   const safeOnClose = (
     e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
   ) => {
-    if (currentPath === '/add-details' || currentPath === '/onboarding') {
-      if (currentPath === '/add-details') {
+    if (pathname === '/add-details' || pathname === '/onboarding') {
+      if (pathname === '/add-details')
         setConfDetails(['Add Plant Details', 'plants']);
-      } else {
-        setConfDetails(['Onboarding', 'garden']);
-      }
+      else setConfDetails(['Onboarding', 'garden']);
+
       e?.preventDefault();
       const href = (e?.currentTarget as HTMLAnchorElement)?.getAttribute(
         'href',
       );
       if (href) setPendingHref(href);
       setShowConfirmModal(true);
-    } else {
-      if (pendingHref) router.push(pendingHref);
+    } else if (pendingHref) {
+      push(pendingHref);
     }
   };
 
-  // Confirm handler for the modal:
+  /* confirmation-modal handlers */
   const handleConfirm = () => {
-    if (pendingHref) {
-      router.push(pendingHref);
-    }
+    if (pendingHref) push(pendingHref);
     setShowConfirmModal(false);
     setPendingHref(null);
   };
-
   const handleCancel = () => {
     setShowConfirmModal(false);
     setPendingHref(null);
   };
 
-  const onNavColumnClick = () => {
-    toggleNavColumn();
-  };
+  /* nav-column hamburger */
+  const onNavColumnClick = () => toggleNavColumn();
 
-  const AuthOrProfileButtons = () => {
-    // If not (both profile and auth ready)
-    if (authLoading || !profileReady) return <div></div>;
+  /* auth / profile buttons (unchanged except push) */
+  function AuthOrProfileButtons() {
+    if (authLoading || !profileReady) return <div />;
 
-    // Logged-in user
     if (userId) {
-      // Logged in AND onboarded
-      // TODO: this should route to /my-account in the future
       if (profileData) {
         return (
           <ProfileIconWrapper>
@@ -85,8 +85,6 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
           </ProfileIconWrapper>
         );
       }
-
-      // Not onboarded
       return (
         <Link href={CONFIG.onboarding}>
           <P3 $color={COLORS.blueLink}>Complete Onboarding</P3>
@@ -94,7 +92,6 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
       );
     }
 
-    // Not logged-in user
     return (
       <Flex $direction="row" $gap="8px" $w="max-content">
         <Link href={CONFIG.login}>
@@ -105,24 +102,49 @@ export default function Header({ toggleNavColumn }: HeaderProps) {
         </Link>
       </Flex>
     );
-  };
+  }
 
   return (
-    <Container>
-      <HamburgerButton onClick={onNavColumnClick}>
-        <Icon type="hamburger" />
-      </HamburgerButton>
-      <Link onClick={safeOnClose} href={CONFIG.home}>
-        <Image src="/images/grow-together-logo.png" alt="Grow Together Logo" />
-      </Link>
-      <AuthOrProfileButtons />
-      <ConfirmationModal
-        isOpen={showConfirmModal}
-        title={`Exit ${confDetails[0]}?`}
-        message={`You will lose all information entered for your ${confDetails[1]}!`}
-        onCancel={handleCancel}
-        onConfirm={handleConfirm}
-      />
-    </Container>
+    <>
+      {/* loader overlay while a route transition is running */}
+      {isPending && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: 'rgba(255,255,255,0.55)',
+            zIndex: 10000,
+          }}
+        >
+          <Loader />
+        </div>
+      )}
+
+      <Container>
+        <HamburgerButton onClick={onNavColumnClick}>
+          <Icon type="hamburger" />
+        </HamburgerButton>
+
+        <Link onClick={safeOnClose} href={CONFIG.home}>
+          <Image
+            src="/images/grow-together-logo.png"
+            alt="Grow Together Logo"
+          />
+        </Link>
+
+        <AuthOrProfileButtons />
+
+        <ConfirmationModal
+          isOpen={showConfirmModal}
+          title={`Exit ${confDetails[0]}?`}
+          message={`You will lose all information entered for your ${confDetails[1]}!`}
+          onCancel={handleCancel}
+          onConfirm={handleConfirm}
+        />
+      </Container>
+    </>
   );
 }
