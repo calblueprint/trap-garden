@@ -21,16 +21,6 @@ export default function Footer() {
         >
           <SocialMediaIcon type="facebook" />
         </a>
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-          <SocialMediaIcon type="xTwitter" />
-        </a>
-        <a
-          href="https://www.linkedin.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <SocialMediaIcon type="linkedIn" />
-        </a>
         <a
           href="https://www.instagram.com/trapgarden/"
           target="_blank"
@@ -46,11 +36,8 @@ export default function Footer() {
     <Container>
       <Flex $direction="column" $align="start" $justify="center" $gap="16px">
         <HeaderText> Contact Us</HeaderText>
-        <Flex $direction="column" $align="start" $justify="center" $gap="8px">
-          <InfoText>Email: info@trapgarden.org</InfoText>
-          <InfoText>{`Phone: (123) 456-7890`}</InfoText>
-          <SocialMediaRow />
-        </Flex>
+        <InfoText>Email: info@trapgarden.org</InfoText>
+        <SocialMediaRow />
       </Flex>
 
       <Flex $direction="column" $align="end" $justify="center" $gap="12px">
@@ -62,7 +49,13 @@ export default function Footer() {
           <InfoText style={{ textAlign: 'right' }}>
             Non-Profit Web Design by Cal Blueprint
           </InfoText>
-          <SocialMediaIcon type="bp" />
+          <a
+            href="https://calblueprint.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <SocialMediaIcon type="bp" />
+          </a>
         </Flex>
       </Flex>
     </Container>
