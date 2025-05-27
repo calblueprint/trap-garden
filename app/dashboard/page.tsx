@@ -441,7 +441,7 @@ export default function Page() {
     });
     for (const t of filteredTaskOnlyType) t.completed ? completed++ : current++;
     return { currentTasksCount: current, completedTasksCount: completed };
-  }, [pendingTasks, selectedTab, activeFilter]);
+  }, [pendingTasks, activeFilter]);
 
   useEffect(() => {
     setFixedCompletedTasksCount(pendingTasks.filter(t => t.completed).length);
